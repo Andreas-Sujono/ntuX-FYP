@@ -1,0 +1,55 @@
+{
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
+    "extends": [
+        "eslint:recommended",
+        "plugin:react/recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:prettier/recommended"
+    ],
+    "settings": {
+        "import/resolver": {
+            "typescript": {},
+            "node": {
+                "paths": ["src"],
+                "moduleDirectory": ["node_modules", "src/"]
+            }
+        },
+        "react": {
+            "version": "detect"
+        }
+    },
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "ecmaVersion": 12,
+        "sourceType": "module"
+    },
+    "plugins": [
+        "react",
+        "@typescript-eslint"
+    ],
+    "rules": {
+        "prettier/prettier": [
+            "warn",
+            {
+                "printWidth": 80,
+                "tabWidth": 2,
+                "useTabs": false,
+                "semi": true,
+                "singleQuote": true,
+                "trailingComma": "all"
+            }
+        ],
+        "no-use-before-define": "off",
+        "@typescript-eslint/no-use-before-define": ["error"],
+        "no-shadow": "off",
+        "@typescript-eslint/no-shadow": ["error"],
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/explicit-module-boundary-types": "off"
+    }
+}
