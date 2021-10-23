@@ -21,15 +21,6 @@ export const routeData = [
     },
   },
   {
-    path: routes.ADMIN.MANAGE_BLOG,
-    component: lazy(() => import('./ManageBlog')),
-    exact: true,
-    id: '3',
-    details: {
-      title: 'Manage Blog',
-    },
-  },
-  {
     path: routes.ADMIN.MANAGE_FORUM,
     component: lazy(() => import('./ManageForum')),
     exact: true,

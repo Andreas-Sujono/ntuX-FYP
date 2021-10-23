@@ -1,4 +1,4 @@
-# Frontend
+# NTUX Frontend
 developed and built in ReactJs, Typescript, and Redux
 
 see the demo of the app here: [https://andreas-sujono.github.io/vegan-recipe-app/#/](https://andreas-sujono.github.io/vegan-recipe-app/#/)

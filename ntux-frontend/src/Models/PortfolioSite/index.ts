@@ -1,5 +1,3 @@
-import { BlogPreview } from '../Blog';
-
 export interface Setting {
   order?: number;
   isHidden?: boolean;
@@ -94,7 +92,6 @@ export interface AllSiteData {
   certifications: Section<Certification[]>;
   siteContribution: Section<SiteContribution>;
   skills: Section<Skill[]>;
-  blogs: Section<BlogPreview[]>;
 }
 
 export type SectionItem = Section<any> & { sectionName: keyof AllSiteData };

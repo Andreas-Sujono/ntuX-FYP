@@ -1,7 +1,7 @@
 import React, { memo, useState } from 'react';
 import { DownChevronIcon, UpChevronIcon } from 'react-dre/lib/Icon';
-import { Comment } from '../../../Models/Blog';
 import { shortenDateFormat } from '../../utils';
+import { Comment } from '../../../Models/Forum';
 import AuthorBlock from '../AuthorBlock';
 import { TextInput } from '../Input';
 import {

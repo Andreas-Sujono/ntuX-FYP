@@ -1,4 +1,21 @@
-import { Comment, Author } from '../Blog';
+export interface Author {
+  id: string | number;
+  profileImage: string;
+  name: string;
+  description?: string;
+}
+
+export interface Comment {
+  id: string | number;
+  author: Author;
+  postedDate: Date;
+  enableVote?: boolean;
+  numberOfVotes?: number;
+  comment: string;
+  numberOfViews?: string;
+  enableReply?: boolean;
+  replies?: Comment[];
+}
 
 export interface Question {
   id: string;

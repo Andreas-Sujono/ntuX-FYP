@@ -1,7 +1,7 @@
+import { Comment } from 'Models/Forum';
 import React, { memo } from 'react';
 import CommentBox from '../../../common/Components/CommentBox';
 import Tag from '../../../common/Components/Tag';
-import { Comment } from '../../../Models/Blog';
 import {
   mockQuestion,
   mockComments as mockSolutions,

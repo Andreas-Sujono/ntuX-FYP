@@ -1,5 +1,5 @@
 import { User } from 'Models/Auth';
-import { ForumUser, Question, QuestionSummary, Tag } from '../Forum';
+import { ForumUser, Question, QuestionSummary, Tag, Comment } from '../Forum';
 
 export const mockUser: User = {
   id: '12122',

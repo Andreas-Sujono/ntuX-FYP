@@ -13,10 +13,6 @@ export const routeData = [
     exact: true,
   },
   {
-    path: routes.BLOG.BASE,
-    component: lazy(() => import('../../BlogLevel')),
-  },
-  {
     path: routes.FORUM.BASE,
     component: lazy(() => import('../../ForumQnA')),
   },
@@ -27,26 +23,6 @@ export const routeData = [
   {
     path: routes.ADMIN.BASE,
     component: lazy(() => import('../AdminRoutes')),
-  },
-  {
-    path: routes.EVENT.BASE,
-    component: lazy(() => import('../../Event')),
-  },
-  {
-    path: routes.ENTERTAINMENT.BASE,
-    component: lazy(() => import('../../Entertainment')),
-  },
-  {
-    path: routes.JOB.BASE,
-    component: lazy(() => import('../../JobPortalLevel')),
-  },
-  {
-    path: routes.FEED.BASE,
-    component: lazy(() => import('../../FeedLevel')),
-  },
-  {
-    path: routes.PROJECT.BASE,
-    component: lazy(() => import('../../ProjectLevel')),
   },
   {
     path: routes.COMING_SOON,

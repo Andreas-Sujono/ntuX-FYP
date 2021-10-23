@@ -1,5 +1,5 @@
+import { Author } from 'Models/Forum';
 import React, { memo } from 'react';
-import { Author } from '../../../Models/Blog';
 import { Container } from './Styles';
 
 interface Props {

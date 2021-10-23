@@ -6,7 +6,6 @@ import UserSummarySection from './UserSummarySection';
 import WorkExperienceSection from './WorkExperienceSection';
 import EducationSection from './EducationSection';
 import CertificationSection from './CertificationSection';
-import BlogSection from './BlogSection';
 import ContributionSection from './ContributionSection';
 import SkillsSection from './SkillsSection';
 
@@ -32,9 +31,6 @@ const DefaultTemplate: React.FC = () => {
 
         if (item.sectionName === 'certifications')
           return <CertificationSection data={item.data} key={key} />;
-
-        if (item.sectionName === 'blogs')
-          return <BlogSection data={item.data} key={key} />;
 
         if (item.sectionName === 'skills')
           return <SkillsSection data={item.data} key={key} />;
