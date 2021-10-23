@@ -114,9 +114,11 @@ export const InlineUl = styled.ul`
     background: #ae1b1b;
     padding: 8px 20px;
     border-radius: 8px;
-    max-width: 150px;
+    width: 120px;
     margin: auto;
     display: block;
+    text-align: center;
+    font-size: 20px;
     a,
     a:hover {
       color: white;

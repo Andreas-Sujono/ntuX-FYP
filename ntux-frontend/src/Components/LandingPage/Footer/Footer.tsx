@@ -9,7 +9,7 @@ import {
   ThirdColumn,
   CopyrightGroup,
 } from './Styles';
-import { useThemeContext } from '../../../App/ThemeProvider';
+// import { useThemeContext } from '../../../App/ThemeProvider';
 
 const {
   REACT_APP_ORG_EMAIL,
@@ -21,10 +21,7 @@ const {
 
 const Footer: React.FC = () => {
   const location = useLocation();
-  const { darkTheme, setDarkTheme } = useThemeContext();
-  const logoImagePath = `${process.env.PUBLIC_URL}/assets/logos/${
-    darkTheme ? 'full-white-logo' : 'full-colored-logo'
-  }.svg`;
+  const logoImagePath = `${process.env.PUBLIC_URL}/assets/logos/full-white-logo.svg`;
 
   const queryObj: Record<string, any> =
     queryString.parse(location.search) || {};
@@ -32,7 +29,7 @@ const Footer: React.FC = () => {
   if (queryObj.hideFooter) return <></>;
 
   return (
-    <div className="dt-bprimary dt-tprimary">
+    <div className="dt-bprimary dt-tprimary" style={{ background: '#181F5E' }}>
       <Container id="contact-us">
         <Row>
           <FirstColumn>
@@ -69,12 +66,6 @@ const Footer: React.FC = () => {
           <ThirdColumn>
             <h3>Give Feedback</h3>
             {REACT_APP_FEEDBACK_LINK}
-            <div
-              onClick={() => setDarkTheme(!darkTheme)}
-              className="theme-button"
-            >
-              Change to {darkTheme ? 'light theme' : 'dark theme'}
-            </div>
           </ThirdColumn>
         </Row>
         <CopyrightGroup>

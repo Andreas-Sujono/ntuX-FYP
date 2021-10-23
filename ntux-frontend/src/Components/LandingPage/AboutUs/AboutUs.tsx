@@ -1,10 +1,11 @@
 import React, { memo } from 'react';
+import { Container } from './Styles';
 
 function AboutUs(): React.ReactElement {
   return (
-    <div>
-      <h1>Andreas Sujono About Us</h1>
-    </div>
+    <Container>
+      <h1>About Us</h1>
+    </Container>
   );
 }
 

@@ -9,6 +9,7 @@ const BasicProfile = () => {
   const [email, setEmail] = useState('');
   const [desc, setDesc] = useState('');
   const [profession, setProfession] = useState('');
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [imageFile, setImageFile] = useState({});
   const [imageUrl, setImageUrl] = useState('');
 

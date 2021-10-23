@@ -1,50 +1,27 @@
 import React, { memo } from 'react';
-import {
-  FullWidthContainer,
-  Container,
-  Title,
-  Row,
-  Card,
-  AndMoreText,
-} from './Styles';
+import { FullWidthContainer, Container, Title, Row, Card } from './Styles';
 
 const { PUBLIC_URL } = process.env;
 const data = [
   {
-    title: 'Video Courses & Tutorial',
+    title: 'Online Course',
     iconPath: PUBLIC_URL + '/assets/LP/features1.svg',
   },
   {
-    title: 'Interview Preparation',
-    iconPath: PUBLIC_URL + '/assets/LP/features2.svg',
+    title: 'Forum Discussion',
+    iconPath: PUBLIC_URL + '/assets/LP/features3.svg',
+  },
+  {
+    title: 'Student Tutoring',
+    iconPath: PUBLIC_URL + '/assets/LP/read-book.svg',
   },
   {
     title: 'Portfolio Site',
     iconPath: PUBLIC_URL + '/assets/LP/features4.svg',
   },
-  // {
-  //   title: 'Books Recommendation & Review',
-  //   iconPath: PUBLIC_URL + '/assets/LP/read-book.svg',
-  // },
   {
-    title: 'Freelance & Contract Projects',
-    iconPath: PUBLIC_URL + '/assets/LP/read-book.svg',
-  },
-  {
-    title: 'Job Portal',
+    title: 'Points & Rewards',
     iconPath: PUBLIC_URL + '/assets/LP/resume.svg',
-  },
-  {
-    title: 'Free & Paid Events',
-    iconPath: PUBLIC_URL + '/assets/LP/video.svg',
-  },
-  {
-    title: 'Blogs',
-    iconPath: PUBLIC_URL + '/assets/LP/write-blog.svg',
-  },
-  {
-    title: 'Forum QnA',
-    iconPath: PUBLIC_URL + '/assets/LP/features3.svg',
   },
 ];
 
@@ -54,7 +31,7 @@ const FeaturesSummary: React.FC = () => {
   return (
     <FullWidthContainer className="dt-bsecondary dt-tprimary">
       <Container>
-        <Title>All in One Platform</Title>
+        <Title>Our Features</Title>
         <Row>
           {data.map((item: DataItem) => (
             <Card key={item.title}>
@@ -63,7 +40,6 @@ const FeaturesSummary: React.FC = () => {
             </Card>
           ))}
         </Row>
-        <AndMoreText>And More...</AndMoreText>
       </Container>
     </FullWidthContainer>
   );

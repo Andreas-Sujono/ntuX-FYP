@@ -8,6 +8,7 @@ export const Container = styled(PageContentContainer)`
   font-weight: 500;
   font-size: 16px;
   line-height: 24px;
+  color: white;
 
   ${media.lessThan('sm')`
     padding-top: 40px;

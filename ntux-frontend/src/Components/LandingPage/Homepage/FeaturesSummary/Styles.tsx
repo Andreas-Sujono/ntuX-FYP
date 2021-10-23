@@ -4,6 +4,7 @@ import { PageContentContainer } from '../../../shared/Shared.styles';
 
 export const FullWidthContainer = styled.div`
   position: relative;
+  background: #f5f5f5;
 `;
 
 export const Container = styled(PageContentContainer)`
@@ -34,8 +35,8 @@ export const Row = styled.div`
   align-items: center;
   display: flex;
   justify-content: space-between;
-  flex-wrap: wrap;
   z-index: 3;
+  column-gap: 24px;
 
   ${media.lessThan('sm')`
     margin-top: 32px;
@@ -43,8 +44,8 @@ export const Row = styled.div`
 `;
 
 export const Card = styled.div`
-  width: 23%;
-  min-width: 150px;
+  width: 19%;
+  min-width: 120px;
   margin-bottom: 2em;
   font-weight: bold;
   font-size: 22px;
@@ -60,21 +61,8 @@ export const Card = styled.div`
     width: 50%;
     margin: auto;
     margin-bottom: 1.2em;
+    height: 100px;
   }
-
-  ${media.lessThan('md')`
-    font-size: 18px;
-  `}
-`;
-
-export const AndMoreText = styled.h3`
-  font-weight: bold;
-  font-size: 24px;
-  margin: 0;
-  z-index: 3;
-  text-align: center;
-  color: #ae1b1b;
-  margin-bottom: 20px;
 
   ${media.lessThan('md')`
     font-size: 18px;
