@@ -21,10 +21,12 @@ export const Row = styled.div`
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
+  column-gap: 24px;
+  row-gap: 24px;
 `;
 
 export const Column = styled.div`
-  width: 31%;
+  flex: 1 1 0;
   h3 {
     font-weight: 600;
     font-size: 18px;
@@ -32,6 +34,7 @@ export const Column = styled.div`
     margin: 0;
     margin-top: 16px;
     margin-bottom: 12px;
+    color: white;
   }
 
   ${media.lessThan('md')`
@@ -41,35 +44,38 @@ export const Column = styled.div`
 `;
 
 export const FirstColumn = styled(Column)`
-  width: 40%;
+  flex: 2 1 0;
   > img {
     width: 220px;
   }
   .slogan {
     margin-top: 0px;
     font-size: 18px;
+    color: white;
   }
 `;
 
 export const SecondColumn = styled(Column)`
-  width: 40%;
+  flex: 1 1 0;
+  text-align: right;
 
   ul {
     margin: 0;
     padding: 0;
     list-style-type: none;
+    li {
+      white-space: nowrap;
+    }
   }
 `;
 
 export const ThirdColumn = styled(Column)`
-  width: 20%;
-  text-align: right;
+  flex: 2 1 0;
 
-  .theme-button {
-    margin-top: 0.5em;
-    cursor: pointer;
-    color: #ad1c1c;
-    font-weight: bold;
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
   }
 
   ${media.lessThan('sm')`

@@ -25,7 +25,7 @@ const AdminRoutes = () => {
         {routeData.map((route) => (
           <Route key={route.path} {...route} />
         ))}
-        <Redirect to={routes.ADMIN.DASHBOARD} />;
+        <Redirect to={routes.ADMIN.BASE} />;
       </Switch>
     </Suspense>
   );

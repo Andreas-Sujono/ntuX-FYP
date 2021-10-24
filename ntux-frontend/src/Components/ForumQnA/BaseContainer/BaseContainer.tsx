@@ -1,9 +1,5 @@
 import React, { memo } from 'react';
-import {
-  CheckoutBlogAds,
-  CourseAds,
-  OpenForAds,
-} from '../../../common/Components/AdsCard';
+import { CourseAds, OpenForAds } from '../../../common/Components/AdsCard';
 import SideNav from './SideNav';
 import { Container, LeftSection, CenterSection, RightSection } from './Styles';
 
@@ -12,7 +8,6 @@ function BaseContainer({ children }: any): React.ReactElement {
     <Container>
       <LeftSection>
         <SideNav />
-        <CheckoutBlogAds top="2em" bottom="1em" widths={['80%']} />
         <CourseAds widths={['90%']} />
       </LeftSection>
       <CenterSection>{children}</CenterSection>

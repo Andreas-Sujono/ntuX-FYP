@@ -18,20 +18,14 @@ const data: SidebarItem[] = [
   {
     id: '1',
     name: 'Dashboard',
-    path: routes.ADMIN.DASHBOARD,
+    path: routes.ADMIN.BASE,
     icon: 'https://image.flaticon.com/icons/png/512/1828/1828765.png',
   },
   {
     id: '2',
     name: 'Start Learning',
-    path: routes.ADMIN.SPECIALIZATIONS,
+    path: routes.ADMIN.MY_COURSES,
     icon: 'https://image.flaticon.com/icons/png/512/2883/2883662.png',
-  },
-  {
-    id: '3',
-    name: 'Manage Blog',
-    path: routes.ADMIN.MANAGE_BLOG,
-    icon: 'https://image.flaticon.com/icons/png/512/1159/1159633.png',
   },
   {
     id: '4',

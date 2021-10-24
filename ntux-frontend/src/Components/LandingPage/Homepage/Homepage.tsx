@@ -1,12 +1,16 @@
 import React, { memo } from 'react';
 import WelcomeSection from './WelcomeSection';
 import FeaturesSummary from './FeaturesSummary';
+import WhyUs from './WhyUs';
+import ExploreCourses from './ExploreCourses';
 
 function Homepage(): React.ReactElement {
   return (
-    <div className="dt-bprimary">
+    <div className="w-bprimary">
       <WelcomeSection />
       <FeaturesSummary />
+      <WhyUs />
+      <ExploreCourses />
     </div>
   );
 }

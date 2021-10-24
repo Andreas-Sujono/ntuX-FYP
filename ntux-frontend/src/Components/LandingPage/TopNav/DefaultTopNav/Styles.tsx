@@ -2,22 +2,7 @@ import styled, { css, createGlobalStyle } from 'styled-components';
 import { media } from '../../../../common/styling';
 
 export const GlobalStyle = createGlobalStyle<{ showDropdown: boolean }>`
-  body{
-    padding-top: 60px;
-    /* ${(props) =>
-      props.showDropdown &&
-      css`
-        height: 100vh;
-        overflow: hidden;
-        background: 'grey';
-      `} */
-  }
 
-  ${media.lessThan('md')`
-    body{
-      padding-top: 60px;
-    }
-  `}
 `;
 
 export const BackgroundContainer = styled.div<{
@@ -25,8 +10,8 @@ export const BackgroundContainer = styled.div<{
   isDarkTheme: boolean;
 }>`
   transition: all 0.15s;
-  background-color: ${(props) => (props.isDarkTheme ? '#1d1d1d' : 'white')};
-  color: ${(props) => (props.isDarkTheme ? '#c4c3c3' : '#888686')};
+  background-color: rgba(255, 255, 255, 0.8);
+  color: #888686;
   width: 100%;
   position: absolute;
   top: 0;
@@ -119,9 +104,14 @@ export const InlineUl = styled.ul`
     display: block;
     text-align: center;
     font-size: 20px;
+    transition: all 0.2s;
     a,
     a:hover {
       color: white;
+    }
+
+    &:hover {
+      filter: brightness(0.86);
     }
   }
 

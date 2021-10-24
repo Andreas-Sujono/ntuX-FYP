@@ -5,23 +5,23 @@ const { PUBLIC_URL } = process.env;
 const data = [
   {
     title: 'Online Course',
-    iconPath: PUBLIC_URL + '/assets/LP/features1.svg',
+    iconPath: PUBLIC_URL + '/assets/LP/feature1.svg',
   },
   {
     title: 'Forum Discussion',
-    iconPath: PUBLIC_URL + '/assets/LP/features3.svg',
+    iconPath: PUBLIC_URL + '/assets/LP/feature4.svg',
   },
   {
     title: 'Student Tutoring',
-    iconPath: PUBLIC_URL + '/assets/LP/read-book.svg',
+    iconPath: PUBLIC_URL + '/assets/LP/feature2.svg',
   },
   {
     title: 'Portfolio Site',
-    iconPath: PUBLIC_URL + '/assets/LP/features4.svg',
+    iconPath: PUBLIC_URL + '/assets/LP/feature3.svg',
   },
   {
     title: 'Points & Rewards',
-    iconPath: PUBLIC_URL + '/assets/LP/resume.svg',
+    iconPath: PUBLIC_URL + '/assets/LP/feature5.svg',
   },
 ];
 
@@ -29,7 +29,7 @@ type DataItem = typeof data[0];
 
 const FeaturesSummary: React.FC = () => {
   return (
-    <FullWidthContainer className="dt-bsecondary dt-tprimary">
+    <FullWidthContainer className="w-bsecondary w-tprimary">
       <Container>
         <Title>Our Features</Title>
         <Row>

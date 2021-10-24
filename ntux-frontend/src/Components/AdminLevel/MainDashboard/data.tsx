@@ -3,7 +3,7 @@ import { routes } from '../../Routes';
 
 export const routeData = [
   {
-    path: routes.ADMIN.DASHBOARD,
+    path: routes.ADMIN.BASE,
     component: lazy(() => import('./Dashboard')),
     exact: true,
     id: '1',
@@ -12,7 +12,7 @@ export const routeData = [
     },
   },
   {
-    path: routes.ADMIN.SPECIALIZATIONS,
+    path: routes.ADMIN.MY_COURSES,
     component: lazy(() => import('./StartLearning')),
     exact: true,
     id: '2',

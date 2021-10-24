@@ -35,7 +35,7 @@ const AuthForm: React.FC = () => {
     e.preventDefault();
     resetForm();
     console.log('submitted');
-    history.push(routes.ADMIN.DASHBOARD);
+    history.push(routes.ADMIN.BASE);
   };
 
   return (

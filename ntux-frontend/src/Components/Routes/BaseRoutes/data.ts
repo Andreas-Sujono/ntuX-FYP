@@ -13,6 +13,16 @@ export const routeData = [
     exact: true,
   },
   {
+    path: routes.LP_COURSE,
+    component: lazy(() => import('../../LandingPage/CourseDetail')),
+    exact: true,
+  },
+  {
+    path: routes.REGISTER_COURSE,
+    component: lazy(() => import('../../LandingPage/RegisterCourse')),
+    exact: true,
+  },
+  {
     path: routes.FORUM.BASE,
     component: lazy(() => import('../../ForumQnA')),
   },

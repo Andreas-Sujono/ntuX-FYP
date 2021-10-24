@@ -1,11 +1,8 @@
 export const routes = {
   LP_HOMEPAGE: '/',
   LP_ABOUT_US: '/about-us',
-  BLOG: {
-    BASE: '/blogs',
-    EACH_BLOG: '/blogs/:blogId',
-    EDIT_BLOG: '/admin/blogs/:blogId/edit',
-  },
+  LP_COURSE: '/courses/:courseId',
+  REGISTER_COURSE: '/courses/:courseId/register',
   FORUM: {
     BASE: '/forum',
     QUESTIONS: '/forum/questions',
@@ -17,47 +14,31 @@ export const routes = {
   PORTFOLIO: {
     BASE: '/portfolio/:userId',
   },
-  EVENT: {
-    BASE: '/events',
-  },
-  ENTERTAINMENT: {
-    BASE: '/entertainment',
-  },
-  JOB: {
-    BASE: '/jobs',
-  },
-  PROJECT: {
-    BASE: '/projects',
-  },
-  FEED: {
-    BASE: '/feed',
-  },
   COMING_SOON: '/coming-soon',
 
   // start of admin page
   ADMIN: {
-    BASE: '/admin',
-    DASHBOARD: '/admin/dashboard',
-    SPECIALIZATIONS: '/admin/dashboard/specializations',
-    MANAGE_BLOG: '/admin/dashboard/manage-blogs',
-    MANAGE_FORUM: '/admin/dashboard/manage-forum',
-    EDIT_BLOG: '/admin/manage-blogs/:blogId',
-    EDIT_QUERY: '/admin/manage-blogs/:questionId',
-    PORTFOLIO: '/admin/dashboard/portfolio',
+    BASE: '/dashboard',
+    MY_COURSES: '/dashboard/my-courses',
+    MANAGE_FORUM: '/dashboard/manage-forum',
+    EDIT_QUERY: '/dashboard/manage-question/:questionId',
+    PORTFOLIO: '/dashboard/portfolio',
   },
-  SPECIALIZATIONS: {
-    BASE: '/admin/specializations',
-    COURSES: '/admin/specializations/:specializationId',
-    COURSE: '/admin/specializations/:specializationId/:courseId',
+  COURSES: {
+    BASE: '/dashboard/my-courses',
+    COURSE: '/dashboard/my-courses/:courseId',
+    OVERVIEW: '/dashboard/my-courses/:courseId/overview',
+    COURSE_CONTENT: '/dashboard/my-courses/:courseId/content',
+    ANNOUNCEMENTS: '/dashboard/my-courses/:courseId/announcements',
   },
   SETTINGS: {
     PROFILE: {
-      BASE: '/admin/dashboard/setting/profile',
-      CHANGE_PASSWORD: '/admin/dashboard/setting/profile/change-password',
-      LOGOUT: '/admin/dashboard/setting/profile/logout',
+      BASE: '/dashboard/setting/profile',
+      CHANGE_PASSWORD: '/dashboard/setting/profile/change-password',
+      LOGOUT: '/dashboard/setting/profile/logout',
     },
     PORTFOLIO: {
-      BASE: '/admin/dashboard/setting/portfolio',
+      BASE: '/dashboard/setting/portfolio',
     },
   },
 };

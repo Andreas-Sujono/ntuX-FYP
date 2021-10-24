@@ -3,7 +3,7 @@ import { routes } from '../Routes';
 
 export const routeData = [
   {
-    path: routes.ADMIN.DASHBOARD,
+    path: routes.ADMIN.BASE,
     component: lazy(() => import('./MainDashboard')),
   },
 ];

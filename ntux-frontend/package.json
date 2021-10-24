@@ -24,6 +24,7 @@
     "react-markdown": "^6.0.2",
     "react-multi-carousel": "^2.6.3",
     "react-redux": "^7.2.4",
+    "react-responsive-carousel": "^3.2.22",
     "react-router-dom": "^5.2.0",
     "react-router-hash-link": "^2.4.3",
     "react-scripts": "4.0.3",
@@ -42,7 +43,7 @@
   },
   "scripts": {
     "start": "PUBLIC_URL=/ react-scripts start",
-    "build": "PUBLIC_URL=/devthinker GENERATE_SOURCEMAP=false react-scripts build && react-snapshot",
+    "build": "PUBLIC_URL=/ntux GENERATE_SOURCEMAP=false react-scripts build && react-snapshot",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint src/*.ts src/*.tsx src/**/*.ts src/**/*.tsx",

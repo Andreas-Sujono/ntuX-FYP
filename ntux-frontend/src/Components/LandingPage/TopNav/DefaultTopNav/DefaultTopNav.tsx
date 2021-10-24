@@ -48,9 +48,6 @@ const DefaultTopNav: React.FC = () => {
     (path: string, id: string, el: React.ReactNode) => {
       const withHash =
         path + path[path.length - 1] === '/' ? `#${id}` : `/#${id}`;
-
-      // console.log(compareWithCurrentPath(path), withHash);
-
       return (
         <HashLink smooth to={withHash}>
           {el}

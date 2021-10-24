@@ -13,8 +13,7 @@ import {
 
 const {
   REACT_APP_ORG_EMAIL,
-  REACT_APP_PAYPAL_LINK,
-  REACT_APP_FEEDBACK_LINK,
+  REACT_APP_ORG_PHONE_NUMBER,
   REACT_APP_ORG_NAME,
   REACT_APP_COPYRIGHT_YEAR,
 } = process.env;
@@ -29,17 +28,26 @@ const Footer: React.FC = () => {
   if (queryObj.hideFooter) return <></>;
 
   return (
-    <div className="dt-bprimary dt-tprimary" style={{ background: '#181F5E' }}>
+    <div className="w-bprimary w-tprimary" style={{ background: '#181F5E' }}>
       <Container id="contact-us">
         <Row>
           <FirstColumn>
             <img src={logoImagePath} alt="DevThinker" />
-            <div className="slogan dt-tsecondary">
-              Coding never feel this easy
-            </div>
+            <div className="slogan w-tprimary">One Course Platform For All</div>
           </FirstColumn>
+
+          <ThirdColumn>
+            <h3>Features</h3>
+            <ul>
+              <li>Login</li>
+              <li>Explore Courses</li>
+              <li>Forum Discussion</li>
+              <li>Student Tutoring</li>
+            </ul>
+          </ThirdColumn>
+
           <SecondColumn>
-            <h3 className="dt-tsecondary">Contact</h3>
+            <h3 className="w-tprimary">Contact</h3>
             <ul>
               <li>
                 Email:&nbsp;
@@ -52,21 +60,11 @@ const Footer: React.FC = () => {
                 </a>
               </li>
               <li>
-                Paypal Donate:&nbsp;
-                <a
-                  href="https://www.paypal.me/andreassujono"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  {REACT_APP_PAYPAL_LINK}
-                </a>
+                Phone Number:&nbsp;
+                {REACT_APP_ORG_PHONE_NUMBER}
               </li>
             </ul>
           </SecondColumn>
-          <ThirdColumn>
-            <h3>Give Feedback</h3>
-            {REACT_APP_FEEDBACK_LINK}
-          </ThirdColumn>
         </Row>
         <CopyrightGroup>
           Copyright@{REACT_APP_COPYRIGHT_YEAR} {REACT_APP_ORG_NAME}

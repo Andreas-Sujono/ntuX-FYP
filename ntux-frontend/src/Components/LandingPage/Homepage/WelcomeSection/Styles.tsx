@@ -3,78 +3,56 @@ import { media } from '../../../../common/styling';
 import { PageContentContainer } from '../../../shared/Shared.styles';
 
 export const Container = styled(PageContentContainer)`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 80px 16px;
-  padding-top: 50px;
-  flex-wrap: wrap;
+  padding: 0 16px;
   position: relative;
   z-index: 1;
 
   ${media.lessThan('md')`
-  padding: 30px 16px;
   padding-top: 0;
   `};
 `;
 
-export const LeftSection = styled.div`
-  width: 50%;
-  position: relative;
-  min-height: 300px;
-
-  img {
-    width: 100%;
-    margin: auto;
-    display: block;
-  }
-  ${media.lessThan('md')`
-      width: 80%;
-      max-height: 400px;
-      margin: auto;
-      /* overflow: hidden; */
-  `}
-`;
-
-export const RightSection = styled.div`
-  width: 45%;
-  max-width: 450px;
-
-  ${media.lessThan('md')`
-    width: 100%;
-    margin: auto;
-    margin-top: 48px;
-  `}
-`;
-
 export const TaglineContainer = styled.div`
   position: absolute;
-  top: 40%;
-  right: 0%;
-  background: #ae1b1b;
-  border-radius: 18px;
-  padding: 20px;
-  text-align: center;
-  width: 340px;
+  top: -580px;
+  left: 0%;
+  background: rgba(89, 136, 180, 0.75);
+  border-radius: 0;
+  padding: 52px;
+  width: 50%;
+  height: 580px;
   font-weight: bold;
-  font-size: 28px;
-  line-height: 32px;
+  font-size: 24px;
+  line-height: 29px;
   color: #ffffff;
-  transition: all 0.2s;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
 
-  p {
-    max-width: 280px;
-    margin: auto;
+  h1 {
+    font-weight: bold;
+    font-size: 42px;
+    line-height: 50px;
+    margin-top: 20px;
   }
 
-  &:hover {
-    transform: scale(1.05, 1.05);
+  h2 {
+    margin-top: 18px;
+    margin-bottom: 28px;
   }
+`;
 
-  ${media.lessThan('md')`
-    width: 60%;
-    font-size: 22px;
-    line-height: 28px;
-    right: -5%;
-  `}
+export const ImageContainer = styled.div`
+  width: 100%;
+  height: 580px;
+  position: relative;
+
+  img {
+    width: 60% !important;
+    height: 580px;
+    object-fit: cover;
+    float: right;
+  }
 `;
