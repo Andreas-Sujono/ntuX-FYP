@@ -9,7 +9,7 @@ export interface ThemeProps {
 }
 
 const GlobalStyle = createGlobalStyle<ThemeProps>`
-    .w-bprimary {
+    /* .w-bprimary {
         transition: all 0.12s;
         background-color: ${(props) =>
           props.darkTheme ? props.bgColor.darkPrimary : props.bgColor.primary}
@@ -39,7 +39,7 @@ const GlobalStyle = createGlobalStyle<ThemeProps>`
     }
     .w-ttertiary {
         color: ${(props) => props.textColor.tertiary};
-    }
+    } */
     .w-tlink {
         color: ${(props) => props.textColor.link};
         &:hover{

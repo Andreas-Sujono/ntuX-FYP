@@ -6,7 +6,7 @@ import ExploreCourses from './ExploreCourses';
 
 function Homepage(): React.ReactElement {
   return (
-    <div className="w-bprimary">
+    <div>
       <WelcomeSection />
       <FeaturesSummary />
       <WhyUs />

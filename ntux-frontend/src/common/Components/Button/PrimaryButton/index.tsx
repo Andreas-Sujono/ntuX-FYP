@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { media } from '../../../styling';
 
-export const Button = styled.button`
+export const Button = styled.button<{ widthS?: string }>`
   display: block;
   padding: 0.5em 1.5em;
   border: 0;
@@ -13,6 +13,7 @@ export const Button = styled.button`
   font-size: 16px;
   cursor: pointer;
   transition: all 0.12s;
+  width: ${(props) => props.widthS};
 
   &:focus {
     outline: 0;
@@ -34,6 +35,7 @@ interface IPrimaryByttonProps {
   className?: string;
   style?: Record<string, any>;
   color?: string;
+  width?: string;
 }
 
 const PrimaryBytton: React.FunctionComponent<IPrimaryByttonProps> = ({
@@ -41,9 +43,10 @@ const PrimaryBytton: React.FunctionComponent<IPrimaryByttonProps> = ({
   className,
   style = {},
   color = '#ae1b1b',
+  width = 'auto',
 }: IPrimaryByttonProps) => {
   return (
-    <Button color={color} className={className} style={style}>
+    <Button color={color} className={className} style={style} widthS={width}>
       {children}
     </Button>
   );
