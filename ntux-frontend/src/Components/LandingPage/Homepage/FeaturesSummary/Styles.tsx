@@ -25,7 +25,7 @@ export const Title = styled.h1`
   text-align: center;
 
   ${media.lessThan('md')`
-    font-size: 22px;
+    font-size: 24px;
   `}
 `;
 
@@ -37,14 +37,17 @@ export const Row = styled.div`
   justify-content: space-between;
   z-index: 3;
   column-gap: 24px;
+  flex-wrap: wrap;
 
   ${media.lessThan('sm')`
     margin-top: 32px;
   `}
+  ${media.lessThan('md')`
+  `}
 `;
 
 export const Card = styled.div`
-  width: 19%;
+  flex: 1 1 120px;
   min-width: 120px;
   margin-bottom: 2em;
   font-weight: bold;

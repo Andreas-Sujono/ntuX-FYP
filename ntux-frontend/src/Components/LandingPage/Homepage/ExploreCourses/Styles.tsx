@@ -7,6 +7,9 @@ export const Container = styled(PageContentContainer)`
   position: relative;
   z-index: 1;
   padding-top: 0px;
+
+  ${media.lessThan('md')`
+  `}
 `;
 
 export const Title = styled.h1`
@@ -18,16 +21,16 @@ export const Title = styled.h1`
   position: relative;
 
   ${media.lessThan('md')`
-    font-size: 22px;
+    font-size: 24px;
   `}
 `;
 
 export const CoursesContainer = styled.div`
   display: flex;
   row-gap: 40px;
-  column-gap: 40px;
+  column-gap: 24px;
   flex-wrap: wrap;
-  margin-top: 50px;
+  margin-top: 36px;
 `;
 
 export const CourseCard = styled.div`
@@ -71,4 +74,23 @@ export const CourseCard = styled.div`
       }
     }
   }
+
+  ${media.lessThan('md')`
+    .details {
+      padding: 16px;
+      .name {
+        font-size: 20px;
+      }
+      .hours {
+      }
+      .batch {
+        font-size: 16px;
+        margin-top: 8px;
+
+        strong {
+          color: #c63044;
+        }
+      }
+    }
+  `}
 `;

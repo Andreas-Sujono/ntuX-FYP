@@ -22,6 +22,11 @@ export const Container = styled(PageContentContainer)`
       border-radius: 16px;
     }
   }
+
+  ${media.lessThan('md')`
+    flex-direction: column;
+    padding: 32px 16px;
+  `}
 `;
 
 export const Title = styled.h1`
@@ -37,7 +42,7 @@ export const Title = styled.h1`
   }
 
   ${media.lessThan('md')`
-    font-size: 22px;
+    font-size: 24px;
   `}
 `;
 
@@ -51,4 +56,8 @@ export const BoxContent = styled.div`
   margin-top: 28px;
   font-size: 20px;
   line-height: 24px;
+
+  ${media.lessThan('md')`
+  font-size: 18px;
+  `}
 `;

@@ -56,7 +56,6 @@ export const Container = styled.div`
 export const LogoContainer = styled.div`
   width: 165px;
   img {
-    width: 100%;
     max-height: 32px;
   }
 `;
@@ -106,7 +105,7 @@ export const InlineUl = styled.ul`
 export const DropdownUlContainer = styled.div`
   .icon {
     position: absolute;
-    top: 20px;
+    top: 12px;
     right: 16px;
     width: 24px;
     height: 24px;
@@ -119,7 +118,7 @@ export const DropdownUl = styled(InlineUl)<{
   isDarkTheme: boolean;
 }>`
   position: absolute;
-  top: 50px;
+  top: 46px;
   left: 0;
   width: 100%;
   background-color: ${(props) => (props.isDarkTheme ? '#1d1d1d' : 'white')};
@@ -131,7 +130,7 @@ export const DropdownUl = styled(InlineUl)<{
   margin: 0;
   box-shadow: ${(props) =>
     props.showDropdown ? ' 1px 1px 1px 1px rgba(174, 27, 27, 0.1)' : 0};
-  height: ${(props) => (props.showDropdown ? '280px' : 0)};
+  height: ${(props) => (props.showDropdown ? '200px' : 0)};
   transition: all 0.2s ease-in-out;
   opacity: ${(props) => (props.showDropdown ? '1' : '0')};
   overflow: ${(props) => (props.showDropdown ? 'show' : 'hidden')};

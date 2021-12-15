@@ -67,6 +67,10 @@ export const SecondColumn = styled(Column)`
       white-space: nowrap;
     }
   }
+
+  ${media.lessThan('md')`
+    text-align: left;
+  `}
 `;
 
 export const ThirdColumn = styled(Column)`
@@ -85,7 +89,7 @@ export const ThirdColumn = styled(Column)`
 
 export const CopyrightGroup = styled.div`
   color: #aeafc1;
-  /* text-align: center; */
+  text-align: center;
   margin-top: 24px;
 
   ${media.lessThan('sm')`

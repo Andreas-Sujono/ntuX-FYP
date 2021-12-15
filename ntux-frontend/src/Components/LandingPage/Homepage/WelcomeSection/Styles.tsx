@@ -11,6 +11,7 @@ export const Container = styled(PageContentContainer)`
 
   ${media.lessThan('md')`
   padding-top: 0;
+  padding: 0;
   `};
 `;
 
@@ -37,7 +38,6 @@ export const TaglineContainer = styled.div`
   h1 {
     font-weight: bold;
     font-size: 42px;
-    line-height: 50px;
     margin-top: 40px;
   }
 
@@ -51,6 +51,21 @@ export const TaglineContainer = styled.div`
   strong {
     color: white;
   }
+
+  ${media.lessThan('md')`
+    position: relative;
+    top: 0;
+    width: 100%;
+    padding: 10vh 16px;
+    height: auto;
+
+    h1{
+      font-size: 32px;
+    }
+    h2{
+      font-size: 24px;
+    }
+  `};
 `;
 
 export const ImageContainer = styled.div`
@@ -64,4 +79,8 @@ export const ImageContainer = styled.div`
     object-fit: cover;
     float: right;
   }
+
+  ${media.lessThan('md')`
+    display: none;
+  `};
 `;
