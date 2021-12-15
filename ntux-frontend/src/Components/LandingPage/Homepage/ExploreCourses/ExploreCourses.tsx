@@ -7,7 +7,7 @@ import { Container, CoursesContainer, Title, CourseCard } from './Styles';
 const ExploreCourses: React.FC = () => {
   const history = useHistory();
   return (
-    <Container>
+    <Container id="explore-courses">
       <Title>Available Courses</Title>
       <CoursesContainer>
         <CourseCard

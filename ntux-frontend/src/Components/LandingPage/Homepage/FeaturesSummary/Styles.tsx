@@ -31,7 +31,7 @@ export const Title = styled.h1`
 
 export const Row = styled.div`
   width: 100%;
-  margin-top: 60px;
+  margin-top: 40px;
   align-items: center;
   display: flex;
   justify-content: space-between;

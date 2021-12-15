@@ -8,6 +8,11 @@ export const routeData = [
     exact: true,
   },
   {
+    path: routes.LOGIN_PAGE,
+    component: lazy(() => import('../../Auth/LoginPage')),
+    exact: true,
+  },
+  {
     path: routes.LP_ABOUT_US,
     component: lazy(() => import('../../LandingPage/AboutUs')),
     exact: true,

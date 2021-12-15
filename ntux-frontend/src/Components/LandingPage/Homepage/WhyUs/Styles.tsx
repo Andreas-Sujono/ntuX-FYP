@@ -3,7 +3,7 @@ import { media } from '../../../../common/styling';
 import { PageContentContainer } from '../../../shared/Shared.styles';
 
 export const Container = styled(PageContentContainer)`
-  padding: 80px 16px;
+  padding: 60px 16px;
   position: relative;
   z-index: 1;
   display: flex;
@@ -31,6 +31,10 @@ export const Title = styled.h1`
   /* border-bottom: 2px double #ae1b1b; */
   z-index: 3;
   position: relative;
+
+  strong {
+    color: #ae1b1b;
+  }
 
   ${media.lessThan('md')`
     font-size: 22px;

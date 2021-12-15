@@ -14,6 +14,7 @@ import {
   DropdownUl,
 } from './Styles';
 import { useThemeContext } from '../../../../App/ThemeProvider';
+import { Button } from '@mui/material';
 
 // const dropdownList: any = [];
 
@@ -70,11 +71,9 @@ const DefaultTopNav: React.FC = () => {
           <Link to="#">Student Tutoring</Link>
         </li>
         <li className="highlighted">
-          <div className="button">
-            <HashLink smooth to={routes.LP_HOMEPAGE + '/#login'}>
-              Login
-            </HashLink>
-          </div>
+          <Button variant="contained" color="primary">
+            <Link to={routes.LOGIN_PAGE}>Login</Link>
+          </Button>
         </li>
       </>
     );

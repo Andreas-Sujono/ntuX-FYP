@@ -10,7 +10,7 @@ export const BackgroundContainer = styled.div<{
   isDarkTheme: boolean;
 }>`
   transition: all 0.15s;
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: rgba(255, 255, 255, 1);
   color: #888686;
   width: 100%;
   position: absolute;
@@ -57,6 +57,7 @@ export const LogoContainer = styled.div`
   width: 165px;
   img {
     width: 100%;
+    max-height: 32px;
   }
 `;
 
@@ -84,34 +85,16 @@ export const InlineUl = styled.ul`
       color: #ae1b1b;
     }
   }
+  .highlighted {
+    a:hover {
+      color: inherit;
+    }
+  }
 
   .products-button {
     transition: all 0.15s;
     &:hover {
       color: #ae1b1b;
-    }
-  }
-
-  .highlighted a {
-    color: #ae1b1b;
-  }
-  .button {
-    background: #ae1b1b;
-    padding: 8px 20px;
-    border-radius: 8px;
-    width: 120px;
-    margin: auto;
-    display: block;
-    text-align: center;
-    font-size: 20px;
-    transition: all 0.2s;
-    a,
-    a:hover {
-      color: white;
-    }
-
-    &:hover {
-      filter: brightness(0.86);
     }
   }
 

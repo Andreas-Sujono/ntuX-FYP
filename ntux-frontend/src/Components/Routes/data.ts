@@ -2,6 +2,7 @@ export const routes = {
   LP_HOMEPAGE: '/',
   LP_ABOUT_US: '/about-us',
   LP_COURSE: '/courses/:courseId',
+  LOGIN_PAGE: '/login',
   REGISTER_COURSE: '/courses/:courseId/register',
   FORUM: {
     BASE: '/forum',

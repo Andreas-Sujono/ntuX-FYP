@@ -4,6 +4,10 @@ import { darkThemeRoutePaths } from '../../common/platformSetting';
 import { colors } from '../../common/styling';
 import { PlatformSetting } from '../../Models/PlatformSetting';
 import GlobalStyle, { ThemeProps } from './GlobalStyle';
+import {
+  ThemeProvider as MUIThemeProvider,
+  createTheme,
+} from '@mui/material/styles';
 
 const ThemeContext = React.createContext({
   bgColor: colors.bg,
@@ -80,10 +84,20 @@ const ThemeProvider = ({
     },
   };
 
+  const MUITheme = createTheme({
+    palette: {
+      primary: {
+        main: colors.primary,
+      },
+    },
+  });
+
   return (
     <ThemeContext.Provider value={value}>
-      <GlobalStyle {...value} />
-      {children}
+      <MUIThemeProvider theme={MUITheme}>
+        <GlobalStyle {...value} />
+        {children}
+      </MUIThemeProvider>
     </ThemeContext.Provider>
   );
 };

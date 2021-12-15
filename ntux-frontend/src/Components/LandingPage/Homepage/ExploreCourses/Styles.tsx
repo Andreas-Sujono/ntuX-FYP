@@ -6,7 +6,7 @@ export const Container = styled(PageContentContainer)`
   padding: 80px 16px;
   position: relative;
   z-index: 1;
-  padding-top: 40px;
+  padding-top: 0px;
 `;
 
 export const Title = styled.h1`
@@ -31,18 +31,24 @@ export const CoursesContainer = styled.div`
 `;
 
 export const CourseCard = styled.div`
-  width: 380px;
+  flex: 1 1 380px;
+  max-width: 380px;
   background: #ffffff;
   border: 1px solid #d0d0d0;
   box-sizing: border-box;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 16px;
   cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  }
 
   img {
     width: 100%;
-    height: 220px;
+    height: 180px;
     object-fit: cover;
+    border-radius: 16px;
   }
 
   .details {
@@ -59,6 +65,10 @@ export const CourseCard = styled.div`
       font-size: 18px;
       line-height: 21px;
       margin-top: 12px;
+
+      strong {
+        color: #c63044;
+      }
     }
   }
 `;
