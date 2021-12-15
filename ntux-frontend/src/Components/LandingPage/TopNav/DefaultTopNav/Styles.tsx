@@ -1,5 +1,5 @@
 import styled, { css, createGlobalStyle } from 'styled-components';
-import { media } from '../../../../common/styling';
+// import { media } from '../../../../common/styling';
 
 export const GlobalStyle = createGlobalStyle<{ showDropdown: boolean }>`
 

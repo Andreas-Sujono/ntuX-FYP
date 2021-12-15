@@ -22,9 +22,13 @@ const Routes = () => {
       left: 0,
       // behavior: 'smooth',
     });
-    if (matchPath(location.pathname, { path: routes.ADMIN.BASE }))
+    if (
+      matchPath(location.pathname, { path: routes.ADMIN.BASE }) ||
+      matchPath(location.pathname, { path: routes.LOGIN_PAGE }) ||
+      matchPath(location.pathname, { path: routes.RESET_PASSWORD_PAGE })
+    ) {
       setIsAdminRoutes(true);
-    else setIsAdminRoutes(false);
+    } else setIsAdminRoutes(false);
   }, [location.pathname]);
 
   return (

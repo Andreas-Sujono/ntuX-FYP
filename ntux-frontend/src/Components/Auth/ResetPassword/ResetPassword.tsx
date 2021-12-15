@@ -28,7 +28,7 @@ function Copyright(props: any) {
   );
 }
 
-export default function SignInSide() {
+export default function ResetPasswordSide() {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -68,7 +68,7 @@ export default function SignInSide() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            Reset Password
           </Typography>
           <Box
             component="form"
@@ -80,20 +80,20 @@ export default function SignInSide() {
               margin="normal"
               required
               fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-              autoFocus
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              autoComplete="current-password"
             />
             <TextField
               margin="normal"
               required
               fullWidth
-              name="password"
-              label="Password"
+              name="Confirm password"
+              label="Confirm Password"
               type="password"
-              id="password"
+              id="confirm-password"
               autoComplete="current-password"
             />
             <Button
@@ -102,13 +102,13 @@ export default function SignInSide() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign In
+              Reset
             </Button>
-            <Grid container>
+            {/* <Grid container>
               <Grid item xs>
                 <Link href="#">Forgot password?</Link>
               </Grid>
-            </Grid>
+            </Grid> */}
             <Copyright sx={{ mt: 5 }} />
           </Box>
         </Box>

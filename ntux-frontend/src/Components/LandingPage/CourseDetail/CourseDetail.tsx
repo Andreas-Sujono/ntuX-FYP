@@ -9,7 +9,6 @@ import {
   NavBar,
   Content,
 } from './Styles';
-import { PrimaryButton } from 'common/Components/Button';
 import { HashLink } from 'react-router-hash-link';
 import { Avatar, Button, CardHeader } from '@mui/material';
 import { red } from '@mui/material/colors';

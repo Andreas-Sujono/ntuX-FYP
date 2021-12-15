@@ -71,9 +71,11 @@ const DefaultTopNav: React.FC = () => {
           <Link to="#">Student Tutoring</Link>
         </li>
         <li className="highlighted">
-          <Button variant="contained" color="primary">
-            <Link to={routes.LOGIN_PAGE}>Login</Link>
-          </Button>
+          <Link to={routes.LOGIN_PAGE}>
+            <Button variant="contained" color="primary">
+              Login
+            </Button>
+          </Link>
         </li>
       </>
     );
