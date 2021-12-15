@@ -24,7 +24,11 @@ const ExploreCourses: React.FC = () => {
             </div>
           </div>
         </CourseCard>
-        <CourseCard>
+        <CourseCard
+          onClick={() =>
+            history.push(makePath(routes.LP_COURSE, { courseId: 2 }))
+          }
+        >
           <img src="https://i.pcmag.com/imagery/articles/00tLYTqwmgFvacZlYPc5ecO-8.1583853669.fit_lim.jpg" />
           <div className="details">
             <div className="name">EE017: Computer Networking I</div>

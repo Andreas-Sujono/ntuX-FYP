@@ -12,7 +12,7 @@ export const Container = styled(PageContentContainer)`
 
   ${media.lessThan('sm')`
     padding-top: 40px;
-    font-size: 14px;
+    font-size: 16px;
     line-height: 20px;
   `}
 `;
@@ -93,7 +93,7 @@ export const CopyrightGroup = styled.div`
   margin-top: 24px;
 
   ${media.lessThan('sm')`
-    font-size: 12px;
+    font-size: 14px;
     line-height: 16px;
     margin-top: 0;
   `}

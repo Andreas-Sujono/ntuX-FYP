@@ -79,6 +79,10 @@ const GlobalStyle = createGlobalStyle<ThemeProps>`
             font-size: inherit;
         }
     }
+
+    html, body{
+        font-size: 16px;
+    }
 `;
 
 export default GlobalStyle;

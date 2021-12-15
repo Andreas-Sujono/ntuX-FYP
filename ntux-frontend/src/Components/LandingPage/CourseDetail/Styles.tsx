@@ -1,3 +1,4 @@
+import { media } from 'common/styling';
 import styled from 'styled-components';
 
 export const FullWidthContainer = styled.div`
@@ -41,6 +42,21 @@ export const TopSummary = styled.div`
       line-height: 34px;
     }
   }
+
+  ${media.lessThan('md')` 
+    margin-top: 62px;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+
+    .right-content {
+      padding: 16px;
+      h1 {
+        font-size: 24px;
+        line-height: 30px;
+      }
+    }
+  `}
 `;
 
 export const Status = styled.div`
@@ -59,6 +75,10 @@ export const AvailabilityBox = styled.div`
   button {
     margin-top: 30px;
   }
+
+  ${media.lessThan('md')` 
+    padding: 0;
+  `}
 `;
 
 export const NavBar = styled.div`
@@ -72,6 +92,7 @@ export const NavBar = styled.div`
   padding: 14px 30px;
   margin-top: 24px;
   border-radius: 12px;
+  overflow: auto;
   p {
     margin: 0;
     cursor: pointer;
@@ -79,18 +100,60 @@ export const NavBar = styled.div`
 `;
 
 export const Content = styled.div`
-  padding: 40px 16px;
+  padding: 40px 0;
   padding-top: 20px;
   max-width: 1024px;
   .title {
     font-weight: bold;
-    font-size: 24px;
+    font-size: 22px;
     line-height: 29px;
     margin-bottom: 16px;
-    margin-top: 20px;
+    margin-top: 1em;
   }
   .content {
     font-size: 18px;
     line-height: 22px;
+    margin-bottom: 2em;
+
+    .MuiCardHeader-avatar {
+      width: 50px;
+      height: 50px;
+      font-size: 20px;
+      > * {
+        width: 100%;
+        height: 100%;
+      }
+    }
+    .MuiCardHeader-title {
+      font-size: 1.1rem;
+    }
+    .MuiCardHeader-subheader {
+      font-size: 1rem;
+    }
   }
+
+  ${media.lessThan('md')`
+  padding: 0 0;
+
+    .title{
+      font-size: 20px;
+    }
+    .content{
+      font-size: 16px;
+      line-height: 20px;
+      margin-bottom: 1em;
+
+      .MuiCardHeader-avatar {
+        width: 40px;
+        height: 40px;
+        font-size: 18px;
+      }
+      .MuiCardHeader-title {
+        font-size: 1rem;
+      }
+      .MuiCardHeader-subheader {
+        font-size: 0.9rem;
+      }
+    }
+  `}
 `;
