@@ -71,6 +71,7 @@ export const CourseCard = styled.div`
 
       strong {
         color: #c63044;
+        font-weight: 500;
       }
     }
   }

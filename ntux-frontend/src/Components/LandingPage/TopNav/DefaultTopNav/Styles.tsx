@@ -67,7 +67,7 @@ export const InlineUl = styled.ul`
   margin: 0;
 
   > li {
-    font-weight: 600;
+    font-weight: 500;
     font-size: 17px;
     line-height: 22px;
     color: inherit;

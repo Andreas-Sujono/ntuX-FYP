@@ -1,5 +1,6 @@
 import React, { memo, useState, useEffect } from 'react';
 import { useLocation, matchPath } from 'react-router-dom';
+import CssBaseline from '@mui/material/CssBaseline';
 import { darkThemeRoutePaths } from '../../common/platformSetting';
 import { colors } from '../../common/styling';
 import { PlatformSetting } from '../../Models/PlatformSetting';
@@ -89,6 +90,7 @@ const ThemeProvider = ({
       primary: {
         main: colors.primary,
       },
+      text: colors.text,
     },
   });
 
@@ -96,6 +98,7 @@ const ThemeProvider = ({
     <ThemeContext.Provider value={value}>
       <MUIThemeProvider theme={MUITheme}>
         <GlobalStyle {...value} />
+        <CssBaseline />
         {children}
       </MUIThemeProvider>
     </ThemeContext.Provider>

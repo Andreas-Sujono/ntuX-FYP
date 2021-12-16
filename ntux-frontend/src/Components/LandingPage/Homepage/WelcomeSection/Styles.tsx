@@ -36,7 +36,7 @@ export const TaglineContainer = styled.div`
   color: white;
 
   h1 {
-    font-weight: bold;
+    font-weight: 500;
     font-size: 42px;
     margin-top: 40px;
   }
@@ -46,6 +46,7 @@ export const TaglineContainer = styled.div`
     margin-top: 18px;
     margin-bottom: 28px;
     color: white;
+    font-weight: 500;
   }
 
   strong {

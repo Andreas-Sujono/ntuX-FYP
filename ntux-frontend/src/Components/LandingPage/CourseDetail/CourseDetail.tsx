@@ -12,8 +12,12 @@ import {
 import { HashLink } from 'react-router-hash-link';
 import { Avatar, Button, CardHeader } from '@mui/material';
 import { red } from '@mui/material/colors';
+import { makePath } from 'common/utils';
+import { routes } from 'Components/Routes';
+import { useHistory } from 'react-router-dom';
 
 function CourseDetail(): React.ReactElement {
+  const history = useHistory();
   return (
     <FullWidthContainer>
       <BackgroundContainer />
@@ -39,6 +43,11 @@ function CourseDetail(): React.ReactElement {
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
                 color="primary"
+                onClick={() => {
+                  history.push(
+                    makePath(routes.REGISTER_COURSE, { courseId: '1' }),
+                  );
+                }}
               >
                 Register
               </Button>

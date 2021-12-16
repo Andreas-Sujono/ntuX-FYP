@@ -50,7 +50,7 @@ export const Card = styled.div`
   flex: 1 1 120px;
   min-width: 120px;
   margin-bottom: 2em;
-  font-weight: bold;
+  font-weight: 400;
   font-size: 22px;
   text-align: center;
   transition: all 0.18s;

@@ -11,7 +11,7 @@ export const Container = styled(PageContentContainer)`
   column-gap: 40px;
 
   .left-content {
-    flex: 1 1 0;
+    flex: 1.3 1 0;
   }
   .right-content {
     flex: 1 1 0;
@@ -56,6 +56,7 @@ export const BoxContent = styled.div`
   margin-top: 28px;
   font-size: 20px;
   line-height: 24px;
+  font-weight: 400;
 
   ${media.lessThan('md')`
   font-size: 18px;
