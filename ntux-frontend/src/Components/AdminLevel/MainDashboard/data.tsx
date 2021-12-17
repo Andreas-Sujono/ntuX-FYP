@@ -13,45 +13,47 @@ export const routeData = [
   },
   {
     path: routes.ADMIN.MY_COURSES,
-    component: lazy(() => import('./StartLearning')),
+    component: lazy(() => import('./Dashboard')),
     exact: true,
     id: '2',
     details: {
-      title: 'Start Learning',
-    },
-  },
-  {
-    path: routes.ADMIN.MANAGE_FORUM,
-    component: lazy(() => import('./ManageForum')),
-    exact: true,
-    id: '4',
-    details: {
-      title: 'Manage Forum',
+      title: 'My Courses',
     },
   },
   {
     path: routes.ADMIN.PORTFOLIO,
-    component: lazy(() => import('./PortfolioSite')),
+    component: lazy(() => import('./Dashboard')),
+    exact: true,
+    id: '3',
+    details: {
+      title: 'Manage Portfolio Site',
+    },
+  },
+  {
+    path: routes.ADMIN.STUDENT_TUTORING,
+    component: lazy(() => import('./Dashboard')),
+    exact: true,
+    id: '4',
+    details: {
+      title: 'Student Tutoring',
+    },
+  },
+  {
+    path: routes.ADMIN.POINTS_REWARDS,
+    component: lazy(() => import('./Dashboard')),
     exact: true,
     id: '5',
     details: {
-      title: 'Portfolio Site',
+      title: 'Points & Rewards',
     },
   },
   {
-    path: routes.SETTINGS.PROFILE.BASE,
-    component: lazy(() => import('./SettingsLevel/ProfileSetting')),
-    id: '7',
+    path: routes.SETTINGS.BASE,
+    component: lazy(() => import('./Dashboard')),
+    exact: true,
+    id: '6',
     details: {
-      title: 'Profile Setting',
-    },
-  },
-  {
-    path: routes.SETTINGS.PORTFOLIO.BASE,
-    component: lazy(() => import('./PortfolioSite')),
-    id: '8',
-    details: {
-      title: 'Portfolio Setting',
+      title: 'Settings',
     },
   },
 ];

@@ -1,13 +1,14 @@
 import React, { Suspense, memo } from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import { LoadingBar } from 'react-dre/lib/LoadingBar';
+import StudentMainContainer from './Container/MainContainer';
 import { routeData } from './data';
 import { routes } from '../../Routes';
-import Container from './Container';
 
 const MainDashboardRoutes = () => {
+  const MainContainer = StudentMainContainer;
   return (
-    <Container>
+    <MainContainer>
       <Suspense
         fallback={
           <LoadingBar
@@ -30,7 +31,7 @@ const MainDashboardRoutes = () => {
           <Redirect to={routes.ADMIN.BASE} />;
         </Switch>
       </Suspense>
-    </Container>
+    </MainContainer>
   );
 };
 

@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import Box from '@mui/material/Box';
-import { PageContentContainer } from 'Components/shared/Shared.styles';
 import { media } from 'common/styling';
 
 export const BackgroundContainer = styled.div`

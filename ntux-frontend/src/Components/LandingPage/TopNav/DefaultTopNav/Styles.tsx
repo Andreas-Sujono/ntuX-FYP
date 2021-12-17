@@ -56,7 +56,7 @@ export const Container = styled.div`
 export const LogoContainer = styled.div`
   width: 165px;
   img {
-    max-height: 32px;
+    max-height: 42px;
   }
 `;
 

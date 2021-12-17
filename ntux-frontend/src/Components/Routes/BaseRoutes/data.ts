@@ -44,8 +44,4 @@ export const routeData = [
     path: routes.ADMIN.BASE,
     component: lazy(() => import('../AdminRoutes')),
   },
-  {
-    path: routes.COMING_SOON,
-    component: lazy(() => import('../../ComingSoonPage')),
-  },
 ];

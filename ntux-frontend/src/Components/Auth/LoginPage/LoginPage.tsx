@@ -10,7 +10,7 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 
-function Copyright(props: any) {
+export function Copyright(props: any) {
   return (
     <Typography
       variant="body2"

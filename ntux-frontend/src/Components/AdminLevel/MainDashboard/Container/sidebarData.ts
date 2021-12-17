@@ -1,4 +1,10 @@
 import { routes } from 'Components/Routes';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import SchoolIcon from '@mui/icons-material/School';
+import WebIcon from '@mui/icons-material/Web';
+import LoyaltyIcon from '@mui/icons-material/Loyalty';
+import SettingsIcon from '@mui/icons-material/Settings';
+import PeopleIcon from '@mui/icons-material/People';
 
 export interface DropdownItem {
   id: string;
@@ -10,7 +16,7 @@ export interface SidebarItem {
   id: string;
   name: string;
   path: string;
-  icon: string;
+  Icon: any;
   items?: DropdownItem[];
 }
 
@@ -19,31 +25,37 @@ const data: SidebarItem[] = [
     id: '1',
     name: 'Dashboard',
     path: routes.ADMIN.BASE,
-    icon: 'https://image.flaticon.com/icons/png/512/1828/1828765.png',
+    Icon: DashboardIcon,
   },
   {
     id: '2',
-    name: 'Start Learning',
+    name: 'My Courses',
     path: routes.ADMIN.MY_COURSES,
-    icon: 'https://image.flaticon.com/icons/png/512/2883/2883662.png',
+    Icon: SchoolIcon,
+  },
+  {
+    id: '3',
+    name: 'Manage Portfolio Site',
+    path: routes.ADMIN.PORTFOLIO,
+    Icon: WebIcon,
   },
   {
     id: '4',
-    name: 'Manage Forum',
-    path: routes.ADMIN.MANAGE_FORUM,
-    icon: 'https://image.flaticon.com/icons/png/512/1545/1545615.png',
+    name: 'Student Tutoring',
+    path: routes.ADMIN.STUDENT_TUTORING,
+    Icon: PeopleIcon,
   },
   {
     id: '5',
-    name: 'Portfolio Site',
-    path: routes.ADMIN.PORTFOLIO,
-    icon: 'https://image.flaticon.com/icons/png/512/2920/2920242.png',
+    name: 'Points & Rewards',
+    path: routes.ADMIN.POINTS_REWARDS,
+    Icon: LoyaltyIcon,
   },
   {
     id: '6',
     name: 'Settings',
     path: routes.SETTINGS.PROFILE.BASE,
-    icon: 'https://image.flaticon.com/icons/png/512/2099/2099058.png',
+    Icon: SettingsIcon,
     items: [
       {
         id: '7',

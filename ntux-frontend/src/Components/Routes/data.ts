@@ -22,7 +22,9 @@ export const routes = {
   ADMIN: {
     BASE: '/dashboard',
     MY_COURSES: '/dashboard/my-courses',
+    STUDENT_TUTORING: '/dashboard/student-tutoring',
     MANAGE_FORUM: '/dashboard/manage-forum',
+    POINTS_REWARDS: '/dashboard/points-rewards',
     EDIT_QUERY: '/dashboard/manage-question/:questionId',
     PORTFOLIO: '/dashboard/portfolio',
   },
@@ -34,13 +36,14 @@ export const routes = {
     ANNOUNCEMENTS: '/dashboard/my-courses/:courseId/announcements',
   },
   SETTINGS: {
+    BASE: '/settings',
     PROFILE: {
-      BASE: '/dashboard/setting/profile',
-      CHANGE_PASSWORD: '/dashboard/setting/profile/change-password',
-      LOGOUT: '/dashboard/setting/profile/logout',
+      BASE: '/dashboard/settings/profile',
+      CHANGE_PASSWORD: '/dashboard/settings/profile/change-password',
+      LOGOUT: '/dashboard/settings/profile/logout',
     },
     PORTFOLIO: {
-      BASE: '/dashboard/setting/portfolio',
+      BASE: '/dashboard/settings/portfolio',
     },
   },
 };

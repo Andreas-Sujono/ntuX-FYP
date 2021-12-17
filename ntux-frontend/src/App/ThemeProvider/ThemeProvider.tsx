@@ -92,6 +92,18 @@ const ThemeProvider = ({
       },
       text: colors.text,
     },
+    components: {
+      // Name of the component
+      MuiListItemButton: {
+        styleOverrides: {
+          root: {
+            '&.Mui-selected': {
+              background: '#EFEFEF',
+            },
+          },
+        },
+      },
+    },
   });
 
   return (
