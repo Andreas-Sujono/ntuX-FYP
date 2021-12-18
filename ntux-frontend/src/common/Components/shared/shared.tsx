@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, Typography } from '@mui/material';
+import { Link } from '@mui/material';
 
 export const LinkText = ({ children }: any) => (
   <Link

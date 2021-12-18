@@ -10,6 +10,20 @@ import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
 import { green } from '@mui/material/colors';
 import TabsContainer from './Tabs/TabsContainer';
+import styled from 'styled-components';
+import { media } from 'common/styling';
+
+export const StyledContainer = styled(Grid)<any>`
+  position: relative;
+  top: -6rem;
+  ${media.lessThan('md')`
+    top: -11.5rem;
+
+    > * {
+      padding: 16px;
+    }
+  `};
+`;
 
 function SettingsContent() {
   return (
@@ -33,11 +47,11 @@ function SettingsContent() {
         />
       </Paper>
 
-      <Grid
+      <StyledContainer
         container
         spacing={3}
         maxWidth={'lg'}
-        sx={{ margin: 'auto', mt: -14 }}
+        sx={{ margin: 'auto' }}
       >
         <Grid item xs={12} md={3}>
           <Paper style={{ width: '100%', height: '200px', maxWidth: '100%' }}>
@@ -69,7 +83,7 @@ function SettingsContent() {
         <Grid item xs={12} md={9}>
           <TabsContainer />
         </Grid>
-      </Grid>
+      </StyledContainer>
     </Container>
   );
 }

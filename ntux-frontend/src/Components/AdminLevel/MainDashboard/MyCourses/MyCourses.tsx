@@ -3,7 +3,7 @@ import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
-import { Link, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import { LinearProgressWithLabel } from './Styles';
 import { CourseCard as LPCourseCard } from '../../../LandingPage/Homepage/ExploreCourses/Styles';
 import { LinkText } from 'common/Components/shared/shared';
@@ -80,12 +80,7 @@ export default function MyCourses() {
         </Grid>
       </Grid>
 
-      <Typography
-        variant="h5"
-        component="h2"
-        mt={10}
-        sx={{ fontWeight: '500' }}
-      >
+      <Typography variant="h5" component="h2" mt={7} sx={{ fontWeight: '500' }}>
         Recommended Courses
       </Typography>
       <Grid container spacing={3} mt={1}>

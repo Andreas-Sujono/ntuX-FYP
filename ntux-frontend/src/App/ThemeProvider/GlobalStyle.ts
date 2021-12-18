@@ -95,8 +95,8 @@ const GlobalStyle = createGlobalStyle<ThemeProps>`
             font-size: 15px;
         }
         .MuiGrid-item{
-            padding-left: 16px !important;
-            padding-right: 16px !important;
+            /* padding-left: 16px !important;
+            padding-right: 16px !important; */
             /* padding: 16px; */
         }
         .MuiGrid-container{

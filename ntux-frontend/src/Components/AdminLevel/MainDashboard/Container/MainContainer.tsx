@@ -123,7 +123,12 @@ function MainContainer({ children }: { children: React.ReactNode }) {
           <DrawerList key={item.id}>
             <ListItemButton
               selected={routeDetails.id === item.id}
-              onClick={() => history.push(item.path)}
+              onClick={() => {
+                history.push(item.path);
+                if (window.innerWidth < 550) {
+                  setOpen(false);
+                }
+              }}
             >
               <ListItemIcon>
                 <item.Icon />
