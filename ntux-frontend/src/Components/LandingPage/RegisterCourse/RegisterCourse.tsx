@@ -38,7 +38,13 @@ export default function RegisterCoursePage() {
           EE0117: Computer Networking I (20 Oct 2021 - 27 Oct 2021)
         </Typography>
         <StyledForm component="form" noValidate onSubmit={handleSubmit}>
-          <Grid container spacing={2}>
+          <Grid
+            container
+            spacing={{
+              xs: 2,
+              md: 2,
+            }}
+          >
             <Grid item xs={12}>
               <Typography component="h3" variant="h6">
                 Participant Details

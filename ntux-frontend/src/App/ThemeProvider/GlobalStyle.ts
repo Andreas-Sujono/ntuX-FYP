@@ -1,5 +1,5 @@
 import { createGlobalStyle } from 'styled-components';
-import { colors } from '../../common/styling';
+import { colors, media } from '../../common/styling';
 
 export interface ThemeProps {
   bgColor: typeof colors.bg;
@@ -72,6 +72,9 @@ const GlobalStyle = createGlobalStyle<ThemeProps>`
     .swal2-container.swal2-backdrop-show, .swal2-container.swal2-noanimation{
         background-color: rgba(12, 14, 69, 0.4) !important;
     }
+    button:focus{
+        outline: 0
+    }
 
     a{
         &:hover{
@@ -83,6 +86,23 @@ const GlobalStyle = createGlobalStyle<ThemeProps>`
     html, body{
         font-size: 16px;
     }
+    .MuiCardHeader-title{
+        min-width: 200px;
+    }
+    
+    ${media.lessThan('sm')`
+        html, body{
+            font-size: 15px;
+        }
+        .MuiGrid-item{
+            padding-left: 16px !important;
+            padding-right: 16px !important;
+            /* padding: 16px; */
+        }
+        .MuiGrid-container{
+            max-width: 100% !important;
+        }
+    `}
 `;
 
 export default GlobalStyle;

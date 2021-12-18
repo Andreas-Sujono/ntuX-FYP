@@ -36,7 +36,7 @@ export const routes = {
     ANNOUNCEMENTS: '/dashboard/my-courses/:courseId/announcements',
   },
   SETTINGS: {
-    BASE: '/settings',
+    BASE: '/dashboard/settings',
     PROFILE: {
       BASE: '/dashboard/settings/profile',
       CHANGE_PASSWORD: '/dashboard/settings/profile/change-password',

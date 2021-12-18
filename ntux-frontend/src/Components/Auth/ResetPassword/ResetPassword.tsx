@@ -35,6 +35,7 @@ export default function ResetPasswordSide() {
           backgroundRepeat: 'no-repeat',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
+          width: '100%',
         }}
       />
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>

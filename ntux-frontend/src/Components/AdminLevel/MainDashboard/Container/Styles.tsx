@@ -2,9 +2,9 @@ import MuiDrawer from '@mui/material/Drawer';
 import Box from '@mui/material/Box';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import { styled } from '@mui/material/styles';
-import { Container, List } from '@mui/material';
+import { Container, List, ListItemButton } from '@mui/material';
 
-const drawerWidth = 240;
+const drawerWidth = 250;
 
 interface AppBarProps extends MuiAppBarProps {
   open?: boolean;
@@ -22,6 +22,7 @@ export const BoxContainer = styled(Box)<any>`
 `;
 export const LogoContainer = styled(Container)`
   width: 100%;
+  cursor: pointer;
   img {
     max-height: 32px;
   }
@@ -38,6 +39,7 @@ export const AppBar = styled(MuiAppBar, {
   backgroundColor: '#FFFFFF',
   color: theme.palette.text.primary,
   boxShadow: '0px 1px 4px rgba(0, 0, 0, 0.12)',
+  overflowX: 'hidden',
   transition: theme.transitions.create(['width', 'margin'], {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
@@ -50,6 +52,7 @@ export const AppBar = styled(MuiAppBar, {
       duration: theme.transitions.duration.enteringScreen,
     }),
   }),
+  ...(!open && {}),
 }));
 
 export const Drawer = styled(MuiDrawer, {
@@ -72,8 +75,29 @@ export const Drawer = styled(MuiDrawer, {
       }),
       width: theme.spacing(7),
       [theme.breakpoints.up('sm')]: {
-        width: theme.spacing(9),
+        width: theme.spacing(7),
+      },
+      [theme.breakpoints.down('sm')]: {
+        width: 0,
       },
     }),
+  },
+}));
+
+export const ProfileButton = styled(ListItemButton)(({ theme }) => ({
+  padding: 0,
+  maxWidth: '250px',
+  width: 'auto',
+  flexGrow: 0,
+  [theme.breakpoints.down('sm')]: {
+    '& .MuiCardHeader-root': {
+      paddingRight: 0,
+    },
+    '& .MuiCardHeader-avatar': {
+      marginRight: 0,
+    },
+    '& .MuiCardHeader-title': {
+      display: 'none',
+    },
   },
 }));

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { matchPath, useHistory, useLocation } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
@@ -16,20 +17,22 @@ import {
   BoxContainer,
   DrawerList,
   LogoContainer,
+  ProfileButton,
 } from './Styles';
 import data from './sidebarData';
 import { routeData } from '../data';
-import { matchPath, useLocation } from 'react-router-dom';
+import { routes } from 'Components/Routes';
 
 const logoImagePath = `${process.env.PUBLIC_URL}/assets/logos/full-colored-logo.svg`;
 
 function MainContainer({ children }: { children: React.ReactNode }) {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(window.innerWidth < 550 ? false : true);
   const toggleDrawer = () => {
     setOpen(!open);
   };
 
   const location = useLocation();
+  const history = useHistory();
   const [routeDetails, setRouteDetails] = useState<typeof routeData[0]>(
     routeData[0],
   );
@@ -54,9 +57,11 @@ function MainContainer({ children }: { children: React.ReactNode }) {
     <BoxContainer>
       <AppBar position="absolute" open={open}>
         <Toolbar
-          sx={{
-            pr: '24px', // keep right padding when drawer closed
-          }}
+          sx={
+            {
+              // pr: '24px', // keep right padding when drawer closed
+            }
+          }
         >
           <IconButton
             edge="start"
@@ -75,19 +80,26 @@ function MainContainer({ children }: { children: React.ReactNode }) {
             variant="h6"
             color="inherit"
             noWrap
-            sx={{ flexGrow: 1 }}
+            sx={{ flexGrow: 1, minWidth: '120px' }}
           >
-            Dashboard
+            {routeDetails.details?.title}
           </Typography>
-          <CardHeader
-            avatar={
-              <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                A
-              </Avatar>
-            }
-            title="Andreas Sujono"
-            className="profile-card"
-          />
+          <ProfileButton>
+            <CardHeader
+              avatar={
+                <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
+                  A
+                </Avatar>
+              }
+              title="Andreas Sujono"
+              className="profile-card"
+              sx={{
+                width: 'auto',
+                maxWidth: '250px',
+                marginLeft: 'auto',
+              }}
+            />
+          </ProfileButton>
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open}>
@@ -100,7 +112,7 @@ function MainContainer({ children }: { children: React.ReactNode }) {
             marginBottom: '2rem',
           }}
         >
-          <LogoContainer>
+          <LogoContainer onClick={() => history.push(routes.LP_HOMEPAGE)}>
             <img src={logoImagePath} alt="NTUX" />
           </LogoContainer>
           <IconButton onClick={toggleDrawer}>
@@ -109,7 +121,10 @@ function MainContainer({ children }: { children: React.ReactNode }) {
         </Toolbar>
         {data.map((item) => (
           <DrawerList key={item.id}>
-            <ListItemButton selected={routeDetails.id === item.id}>
+            <ListItemButton
+              selected={routeDetails.id === item.id}
+              onClick={() => history.push(item.path)}
+            >
               <ListItemIcon>
                 <item.Icon />
               </ListItemIcon>
@@ -131,12 +146,14 @@ function MainContainer({ children }: { children: React.ReactNode }) {
         }}
       >
         <Toolbar />
-        <Container
-          maxWidth="xl"
-          sx={{ mt: 4, mb: 4, padding: 0, margin: '32px 0' }}
-        >
-          {children}
-        </Container>
+        <div style={{ minWidth: '300px', overflowX: 'hidden' }}>
+          <Container
+            sx={{ m: 0, p: 0, padding: 0, paddingLeft: 0 }}
+            style={{ padding: 0, maxWidth: '100%' }}
+          >
+            {children}
+          </Container>
+        </div>
       </Box>
     </BoxContainer>
   );

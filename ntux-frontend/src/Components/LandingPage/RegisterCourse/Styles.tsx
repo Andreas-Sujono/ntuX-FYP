@@ -45,4 +45,11 @@ export const StyledForm = styled(Box).attrs({
   ${media.lessThan('md')`
     padding: 16px
   `};
+  ${media.lessThan('sm')`
+    padding: 16px 0;
+
+    >.MuiGrid-container{
+      margin-left: 0
+    }
+  `};
 `;

@@ -50,10 +50,14 @@ export const TopSummary = styled.div`
     align-items: flex-start;
 
     .right-content {
-      padding: 16px;
+      padding: 0;
+      width: 100%;
       h1 {
         font-size: 24px;
         line-height: 30px;
+      }
+      ul:nth-child(2){
+        margin-bottom: 0
       }
     }
   `}
@@ -85,7 +89,7 @@ export const NavBar = styled.div`
   display: flex;
   align-items: center;
   column-gap: 50px;
-  font-weight: bold;
+  font-weight: 500;
   font-size: 18px;
   line-height: 24px;
   background: #f5f5f5;
@@ -104,7 +108,7 @@ export const Content = styled.div`
   padding-top: 20px;
   max-width: 1024px;
   .title {
-    font-weight: bold;
+    font-weight: 500;
     font-size: 22px;
     line-height: 29px;
     margin-bottom: 16px;

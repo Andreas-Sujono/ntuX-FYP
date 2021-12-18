@@ -13,7 +13,7 @@ export const routeData = [
   },
   {
     path: routes.ADMIN.MY_COURSES,
-    component: lazy(() => import('./Dashboard')),
+    component: lazy(() => import('./MyCourses')),
     exact: true,
     id: '2',
     details: {
@@ -22,7 +22,7 @@ export const routeData = [
   },
   {
     path: routes.ADMIN.PORTFOLIO,
-    component: lazy(() => import('./Dashboard')),
+    component: lazy(() => import('./ManagePortfolio')),
     exact: true,
     id: '3',
     details: {
@@ -31,7 +31,7 @@ export const routeData = [
   },
   {
     path: routes.ADMIN.STUDENT_TUTORING,
-    component: lazy(() => import('./Dashboard')),
+    component: lazy(() => import('./StudentTutoring')),
     exact: true,
     id: '4',
     details: {
@@ -40,7 +40,7 @@ export const routeData = [
   },
   {
     path: routes.ADMIN.POINTS_REWARDS,
-    component: lazy(() => import('./Dashboard')),
+    component: lazy(() => import('./PointsRewards')),
     exact: true,
     id: '5',
     details: {
@@ -49,8 +49,7 @@ export const routeData = [
   },
   {
     path: routes.SETTINGS.BASE,
-    component: lazy(() => import('./Dashboard')),
-    exact: true,
+    component: lazy(() => import('./Settings')),
     id: '6',
     details: {
       title: 'Settings',

@@ -100,6 +100,9 @@ const ThemeProvider = ({
             '&.Mui-selected': {
               background: '#EFEFEF',
             },
+            '&.Mui-selected:hover': {
+              background: '#EFEFEF',
+            },
           },
         },
       },
