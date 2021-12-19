@@ -1,3 +1,3 @@
-import Dashboard from './Dashboard';
+import ManagePortfolio from './ManagePortfolio';
 
-export default Dashboard;
+export default ManagePortfolio;

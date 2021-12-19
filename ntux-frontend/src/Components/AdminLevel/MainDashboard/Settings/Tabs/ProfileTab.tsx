@@ -30,6 +30,20 @@ export default function ProfileTab() {
             </Typography>
             <Divider sx={{ mb: 2, mt: 0.5 }} />
           </Grid>
+          <Grid item xs={12} sm={12}>
+            <TextField
+              fullWidth
+              id="file"
+              type="file"
+              name="file"
+              value=""
+              label="Profile Image"
+              // variant="filled"
+              InputLabelProps={{
+                shrink: true,
+              }}
+            />
+          </Grid>
           <Grid item xs={12} sm={6}>
             <TextField
               fullWidth
