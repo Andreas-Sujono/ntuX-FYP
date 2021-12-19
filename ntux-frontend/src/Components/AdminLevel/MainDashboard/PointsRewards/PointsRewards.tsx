@@ -2,7 +2,7 @@ import React from 'react';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
-import { Typography, Box } from '@mui/material';
+import { Typography } from '@mui/material';
 import { TopBox } from './Styles';
 import {
   HowToGetPoints,

@@ -1,3 +1,3 @@
-import Dashboard from './Dashboard';
+import StudentTutoring from './StudentTutoring';
 
-export default Dashboard;
+export default StudentTutoring;

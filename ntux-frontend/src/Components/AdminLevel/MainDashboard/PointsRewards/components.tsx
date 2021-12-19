@@ -203,15 +203,18 @@ export const RewardsGallery = ({ onClickRewardDetails }: any) => {
                 alt="green iguana"
               />
               <CardContent>
-                <Typography gutterBottom variant="h6" component="div">
+                <Typography variant="h6" component="div">
                   Voucher 20$
                 </Typography>
+                <Typography gutterBottom variant="body2" component="div">
+                  Cost: 10 pts
+                </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  Lizards are a widespread group of squamate reptiles, with over
-                  6,000 species, ranging across all continents except Antarctica
+                  Lizards are a widespread group of squamate reptiles
                 </Typography>
               </CardContent>
               <CardActions sx={{ mt: -2 }}>
+                <Button size="small">Reedem</Button>
                 <Button size="small" onClick={() => onClickRewardDetails({})}>
                   See details
                 </Button>
