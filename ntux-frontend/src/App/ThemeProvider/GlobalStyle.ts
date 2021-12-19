@@ -110,6 +110,9 @@ const GlobalStyle = createGlobalStyle<ThemeProps>`
         .MuiGrid-container{
             max-width: 100% !important;
         }
+        .slick-prev::before{
+            color: black !important;
+        }
     `}
 `;
 

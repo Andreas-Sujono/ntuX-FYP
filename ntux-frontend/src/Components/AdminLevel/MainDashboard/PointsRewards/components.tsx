@@ -181,10 +181,21 @@ export const RewardsGallery = ({ onClickRewardDetails }: any) => {
       <Typography component="h5" variant="h6" mb={2} mt={1}>
         Rewards Available
       </Typography>
-      <Box pl={3} pr={3}>
+      <Box
+        sx={(theme) => ({
+          [theme.breakpoints.up('md')]: { pl: 3, pr: 3 },
+          [theme.breakpoints.down('md')]: { pl: 1, pr: 2 },
+        })}
+      >
         <Slider {...settings}>
           {[1, 2, 3, 4, 5, 6].map((item) => (
-            <Card sx={{ maxWidth: '94%', mr: 2 }} key={item}>
+            <Card
+              sx={(theme) => ({
+                [theme.breakpoints.up('md')]: { mr: 0, maxWidth: '94%' },
+                [theme.breakpoints.down('md')]: { mr: 0 },
+              })}
+              key={item}
+            >
               <CardMedia
                 component="img"
                 height="140"

@@ -28,10 +28,10 @@ export default function PointsRewards() {
         <Grid item xs={12}>
           <TopBox>
             <Grid container sx={{ alignItems: 'center' }}>
-              <Grid item>
+              <Grid item xs={1} sx={{ maxWidth: '50px' }}>
                 <MilitaryTechIcon sx={{ fontSize: '3rem', color: 'gold' }} />
               </Grid>
-              <Grid item xs={5} sx={{ ml: 2 }}>
+              <Grid item xs={10} md={5} sx={{ ml: 2 }}>
                 <Typography component="h5" variant="h6">
                   Level 3 (Gold)
                 </Typography>
@@ -41,10 +41,10 @@ export default function PointsRewards() {
                   label="680 / 1000 exp"
                   sx={{ mt: 0 }}
                   type="string"
-                  minWidth={180}
+                  minWidth={100}
                 />
               </Grid>
-              <Grid item sx={{ textAlign: 'right' }} xs={6}>
+              <Grid item xs={12} md={6} className="grid-item-2">
                 <Typography
                   component="h3"
                   variant="h5"

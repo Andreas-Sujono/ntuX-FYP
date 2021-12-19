@@ -17,4 +17,15 @@ export const TopBox = styled(Paper).attrs({
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+
+  .grid-item-2 {
+    text-align: right;
+  }
+
+  ${media.lessThan('md')`
+    .grid-item-2{
+      text-align: left;
+      margin-top: 1rem;
+    }
+  `}
 `;
