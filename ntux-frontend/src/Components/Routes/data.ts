@@ -29,11 +29,11 @@ export const routes = {
     PORTFOLIO: '/dashboard/portfolio',
   },
   COURSES: {
-    BASE: '/dashboard/my-courses',
-    COURSE: '/dashboard/my-courses/:courseId',
-    OVERVIEW: '/dashboard/my-courses/:courseId/overview',
-    COURSE_CONTENT: '/dashboard/my-courses/:courseId/content',
-    ANNOUNCEMENTS: '/dashboard/my-courses/:courseId/announcements',
+    BASE: '/dashboard/courses/:courseId',
+    COURSE: '/dashboard/courses/:courseId',
+    OVERVIEW: '/dashboard/courses/:courseId/overview',
+    COURSE_CONTENT: '/dashboard/courses/:courseId/content',
+    ANNOUNCEMENTS: '/dashboard/courses/:courseId/announcements',
   },
   SETTINGS: {
     BASE: '/dashboard/settings',

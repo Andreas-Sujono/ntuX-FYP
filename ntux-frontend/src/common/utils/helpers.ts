@@ -42,7 +42,7 @@ export const createId = (length = 10): string => {
 export const makePath = (
   path: string,
   replacement: Record<string, any> = {},
-  queryParams?: string,
+  queryParams?: any,
   injectedQueryObj?: Record<string, any>,
 ): string => {
   let result = path;

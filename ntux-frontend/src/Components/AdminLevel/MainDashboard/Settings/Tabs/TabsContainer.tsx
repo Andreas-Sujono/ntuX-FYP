@@ -35,7 +35,7 @@ export default function TabsContainer() {
   };
 
   return (
-    <Box sx={{ width: '100%', background: 'white', minHeight: '500px' }}>
+    <Box sx={{ width: '100%', background: 'white', minHeight: '100px' }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs
           value={value}

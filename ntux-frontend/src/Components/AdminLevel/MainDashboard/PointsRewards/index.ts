@@ -1,3 +1,3 @@
-import Dashboard from './Dashboard';
+import PointsRewards from './PointsRewards';
 
-export default Dashboard;
+export default PointsRewards;

@@ -16,8 +16,9 @@ import { media } from 'common/styling';
 export const StyledContainer = styled(Grid)<any>`
   position: relative;
   top: -6rem;
+
   ${media.lessThan('md')`
-    top: -11.5rem;
+    top: -10rem;
 
     > * {
       padding: 16px;
@@ -33,7 +34,7 @@ function SettingsContent() {
         padding: 0,
         width: '100%',
         maxWidth: '100%',
-        minHeight: '90vh',
+        // minHeight: '70vh',
       }}
     >
       <Paper style={{ width: '100%', height: '200px', maxWidth: '100%' }}>
@@ -51,7 +52,7 @@ function SettingsContent() {
         container
         spacing={3}
         maxWidth={'lg'}
-        sx={{ margin: 'auto' }}
+        sx={{ marginLeft: 'auto', marginRight: 'auto' }}
       >
         <Grid item xs={12} md={3}>
           <Paper style={{ width: '100%', height: '200px', maxWidth: '100%' }}>

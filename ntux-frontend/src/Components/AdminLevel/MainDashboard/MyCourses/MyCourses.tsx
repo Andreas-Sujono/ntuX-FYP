@@ -3,18 +3,29 @@ import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
-import { Typography } from '@mui/material';
+import { IconButton, InputAdornment, Typography } from '@mui/material';
 import { LinearProgressWithLabel } from './Styles';
 import { CourseCard as LPCourseCard } from '../../../LandingPage/Homepage/ExploreCourses/Styles';
 import { LinkText } from 'common/Components/shared/shared';
+import SearchIcon from '@mui/icons-material/Search';
+import { useHistory } from 'react-router-dom';
+import { routes } from '../../../Routes';
+import { makePath } from 'common/utils';
 
 export const CourseCard = () => {
+  const history = useHistory();
+  const cousePath = makePath(routes.COURSES.BASE, { courseId: 1 });
   return (
     <Grid
       container
       spacing={1}
-      sx={{ backgroundColor: 'white', borderRadius: '8px', marginLeft: 0 }}
-      // maxWidth={'md'}
+      sx={{
+        backgroundColor: 'white',
+        borderRadius: '8px',
+        marginLeft: 0,
+        cursor: 'pointer',
+      }}
+      onClick={() => history.push(cousePath)}
     >
       <Grid item xs={12} md={4} lg={4} sx={{ maxHeight: '150px' }}>
         <img
@@ -64,6 +75,15 @@ export default function MyCourses() {
             label="Search My Courses"
             id="fullWidth"
             sx={{ backgroundColor: 'white' }}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <IconButton aria-label="Search" edge="end">
+                    <SearchIcon />
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
           />
         </Grid>
         <Grid item xs={12} lg={6}>

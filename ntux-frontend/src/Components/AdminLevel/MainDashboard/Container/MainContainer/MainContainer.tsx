@@ -20,7 +20,7 @@ import {
   ProfileButton,
 } from './Styles';
 import data from './sidebarData';
-import { routeData } from '../data';
+import { routeData } from '../../data';
 import { routes } from 'Components/Routes';
 
 const logoImagePath = `${process.env.PUBLIC_URL}/assets/logos/full-colored-logo.svg`;

@@ -1,12 +1,27 @@
-import React, { Suspense, memo } from 'react';
-import { Route, Switch, Redirect } from 'react-router-dom';
+import React, { Suspense, memo, useState, useEffect } from 'react';
+import { Route, Switch, Redirect, useLocation } from 'react-router-dom';
 import { LoadingBar } from 'react-dre/lib/LoadingBar';
 import StudentMainContainer from './Container/MainContainer';
+import CourseContainer from './Container/CourseContainer';
 import { routeData } from './data';
 import { routes } from '../../Routes';
 
 const MainDashboardRoutes = () => {
-  const MainContainer = StudentMainContainer;
+  const location = useLocation();
+  const [isCourseLevel, setIsCourseLevel] = useState(false);
+  const MainContainer = isCourseLevel ? CourseContainer : StudentMainContainer;
+
+  useEffect(() => {
+    const pathname = location.pathname;
+
+    const isCourseLevelPath = /.*dashboard\/courses.*/.test(pathname);
+    if (isCourseLevelPath) {
+      setIsCourseLevel(true);
+    } else {
+      setIsCourseLevel(false);
+    }
+  }, [location.pathname]);
+
   return (
     <MainContainer>
       <Suspense
