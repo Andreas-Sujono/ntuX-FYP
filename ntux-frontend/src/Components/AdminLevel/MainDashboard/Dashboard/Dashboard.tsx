@@ -3,23 +3,13 @@ import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import { TopBox, FeatureBox } from './Styles';
 import { Typography } from '@mui/material';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
 import { CourseCard } from '../MyCourses/MyCourses';
 import { LinkText } from 'common/Components/shared/shared';
-
-const HowToGetPoints = [
-  'Finish online course',
-  'Ask answer question in forum discussion',
-  'Answer question in forum discussion',
-  'create your portfolio site',
-  'tutor student',
-];
+import { HowToGetPoints } from '../PointsRewards/components';
 
 function DashboardContent() {
   return (
-    <Container maxWidth="xl" sx={{ margin: 0, mt: 4, mb: 8, ml: 1, pr: 1 }}>
+    <Container maxWidth="xl" sx={{ margin: 0, mt: 2, mb: 8, ml: 1, pr: 1 }}>
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <TopBox>
@@ -56,26 +46,7 @@ function DashboardContent() {
           </Grid>
         </Grid>
         <Grid item xs={12} md={4} lg={4}>
-          <FeatureBox sx={{ padding: '1rem' }}>
-            <Typography component="h5" variant="h6">
-              Today Goals
-            </Typography>
-            <List dense={false}>
-              {HowToGetPoints.map((item) => (
-                <ListItem key={item} divider sx={{ p: 0.5 }}>
-                  <ListItemText
-                    primary={item}
-                    sx={{ fontSize: '18px' }}
-                    color="text.secondary"
-                  />
-                </ListItem>
-              ))}
-            </List>
-
-            {/* <Typography component="h3" variant="h6">
-              data
-            </Typography> */}
-          </FeatureBox>
+          <HowToGetPoints />
         </Grid>
         {/* Recent Orders */}
         <Grid item xs={12}>

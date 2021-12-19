@@ -4,8 +4,8 @@ import { media } from 'common/styling';
 
 export const TopBox = styled(Paper).attrs({
   sx: {
-    padding: '1.5rem',
-    minHeight: 140,
+    padding: '1rem',
+    minHeight: 100,
     boxShadow: '0px 4px 4px rgba(253, 145, 145, 0.25)',
     borderRadius: '16px',
     position: 'relative',

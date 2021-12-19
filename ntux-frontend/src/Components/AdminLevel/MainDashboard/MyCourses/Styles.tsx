@@ -20,15 +20,17 @@ export const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
 }));
 
 export function LinearProgressWithLabel(props: any) {
+  const textValue =
+    props.type === 'string' ? props.label : `${Math.round(props.value)}%`;
   return (
     <Box sx={{ display: 'flex', alignItems: 'center', ...props.sx }}>
       <Box sx={{ width: '100%', mr: 1 }}>
         <BorderLinearProgress variant="determinate" {...props} sx={{}} />
       </Box>
-      <Box sx={{ minWidth: 35 }}>
-        <Typography variant="body2" color="text.secondary">{`${Math.round(
-          props.value,
-        )}%`}</Typography>
+      <Box sx={{ minWidth: props.minWidth || 35 }}>
+        <Typography variant="body2" color="text.secondary">
+          {textValue}
+        </Typography>
       </Box>
     </Box>
   );

@@ -89,6 +89,14 @@ const GlobalStyle = createGlobalStyle<ThemeProps>`
     .MuiCardHeader-title{
         min-width: 200px;
     }
+    .slick-arrow{
+        /* background: white !important; */
+        border-radius: 50%;
+        color: black !important;
+    }
+    .slick-prev::before, .slick-next::before{
+        color: black !important;
+    }
     
     ${media.lessThan('sm')`
         html, body{
