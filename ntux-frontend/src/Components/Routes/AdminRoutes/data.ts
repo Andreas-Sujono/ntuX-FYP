@@ -6,4 +6,8 @@ export const routeData = [
     path: routes.ADMIN.BASE,
     component: lazy(() => import('../../AdminLevel')),
   },
+  {
+    path: routes.STAFF.BASE,
+    component: lazy(() => import('../../AdminLevel')),
+  },
 ];

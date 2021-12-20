@@ -6,4 +6,8 @@ export const routeData = [
     path: routes.ADMIN.BASE,
     component: lazy(() => import('./MainDashboard')),
   },
+  {
+    path: routes.STAFF.BASE,
+    component: lazy(() => import('./StaffDashboard')),
+  },
 ];

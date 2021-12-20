@@ -23,9 +23,10 @@ const Routes = () => {
       // behavior: 'smooth',
     });
     if (
-      matchPath(location.pathname, { path: routes.ADMIN.BASE }) ||
-      matchPath(location.pathname, { path: routes.LOGIN_PAGE }) ||
-      matchPath(location.pathname, { path: routes.RESET_PASSWORD_PAGE })
+      (matchPath(location.pathname, { path: routes.ADMIN.BASE }) ||
+        matchPath(location.pathname, { path: routes.LOGIN_PAGE }) ||
+        matchPath(location.pathname, { path: routes.RESET_PASSWORD_PAGE }),
+      matchPath(location.pathname, { path: routes.STAFF.BASE }))
     ) {
       setIsAdminRoutes(true);
     } else setIsAdminRoutes(false);

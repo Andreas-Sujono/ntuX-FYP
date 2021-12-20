@@ -28,6 +28,18 @@ export const routes = {
     EDIT_QUERY: '/dashboard/manage-question/:questionId',
     PORTFOLIO: '/dashboard/portfolio',
   },
+  STAFF: {
+    BASE: '/admin',
+    DASHBOARD: '/admin/dashboard',
+    MANAGE_COURSES: '/admin/manage-courses',
+    MANAGE_USERS: '/admin/manage-users',
+    MANAGE_REWARDS: '/admin/manage-rewards',
+    MANAGE_FORUM: '/admin/manage-forum',
+    SETTINGS: '/admin/settings',
+  },
+  STAFF_COURSES: {
+    BASE: '/admin/courses/:courseId',
+  },
   COURSES: {
     BASE: '/dashboard/courses/:courseId',
     COURSE: '/dashboard/courses/:courseId',

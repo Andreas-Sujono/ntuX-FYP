@@ -2,12 +2,9 @@ import React, { Suspense, memo } from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import { LoadingBar } from 'react-dre/lib/LoadingBar';
 import { routeData } from './data';
-import { routes } from '../Routes';
+import { routes } from '../../../Routes';
 
-const AdminRoutes = () => {
-  const isAdmin = true;
-  const base = isAdmin ? routes.STAFF.BASE : routes.ADMIN.BASE;
-
+const MainDashboardRoutes = () => {
   return (
     <Suspense
       fallback={
@@ -28,10 +25,10 @@ const AdminRoutes = () => {
         {routeData.map((route) => (
           <Route key={route.path} {...route} />
         ))}
-        <Redirect to={base} />;
+        <Redirect to={routes.COURSES.BASE} />;
       </Switch>
     </Suspense>
   );
 };
 
-export default memo(AdminRoutes);
+export default memo(MainDashboardRoutes);

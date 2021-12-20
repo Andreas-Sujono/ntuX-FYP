@@ -1,7 +1,7 @@
 import React from 'react';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
-import { Button, Typography } from '@mui/material';
+import { Button } from '@mui/material';
 import { TopBox } from './Styles';
 import {
   ProfileBox,

@@ -6,7 +6,7 @@ import UserSummarySection from './UserSummarySection';
 import WorkExperienceSection from './WorkExperienceSection';
 import EducationSection from './EducationSection';
 import CertificationSection from './CertificationSection';
-import ContributionSection from './ContributionSection';
+// import ContributionSection from './ContributionSection';
 import SkillsSection from './SkillsSection';
 
 const DefaultTemplate: React.FC = () => {

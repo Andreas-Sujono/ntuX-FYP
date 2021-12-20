@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import { CourseAds, OpenForAds } from '../../../common/Components/AdsCard';
+// import { CourseAds, OpenForAds } from '../../../common/Components/AdsCard';
 import SideNav from './SideNav';
 import { Container, LeftSection, CenterSection, RightSection } from './Styles';
 
