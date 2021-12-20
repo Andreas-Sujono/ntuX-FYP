@@ -4,6 +4,7 @@ import SchoolIcon from '@mui/icons-material/School';
 import LoyaltyIcon from '@mui/icons-material/Loyalty';
 import SettingsIcon from '@mui/icons-material/Settings';
 import PeopleIcon from '@mui/icons-material/People';
+import ForumIcon from '@mui/icons-material/Forum';
 
 export interface DropdownItem {
   id: string;
@@ -42,7 +43,7 @@ const data: SidebarItem[] = [
     id: '4',
     name: 'Manage Forum',
     path: routes.STAFF.MANAGE_FORUM,
-    Icon: PeopleIcon,
+    Icon: ForumIcon,
   },
   {
     id: '5',

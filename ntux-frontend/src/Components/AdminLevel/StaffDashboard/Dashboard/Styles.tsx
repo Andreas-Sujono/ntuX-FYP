@@ -27,15 +27,9 @@ export const TopBox = styled(Paper).attrs({
   `}
 `;
 
-export const FeatureBox = styled(Paper).attrs({
+export const StyledBox = styled(Paper).attrs({
   sx: {
-    padding: '1.5rem 1rem',
-    boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
-    borderRadius: '8px',
+    p: 2,
     position: 'relative',
   },
-})<any>`
-  strong {
-    color: #c63044;
-  }
-`;
+})<any>``;

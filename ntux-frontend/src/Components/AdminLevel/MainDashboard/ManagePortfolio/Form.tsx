@@ -72,7 +72,6 @@ export default function Form() {
             fullWidth
             id="fullName"
             label="Full Name (as shown in NRIC/ FIN/ Passport)"
-            autoFocus
             size="medium"
           />
         </Grid>

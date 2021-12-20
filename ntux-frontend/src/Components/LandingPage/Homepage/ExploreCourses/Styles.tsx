@@ -62,12 +62,12 @@ export const CourseCard = styled.div`
     }
     .hours {
       color: #484747;
-      margin-top: 12px;
+      margin-top: 8px;
     }
     .batch {
       font-size: 18px;
       line-height: 21px;
-      margin-top: 12px;
+      margin-top: 8px;
 
       strong {
         color: #c63044;
