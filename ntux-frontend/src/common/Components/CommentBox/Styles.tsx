@@ -13,7 +13,8 @@ export const MainBox = styled.div`
   border: 1px solid #c7c7c7;
   box-sizing: border-box;
   border-radius: 8px;
-  padding: 16px 20px;
+  padding: 16px 16px;
+  font-size: 1rem;
 `;
 
 export const Row = styled.div`
@@ -46,7 +47,9 @@ export const VoteContainer = styled.div`
   }
 `;
 
-export const TextContainer = styled.div``;
+export const TextContainer = styled.div`
+  font-size: 1rem;
+`;
 
 export const BottomRow = styled.div`
   color: #888686;
@@ -67,14 +70,15 @@ export const BottomRow = styled.div`
 export const ReplyContainer = styled.div`
   padding: 8px;
   padding-left: 60px;
+  font-size: 0.9rem;
 
   .author-name {
-    font-size: 16px;
+    font-size: 0.9rem;
     color: #ae1b1b;
     margin-left: 1em;
   }
   .posted-date {
     color: #888686;
-    font-size: 14px;
+    font-size: 0.9rem;
   }
 `;

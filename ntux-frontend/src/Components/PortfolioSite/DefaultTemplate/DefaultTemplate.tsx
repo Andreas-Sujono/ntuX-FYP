@@ -35,8 +35,8 @@ const DefaultTemplate: React.FC = () => {
         if (item.sectionName === 'skills')
           return <SkillsSection data={item.data} key={key} />;
 
-        if (item.sectionName === 'siteContribution')
-          return <ContributionSection data={item.data} key={key} />;
+        // if (item.sectionName === 'siteContribution')
+        //   return <ContributionSection data={item.data} key={key} />;
 
         return null;
       })}

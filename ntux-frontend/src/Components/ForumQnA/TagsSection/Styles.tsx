@@ -51,7 +51,7 @@ export const TagCard = styled.div`
   box-sizing: border-box;
   border-radius: 8px;
   padding: 12px;
-  width: 31%;
+  width: 48%;
   margin-right: 2%;
   cursor: pointer;
 

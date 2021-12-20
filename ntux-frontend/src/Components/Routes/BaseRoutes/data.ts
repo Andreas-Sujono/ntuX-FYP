@@ -44,4 +44,8 @@ export const routeData = [
     path: routes.ADMIN.BASE,
     component: lazy(() => import('../AdminRoutes')),
   },
+  {
+    path: routes.FORUM.BASE,
+    component: lazy(() => import('../../ForumQnA')),
+  },
 ];

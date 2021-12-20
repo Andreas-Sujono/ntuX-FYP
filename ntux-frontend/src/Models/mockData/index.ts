@@ -41,12 +41,12 @@ export const mockQuestions: QuestionSummary[] = [
     tags: [
       {
         id: '1',
-        tag: 'html',
+        tag: 'EE4013',
         description: 'test',
       },
       {
         id: '2',
-        tag: 'css',
+        tag: 'Course',
         description: 'test',
       },
     ],
@@ -68,12 +68,12 @@ export const mockQuestions: QuestionSummary[] = [
     tags: [
       {
         id: '1',
-        tag: 'html',
+        tag: 'EE4013',
         description: 'test',
       },
       {
         id: '2',
-        tag: 'css',
+        tag: 'random',
         description: 'test',
       },
     ],
@@ -95,12 +95,12 @@ export const mockQuestions: QuestionSummary[] = [
     tags: [
       {
         id: '1',
-        tag: 'html',
+        tag: 'EE4013',
         description: 'test',
       },
       {
         id: '2',
-        tag: 'css',
+        tag: 'Programming',
         description: 'test',
       },
     ],
@@ -122,39 +122,12 @@ export const mockQuestions: QuestionSummary[] = [
     tags: [
       {
         id: '1',
-        tag: 'html',
+        tag: 'EE4013',
         description: 'test',
       },
       {
         id: '2',
-        tag: 'css',
-        description: 'test',
-      },
-    ],
-  },
-  {
-    id: '12121',
-    author: {
-      id: '1212',
-      name: 'andreas sujono',
-      profileImage: '',
-      description: '',
-    },
-    question: 'How to deploy a nodeJs server in sds to Heroku?',
-    description:
-      'I’m trying to deploy a server written in NodeJs, I want to host it online and found out that Heroku is the best option for it. How to deploy it by using command line only......',
-    postedDate: new Date(),
-    numberOfVotes: 5,
-    numberOfSolutions: 10,
-    tags: [
-      {
-        id: '1',
-        tag: 'html',
-        description: 'test',
-      },
-      {
-        id: '2',
-        tag: 'css',
+        tag: 'Course',
         description: 'test',
       },
     ],
@@ -178,12 +151,12 @@ export const mockQuestion: Question = {
   tags: [
     {
       id: '1',
-      tag: 'html',
+      tag: 'EE4013',
       description: 'test',
     },
     {
       id: '2',
-      tag: 'css',
+      tag: 'Course',
       description: 'test',
     },
   ],

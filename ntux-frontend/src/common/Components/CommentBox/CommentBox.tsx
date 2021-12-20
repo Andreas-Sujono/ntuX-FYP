@@ -13,6 +13,7 @@ import {
   BottomRow,
   ReplyContainer,
 } from './Styles';
+import { Divider } from '@mui/material';
 
 interface Props {
   comment: Comment;
@@ -25,7 +26,7 @@ function CommentBox({ comment }: Props): React.ReactElement {
     return (
       <ReplyContainer>
         {item.comment}{' '}
-        <span className="author-name"> - {item.author.name}</span>,{' '}
+        <span className="author-name"> By {item.author.name}</span>,{' '}
         <span className="posted-date">{item.postedDate.toDateString()}</span>
       </ReplyContainer>
     );
@@ -67,7 +68,7 @@ function CommentBox({ comment }: Props): React.ReactElement {
       {(comment.replies || []).map((item) => (
         <div key={item.comment}>
           {renderReplyBox(item)}
-          <hr />
+          <Divider />
         </div>
       ))}
       {!!comment.replies?.length && (

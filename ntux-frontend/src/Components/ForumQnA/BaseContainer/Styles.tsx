@@ -6,7 +6,7 @@ export const Container = styled(PageContentContainer)`
   min-height: 60vh;
   display: flex;
   justify-content: space-between;
-  padding-top: 40px;
+  padding-top: 100px;
   padding-bottom: 80px;
 
   /* h1 {

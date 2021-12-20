@@ -13,9 +13,9 @@ export const mockSiteData: AllSiteData = {
         Looking for software engineering internship for August-December 2021 period`,
       resumeLink: '',
       backgroundImage:
-        'https://media-exp1.licdn.com/dms/image/C4E16AQGdOxRvyrPZYA/profile-displaybackgroundimage-shrink_350_1400/0/1623390586484?e=1629936000&v=beta&t=jEExigX1DyB7_myhA9D4VubX8VYuapcNrTNBZBLufpw',
+        'https://www.nawpic.com/media/2020/nature-background-nawpic-10.jpg',
       profileImage:
-        'https://media-exp1.licdn.com/dms/image/C4E03AQGq_6a7NMxyqA/profile-displayphoto-shrink_400_400/0/1623389195049?e=1629936000&v=beta&t=YfW27HvxAkVlA6eGM1zVTFGbIIfPJ1irrs0TzR-P44c',
+        'https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg',
       socialMedias: [
         {
           id: '1',

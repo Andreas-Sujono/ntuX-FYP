@@ -36,14 +36,16 @@ export const RightCard = styled.div`
 
   .name {
     font-weight: bold;
+    font-size: 1.2rem;
   }
   .role {
-    margin-top: 6px;
+    margin-top: 0px;
+    font-size: 1rem;
   }
   .period {
     color: #6f6f6f;
-    margin-top: 6px;
-    font-size: 16px;
+    margin-top: 0px;
+    font-size: 0.9rem;
   }
   .desc {
     background: #ffffff;
@@ -52,7 +54,7 @@ export const RightCard = styled.div`
     box-sizing: border-box;
     border-radius: 8px;
     margin-top: 12px;
-    font-size: 16px;
+    font-size: 1rem;
   }
 
   ${media.lessThan('md')`

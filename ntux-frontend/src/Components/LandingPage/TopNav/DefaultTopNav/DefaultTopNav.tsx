@@ -62,13 +62,17 @@ const DefaultTopNav: React.FC = () => {
     return (
       <>
         <li>
-          {renderWithLink(routes.LP_HOMEPAGE, 'courses', <>Expore Courses</>)}
+          {renderWithLink(
+            routes.LP_HOMEPAGE,
+            'explore-courses',
+            <>Expore Courses</>,
+          )}
         </li>
         <li>
-          <Link to="#">Forum Discussion</Link>
+          <Link to={routes.FORUM.QUESTIONS}>Forum Discussion</Link>
         </li>
         <li>
-          <Link to="#">Student Tutoring</Link>
+          <Link to={routes.ADMIN.STUDENT_TUTORING}>Student Tutoring</Link>
         </li>
         <li className="highlighted">
           <Link to={routes.LOGIN_PAGE}>

@@ -20,7 +20,7 @@ export const PaddedContainer = styled.div`
 `;
 
 export const SectionContainer = styled.div`
-  padding: 2em 16px;
+  padding: 1em 16px;
   padding-bottom: 2em;
   position: relative;
 

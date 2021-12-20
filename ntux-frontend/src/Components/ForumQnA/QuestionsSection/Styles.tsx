@@ -52,7 +52,7 @@ export const Card = styled.div`
   border: 1px solid #ae1b1b;
   box-sizing: border-box;
   border-radius: 8px;
-  padding: 16px 20px;
+  padding: 12px 16px;
   margin-top: 1.2em;
   cursor: pointer;
 `;
@@ -62,22 +62,26 @@ export const CardTopRow = styled.div`
   justify-content: space-between;
 
   .left-section {
-    width: 80%;
+    width: 78%;
 
     .title {
-      font-weight: bold;
-      font-size: 18px;
+      font-weight: 500;
+      font-size: 1.1rem;
     }
     .subtitle {
       color: #888686;
-      font-size: 16px;
-      margin-top: 1em;
+      font-size: 0.9rem;
+      margin-top: 0.8em;
     }
   }
 
   .right-section {
     font-size: 14px;
     color: #888686;
+    > div.posted-on {
+      font-size: 13px;
+      white-space: nowrap;
+    }
   }
 
   ${media.lessThan('md')`

@@ -22,6 +22,9 @@ export const Container = styled.div`
   .author-name {
     color: #ae1b1b;
     text-transform: capitalize;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   ${media.lessThan('sm')`

@@ -8,12 +8,10 @@ function BaseContainer({ children }: any): React.ReactElement {
     <Container>
       <LeftSection>
         <SideNav />
-        <CourseAds widths={['90%']} />
+        {/* <CourseAds widths={['90%']} /> */}
       </LeftSection>
       <CenterSection>{children}</CenterSection>
-      <RightSection>
-        <OpenForAds sizeRatio={0.8} />
-      </RightSection>
+      <RightSection>{/* <OpenForAds sizeRatio={0.8} /> */}</RightSection>
     </Container>
   );
 }

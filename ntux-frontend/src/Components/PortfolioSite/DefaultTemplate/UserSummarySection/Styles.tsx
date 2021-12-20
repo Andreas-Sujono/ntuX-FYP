@@ -48,16 +48,17 @@ export const TopContentLeftSection = styled.div`
 
   .name {
     font-weight: bold;
-    font-size: 32px;
-    margin-top: 12px;
+    font-size: 2rem;
+    margin-top: 4px;
   }
   .role {
-    font-size: 22px;
+    font-size: 1.3rem;
+    margin-top: -3px;
   }
   .contact {
-    font-size: 16px;
+    font-size: 1rem;
     color: #6f6f6f;
-    margin-top: 6px;
+    margin-top: 0px;
   }
 
   ${media.lessThan('md')`
@@ -77,6 +78,6 @@ export const BottomContent = styled.div`
   box-sizing: border-box;
   border-radius: 8px;
   padding: 16px;
-  font-size: 15px;
+  font-size: 1.1rem;
   margin-top: 1em;
 `;

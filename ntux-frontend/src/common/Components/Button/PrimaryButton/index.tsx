@@ -42,7 +42,7 @@ const PrimaryBytton: React.FunctionComponent<IPrimaryByttonProps> = ({
   children,
   className,
   style = {},
-  color = '#ae1b1b',
+  color = '#C63044',
   width = 'auto',
 }: IPrimaryByttonProps) => {
   return (

@@ -25,7 +25,7 @@ function QuestionCard({
           <div className="subtitle">{summary.description}</div>
         </div>
         <div className="right-section">
-          <div>
+          <div className="posted-on">
             Posted {shortenDateFormat(summary.postedDate.getTime() / 1000)} ago
           </div>
           <br />
@@ -34,9 +34,9 @@ function QuestionCard({
       </CardTopRow>
       <CardBottomRow>
         <div className="left-section">
-          <div className="votes">
+          {/* <div className="votes">
             <span>{summary.numberOfVotes || 0}</span> Votes
-          </div>
+          </div> */}
           <div className="solutions">
             <span>{summary.numberOfSolutions || 0}</span> Solutions
           </div>

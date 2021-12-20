@@ -64,7 +64,7 @@ export const WorkRightCard = styled.div`
   padding: 16px;
   padding-left: 0;
   padding-top: 8px;
-  font-size: 15px;
+  font-size: 1rem;
   margin-left: 3em;
 
   ul {

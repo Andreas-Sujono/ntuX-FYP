@@ -111,22 +111,23 @@ export const UserCard = styled.div`
   .right-section {
     width: calc(100% - 50px);
     .name {
-      font-size: 17px;
+      font-size: 1rem;
       /* font-weight: bold; */
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
     .role {
-      font-size: 15px;
+      font-size: 0.8rem;
       color: #888686;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+      margin-top: -3px;
     }
     .level {
-      font-size: 15px;
-      color: #ae1b1b;
+      font-size: 0.8rem;
+      color: #000000;
     }
   }
 `;
