@@ -54,7 +54,10 @@ function MainContainer({ children }: { children: React.ReactNode }) {
 
   const location = useLocation();
   const history = useHistory();
-  const match = useRouteMatch(routes.COURSES.BASE);
+  const match: any = useRouteMatch(routes.COURSES.BASE) || {};
+  if (match?.params?.courseId === ':courseId')
+    match.params = { courseId: null };
+
   const [routeDetails, setRouteDetails] = useState<typeof routeData[0]>(
     routeData[0],
   );

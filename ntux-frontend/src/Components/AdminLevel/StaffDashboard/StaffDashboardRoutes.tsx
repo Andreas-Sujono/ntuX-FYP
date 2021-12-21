@@ -14,7 +14,7 @@ const StaffDashboardRoutes = () => {
   useEffect(() => {
     const pathname = location.pathname;
 
-    const isCourseLevelPath = /.*dashboard\/courses.*/.test(pathname);
+    const isCourseLevelPath = /.*admin\/courses.*/.test(pathname);
     if (isCourseLevelPath) {
       setIsCourseLevel(true);
     } else {

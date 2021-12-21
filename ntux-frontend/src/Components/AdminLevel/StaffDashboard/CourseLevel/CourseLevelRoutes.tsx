@@ -25,7 +25,7 @@ const MainDashboardRoutes = () => {
         {routeData.map((route) => (
           <Route key={route.path} {...route} />
         ))}
-        <Redirect to={routes.COURSES.BASE} />;
+        <Redirect to={routes.STAFF_COURSES.BASE} />;
       </Switch>
     </Suspense>
   );

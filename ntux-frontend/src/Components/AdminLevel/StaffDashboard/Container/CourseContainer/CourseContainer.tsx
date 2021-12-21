@@ -54,7 +54,10 @@ function MainContainer({ children }: { children: React.ReactNode }) {
 
   const location = useLocation();
   const history = useHistory();
-  const match = useRouteMatch(routes.COURSES.BASE);
+  const match: any = useRouteMatch(routes.STAFF_COURSES.BASE) || {};
+  if (match?.params?.courseId === ':courseId')
+    match.params = { courseId: null };
+
   const [routeDetails, setRouteDetails] = useState<typeof routeData[0]>(
     routeData[0],
   );
@@ -105,7 +108,7 @@ function MainContainer({ children }: { children: React.ReactNode }) {
             noWrap
             sx={{ flexGrow: 1, minWidth: '120px' }}
           >
-            EE4013: Computer Networking I
+            {routeDetails.details.title} - EE4013: Computer Networking I
           </Typography>
           <ProfileButton>
             <CardHeader
@@ -146,7 +149,7 @@ function MainContainer({ children }: { children: React.ReactNode }) {
           <ListItemButton
             selected={false}
             onClick={() => {
-              history.push(routes.ADMIN.BASE);
+              history.push(routes.STAFF.DASHBOARD);
               if (window.innerWidth < 550) {
                 setOpen(false);
               }

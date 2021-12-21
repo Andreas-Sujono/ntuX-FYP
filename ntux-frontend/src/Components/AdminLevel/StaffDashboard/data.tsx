@@ -65,4 +65,12 @@ export const routeData = [
       title: 'Settings',
     },
   },
+  {
+    path: routes.STAFF_COURSES.BASE,
+    component: lazy(() => import('./CourseLevel')),
+    id: '7',
+    details: {
+      title: 'Courses',
+    },
+  },
 ];

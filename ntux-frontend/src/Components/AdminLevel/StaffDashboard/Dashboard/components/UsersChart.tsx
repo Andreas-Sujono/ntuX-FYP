@@ -71,7 +71,7 @@ export default function UsersChart() {
   });
 
   return (
-    <Card>
+    <Card sx={{ height: '100%' }}>
       <BaseOptionChartStyle />
       <CardHeader title="Total Users: 120" />
       <ChartWrapperStyle dir="ltr">

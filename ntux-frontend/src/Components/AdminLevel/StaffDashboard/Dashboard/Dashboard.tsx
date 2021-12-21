@@ -5,6 +5,8 @@ import { Typography } from '@mui/material';
 import UsersChart from './components/UsersChart';
 import WebsiteTraffic from './components/WebsiteTraffic';
 import { StyledBox } from './Styles';
+import PopularCourses from './components/PopularCourses';
+import LatestUsers from './components/LatestUsers';
 
 function DashboardContent() {
   return (
@@ -64,6 +66,12 @@ function DashboardContent() {
               </StyledBox>
             </Grid>
           </Grid>
+        </Grid>
+        <Grid item xs={12}>
+          <PopularCourses />
+        </Grid>
+        <Grid item xs={12}>
+          <LatestUsers />
         </Grid>
       </Grid>
     </Container>

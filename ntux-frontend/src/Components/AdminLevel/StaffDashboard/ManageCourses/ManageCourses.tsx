@@ -11,7 +11,7 @@ import { makePath } from 'common/utils';
 
 export const CourseCard = () => {
   const history = useHistory();
-  const cousePath = makePath(routes.COURSES.BASE, { courseId: 1 });
+  const cousePath = makePath(routes.STAFF_COURSES.BASE, { courseId: 1 });
   return (
     <LPCourseCard
       onClick={() => history.push(cousePath)}

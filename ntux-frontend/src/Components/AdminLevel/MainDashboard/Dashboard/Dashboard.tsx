@@ -36,7 +36,7 @@ function DashboardContent() {
           </TopBox>
         </Grid>
         <Grid item xs={12} md={8} lg={8} maxWidth={'md'}>
-          <Grid spacing={0} sx={{ marginLeft: 0, mt: 1 }}>
+          <Grid sx={{ marginLeft: 0, mt: 1 }}>
             <Grid item xs={12} sx={{ marginLeft: 0 }}>
               <CourseCard />
             </Grid>
@@ -55,7 +55,8 @@ function DashboardContent() {
               Forum Discussion
             </Typography>
             <Typography component="h3" variant="body1" sx={{ mt: 1 }}>
-              Be active and earn more points,{' '}
+              Have any doubt?, Ask any questions and answer somebody
+              question.&nbsp; Be active and earn more points.&nbsp;
               <LinkText>
                 <strong>visit Forum Discussion</strong>
               </LinkText>
@@ -68,10 +69,24 @@ function DashboardContent() {
               Student Tutoring
             </Typography>
             <Typography component="h3" variant="body1" sx={{ mt: 1 }}>
-              Have difficulties in your learning, find a tutor and earn more
-              points,&nbsp;
+              Have any difficulties in your learning, find a tutor or be a tutor
+              to earn more points,&nbsp;
               <LinkText>
                 <strong> visit Student Tutoring</strong>
+              </LinkText>
+            </Typography>
+          </FeatureBox>
+        </Grid>
+        <Grid item xs={12}>
+          <FeatureBox>
+            <Typography component="h3" variant="h6">
+              Portfolio Site
+            </Typography>
+            <Typography component="h3" variant="body1" sx={{ mt: 1 }}>
+              Showcase your experience and build your own page. You can show
+              this to the future employer.&nbsp;
+              <LinkText>
+                <strong> visit Portfolio Site</strong>
               </LinkText>
             </Typography>
           </FeatureBox>

@@ -39,6 +39,12 @@ export const routes = {
   },
   STAFF_COURSES: {
     BASE: '/admin/courses/:courseId',
+    OVERVIEW: '/admin/courses/:courseId/overview',
+    COURSE_CONTENT: '/admin/courses/:courseId/content',
+    ANNOUNCEMENTS: '/admin/courses/:courseId/announcements',
+    MANAGE_BATCH: '/admin/courses/:courseId/manage-batch',
+    MANAGE_STUDENTS: '/admin/courses/:courseId/manage-students',
+    STUDENT_DETAIL: '/admin/courses/:courseId/students/:studentId',
   },
   COURSES: {
     BASE: '/dashboard/courses/:courseId',
