@@ -22,7 +22,7 @@ export const routeData = [
   },
   {
     path: routes.STAFF_COURSES.COURSE_CONTENT,
-    component: lazy(() => import('./CourseContent')),
+    component: lazy(() => import('./ManageCourseContent')),
     exact: true,
     id: '2',
     details: {
