@@ -1,9 +1,11 @@
+import { Course } from 'src/courseModule/entities/course.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToMany,
 } from 'typeorm';
 
 export enum UserRole {
@@ -70,4 +72,7 @@ export class User {
 
   @Column({ nullable: true, type: 'timestamp with time zone' })
   deletedAt: Date;
+
+  @ManyToMany(() => Course)
+  courses: Course[]; //for lecturers only
 }

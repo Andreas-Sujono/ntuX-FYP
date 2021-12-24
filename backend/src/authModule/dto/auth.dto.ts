@@ -9,6 +9,18 @@ export class ForgotPasswordDto {
   email: string;
 }
 
+export class ResendConfirmationDto {
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  email: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  type: 'EMAIL_CONFIRMATION' | 'FORGOT_PASSWORD';
+}
+
 export class ConfirmForgotPasswordDto {
   @ApiProperty()
   @IsNotEmpty()
@@ -60,18 +72,6 @@ export class ChangePasswordDto {
   @IsNotEmpty()
   @IsString()
   newPassword: string;
-}
-
-export class ConfirmAccountDto {
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsString()
-  email: string;
-
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsString()
-  confirmationCode: string;
 }
 
 export class SignUpDto extends User {

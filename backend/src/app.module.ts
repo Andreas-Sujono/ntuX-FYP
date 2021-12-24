@@ -6,6 +6,9 @@ import { JwtAuthGuard } from './authModule/jwt-auth.guard';
 import { APP_GUARD } from '@nestjs/core';
 import { CommonModule } from './commonModule/common.module';
 import { RolesGuard } from './authModule/roles/roles.guard';
+import { PassportModule } from '@nestjs/passport';
+import { JwtModule } from '@nestjs/jwt';
+import { CourseModule } from './courseModule/course.module';
 
 @Module({
   imports: [
@@ -21,9 +24,14 @@ import { RolesGuard } from './authModule/roles/roles.guard';
       database: process.env.DB_NAME,
       autoLoadEntities: true,
     }),
-
+    PassportModule,
+    JwtModule.register({
+      secret: process.env.SECRET_KEY,
+      signOptions: { expiresIn: '1m' },
+    }),
     AuthModule,
     CommonModule,
+    CourseModule,
   ],
   controllers: [],
   providers: [

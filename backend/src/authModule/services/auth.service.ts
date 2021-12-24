@@ -43,7 +43,23 @@ export class AuthService {
   }
 
   async login(email: string, password: string) {
-    const user = await this.validateUser(email, password);
+    const user = await this.userRepo.findOne({
+      where: { email, isActive: true },
+    });
+    if (!user)
+      throw new UnauthorizedException(
+        'Email is not registered!, Try register a course to get account',
+      );
+
+    const isMatch = await this.encryptionService.isHashMatched(
+      password,
+      user.hashedPassword,
+    );
+
+    if (!isMatch) throw new UnauthorizedException('Password is incorrect');
+
+    delete user.confirmationCode;
+    delete user.codeExpiresAt;
 
     if (!user.emailVerifiesAt)
       return {
@@ -125,13 +141,16 @@ export class AuthService {
     };
   }
 
-  async resendConfirmationEmail(email: string) {
+  async resendConfirmationEmail(
+    email: string,
+    type: 'EMAIL_CONFIRMATION' | 'FORGOT_PASSWORD',
+  ) {
     const user = await this.userRepo.findOne({ email });
     if (!user)
       throw new BadRequestException(
         'Email is not registered! Please Sign Up first',
       );
-    if (user.emailVerifiesAt)
+    if (type === 'EMAIL_CONFIRMATION' && user.emailVerifiesAt)
       throw new BadRequestException('Email is already confirmed');
 
     const longCode = this.generateLongCode();
@@ -140,12 +159,21 @@ export class AuthService {
     await this.userRepo.save(user);
 
     //send email confirmation with code
-    this.emailService.sendEmail(
-      email,
-      'NTUX: Confirm your email',
-      'Please go to this link to confirm your email: http://localhost:3000/confirm-email/?token=' +
-        longCode,
-    );
+    if (type === 'EMAIL_CONFIRMATION')
+      this.emailService.sendEmail(
+        email,
+        'NTUX: Confirm your email',
+        'Please go to this link to confirm your email: http://localhost:3000/confirm-email/?token=' +
+          longCode,
+      );
+
+    if (type === 'FORGOT_PASSWORD')
+      this.emailService.sendEmail(
+        email,
+        'NTUX: Confirm your email',
+        'Please go to this link to change your password: http://localhost:3000/forgot-password/?token=' +
+          longCode,
+      );
     return {
       user,
       status: 'NOT_CONFIRMED',
@@ -171,7 +199,7 @@ export class AuthService {
     this.emailService.sendEmail(
       email,
       'NTUX: Confirm your email',
-      'Please go to this link to confirm your email: http://localhost:3000/forgot-password/?token=' +
+      'Please go to this link to change your password: http://localhost:3000/forgot-password/?token=' +
         longCode,
     );
 
