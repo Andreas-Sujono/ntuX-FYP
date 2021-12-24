@@ -70,7 +70,9 @@ export class AuthService {
     const payload = { email: user.email, userId: user.id, role: user.role };
 
     return {
-      access_token: this.jwtService.sign(payload),
+      access_token: this.jwtService.sign(payload, {
+        secret: process.env.SECRET_KEY,
+      }),
       user,
       status: 'CONFIRMED',
     };
@@ -90,6 +92,7 @@ export class AuthService {
     try {
       const tempPassword = this.generateTempPassword();
       const longCode = this.generateLongCode();
+      delete body.id;
       const user = await this.userRepo.save({
         ...body,
         hashedPassword: tempPassword,
@@ -113,6 +116,7 @@ export class AuthService {
         status: 'NOT_CONFIRMED',
       };
     } catch (err) {
+      console.log(err);
       throw new BadRequestException('Email is already registered');
     }
   }
@@ -238,6 +242,28 @@ export class AuthService {
       'NTUX: Successfully changed your password',
       'You have succesfully changed your password',
     );
+
+    return {
+      status: 'SUCCESS', //redirect user to login
+    };
+  }
+
+  async resetPassword(body: any) {
+    const user = await this.userRepo.findOne({ email: body.email });
+    if (!user)
+      throw new BadRequestException(
+        'Email is not registered! Please Sign Up first',
+      );
+
+    if (user.confirmationCode !== body.token)
+      throw new BadRequestException('Code is incorrect');
+    if (user.codeExpiresAt < new Date())
+      throw new BadRequestException('Code is expired, Please forgot password!');
+
+    const hashedPassword = await this.encryptionService.hash(body.password);
+
+    user.hashedPassword = hashedPassword;
+    await this.userRepo.save(user);
 
     return {
       status: 'SUCCESS', //redirect user to login

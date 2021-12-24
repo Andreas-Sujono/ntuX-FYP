@@ -37,10 +37,10 @@ export class User {
   @Column({ nullable: true })
   salutation: string;
 
-  @Column()
+  @Column({ nullable: true })
   nationality: string;
 
-  @Column()
+  @Column({ nullable: true })
   citizenship: string;
 
   @Column({ nullable: true })
@@ -49,7 +49,7 @@ export class User {
   @Column({ nullable: true, type: 'timestamp with time zone' })
   dateOfBirth: Date;
 
-  @Column({ enum: UserRole })
+  @Column({ enum: UserRole, default: UserRole.STUDENT })
   role: string;
 
   @Column({ nullable: true, default: true })

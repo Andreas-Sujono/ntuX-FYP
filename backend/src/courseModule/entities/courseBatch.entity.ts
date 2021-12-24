@@ -36,7 +36,7 @@ export class CourseBatch {
   @Column({ type: 'timestamp with time zone' })
   registrationEndsAt: Date;
 
-  @Column({ enum: CourseBatchStatus })
+  @Column({ enum: CourseBatchStatus, default: CourseBatchStatus.DRAFT })
   status: CourseBatchStatus;
 
   @CreateDateColumn({ type: 'timestamp with time zone' })

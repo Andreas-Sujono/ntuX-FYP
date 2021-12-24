@@ -44,7 +44,7 @@ export class CourseService extends TypeOrmCrudService<Course> {
       course: { id: courseId },
     });
     return {
-      ...courseDetail,
+      ...(courseDetail[0] || {}),
       batches: courseBatches,
     };
   }

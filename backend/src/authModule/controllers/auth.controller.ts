@@ -21,29 +21,40 @@ export class AuthController {
     return this.authService.login(body.email, body.password);
   }
 
+  @Public()
   @Post('signup')
   async signup(@Body() body: SignUpDto) {
     return this.authService.signUp(body);
   }
 
+  @Public()
   @Get('confirm-email')
   async confirmEmail(
     @Query('email') email: string,
     @Query('token') token: string,
   ) {
-    return this.confirmEmail(email, token);
+    return this.authService.confirmEmail(email, token);
   }
 
-  @Post('resend-confirmation-code')
+  @Public()
+  @Post('reset-password')
+  async resetPassword(@Body() body: any) {
+    return this.authService.resetPassword(body);
+  }
+
+  @Public()
+  @Post('resend-confirmation')
   async resendConfirmation(@Body() body: ResendConfirmationDto) {
     return this.authService.resendConfirmationEmail(body.email, body.type);
   }
 
+  @Public()
   @Post('forgot-password')
   async forgotPassword(@Body() body: ForgotPasswordDto) {
     return this.authService.forgotPassword(body.email);
   }
 
+  @Public()
   @Post('confirm-forgot-password')
   async confirmForgotPassword(@Body() body: ConfirmForgotPasswordDto) {
     return this.authService.confirmForgotPassword(

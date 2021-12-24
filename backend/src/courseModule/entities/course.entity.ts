@@ -22,6 +22,9 @@ export class Course {
   @Column()
   name: string;
 
+  @Column({ nullable: true })
+  imageUrl: string;
+
   @Column({ nullable: true, default: '' })
   description: string;
 
@@ -31,7 +34,7 @@ export class Course {
   @Column({ nullable: true, default: '' })
   outline: string;
 
-  @Column({ enum: CourseStatus }) //DRAFT, PUBLISHED
+  @Column({ enum: CourseStatus, default: CourseStatus.DRAFT }) //DRAFT, PUBLISHED
   status: CourseStatus;
 
   @Column()

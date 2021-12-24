@@ -2,7 +2,7 @@ import { CourseUser } from './../entities/courseUser.entity';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TypeOrmCrudService } from '@nestjsx/crud-typeorm';
-import { User } from 'src/authModule/entities/user.entity';
+import { User, UserRole } from 'src/authModule/entities/user.entity';
 import { AuthService } from 'src/authModule/services/auth.service';
 import { Repository } from 'typeorm';
 import {
@@ -22,8 +22,13 @@ export class StudentRegistrationService extends TypeOrmCrudService<StudentRegist
     super(repo);
   }
 
-  async registerCourse(user: User, courseId: string, courseBatchId: string) {
+  async registerCourse(
+    user: User,
+    courseId: string | number,
+    courseBatchId: string | number,
+  ) {
     const existingUser = await this.userRepo.findOne({ email: user.email });
+    user.role = UserRole.STUDENT;
     if (!existingUser) {
       const { user: createdUser } = await this.authService.signUp(user);
       await this.repo.save(
