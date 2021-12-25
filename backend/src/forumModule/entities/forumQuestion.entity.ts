@@ -20,6 +20,9 @@ export class ForumQuestion {
   @ManyToOne(() => User)
   user: User;
 
+  @ManyToMany(() => ForumTag)
+  tags: ForumTag[];
+
   @ManyToOne(
     () => ForumQuestion,
     (forumQuestion) => forumQuestion.childrenQuestions,
@@ -34,9 +37,6 @@ export class ForumQuestion {
 
   @OneToMany(() => ForumAnswer, (forumAnswer) => forumAnswer.question)
   answers: ForumAnswer[];
-
-  @ManyToMany(() => ForumTag)
-  tags: ForumTag[];
 
   @Column()
   name: string;

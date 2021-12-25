@@ -8,9 +8,10 @@ import { UserService } from './services/user.service';
 import { CommonModule } from 'src/commonModule/common.module';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.strategy';
+import { PremiumSetting } from 'src/commonModule/entities/premiumSetting.entity';
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([User, PremiumSetting]),
     PassportModule,
     CommonModule,
     JwtModule.register({

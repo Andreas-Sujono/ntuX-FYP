@@ -1,5 +1,4 @@
-import { ForumTag } from './../entities/ForumTag.entity';
-import { ForumQuestion } from '../entities/forumQuestion.entity';
+import { ForumTag } from './../entities/forumTag.entity';
 import { Roles } from '../../authModule/roles/roles.decorator';
 import { Controller } from '@nestjs/common';
 import { Crud, CrudController } from '@nestjsx/crud';

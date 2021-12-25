@@ -1,5 +1,4 @@
 import { ForumQuestion } from './forumQuestion.entity';
-import { ForumTag } from './forumTag.entity';
 import { User } from 'src/authModule/entities/user.entity';
 import {
   Entity,
@@ -8,7 +7,6 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
-  ManyToMany,
   OneToMany,
 } from 'typeorm';
 
@@ -28,9 +26,6 @@ export class ForumAnswer {
 
   @OneToMany(() => ForumAnswer, (forumAnswer) => forumAnswer.parentAnswer)
   childrenAnswers: ForumAnswer[];
-
-  @ManyToMany(() => ForumTag)
-  tags: ForumTag[];
 
   @Column()
   name: string;

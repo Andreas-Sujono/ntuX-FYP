@@ -1,15 +1,22 @@
+import { ForumQuestion } from './forumQuestion.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
 
 @Entity()
 export class ForumTag {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @ManyToMany(() => ForumQuestion)
+  @JoinTable()
+  questions: ForumQuestion[];
 
   @Column()
   name: string;

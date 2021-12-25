@@ -1,3 +1,4 @@
+import { PremiumSetting } from './../../commonModule/entities/premiumSetting.entity';
 import { Course } from 'src/courseModule/entities/course.entity';
 import {
   Entity,
@@ -6,6 +7,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToMany,
+  OneToOne,
 } from 'typeorm';
 
 export enum UserRole {
@@ -87,4 +89,7 @@ export class User {
 
   @ManyToMany(() => Course)
   courses: Course[]; //for lecturers only
+
+  @OneToOne(() => PremiumSetting, (premiumSetting) => premiumSetting.user)
+  premiumSetting: PremiumSetting;
 }

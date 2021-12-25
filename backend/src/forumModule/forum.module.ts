@@ -8,13 +8,14 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CommonModule } from 'src/commonModule/common.module';
 import { ForumQuestion } from './entities/forumQuestion.entity';
-import { ForumTag } from './entities/ForumTag.entity';
+import { ForumTag } from './entities/forumTag.entity';
 import { ForumQuestionService } from './services/forumQuestion.service';
 import { ForumTagService } from './services/forumTag.service';
+import { User } from 'src/authModule/entities/user.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([ForumQuestion, ForumAnswer, ForumTag]),
+    TypeOrmModule.forFeature([ForumTag, ForumQuestion, ForumAnswer, User]),
     CommonModule,
     AuthModule,
   ],

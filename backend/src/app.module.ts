@@ -10,6 +10,7 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { CourseModule } from './courseModule/course.module';
 import { ForumModule } from './forumModule/forum.module';
+import { TutoringModule } from './tutoringModule/tutoring.module';
 
 @Module({
   imports: [
@@ -30,10 +31,11 @@ import { ForumModule } from './forumModule/forum.module';
       secret: process.env.SECRET_KEY,
       signOptions: { expiresIn: '1m' },
     }),
+    ForumModule,
     AuthModule,
     CommonModule,
     CourseModule,
-    ForumModule,
+    TutoringModule,
   ],
   controllers: [],
   providers: [

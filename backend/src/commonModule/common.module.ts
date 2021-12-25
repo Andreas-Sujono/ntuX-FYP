@@ -19,6 +19,7 @@ import { RewardService } from './services/reward.entity';
 import { RewardRedeemedService } from './services/rewardRedeemed.service';
 import { WebsiteActivityService } from './services/websiteActivity.service';
 import { WebsiteActivityController } from './controllers/websiteActivity.controller';
+import { User } from 'src/authModule/entities/user.entity';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { WebsiteActivityController } from './controllers/websiteActivity.control
       Reward,
       RewardRedeemed,
       WebsiteActivity,
+      User,
     ]),
   ],
   providers: [
