@@ -13,4 +13,13 @@ export class UserService extends TypeOrmCrudService<User> {
   async createUser(body: User) {
     return this.authService.signUp(body, body.role);
   }
+
+  async getTopUsers() {
+    return this.repo.find({
+      order: {
+        totalPoints: 'DESC',
+      },
+      take: 10,
+    });
+  }
 }

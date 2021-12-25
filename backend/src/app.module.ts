@@ -9,6 +9,7 @@ import { RolesGuard } from './authModule/roles/roles.guard';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { CourseModule } from './courseModule/course.module';
+import { ForumModule } from './forumModule/forum.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { CourseModule } from './courseModule/course.module';
     AuthModule,
     CommonModule,
     CourseModule,
+    ForumModule,
   ],
   controllers: [],
   providers: [

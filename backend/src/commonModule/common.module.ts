@@ -18,7 +18,7 @@ import { PortfolioService } from './services/Portfolio.service';
 import { RewardService } from './services/reward.entity';
 import { RewardRedeemedService } from './services/rewardRedeemed.service';
 import { WebsiteActivityService } from './services/websiteActivity.service';
-import { WebsiteActivityController } from './controllers/websiteAcitvity.entity';
+import { WebsiteActivityController } from './controllers/websiteActivity.controller';
 
 @Module({
   imports: [

@@ -1,8 +1,9 @@
 import { Roles } from '../roles/roles.decorator';
-import { Controller } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { Crud, CrudController, CrudRequest, Override } from '@nestjsx/crud';
 import { User, UserRole } from 'src/authModule/entities/user.entity';
 import { UserService } from '../services/user.service';
+import { Public } from '../public.decorator';
 
 @Crud({
   model: {
@@ -34,5 +35,11 @@ export class UserController implements CrudController<User> {
   @Override()
   async createOne(req: CrudRequest, dto: User) {
     return this.service.createUser(dto);
+  }
+
+  @Get('top')
+  @Public()
+  async getTopUsers() {
+    return this.service.getTopUsers();
   }
 }

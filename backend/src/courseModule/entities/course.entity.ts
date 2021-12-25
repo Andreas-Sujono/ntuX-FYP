@@ -34,6 +34,9 @@ export class Course {
   @Column({ nullable: true, default: '' })
   outline: string;
 
+  @Column({ nullable: true })
+  totalHours: number;
+
   @Column({ enum: CourseStatus, default: CourseStatus.DRAFT }) //DRAFT, PUBLISHED
   status: CourseStatus;
 
