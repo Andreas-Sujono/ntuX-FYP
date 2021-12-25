@@ -19,7 +19,7 @@ async function bootstrap() {
   app.enableCors();
   // app.use(csurf());
   app.use(helmet());
-  app.setGlobalPrefix('api/v1');
+  app.setGlobalPrefix(`${process.env.PATH_PREFIX || ''}api/v1`);
 
   await app.listen(3000);
 }

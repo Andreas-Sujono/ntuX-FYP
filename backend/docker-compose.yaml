@@ -2,12 +2,27 @@ version: "3.8"
 
 services: 
   ntux-backend:
-    image: node:13.12.0-alpine
+    image: node:16.10.0-alpine
     container_name: ntux-backend
     working_dir: /app
-    command: sh -c "yarn && npm run build && npm start"
+    command: sh -c "npm install && npm run build && npm start"
     ports:
       - 3001:3000
     volumes: 
       - .:/app
+    depends_on:
+      - ntux-db
+
+  ntux-db:
+    container_name: ntux-db
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: yHHTgBgMYTyIHLM0Q6XG
+      POSTGRES_PASSWORD: 9LCM9P7rQkLAqo5CjN2S
+      POSTGRES_DB: ntux
+    ports:
+      - "5433:5432"
+    volumes:
+      - ./ntux_pg_data:/var/lib/postgresql/data/
  
