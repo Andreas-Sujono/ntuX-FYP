@@ -1,4 +1,5 @@
-import { EmailService } from './../../commonModule/service/email.service';
+import { ChangePasswordDto } from './../dto/auth.dto';
+import { EmailService } from './../../commonModule/services/email.service';
 import {
   BadRequestException,
   Injectable,
@@ -6,10 +7,10 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
-import { EncryptionService } from 'src/commonModule/service/encryption.service';
+import { EncryptionService } from 'src/commonModule/services/encryption.service';
 import { Repository } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
-import { User } from '../entities/user.entity';
+import { User, UserRole } from '../entities/user.entity';
 import { SignUpDto } from '../dto/auth.dto';
 
 @Injectable()
@@ -88,7 +89,7 @@ export class AuthService {
     return Math.floor(100000 + Math.random() * 900000);
   }
 
-  async signUp(body: SignUpDto) {
+  async signUp(body: SignUpDto, role?: UserRole) {
     try {
       const tempPassword = this.generateTempPassword();
       const longCode = this.generateLongCode();
@@ -98,7 +99,7 @@ export class AuthService {
         hashedPassword: tempPassword,
         confirmationCode: longCode,
         codeExpiresAt: new Date(new Date().getTime() + 3600000), //1hour
-        role: 'STUDENT',
+        role: role || UserRole.STUDENT,
         emailVerifiesAt: null,
         deletedAt: null,
         isActive: true,
@@ -261,6 +262,19 @@ export class AuthService {
       throw new BadRequestException('Code is expired, Please forgot password!');
 
     const hashedPassword = await this.encryptionService.hash(body.password);
+
+    user.hashedPassword = hashedPassword;
+    await this.userRepo.save(user);
+
+    return {
+      status: 'SUCCESS', //redirect user to login
+    };
+  }
+
+  async changePassword(body: ChangePasswordDto) {
+    const user = await this.validateUser(body.email, body.currentPassword);
+
+    const hashedPassword = await this.encryptionService.hash(body.newPassword);
 
     user.hashedPassword = hashedPassword;
     await this.userRepo.save(user);

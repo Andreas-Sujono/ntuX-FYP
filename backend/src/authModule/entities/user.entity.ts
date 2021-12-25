@@ -19,6 +19,9 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column({ nullable: true })
+  profileImageUrl: string;
+
   @Column()
   fullName: string;
 
@@ -50,7 +53,7 @@ export class User {
   dateOfBirth: Date;
 
   @Column({ enum: UserRole, default: UserRole.STUDENT })
-  role: string;
+  role: UserRole;
 
   @Column({ nullable: true, default: true })
   isActive: boolean;
@@ -60,6 +63,15 @@ export class User {
 
   @Column({ nullable: true, type: 'timestamp with time zone' })
   codeExpiresAt: Date;
+
+  @Column({ nullable: true, default: 0 })
+  totalPoints: number;
+
+  @Column({ nullable: true, default: 0 })
+  totalExps: number;
+
+  @Column({ nullable: true, default: 1 })
+  level: number;
 
   @Column({ nullable: true, type: 'timestamp with time zone' })
   emailVerifiesAt: Date;
