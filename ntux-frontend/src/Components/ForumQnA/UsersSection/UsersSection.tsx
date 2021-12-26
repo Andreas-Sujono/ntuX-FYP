@@ -1,7 +1,6 @@
 import React, { memo } from 'react';
 import { SearchBar } from 'react-dre/lib/SearchBar';
 import { Link } from 'react-router-dom';
-import { ForumUser } from '../../../Models/Forum';
 import { mockForumUsers } from '../../../Models/mockData';
 import { makePath, routes } from '../../Routes';
 import {
@@ -15,8 +14,8 @@ import {
   UserCard,
 } from './Styles';
 
-const Card = ({ user }: { user: ForumUser }) => {
-  const getProfileImage = (_user: ForumUser) => {
+const Card = ({ user }: { user: any }) => {
+  const getProfileImage = (_user: any) => {
     if (_user.profileImage) return <img src={_user.profileImage} />;
     return _user.fullName.slice(0, 1);
   };

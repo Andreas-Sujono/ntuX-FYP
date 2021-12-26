@@ -39,6 +39,7 @@ export default class BaseService {
     } else if (headersPayload['Content-Type'] === null) {
       delete headersPayload['Content-Type'];
     }
+    headersPayload['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
 
     switch (headersPayload['Content-Type']) {
       case 'application/json':
@@ -64,6 +65,7 @@ export default class BaseService {
       const response: ApiResponse = await axios.get(
         this.joinURL(this._baseUrl, url),
       );
+      response.errorCode = response.errorCode || 0;
       if (response.errorCode === 401 || response.status === 401) {
         // unauthorized
         localStorage.clear();
@@ -90,6 +92,7 @@ export default class BaseService {
           cancelToken: this._cancelToken,
         },
       );
+      response.errorCode = response.errorCode || 0;
       return parseObjectToCamelCase(response);
     } catch (err: any) {
       return {
@@ -112,6 +115,7 @@ export default class BaseService {
           cancelToken: this._cancelToken,
         },
       );
+      response.errorCode = response.errorCode || 0;
       return parseObjectToCamelCase(response);
     } catch (err: any) {
       return {
@@ -138,6 +142,7 @@ export default class BaseService {
           cancelToken: this._cancelToken,
         },
       );
+      response.errorCode = response.errorCode || 0;
       return parseObjectToCamelCase(response);
     } catch (err: any) {
       return {
@@ -160,6 +165,7 @@ export default class BaseService {
         this.joinURL(this._baseUrl, url),
         parsedData.data,
       );
+      response.errorCode = response.errorCode || 0;
       return parseObjectToCamelCase(response);
     } catch (err: any) {
       return {

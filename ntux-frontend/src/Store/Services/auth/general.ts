@@ -1,123 +1,54 @@
-import { SignupRequest, LoginRequest } from './../../../Models/Auth';
-import { GAPI_CLIENT_ID, ACCOUNT_TYPE } from '../../Constants/auth/general';
+import {
+  ConfirmEmailRequest,
+  LoginRequest,
+  User,
+} from './../../../Models/Auth';
 import BaseService from '../base';
 
 export default class AuthService extends BaseService {
-  signup = async ({
-    accountType,
-    email,
-    fullName,
-    password,
-  }: SignupRequest) => {
-    let data = {};
-
-    if (accountType === ACCOUNT_TYPE.NORMAL) {
-      // if normal signup
-      data = {
-        accountType,
-        fullName,
-        email,
-        password,
-      };
-    }
-    // else if (accountType === ACCOUNT_TYPE.GOOGLE) {
-    //   // if google signup
-    //   const idToken = await this.getGoogleAuthToken();
-    //   data = {
-    //     accountType,
-    //     token: idToken || '',
-    //   };
-    // }
-
-    const res = await this.postRequest('/account', data);
+  signup = async (user: User) => {
+    const res = await this.postRequest('/auth/signup', user);
     return res.data;
   };
 
-  login = async ({ accountType, email, password }: LoginRequest) => {
-    let data = {};
-    if (accountType === ACCOUNT_TYPE.NORMAL) {
-      // if normal login
-      data = {
-        accountType,
-        email,
-        password,
-      };
-    }
-    // else if (accountType === ACCOUNT_TYPE.GOOGLE) {
-    //   // if google login
-    //   const idToken = await this.getGoogleAuthToken();
-    //   data = {
-    //     accountType,
-    //     token: idToken || '',
-    //   };
-    // }
-
-    const res = await this.putRequest('/account', data);
-
+  login = async (data: LoginRequest) => {
+    const res = await this.patchRequest('/auth/login', data);
     return res.data;
   };
 
-  // // Asynchronously get user idToken.
-  // // If gapi not loaded, wait until loaded and continue.
-  // // If not signed in, will wait until finished sign in and return token.
-  // // If user cancel/reject sign in, returns null.
+  confirmEmail = async (data: ConfirmEmailRequest) => {
+    const res = await this.getRequest(
+      `/auth/confirm-email?email=${data.email}&token=${data.token}`,
+    );
+    return res.data;
+  };
 
-  // getGoogleAuthToken = async () => {
-  //   const googleAuth = await this.gapiInitClient();
-  //   if (googleAuth.isSignedIn.get()) {
-  //     const googleUser = googleAuth.currentUser.get();
-  //     return googleUser.getAuthResponse().id_token;
-  //   }
+  resetPassword = async (data: any) => {
+    const res = await this.postRequest(`/auth/reset-password`, data);
+    return res.data;
+  };
 
-  //   try {
-  //     const googleUser = await googleAuth.signIn();
-  //     return googleUser.getAuthResponse().id_token;
-  //   } catch (e) {
-  //     return null;
-  //   }
-  // };
+  changePassword = async (data: any) => {
+    const res = await this.postRequest(`/auth/change-password`, data);
+    return res.data;
+  };
 
-  // // Wait until gapi loaded, run all initialisation needed
-  // // and return GoogleAuth instance.
+  resendConfirmation = async (data: any) => {
+    const res = await this.postRequest(`/auth/resend-confirmation`, data);
+    return res.data;
+  };
 
-  // gapiInitClient = async () => {
-  //   const gapi = await this.getGapi();
+  forgotPassword = async (data: any) => {
+    const res = await this.postRequest(`/auth/forgot-password`, data);
+    return res.data;
+  };
 
-  //   const initPromise = new Promise((resolve) => {
-  //     gapi.load('client:auth2', resolve);
-  //   });
-  //   await initPromise;
-
-  //   await gapi.client.init({
-  //     client_id: GAPI_CLIENT_ID,
-  //     scope: 'profile',
-  //   });
-
-  //   return gapi.auth2.getAuthInstance();
-  // };
-
-  // // Wait until gapi loaded, else return directly.
-
-  // getGapi = async () => {
-  //   if ((window as any).gapi) return (window as any).gapi;
-  //   const gapiPromise = new Promise((resolve) => {
-  //     const googleLoginEl = document.getElementById('google-login');
-  //     if (googleLoginEl) {
-  //       googleLoginEl.onload = resolve;
-  //     }
-  //   });
-
-  //   await gapiPromise;
-  //   return (window as any).gapi;
-  // };
+  confirmForgotPassword = async (data: any) => {
+    const res = await this.postRequest(`/auth/confirm-forgot-password`, data);
+    return res.data;
+  };
 
   logout = async () => {
-    // const googleAuth = await this.gapiInitClient();
-
-    // if (googleAuth.isSignedIn.get()) {
-    //   await googleAuth.signOut();
-    // }
-    // TODO: call API to logout once the api is ready, now assume always true
     return {
       errorCode: 0,
       errorMessage: '',

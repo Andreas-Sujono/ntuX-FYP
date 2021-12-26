@@ -1,23 +1,20 @@
 import axios from 'axios';
 import AuthService from '../../../Services/auth/general';
-import { errorCodeToMessage } from '../../../Constants/auth/general';
-import { selectAuthGeneralState } from '../../../Selector/auth/general';
-import { SignupRequest, LoginRequest } from './../../../../Models/Auth/index';
 import { AppDispatch, RootState } from '../../../Store';
 import {
   loadRequest,
   loadSuccess,
   loadFailed,
   reset as resetAuthGeneralState,
-  setAccountType,
 } from './general';
+import { LoginRequest, User } from 'Models/Auth';
 
 const { CancelToken } = axios;
 const source = CancelToken.source();
 const canceler = source.cancel;
 
 const service = new AuthService({
-  baseUrl: '/bc-b2b-api/api',
+  baseUrl: '/ntux-server/api/v1',
   cancelToken: source.token,
 });
 
@@ -27,51 +24,23 @@ const sendErrorNotification = (errorMessage = '', errorCode = 0) => {
 };
 
 export const signup =
-  (data: SignupRequest, bypass = false) =>
+  (data: User, bypass = false) =>
   async (dispatch: AppDispatch, getState: () => RootState) => {
-    const rootState = getState();
-    const generalState = selectAuthGeneralState(rootState);
-
-    if (generalState.canceler && !bypass) {
-      generalState.canceler();
-      return { result: false };
-    }
-
-    dispatch(loadRequest(bypass ? null : canceler));
-
     try {
-      dispatch(setAccountType(data.accountType));
       const res = await service.signup(data);
 
       if (res.errorCode !== 0) {
         dispatch(loadFailed());
         return {
           result: false,
-          errorMessage: errorCodeToMessage(res.errorCode).errorMessage,
-          errorComponent: errorCodeToMessage(res.errorCode).errorComponent,
+          errorMessage: res.message,
         };
       }
 
-      // dispatch(
-      //   loadUser.success({
-      //     fullName: res.account.firstName,
-      //     email: res.account.email,
-      //     profileImage: '',
-      //     id: res.account.id,
-      //     phoneNumber: '',
-      //   }),
-      // );
-
-      dispatch(
-        loadSuccess({
-          accountType: data.accountType,
-          isAuthenticated: true,
-        }),
-      );
+      dispatch(loadSuccess({}));
 
       return { result: true };
     } catch (err) {
-      // sendErrorNotification('', err?.response?.status);
       dispatch(loadFailed());
       return { result: false };
     }
@@ -80,49 +49,26 @@ export const signup =
 export const login =
   (data: LoginRequest, bypass = false) =>
   async (dispatch: AppDispatch, getState: () => RootState) => {
-    const rootState = getState();
-    const generalState = selectAuthGeneralState(rootState);
-
-    if (generalState.canceler && !bypass) {
-      generalState.canceler();
-      return { result: false };
-    }
-
-    dispatch(loadRequest(bypass ? null : canceler));
-
     try {
-      dispatch(setAccountType(data.accountType));
       const res = await service.login(data);
 
       if (res.errorCode !== 0) {
         dispatch(loadFailed());
         return {
           result: false,
-          errorMessage: errorCodeToMessage(res.errorCode).errorMessage,
-          errorComponent: errorCodeToMessage(res.errorCode).errorComponent,
+          errorMessage: res.message,
         };
       }
 
-      // dispatch(
-      //   loadUser.success({
-      //     fullName: res.account.firstName,
-      //     email: res.account.email,
-      //     profileImage: '',
-      //     id: res.account.id,
-      //     phoneNumber: '',
-      //   }),
-      // );
-
       dispatch(
         loadSuccess({
-          accountType: data.accountType,
-          isAuthenticated: true,
+          user: res.user,
+          token: res.accessToken,
         }),
       );
 
       return { result: true };
     } catch (err) {
-      // sendErrorNotification('', err?.response?.status);
       dispatch(loadFailed());
       return { result: false };
     }
@@ -135,22 +81,11 @@ export const resetAllState = async (dispatch: AppDispatch) => {
 export const logout =
   (bypass = false) =>
   async (dispatch: AppDispatch, getState: () => RootState) => {
-    const rootState = getState();
-    const generalState = selectAuthGeneralState(rootState);
-
-    if (generalState.canceler && !bypass) {
-      generalState.canceler();
-      return { result: false };
-    }
-
-    dispatch(loadRequest(bypass ? null : canceler));
-
     try {
       const res = await service.logout();
 
       if (res.errorCode !== 0) {
         dispatch(loadFailed());
-        sendErrorNotification(res.errorMessage, res.errorCode);
         return {
           result: false,
         };
@@ -160,17 +95,15 @@ export const logout =
 
       dispatch(
         loadSuccess({
-          accountType: null,
-          isAuthenticated: false,
+          user: null,
+          role: null,
         }),
       );
 
       return { result: true };
     } catch (err) {
-      sendErrorNotification('', err?.response?.status);
       dispatch(loadFailed());
       resetAllState(dispatch);
-
       return { result: false };
     }
   };

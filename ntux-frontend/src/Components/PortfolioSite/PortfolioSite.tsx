@@ -1,11 +1,11 @@
+import { TEMPLATE_TYPE } from 'Models/PortfolioSite';
 import React, { memo } from 'react';
-import { TEMPLATE } from '../../Store/Constants/PortfolioSite/general';
 import DefaultTemplate from './DefaultTemplate';
 
 const PortfolioSite: React.FC = () => {
   const chosenTemplate = 'default';
 
-  if (chosenTemplate === TEMPLATE.DEFAULT) return <DefaultTemplate />;
+  if (chosenTemplate === TEMPLATE_TYPE.DEFAULT) return <DefaultTemplate />;
   return <DefaultTemplate />;
 };
 

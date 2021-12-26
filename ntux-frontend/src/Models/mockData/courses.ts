@@ -1,6 +1,4 @@
-import { Major } from 'Models/Courses';
-
-export const mockFeaturedMajors: Major[] = [
+export const mockFeaturedMajors: any[] = [
   {
     id: '121',
     name: 'Frontend Dev',
@@ -55,7 +53,7 @@ export const mockFeaturedMajors: Major[] = [
   },
 ];
 
-export const mockMajors: Major[] = [
+export const mockMajors: any[] = [
   {
     id: '121',
     name: 'Mathematics for Programming',

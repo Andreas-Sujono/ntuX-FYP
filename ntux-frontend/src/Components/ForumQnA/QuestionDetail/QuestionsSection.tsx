@@ -1,4 +1,3 @@
-import { Comment } from 'Models/Forum';
 import React, { memo } from 'react';
 import CommentBox from '../../../common/Components/CommentBox';
 import Tag from '../../../common/Components/Tag';
@@ -20,7 +19,7 @@ function QuestionsSection(): React.ReactElement {
           <Tag key={item.id}>{item.tag}</Tag>
         ))}
       </TagsContainer>
-      <CommentBox comment={questionComment as Comment} />
+      <CommentBox comment={questionComment as any} />
       <CardsContainer>
         <div className="title">Answers ({mockSolutions.length})</div>
         {mockSolutions.map((item) => (

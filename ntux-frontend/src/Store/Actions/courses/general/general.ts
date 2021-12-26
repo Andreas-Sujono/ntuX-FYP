@@ -8,7 +8,7 @@ import {
 
 const types = ['SET', 'RESET', 'LOAD_REQUEST', 'LOAD_SUCCESS', 'LOAD_FAILED'];
 
-export const ActionTypes = composeWithNamespace(types, 'AUTH_GENERAL');
+export const ActionTypes = composeWithNamespace(types, 'COURSES_GENERAL');
 
 export const set = (key: string, value: any) =>
   commonSet(ActionTypes, key, value);

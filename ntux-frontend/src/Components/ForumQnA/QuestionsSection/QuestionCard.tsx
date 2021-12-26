@@ -3,15 +3,10 @@ import { useHistory } from 'react-router-dom';
 import AuthorBlock from '../../../common/Components/AuthorBlock';
 import Tag from '../../../common/Components/Tag';
 import { makePath, shortenDateFormat } from '../../../common/utils';
-import { QuestionSummary } from '../../../Models/Forum';
 import { routes } from '../../Routes';
 import { Card, CardTopRow, CardBottomRow } from './Styles';
 
-function QuestionCard({
-  summary,
-}: {
-  summary: QuestionSummary;
-}): React.ReactElement {
+function QuestionCard({ summary }: { summary: any }): React.ReactElement {
   const history = useHistory();
   const questionPath = makePath(routes.FORUM.QUESTION_DETAIL, {
     questionId: summary.id,

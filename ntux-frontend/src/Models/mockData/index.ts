@@ -1,7 +1,6 @@
 import { User } from 'Models/Auth';
-import { ForumUser, Question, QuestionSummary, Tag, Comment } from '../Forum';
 
-export const mockUser: User = {
+export const mockUserL: any = {
   id: '12122',
   fullName: 'Andreas Sujono',
   email: 'andreassujono@gmail.com',
@@ -23,7 +22,7 @@ export const mockUser: User = {
   },
 };
 
-export const mockQuestions: QuestionSummary[] = [
+export const mockQuestions: any[] = [
   {
     id: '12121',
     author: {
@@ -134,7 +133,7 @@ export const mockQuestions: QuestionSummary[] = [
   },
 ];
 
-export const mockQuestion: Question = {
+export const mockQuestion: any = {
   id: '12121',
   author: {
     id: '1212',
@@ -207,7 +206,7 @@ export const mockQuestion: Question = {
   ],
 };
 
-export const mockComments: Comment[] = [
+export const mockComments: any[] = [
   {
     id: '12121',
     author: {
@@ -293,7 +292,7 @@ export const mockComments: Comment[] = [
   },
 ];
 
-export const mockTags: Tag[] = [
+export const mockTags: any[] = [
   {
     id: '1',
     tag: 'html',
@@ -308,7 +307,7 @@ export const mockTags: Tag[] = [
   },
 ];
 
-export const mockForumUsers: ForumUser[] = [
+export const mockForumUsers: any[] = [
   {
     id: '1212',
     fullName: 'Andreas Sujono',

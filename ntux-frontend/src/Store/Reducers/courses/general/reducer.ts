@@ -1,4 +1,3 @@
-import { Role } from 'Models/Auth';
 import {
   initEntityState,
   entityLoadingStarted,
@@ -6,12 +5,12 @@ import {
   entityLoadingFailed,
 } from 'common/utils/redux';
 import { AnyAction } from 'redux';
-import { ActionTypes } from '../../../Actions/auth/general';
+import { ActionTypes } from 'Store/Actions/courses/general';
 
 const initialState = initEntityState({
-  isAuthenticated: false,
-  user: null,
-  role: Role.STUDENT,
+  publicCourses: [],
+  allCourses: [],
+  myCourses: [],
 });
 
 function reducer(state = initialState, action: AnyAction) {
