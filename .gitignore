@@ -22,6 +22,8 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+<<<<<<< HEAD
 
 ntux_pg_data
 backend/ntux_pg_data/*
+ntux_pg_data
