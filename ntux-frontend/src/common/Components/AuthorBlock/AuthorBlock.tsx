@@ -1,13 +1,12 @@
-import { Author } from 'Models/Forum';
 import React, { memo } from 'react';
 import { Container } from './Styles';
 
 interface Props {
-  author: Author;
+  author: any;
 }
 
 function AuthorBlock({ author }: Props): React.ReactElement {
-  const getProfileImage = (_author: Author) => {
+  const getProfileImage = (_author: any) => {
     if (_author.profileImage) return <img src={_author.profileImage} />;
     return _author.name.slice(0, 1);
   };

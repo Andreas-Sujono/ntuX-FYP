@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -9,16 +9,82 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Divider from '@mui/material/Divider';
 import { StyledBox, StyledForm, BackgroundContainer } from './Styles';
+import { Course } from 'Models/Courses';
+import { useHistory, useParams } from 'react-router-dom';
+import { getOnePublicCourse, registerCourse } from 'Store/Actions/courses';
+import { useThunkDispatch } from 'common/hooks';
+import { toast } from 'react-toastify';
 
 export default function RegisterCoursePage() {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const dispatch = useThunkDispatch();
+  const history = useHistory();
+  const param: any = useParams();
+  const [courseData, setCourseData] = useState<Course | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  courseData?.courseBatches?.sort((a, b) => {
+    return a.startDate.getTime() - b.endDate.getTime();
+  });
+  const chosenCourseBatch = courseData?.courseBatches?.[0];
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    // eslint-disable-next-line no-console
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    const checked = data.get('checked');
+    const confirmEmail = data.get('confirmEmail') as string;
+
+    const formData = {
+      user: {
+        fullName: data.get('fullName') as string,
+        familyName: data.get('familyName') as string,
+        givenName: data.get('givenName') as string,
+        citizenship: data.get('citizenship') as string,
+        nationality: data.get('nationality') as string,
+        email: data.get('email') as string,
+        hashedPassword: data.get('password') as string,
+      },
+      courseId: courseData?.id,
+      coursebatchId: chosenCourseBatch?.id,
+    };
+
+    if (
+      !formData.user.familyName ||
+      !formData.user.givenName ||
+      !formData.user.fullName ||
+      !formData.user.email ||
+      !confirmEmail
+    )
+      return toast.error('Please fill all the required field');
+
+    if (formData.user.email !== confirmEmail)
+      return toast.error('Email and confirm email are not the same');
+
+    if (data.get('password') !== data.get('confirmPassword'))
+      return toast.error('Password and confirm password are not the same');
+
+    if (!checked)
+      return toast.error(
+        'Please agree to the accurate information declaration',
+      );
+
+    setLoading(true);
+    const res: any = dispatch(registerCourse(formData));
+    setLoading(false);
+    if (res.result) {
+      toast.success('Successfully registered');
+      history.push(`/courses/${formData.courseId}`);
+    }
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  const getData = async () => {
+    const { result, data } = await dispatch(
+      getOnePublicCourse(param?.courseId),
+    );
+    setCourseData(data || {});
   };
 
   return (
@@ -35,7 +101,7 @@ export default function RegisterCoursePage() {
           sx={{ color: '#C63044' }}
           className="subtitle"
         >
-          EE0117: Computer Networking I (20 Oct 2021 - 27 Oct 2021)
+          {courseData?.name} - {chosenCourseBatch?.name}
         </Typography>
         <StyledForm component="form" noValidate onSubmit={handleSubmit}>
           <Grid
@@ -80,7 +146,7 @@ export default function RegisterCoursePage() {
                 name="givenName"
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            {/* <Grid item xs={12} sm={6}>
               <TextField
                 required
                 fullWidth
@@ -88,7 +154,7 @@ export default function RegisterCoursePage() {
                 label="Citizenship"
                 name="citizenship"
               />
-            </Grid>
+            </Grid> */}
             <Grid item xs={12} sm={6}>
               <TextField
                 required
@@ -125,15 +191,33 @@ export default function RegisterCoursePage() {
                 name="confirmEmail"
               />
             </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                required
+                fullWidth
+                id="password"
+                type="password"
+                label="Password"
+                name="password"
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                required
+                fullWidth
+                id="confirmPassword"
+                type="password"
+                label="Confirm Password"
+                name="confirmPassword"
+              />
+            </Grid>
             <Grid item xs={12}>
               <Typography
                 component="h5"
                 variant="body2"
                 sx={{ color: 'text.tertiary' }}
               >
-                *Email Address will be used as the login credentials, a
-                temporary password will be given upon successfull registration.
-                You need to wait 2-3 working days
+                *You will get notification if admin approves your registration
               </Typography>
             </Grid>
 
@@ -146,8 +230,9 @@ export default function RegisterCoursePage() {
 
             <Grid item xs={12}>
               <FormControlLabel
-                control={<Checkbox value="allowExtraEmails" color="primary" />}
+                control={<Checkbox value="true" color="primary" />}
                 label="I declare that the above information submitted is accurate."
+                name="checked"
               />
             </Grid>
             <Grid item xs={12}>
@@ -172,6 +257,7 @@ export default function RegisterCoursePage() {
             fullWidth
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
+            disabled={loading}
           >
             Submit
           </Button>

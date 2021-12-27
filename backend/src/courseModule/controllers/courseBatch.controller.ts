@@ -1,5 +1,5 @@
 import { Roles } from './../../authModule/roles/roles.decorator';
-import { Controller } from '@nestjs/common';
+import { Controller, Query } from '@nestjs/common';
 import { Crud, CrudController } from '@nestjsx/crud';
 import { CourseBatch } from '../entities/courseBatch.entity';
 import { CoursebatchService } from '../services/courseBatch.service';
@@ -8,6 +8,13 @@ import { UserRole } from 'src/authModule/entities/user.entity';
 @Crud({
   model: {
     type: CourseBatch,
+  },
+  query: {
+    join: {
+      course: {
+        eager: true,
+      },
+    },
   },
   routes: {
     only: [

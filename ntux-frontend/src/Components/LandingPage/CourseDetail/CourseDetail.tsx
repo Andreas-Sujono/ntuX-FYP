@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useEffect } from 'react';
 import { PageContentContainer } from 'Components/shared/Shared.styles';
 import {
   FullWidthContainer,
@@ -12,31 +12,74 @@ import {
 import { HashLink } from 'react-router-hash-link';
 import { Avatar, Button, CardHeader } from '@mui/material';
 import { red } from '@mui/material/colors';
-import { makePath } from 'common/utils';
+import { getCourseStatus, makePath } from 'common/utils';
 import { routes } from 'Components/Routes';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
+import { useThunkDispatch } from 'common/hooks';
+import { getOnePublicCourse } from 'Store/Actions/courses';
+import { LoadingBar } from 'common/Components/LoadingBar/FullPageLoadingBar';
+import { Course } from 'Models/Courses';
 
 function CourseDetail(): React.ReactElement {
   const history = useHistory();
+  const dispatch = useThunkDispatch();
+  const param: any = useParams();
+  const [courseData, setCourseData] = React.useState<Course | null>(null);
+  const [loading, setLoading] = React.useState<any>(true);
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  const getData = async () => {
+    setLoading(true);
+    const { result, data } = await dispatch(
+      getOnePublicCourse(param?.courseId),
+    );
+    setCourseData(data || {});
+    setLoading(false);
+  };
+
+  if (loading) {
+    return (
+      <FullWidthContainer>
+        <BackgroundContainer />
+        <PageContentContainer>
+          <LoadingBar height="70vh" />
+        </PageContentContainer>
+      </FullWidthContainer>
+    );
+  }
+
   return (
     <FullWidthContainer>
       <BackgroundContainer />
       <PageContentContainer>
         <TopSummary>
           <div className="left-content">
-            <img src="https://i.pcmag.com/imagery/articles/00tLYTqwmgFvacZlYPc5ecO-8.1583853669.fit_lim.jpg" />
+            <img src={courseData?.imageUrl} />
           </div>
           <div className="right-content">
-            <h1>Computer Networking I</h1>
-            <Status>Open Registration</Status>
+            <h1>{courseData?.name}</h1>
+            <Status>{getCourseStatus(courseData?.courseBatches || [])}</Status>
             <AvailabilityBox>
               Course Availability:
               <ul>
-                <li>20 Oct - 27 Oct 2021</li>
+                {courseData?.courseBatches?.map((batch) => (
+                  <li key={batch.id}>
+                    {batch.startDate.toLocaleDateString()} -{' '}
+                    {batch.endDate.toLocaleDateString()}
+                  </li>
+                ))}
               </ul>
               Registration Availability:
               <ul>
-                <li>20 Oct - 27 Oct 2021</li>
+                {courseData?.courseBatches?.map((batch) => (
+                  <li key={batch.id}>
+                    {batch.registrationStartsAt.toLocaleDateString()} -{' '}
+                    {batch.registrationEndsAt.toLocaleDateString()}
+                  </li>
+                ))}
               </ul>
               <Button
                 fullWidth
@@ -74,68 +117,35 @@ function CourseDetail(): React.ReactElement {
           <div className="title" id="about">
             About
           </div>
-          <div className="content">
-            Modern industrial processes are large, complex and have high degree
-            of interaction with many variables. This makes problem solving
-            difficult and leads to “disappearing problem” syndrome. Problem
-            often disappear without solving will reappear again. This course
-            aims to provide an elementary approach of combining cause and effect
-            problem solving thinking with formulation of theoretically correct
-            hypothesis to provide quick and effective problem-solving techniques
-            for the process industries. The initial part of the course aims to
-            provide basic problem solving approach applicable to any industrial
-            problems and the second part aims to provide basics of some common
-            process equipment and utilization of chemical engineering
-            fundamentals to develop technically correct hypothesis that is the
-            key to the successful problem solving. This course includes both
-            sample problems and working sessions to allow participants to
-            develop confidence approach.
-          </div>
+          <div className="content">{courseData?.description}</div>
           <hr />
           <div className="title" id="objectives">
             Objectives
           </div>
-          <div className="content">
-            <ul>
-              <li>
-                Evaluate product, quotient, power and roots of complex numbers.
-              </li>
-              <li>
-                Use vector operators (dot product and cross product) to solve
-                simple
-              </li>
-              mechanics and geometry problems (e.g. find work done, moment,
-              equations for planes, distance form a point to a plane etc.).
-              <li>
-                Evaluate matrix determinants and use Cramer’s rule to solve
-                simultaneous equations.
-              </li>
-            </ul>
-          </div>
+          <div className="content">{courseData?.objectives}</div>
           <hr />
           <div className="title" id="outline">
             Outline
           </div>
-          <div className="content">
-            Complex numbers. Vectors and matrices. Limits and continuity of
-            functions. Derivatives. Applications of derivatives. Integration.
-            Integration methods. Applications of integration
-          </div>
+          <div className="content">{courseData?.outline}</div>
           <hr />
           <div className="title" id="lecturers">
             Lecturers
           </div>
           <div className="content" style={{ fontSize: '30px' }}>
-            <CardHeader
-              avatar={
-                <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                  M
-                </Avatar>
-              }
-              title="Michelle SHAO Xuguang"
-              subheader="Senior Lecturer"
-              size="large"
-            />
+            {courseData?.lecturers?.map((lecturer: any) => (
+              <CardHeader
+                avatar={
+                  <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
+                    {lecturer.fullName.slice(0, 1).toUpperCase()}
+                  </Avatar>
+                }
+                title={lecturer.fullName}
+                subheader="Lecturer"
+                size="large"
+                key={lecturer.id}
+              />
+            ))}
           </div>
         </Content>
       </PageContentContainer>

@@ -3,6 +3,7 @@ import { Crud, CrudController } from '@nestjsx/crud';
 import { Public } from 'src/authModule/public.decorator';
 import { Roles } from 'src/authModule/roles/roles.decorator';
 import { UserRole } from 'src/authModule/roles/roles.enum';
+import { UserData } from 'src/authModule/user.decorator';
 import { RegisterCourseDto } from '../dto/course.dto';
 import { StudentRegistration } from '../entities/studentRegistration.entity';
 import { StudentRegistrationService } from '../services/studentRegistration.service';
@@ -10,6 +11,16 @@ import { StudentRegistrationService } from '../services/studentRegistration.serv
 @Crud({
   model: {
     type: StudentRegistration,
+  },
+  query: {
+    join: {
+      course: {
+        eager: true,
+      },
+      courseBatch: {
+        eager: true,
+      },
+    },
   },
   routes: {
     only: [
@@ -38,7 +49,16 @@ export class StudentRegistrationController
 
   @Post()
   @Public()
-  async registerCourse(@Body() body: RegisterCourseDto) {
+  async registerCourse(@Body() body: any, @UserData('role') role: string) {
+    if (role === UserRole.LECTURER || role === UserRole.ADMIN) {
+      return this.service.createStudentRegistration(
+        body.userId,
+        body.status,
+        body.courseId,
+        body.courseBatchId,
+      );
+    }
+
     return this.service.registerCourse(
       body.user,
       body.courseId,

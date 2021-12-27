@@ -1,7 +1,6 @@
 import React, { memo, useState } from 'react';
 import { DownChevronIcon, UpChevronIcon } from 'react-dre/lib/Icon';
 import { shortenDateFormat } from '../../utils';
-import { Comment } from '../../../Models/Forum';
 import AuthorBlock from '../AuthorBlock';
 import { TextInput } from '../Input';
 import {
@@ -16,13 +15,13 @@ import {
 import { Divider } from '@mui/material';
 
 interface Props {
-  comment: Comment;
+  comment: any;
 }
 
 function CommentBox({ comment }: Props): React.ReactElement {
   const [commentInput, setCommentInput] = useState('');
 
-  const renderReplyBox = (item: Comment) => {
+  const renderReplyBox = (item: any) => {
     return (
       <ReplyContainer>
         {item.comment}{' '}

@@ -28,7 +28,7 @@ export interface UserSummary {
   email: string;
   phoneNumber: string;
   description: string;
-  socialMedias: SocialMedia[];
+  socialMedias?: SocialMedia[];
   backgroundImage: string;
   profileImage: string;
   resumeLink?: string;
@@ -95,3 +95,7 @@ export interface AllSiteData {
 }
 
 export type SectionItem = Section<any> & { sectionName: keyof AllSiteData };
+
+export enum TEMPLATE_TYPE {
+  DEFAULT = 'default',
+}

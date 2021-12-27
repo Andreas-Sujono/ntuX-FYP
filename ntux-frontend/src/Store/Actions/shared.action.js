@@ -26,21 +26,23 @@ const sendErrorNotification = (_errorMessage = '', errorCode = 0) => {
   });
 };
 
-export const uploadImage = ({ image }) => async () => {
-  try {
-    const formData = new FormData();
-    formData.append('image', image);
+export const uploadImage =
+  ({ image }) =>
+  async () => {
+    try {
+      const formData = new FormData();
+      formData.append('image', image);
 
-    const res = await basicService.uploadImage(formData);
+      const res = await basicService.uploadImage(formData);
 
-    if (res.errorCode !== 0) {
-      sendErrorNotification(errorMessage.UPLOAD_IMAGE_ERROR, res.errorCode);
+      if (res.errorCode !== 0) {
+        sendErrorNotification(errorMessage.UPLOAD_IMAGE_ERROR, res.errorCode);
+        return { result: false };
+      }
+
+      return { result: true, imageUrl: res.imageUrl };
+    } catch (err) {
+      sendErrorNotification('', err?.response?.status);
       return { result: false };
     }
-
-    return { result: true, imageUrl: res.imageUrl };
-  } catch (err) {
-    sendErrorNotification('', err?.response?.status);
-    return { result: false };
-  }
-};
+  };

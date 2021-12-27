@@ -29,6 +29,7 @@ export class StudentRegistrationService extends TypeOrmCrudService<StudentRegist
   ) {
     const existingUser = await this.userRepo.findOne({ email: user.email });
     user.role = UserRole.STUDENT;
+
     if (!existingUser) {
       const { user: createdUser } = await this.authService.signUp(user);
       await this.repo.save(
@@ -46,12 +47,11 @@ export class StudentRegistrationService extends TypeOrmCrudService<StudentRegist
     }
     const existingRegistration = await this.repo.findOne({
       where: {
-        user: {
-          email: user.email,
-        },
+        user: existingUser,
         course: courseId,
       },
     });
+
     if (existingRegistration)
       throw new BadRequestException(
         'You have already registered for this course',
@@ -76,7 +76,12 @@ export class StudentRegistrationService extends TypeOrmCrudService<StudentRegist
     studentRegistrationId: string,
     newStatus: StudentRegistrationStatus,
   ) {
-    const studentRegistration = await this.repo.findOne(studentRegistrationId);
+    const studentRegistration = await this.repo.findOne({
+      where: {
+        id: studentRegistrationId,
+      },
+      relations: ['user', 'course', 'courseBatch'],
+    });
     if (!studentRegistration)
       throw new BadRequestException('Student registration not found');
 
@@ -120,5 +125,63 @@ export class StudentRegistrationService extends TypeOrmCrudService<StudentRegist
     return {
       success: true,
     };
+  }
+
+  async createStudentRegistration(
+    userId: string,
+    status: StudentRegistrationStatus,
+    courseId: string | number,
+    courseBatchId: string | number,
+  ) {
+    const existingRegistration = await this.repo.findOne({
+      where: {
+        user: userId,
+        course: courseId,
+      },
+    });
+    if (existingRegistration)
+      throw new BadRequestException(
+        'Student have already registered for this course',
+      );
+
+    const createdStudentRegistration = await this.repo.save(
+      this.repo.create({
+        course: courseId as any,
+        user: userId as any,
+        courseBatch: courseBatchId as any,
+        registeredAt: new Date(),
+        status,
+      }),
+    );
+
+    if (status === StudentRegistrationStatus.ADMITTED) {
+      //add into courseUser
+      const existing = await this.courseUserRepo.findOne({
+        course: courseId as any,
+        user: userId as any,
+      });
+      if (!existing) {
+        await this.courseUserRepo.save(
+          this.courseUserRepo.create({
+            course: courseId as any,
+            user: userId as any,
+            studentRegistration: createdStudentRegistration,
+            courseBatch: courseBatchId as any,
+          }),
+        );
+      }
+    } else {
+      //remove from courseUser
+      const existing = await this.courseUserRepo.findOne({
+        course: courseId as any,
+        user: userId as any,
+      });
+      if (existing) {
+        await this.courseUserRepo.delete({
+          course: courseId as any,
+          user: userId as any,
+        });
+      }
+    }
   }
 }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -9,6 +9,15 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
+import { toast } from 'react-toastify';
+import { useThunkDispatch } from 'common/hooks';
+import { login } from 'Store/Actions/auth';
+import { Redirect, useHistory, Link as RouterLink } from 'react-router-dom';
+import { routes } from 'Components/Routes';
+import { Role } from 'Models/Auth';
+import axios from 'axios';
+import { useSelector } from 'react-redux';
+import { selectUserId, selectUserRole } from 'Store/Selector/auth';
 
 export function Copyright(props: any) {
   return (
@@ -29,15 +38,42 @@ export function Copyright(props: any) {
 }
 
 export default function SignInSide() {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const dispatch = useThunkDispatch();
+  const history = useHistory();
+  const userId = useSelector(selectUserId);
+  const userRole = useSelector(selectUserRole);
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     // eslint-disable-next-line no-console
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    const formData = {
+      email: data.get('email') as string,
+      password: data.get('password') as string,
+    };
+
+    if (!formData.email || !formData.password)
+      return toast.error('Please fill all the required field', {
+        position: 'top-right',
+      });
+
+    setLoading(true);
+    const res: any = await dispatch(login(formData));
+    setLoading(false);
+
+    if (res.result) {
+      console.log(res);
+      if (res.user.role === Role.STUDENT)
+        return history.push(routes.ADMIN.BASE);
+      return history.push(routes.STAFF.DASHBOARD);
+    }
   };
+
+  if (userId) {
+    if (userRole === Role.STUDENT) return <Redirect to={routes.ADMIN.BASE} />;
+    return <Redirect to={routes.STAFF.BASE} />;
+  }
 
   return (
     <Grid container component="main" sx={{ height: '100vh' }}>
@@ -102,14 +138,20 @@ export default function SignInSide() {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              disabled={loading}
             >
               Sign In
             </Button>
-            <Grid container>
+            {/* <Grid container>
               <Grid item xs>
-                <Link href="#">Forgot password?</Link>
+                <RouterLink
+                  to={routes.FORGOT_PASSWORD_PAGE}
+                  style={{ color: 'darkred' }}
+                >
+                  Forgot Password
+                </RouterLink>
               </Grid>
-            </Grid>
+            </Grid> */}
             <Copyright sx={{ mt: 5 }} />
           </Box>
         </Box>

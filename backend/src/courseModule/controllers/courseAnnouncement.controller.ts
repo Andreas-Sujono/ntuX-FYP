@@ -9,6 +9,16 @@ import { UserRole } from 'src/authModule/entities/user.entity';
   model: {
     type: CourseAnnouncement,
   },
+  query: {
+    join: {
+      course: {
+        eager: true,
+      },
+      courseBatch: {
+        eager: true,
+      },
+    },
+  },
   routes: {
     only: [
       'getOneBase',

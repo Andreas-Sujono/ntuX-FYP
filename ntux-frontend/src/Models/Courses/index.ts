@@ -1,58 +1,83 @@
 import { Id, User } from 'Models/Auth';
 
-export interface Teacher extends User {
-  isTeacher?: boolean;
-  specializations: string;
+export enum CourseStatus {
+  DRAFT = 'DRAFT',
+  PUBLISHED = 'PUBLISHED',
 }
 
-// can be a recorded link or live
-export interface VideoCourse {
-  id: Id;
-  name: string;
-  estimatedDuration: number;
-  isLive: boolean;
-  link: string;
-  teacher: Teacher;
+export enum CourseBatchStatus {
+  DRAFT = 'DRAFT',
+  PUBLISHED = 'PUBLISHED',
 }
 
-// test can be offline or live
-export interface Exam {
-  id: Id;
-  name: string;
-  description: string;
-  isLive: boolean;
-  startTime: number;
-  endTime: number;
-  isPassed: boolean;
+export enum StudentRegistrationStatus {
+  PENDING = 'PENDING',
+  ADMITTED = 'ADMITTED',
+  REJECTED = 'REJECTED',
+  CANCELLED = 'CANCELLED',
 }
 
-export interface CourseResource {
+export interface CourseBatch {
   id: Id;
+  course: Course;
   name: string;
-  description?: string;
-  link: string;
+  startDate: Date;
+  endDate: Date;
+  registrationStartsAt: Date;
+  registrationEndsAt: Date;
+  status: CourseBatchStatus;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface Course {
   id: Id;
   name: string;
+  imageUrl?: string;
+  description?: string;
+  objectives?: string;
+  outline?: string;
+  totalHours?: number;
+  status: CourseStatus;
   code: string;
-  estimatedDuration: number;
-  description: string;
-  image: string;
-  comingSoon?: boolean;
-  videos: VideoCourse[];
-  exams: Exam[];
-  resources: CourseResource[];
-  handbookLink?: string;
-  reviewLink?: string;
+  lecturers: User[];
+  createdAt: Date;
+  updatedAt: Date;
+  courseBatches?: CourseBatch[];
+  courseContents?: CourseContent[];
+  studentRegistrations?: StudentRegistration[];
+  courseAnnouncements?: CourseAnnouncement[];
 }
 
-export interface Major {
+export interface CourseContent {
   id: Id;
-  name: string;
-  relatedCourses: string[];
-  estimatedDuration: number;
-  image: string;
-  comingSoon?: boolean;
+  course: Course;
+  courseBatch?: CourseBatch;
+  pageName: string;
+  pageId: string;
+  pageOrder: number;
+  metadata: any;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface CourseAnnouncement {
+  id: Id;
+  course: Course;
+  courseBatch?: CourseBatch;
+  metadata: any;
+  isSendingEmail: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface StudentRegistration {
+  id: Id;
+  user: User;
+  course: Course;
+  courseBatch: CourseBatch;
+  registeredAt: Date;
+  status: StudentRegistrationStatus;
+  createdAt: Date;
+  updatedAt: Date;
 }

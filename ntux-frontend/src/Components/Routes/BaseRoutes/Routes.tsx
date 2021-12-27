@@ -21,7 +21,12 @@ const Routes = () => {
       matchPath(location.pathname, { path: routes.ADMIN.BASE }) ||
       matchPath(location.pathname, { path: routes.LOGIN_PAGE }) ||
       matchPath(location.pathname, { path: routes.RESET_PASSWORD_PAGE }) ||
-      matchPath(location.pathname, { path: routes.STAFF.BASE })
+      matchPath(location.pathname, { path: routes.STAFF.BASE }) ||
+      matchPath(location.pathname, { path: routes.FORGOT_PASSWORD_PAGE }) ||
+      matchPath(location.pathname, { path: routes.CONFIRM_EMAIL_PAGE }) ||
+      matchPath(location.pathname, {
+        path: routes.CONFIRM_FORGOT_PASSWORD_PAGE,
+      })
     ) {
       setIsAdminRoutes(true);
     } else setIsAdminRoutes(false);

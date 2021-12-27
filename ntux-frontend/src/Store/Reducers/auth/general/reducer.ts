@@ -1,15 +1,17 @@
+import { Role } from 'Models/Auth';
 import {
   initEntityState,
   entityLoadingStarted,
   entityLoadingSucceeded,
   entityLoadingFailed,
-} from 'react-dre/lib/utils';
+} from 'common/utils/redux';
 import { AnyAction } from 'redux';
 import { ActionTypes } from '../../../Actions/auth/general';
 
 const initialState = initEntityState({
-  accountType: null, // 1 for normal login/signup, 2 for using google account
   isAuthenticated: false,
+  user: null,
+  role: Role.STUDENT,
 });
 
 function reducer(state = initialState, action: AnyAction) {

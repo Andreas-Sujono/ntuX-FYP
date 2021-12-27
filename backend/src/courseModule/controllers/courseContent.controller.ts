@@ -1,13 +1,23 @@
 import { Roles } from './../../authModule/roles/roles.decorator';
 import { CourseContent } from './../entities/courseContent.entity';
-import { Controller } from '@nestjs/common';
-import { Crud, CrudController } from '@nestjsx/crud';
+import { Body, Controller } from '@nestjs/common';
+import { Crud, CrudController, Override } from '@nestjsx/crud';
 import { CourseContentService } from '../services/courseContent.service';
 import { UserRole } from 'src/authModule/entities/user.entity';
 
 @Crud({
   model: {
     type: CourseContent,
+  },
+  query: {
+    join: {
+      course: {
+        eager: true,
+      },
+      courseBatch: {
+        eager: true,
+      },
+    },
   },
   routes: {
     only: [
@@ -18,17 +28,22 @@ import { UserRole } from 'src/authModule/entities/user.entity';
       'deleteOneBase',
     ],
     createOneBase: {
-      decorators: [Roles(UserRole.LECTURER, UserRole.ADMIN)],
+      decorators: [Roles(UserRole.LECTURER)],
     },
     updateOneBase: {
-      decorators: [Roles(UserRole.LECTURER, UserRole.ADMIN)],
+      decorators: [Roles(UserRole.LECTURER)],
     },
     deleteOneBase: {
-      decorators: [Roles(UserRole.LECTURER, UserRole.ADMIN)],
+      decorators: [Roles(UserRole.LECTURER)],
     },
   },
 })
 @Controller('course-content')
 export class CourseContentController implements CrudController<CourseContent> {
   constructor(public service: CourseContentService) {}
+
+  @Override()
+  async createOrUpdateContent(@Body() body: any) {
+    return this.service.createOrUpdateCourseContent(body.content);
+  }
 }

@@ -5,7 +5,8 @@ import thunk from 'redux-thunk';
 import { persistStore, persistReducer } from 'redux-persist';
 import { createWhitelistFilter } from 'redux-persist-transform-filter';
 import storage from 'redux-persist/lib/storage'; // defaults to localStorage for web
-// import auth from './reducers/auth';
+import auth from './Reducers/auth';
+import courses from './Reducers/courses';
 
 const isDevelopment = process.env.NODE_ENV === 'development';
 const middlewares = [thunk];
@@ -21,6 +22,8 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
   router: connectRouter(history),
+  auth,
+  courses,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

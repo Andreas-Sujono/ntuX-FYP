@@ -1,9 +1,7 @@
 import axios, { CancelToken } from 'axios';
-import {
-  parseObjectToCamelCase,
-  parseObjectToSnakeCase,
-  camelToSnake,
-} from '../../common/utils';
+import { parseObjectToCamelCase } from '../../common/utils';
+
+const API_URL = 'https://andreassujono.com';
 
 export interface ApiResponse {
   errorCode: number;
@@ -32,6 +30,8 @@ export default class BaseService {
   };
 
   parseData = (data: ApiRequestData, config: any = {}) => {
+    config = config || {};
+
     const headersPayload = config?.headers || { headers: {} };
 
     if (headersPayload['Content-Type'] === undefined) {
@@ -40,30 +40,31 @@ export default class BaseService {
       delete headersPayload['Content-Type'];
     }
 
+    config.headers = {};
+    config.headers['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
+
     switch (headersPayload['Content-Type']) {
       case 'application/json':
-        return { data: parseObjectToSnakeCase(data), config };
+        return { data: data, config };
       case 'multipart/form-data':
       default: {
         if (data instanceof FormData) {
           const fd: any = new FormData();
           for (const key of data.keys()) {
-            fd.append(camelToSnake(key), data.get(key));
+            fd.append(key, data.get(key));
           }
 
-          const formConfig = {};
-          return { data: fd, config: formConfig };
+          return { data: fd, config: config };
         }
-        return { data: parseObjectToSnakeCase(data), config };
+        return { data: data, config };
       }
     }
   };
 
   getRequest = async (url: string) => {
     try {
-      const response: ApiResponse = await axios.get(
-        this.joinURL(this._baseUrl, url),
-      );
+      const finalUrl = this.joinURL(API_URL, this._baseUrl, url);
+      const response: ApiResponse = await axios.get(finalUrl);
       if (response.errorCode === 401 || response.status === 401) {
         // unauthorized
         localStorage.clear();
@@ -82,37 +83,15 @@ export default class BaseService {
   postRequest = async (url: string, data: ApiRequestData, config: any = {}) => {
     try {
       const parsedData = this.parseData(data, config);
-      const response: ApiResponse = await axios.post(
-        this.joinURL(this._baseUrl, url),
-        parsedData.data,
-        {
-          ...parsedData.config,
-          cancelToken: this._cancelToken,
-        },
-      );
-      return parseObjectToCamelCase(response);
-    } catch (err: any) {
-      return {
-        data: {
-          errorCode: err.response.status,
-          ...err.response.data,
-        },
-      };
-    }
-  };
+      const finalUrl = this.joinURL(API_URL, this._baseUrl, url);
 
-  putRequest = async (url: string, data: ApiRequestData, config: any = {}) => {
-    try {
-      const parsedData = this.parseData(data, config);
-      const response: ApiResponse = await axios.put(
-        this.joinURL(this._baseUrl, url),
+      const response = await axios.post(
+        finalUrl,
         parsedData.data,
-        {
-          ...parsedData.config,
-          cancelToken: this._cancelToken,
-        },
+        parsedData.config,
       );
-      return parseObjectToCamelCase(response);
+
+      return response;
     } catch (err: any) {
       return {
         data: {
@@ -130,13 +109,12 @@ export default class BaseService {
   ) => {
     try {
       const parsedData = this.parseData(data, config);
+      const finalUrl = this.joinURL(API_URL, this._baseUrl, url);
+
       const response: ApiResponse = await axios.patch(
-        this.joinURL(this._baseUrl, url),
+        finalUrl,
         parsedData.data,
-        {
-          ...parsedData.config,
-          cancelToken: this._cancelToken,
-        },
+        parsedData.config,
       );
       return parseObjectToCamelCase(response);
     } catch (err: any) {
@@ -156,8 +134,10 @@ export default class BaseService {
   ) => {
     try {
       const parsedData = this.parseData(data, config);
+      const finalUrl = this.joinURL(API_URL, this._baseUrl, url);
+
       const response: ApiResponse = await axios.delete(
-        this.joinURL(this._baseUrl, url),
+        finalUrl,
         parsedData.data,
       );
       return parseObjectToCamelCase(response);

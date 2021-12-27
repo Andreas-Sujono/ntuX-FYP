@@ -1,3 +1,4 @@
+import { UserController } from './controllers/user.controller';
 import { AuthService } from './services/auth.service';
 import { Module } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
@@ -19,7 +20,7 @@ import { PremiumSetting } from 'src/commonModule/entities/premiumSetting.entity'
       signOptions: { expiresIn: '1h' },
     }),
   ],
-  controllers: [AuthController],
+  controllers: [AuthController, UserController],
   providers: [UserService, AuthService, JwtStrategy],
   exports: [UserService, AuthService],
 })

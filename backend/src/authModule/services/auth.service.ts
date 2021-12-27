@@ -13,6 +13,8 @@ import { v4 as uuidv4 } from 'uuid';
 import { User, UserRole } from '../entities/user.entity';
 import { SignUpDto } from '../dto/auth.dto';
 
+const FE_URL = 'https://andreassujono.com/ntux/#';
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -91,26 +93,34 @@ export class AuthService {
 
   async signUp(body: SignUpDto, role?: UserRole) {
     try {
-      const tempPassword = this.generateTempPassword();
+      let tempPassword = body.hashedPassword;
+      tempPassword = await this.encryptionService.hash(tempPassword);
       const longCode = this.generateLongCode();
       delete body.id;
-      const user = await this.userRepo.save({
-        ...body,
-        hashedPassword: tempPassword,
-        confirmationCode: longCode,
-        codeExpiresAt: new Date(new Date().getTime() + 3600000), //1hour
-        role: role || UserRole.STUDENT,
-        emailVerifiesAt: null,
-        deletedAt: null,
-        isActive: true,
-      });
+
+      const user = await this.userRepo.save(
+        this.userRepo.create({
+          ...body,
+          hashedPassword: tempPassword,
+          confirmationCode: longCode,
+          codeExpiresAt: new Date(new Date().getTime() + 3600000), //1hour
+          role: role || UserRole.STUDENT,
+          emailVerifiesAt: null,
+          deletedAt: null,
+          isActive: true,
+        }),
+      );
 
       //send email confirmation with code
       this.emailService.sendEmail(
         body.email,
         'NTUX: Confirm your email',
-        'Please go to this link to confirm your email: http://localhost:3000/confirm-email/?token=' +
-          longCode,
+        `Please go to this link to confirm your email: ${FE_URL}/confirm-email/?email=${body.email}&token=${longCode}`,
+        'confirmEmail',
+        {
+          LINK: `${FE_URL}/confirm-email/?email=${body.email}&token=${longCode}`,
+          link: `${FE_URL}/confirm-email/?email=${body.email}&token=${longCode}`,
+        },
       );
       return {
         user,
@@ -168,16 +178,22 @@ export class AuthService {
       this.emailService.sendEmail(
         email,
         'NTUX: Confirm your email',
-        'Please go to this link to confirm your email: http://localhost:3000/confirm-email/?token=' +
-          longCode,
+        `Please go to this link to confirm your email: ${FE_URL}/confirm-email/?email=${email}&token=${longCode}`,
+        'confirmEmail',
+        {
+          link: `${FE_URL}/confirm-email/?email=${email}&token=${longCode}`,
+        },
       );
 
     if (type === 'FORGOT_PASSWORD')
       this.emailService.sendEmail(
         email,
-        'NTUX: Confirm your email',
-        'Please go to this link to change your password: http://localhost:3000/forgot-password/?token=' +
-          longCode,
+        'NTUX: Reset your password',
+        `Please go to this link to change your password: ${FE_URL}/confirm-forgot-password/?email=${email}&token=${longCode}`,
+        'forgotPassword',
+        {
+          link: `${FE_URL}/confirm-forgot-password/?email=${email}&token=${longCode}`,
+        },
       );
     return {
       user,
@@ -203,9 +219,12 @@ export class AuthService {
     //send email confirmation with code
     this.emailService.sendEmail(
       email,
-      'NTUX: Confirm your email',
-      'Please go to this link to change your password: http://localhost:3000/forgot-password/?token=' +
-        longCode,
+      'NTUX: Reset your Password',
+      `Please go to this link to change your password: ${FE_URL}/confirm-forgot-password/?email=${email}&token=${longCode}`,
+      'forgotPassword',
+      {
+        link: `${FE_URL}/confirm-forgot-password/?email=${email}&token=${longCode}`,
+      },
     );
 
     return {
@@ -217,7 +236,7 @@ export class AuthService {
   async confirmForgotPassword(
     email: string,
     confirmationCode: string,
-    newPassword: string,
+    // newPassword: string,
   ) {
     const user = await this.userRepo.findOne({ email });
     if (!user)
@@ -232,17 +251,17 @@ export class AuthService {
         'Code is expired, Please resend confirmation code again!',
       );
 
-    const hashedPassword = await this.encryptionService.hash(newPassword);
+    // const hashedPassword = await this.encryptionService.hash(newPassword);
 
-    user.hashedPassword = hashedPassword;
-    await this.userRepo.save(user);
+    // user.hashedPassword = hashedPassword;
+    // await this.userRepo.save(user);
 
     //send email that you have forgot password
-    this.emailService.sendEmail(
-      email,
-      'NTUX: Successfully changed your password',
-      'You have succesfully changed your password',
-    );
+    // this.emailService.sendEmail(
+    //   email,
+    //   'NTUX: Successfully changed your password',
+    //   'You have succesfully changed your password',
+    // );
 
     return {
       status: 'SUCCESS', //redirect user to login

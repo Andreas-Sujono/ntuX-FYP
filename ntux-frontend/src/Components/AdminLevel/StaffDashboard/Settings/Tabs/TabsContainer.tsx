@@ -5,6 +5,8 @@ import Box from '@mui/material/Box';
 import ProfileTab from './ProfileTab';
 import ChangePasswordTab from './ChangePasswordTab';
 import { Button, Divider, Grid, Typography } from '@mui/material';
+import { useThunkDispatch } from 'common/hooks';
+import { logout } from 'Store/Actions/auth';
 
 function TabPanel({ children, value, index, ...other }: any) {
   return (
@@ -29,6 +31,11 @@ function a11yProps(index: number) {
 
 export default function TabsContainer() {
   const [value, setValue] = React.useState(0);
+  const dispatch = useThunkDispatch();
+
+  const handleLogout = () => {
+    dispatch(logout());
+  };
 
   const handleChange = (event: any, newValue: any) => {
     setValue(newValue);
@@ -63,7 +70,11 @@ export default function TabsContainer() {
         <Typography variant="body1" gutterBottom>
           We&apos;ll miss you
         </Typography>
-        <Button variant="contained" sx={{ mt: 1.5, mb: 2 }}>
+        <Button
+          variant="contained"
+          sx={{ mt: 1.5, mb: 2 }}
+          onClick={handleLogout}
+        >
           Logout
         </Button>
       </TabPanel>

@@ -8,4 +8,8 @@ export class CourseContentService extends TypeOrmCrudService<CourseContent> {
   constructor(@InjectRepository(CourseContent) repo) {
     super(repo);
   }
+
+  async createOrUpdateCourseContent(courseContent: CourseContent) {
+    return this.repo.save(courseContent);
+  }
 }
