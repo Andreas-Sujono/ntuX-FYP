@@ -1,3 +1,4 @@
+import { CourseBatch } from './../../Models/Courses/index';
 import { v4 as uuidv4 } from 'uuid';
 import queryString from 'query-string';
 
@@ -78,4 +79,23 @@ export const parseJson = (
   } catch (err) {
     return defaultValue;
   }
+};
+
+export const getCourseStatus = (batches: CourseBatch[]) => {
+  const status = 'Closed'; // OPEN REGISTRATION, CLOSED REGISTRATION, ONGOING
+  const now = new Date();
+  let isFuture = false;
+  batches.forEach((batch) => {
+    if (now > batch.registrationStartsAt && now < batch.registrationEndsAt) {
+      return 'Open Registration';
+    }
+    if (now > batch.startDate && now < batch.endDate) {
+      return 'Ongoing';
+    }
+    if (batch.startDate > now) isFuture = true;
+  });
+
+  if (isFuture) return 'Close Registration';
+
+  return status;
 };

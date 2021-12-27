@@ -9,6 +9,13 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
+import { toast } from 'react-toastify';
+import { useThunkDispatch } from 'common/hooks';
+import { login } from 'Store/Actions/auth';
+import { useHistory } from 'react-router-dom';
+import { routes } from 'Components/Routes';
+import { Role } from 'Models/Auth';
+import axios from 'axios';
 
 export function Copyright(props: any) {
   return (
@@ -29,14 +36,30 @@ export function Copyright(props: any) {
 }
 
 export default function SignInSide() {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const dispatch = useThunkDispatch();
+  const history = useHistory();
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     // eslint-disable-next-line no-console
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    const formData = {
+      email: data.get('email') as string,
+      password: data.get('password') as string,
+    };
+
+    if (!formData.email || !formData.password)
+      return toast.error('Please fill all the required field', {
+        position: 'top-right',
+      });
+
+    const res: any = await dispatch(login(formData));
+
+    if (res.result) {
+      if (res.user.role === Role.STUDENT)
+        return history.push(routes.STAFF.DASHBOARD);
+      return history.push(routes.STAFF.DASHBOARD);
+    }
   };
 
   return (

@@ -43,7 +43,10 @@ export interface Course {
   lecturers: User[];
   createdAt: Date;
   updatedAt: Date;
-  bacthes: CourseBatch[];
+  courseBatches?: CourseBatch[];
+  courseContents?: CourseContent[];
+  studentRegistrations?: StudentRegistration[];
+  courseAnnouncements?: CourseAnnouncement[];
 }
 
 export interface CourseContent {

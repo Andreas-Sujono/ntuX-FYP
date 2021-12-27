@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import axios from 'axios';
 import AuthService from '../../../Services/auth/general';
 import { AppDispatch, RootState } from '../../../Store';
@@ -8,6 +9,7 @@ import {
   reset as resetAuthGeneralState,
 } from './general';
 import { LoginRequest, User } from 'Models/Auth';
+import { toast } from 'react-toastify';
 
 const { CancelToken } = axios;
 const source = CancelToken.source();
@@ -28,17 +30,14 @@ export const signup =
   async (dispatch: AppDispatch, getState: () => RootState) => {
     try {
       const res = await service.signup(data);
-
-      if (res.errorCode !== 0) {
+      if (res.errorCode) {
         dispatch(loadFailed());
         return {
           result: false,
           errorMessage: res.message,
         };
       }
-
       dispatch(loadSuccess({}));
-
       return { result: true };
     } catch (err) {
       dispatch(loadFailed());
@@ -51,23 +50,22 @@ export const login =
   async (dispatch: AppDispatch, getState: () => RootState) => {
     try {
       const res = await service.login(data);
-
-      if (res.errorCode !== 0) {
+      if (res.errorCode) {
         dispatch(loadFailed());
+        toast.error(res.message);
         return {
           result: false,
           errorMessage: res.message,
         };
       }
-
       dispatch(
         loadSuccess({
           user: res.user,
           token: res.accessToken,
         }),
       );
-
-      return { result: true };
+      localStorage.setItem('token', res.accessToken);
+      return { result: true, user: res.user };
     } catch (err) {
       dispatch(loadFailed());
       return { result: false };
@@ -83,22 +81,20 @@ export const logout =
   async (dispatch: AppDispatch, getState: () => RootState) => {
     try {
       const res = await service.logout();
-
-      if (res.errorCode !== 0) {
+      if (res.errorCode) {
         dispatch(loadFailed());
         return {
           result: false,
         };
       }
-
       resetAllState(dispatch);
-
       dispatch(
         loadSuccess({
           user: null,
           role: null,
         }),
       );
+      localStorage.removeItem('token');
 
       return { result: true };
     } catch (err) {

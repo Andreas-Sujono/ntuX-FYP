@@ -2,11 +2,12 @@ import { selectPublicCourses } from './../../../Selector/courses/general';
 import axios from 'axios';
 import GeneralService from '../../../Services/courses/general';
 import { AppDispatch, RootState } from '../../../Store';
-import { loadRequest, loadSuccess, loadFailed } from './general';
+import { loadSuccess, loadFailed } from './general';
+import { Id } from 'Models/Auth';
 
 const { CancelToken } = axios;
 const source = CancelToken.source();
-const canceler = source.cancel;
+// const canceler = source.cancel;
 
 const service = new GeneralService({
   baseUrl: '/ntux-server/api/v1',
@@ -28,8 +29,9 @@ export const getPublicCourses =
 
     try {
       const res = await service.getPublicCourses();
+      console.log('res: ', res);
 
-      if (res.errorCode !== 0) {
+      if (res.errorCode) {
         dispatch(loadFailed());
         sendErrorNotification(res.message);
         return {
@@ -45,6 +47,27 @@ export const getPublicCourses =
       );
 
       return { result: true };
+    } catch (err) {
+      dispatch(loadFailed());
+      return { result: false };
+    }
+  };
+
+export const getOnePublicCourse =
+  (id: Id, bypass = false) =>
+  async (dispatch: AppDispatch, getState: () => RootState) => {
+    try {
+      const res = await service.getOnePublicCourses(id);
+      if (res.errorCode) {
+        dispatch(loadFailed());
+        sendErrorNotification(res.message);
+        return {
+          result: false,
+          errorMessage: res.message,
+        };
+      }
+      dispatch(loadSuccess({}));
+      return { result: true, data: res };
     } catch (err) {
       dispatch(loadFailed());
       return { result: false };

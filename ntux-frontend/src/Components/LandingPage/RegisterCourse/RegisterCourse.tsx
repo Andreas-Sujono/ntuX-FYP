@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -9,17 +9,63 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Divider from '@mui/material/Divider';
 import { StyledBox, StyledForm, BackgroundContainer } from './Styles';
+import { Course } from 'Models/Courses';
+import { useParams } from 'react-router-dom';
+import { getOnePublicCourse } from 'Store/Actions/courses';
+import { useThunkDispatch } from 'common/hooks';
+import { toast } from 'react-toastify';
 
 export default function RegisterCoursePage() {
+  const dispatch = useThunkDispatch();
+  const param: any = useParams();
+  const [courseData, setCourseData] = React.useState<Course | null>(null);
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    // eslint-disable-next-line no-console
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    const formData = {
+      fullName: data.get('fullName') as string,
+      familyName: data.get('familyName') as string,
+      givenName: data.get('givenName') as string,
+      citizenship: data.get('citizenship') as string,
+      nationality: data.get('nationality') as string,
+      email: data.get('email') as string,
+      confirmEmail: data.get('confirmEmail') as string,
+      checked: data.get('checked'),
+    };
+
+    if (
+      !formData.familyName ||
+      !formData.givenName ||
+      !formData.fullName ||
+      !formData.email ||
+      !formData.confirmEmail
+    )
+      return toast.error('Please fill all the required field');
+
+    if (formData.email !== formData.confirmEmail)
+      return toast.error('Email and confirm email are not the same');
+
+    if (!formData.checked)
+      return toast.error(
+        'Please agree to the accurate information declaration',
+      );
   };
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  const getData = async () => {
+    const { result, data } = await dispatch(
+      getOnePublicCourse(param?.courseId),
+    );
+    setCourseData(data || {});
+  };
+
+  courseData?.courseBatches?.sort((a, b) => {
+    return a.startDate.getTime() - b.endDate.getTime();
+  });
 
   return (
     <Container component="main" maxWidth="md">
@@ -35,7 +81,7 @@ export default function RegisterCoursePage() {
           sx={{ color: '#C63044' }}
           className="subtitle"
         >
-          EE0117: Computer Networking I (20 Oct 2021 - 27 Oct 2021)
+          {courseData?.name} - {courseData?.courseBatches?.[0]?.name}
         </Typography>
         <StyledForm component="form" noValidate onSubmit={handleSubmit}>
           <Grid
@@ -146,8 +192,9 @@ export default function RegisterCoursePage() {
 
             <Grid item xs={12}>
               <FormControlLabel
-                control={<Checkbox value="allowExtraEmails" color="primary" />}
+                control={<Checkbox value="true" color="primary" />}
                 label="I declare that the above information submitted is accurate."
+                name="checked"
               />
             </Grid>
             <Grid item xs={12}>

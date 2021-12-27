@@ -12,7 +12,7 @@ export default class AuthService extends BaseService {
   };
 
   login = async (data: LoginRequest) => {
-    const res = await this.patchRequest('/auth/login', data);
+    const res = await this.postRequest('/auth/login', data);
     return res.data;
   };
 

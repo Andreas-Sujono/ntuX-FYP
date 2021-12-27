@@ -1,6 +1,8 @@
 import React, { memo, useState, useEffect } from 'react';
 import { useLocation, matchPath } from 'react-router-dom';
 import CssBaseline from '@mui/material/CssBaseline';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { darkThemeRoutePaths } from '../../common/platformSetting';
 import { colors } from '../../common/styling';
 import { PlatformSetting } from '../../Models/PlatformSetting';
@@ -115,6 +117,7 @@ const ThemeProvider = ({
         <GlobalStyle {...value} />
         <CssBaseline />
         {children}
+        <ToastContainer limit={3} position="top-right" />
       </MUIThemeProvider>
     </ThemeContext.Provider>
   );
