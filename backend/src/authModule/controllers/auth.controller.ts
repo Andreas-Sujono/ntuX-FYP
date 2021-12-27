@@ -71,7 +71,7 @@ export class AuthController {
     return this.authService.confirmForgotPassword(
       body.email,
       body.confirmationCode,
-      body.password,
+      // body.password,
     );
   }
 }

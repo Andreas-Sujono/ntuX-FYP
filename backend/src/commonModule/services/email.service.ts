@@ -1,5 +1,8 @@
 import * as mailgun from 'mailgun-js';
 import Handlebars from 'handlebars';
+import forgotPasswordHtml from './templates/forgotPassword';
+import confirmEmailHtml from './templates/confirmEmail';
+
 export class EmailService {
   mg: any;
   constructor() {
@@ -12,7 +15,7 @@ export class EmailService {
     email: string,
     subject: string,
     message: string,
-    html?: string,
+    htmlKey?: 'forgotPassword' | 'confirmEmail',
     paramData?: any,
   ) {
     // send email
@@ -21,10 +24,10 @@ export class EmailService {
       to: email,
       subject: subject,
     };
-    if (message) data.text = message;
-    if (html) {
+    if (message && !htmlKey) data.text = message;
+    if (htmlKey) {
       const template = Handlebars.compile(
-        '<h1>{{title}}</h1><div>{{text}}</div>',
+        htmlKey === 'forgotPassword' ? forgotPasswordHtml : confirmEmailHtml,
       );
       const result = template(paramData);
       data.html = result;
