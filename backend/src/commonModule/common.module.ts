@@ -1,3 +1,5 @@
+import { ForumAnswer } from './../forumModule/entities/forumAnswer.entity';
+import { AdminController } from './controllers/admin.controller';
 import { RewardController } from './controllers/reward.controller';
 import { PortfolioController } from './controllers/portfolio.controller';
 import { Module } from '@nestjs/common';
@@ -21,6 +23,9 @@ import { WebsiteActivityService } from './services/websiteActivity.service';
 import { WebsiteActivityController } from './controllers/websiteActivity.controller';
 import { User } from 'src/authModule/entities/user.entity';
 import { StudentWebsiteActivity } from './entities/StudentWebsiteActivity.entity';
+import { AdminService } from './services/admin.service';
+import { Tutor } from 'src/tutoringModule/entities/tutor.entity';
+import { ForumQuestion } from 'src/forumModule/entities/forumQuestion.entity';
 
 @Module({
   imports: [
@@ -33,6 +38,9 @@ import { StudentWebsiteActivity } from './entities/StudentWebsiteActivity.entity
       WebsiteActivity,
       User,
       StudentWebsiteActivity,
+      Tutor,
+      ForumAnswer,
+      ForumQuestion,
     ]),
   ],
   providers: [
@@ -44,6 +52,7 @@ import { StudentWebsiteActivity } from './entities/StudentWebsiteActivity.entity
     RewardService,
     RewardRedeemedService,
     WebsiteActivityService,
+    AdminService,
   ],
   exports: [EmailService, LoggerService, EncryptionService],
   controllers: [
@@ -52,6 +61,7 @@ import { StudentWebsiteActivity } from './entities/StudentWebsiteActivity.entity
     RewardController,
     RewardRedeemedController,
     WebsiteActivityController,
+    AdminController,
   ],
 })
 export class CommonModule {}

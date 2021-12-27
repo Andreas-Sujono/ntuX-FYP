@@ -93,20 +93,23 @@ export class AuthService {
 
   async signUp(body: SignUpDto, role?: UserRole) {
     try {
-      let tempPassword = body.hashedPassword || this.generateTempPassword();
+      let tempPassword = body.hashedPassword;
       tempPassword = await this.encryptionService.hash(tempPassword);
       const longCode = this.generateLongCode();
       delete body.id;
-      const user = await this.userRepo.save({
-        ...body,
-        hashedPassword: tempPassword,
-        confirmationCode: longCode,
-        codeExpiresAt: new Date(new Date().getTime() + 3600000), //1hour
-        role: role || UserRole.STUDENT,
-        emailVerifiesAt: null,
-        deletedAt: null,
-        isActive: true,
-      });
+
+      const user = await this.userRepo.save(
+        this.userRepo.create({
+          ...body,
+          hashedPassword: tempPassword,
+          confirmationCode: longCode,
+          codeExpiresAt: new Date(new Date().getTime() + 3600000), //1hour
+          role: role || UserRole.STUDENT,
+          emailVerifiesAt: null,
+          deletedAt: null,
+          isActive: true,
+        }),
+      );
 
       //send email confirmation with code
       this.emailService.sendEmail(
@@ -116,6 +119,7 @@ export class AuthService {
         'confirmEmail',
         {
           LINK: `${FE_URL}/confirm-email/?email=${body.email}&token=${longCode}`,
+          link: `${FE_URL}/confirm-email/?email=${body.email}&token=${longCode}`,
         },
       );
       return {
@@ -177,7 +181,7 @@ export class AuthService {
         `Please go to this link to confirm your email: ${FE_URL}/confirm-email/?email=${email}&token=${longCode}`,
         'confirmEmail',
         {
-          LINK: `${FE_URL}/confirm-email/?email=${email}&token=${longCode}`,
+          link: `${FE_URL}/confirm-email/?email=${email}&token=${longCode}`,
         },
       );
 
@@ -188,7 +192,7 @@ export class AuthService {
         `Please go to this link to change your password: ${FE_URL}/confirm-forgot-password/?email=${email}&token=${longCode}`,
         'forgotPassword',
         {
-          LINK: `${FE_URL}/confirm-forgot-password/?email=${email}&token=${longCode}`,
+          link: `${FE_URL}/confirm-forgot-password/?email=${email}&token=${longCode}`,
         },
       );
     return {
@@ -219,7 +223,7 @@ export class AuthService {
       `Please go to this link to change your password: ${FE_URL}/confirm-forgot-password/?email=${email}&token=${longCode}`,
       'forgotPassword',
       {
-        LINK: `${FE_URL}/confirm-forgot-password/?email=${email}&token=${longCode}`,
+        link: `${FE_URL}/confirm-forgot-password/?email=${email}&token=${longCode}`,
       },
     );
 

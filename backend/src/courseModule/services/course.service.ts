@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TypeOrmCrudService } from '@nestjsx/crud-typeorm';
+import { User } from 'src/authModule/entities/user.entity';
 import { Repository } from 'typeorm';
 import { Course, CourseStatus } from '../entities/course.entity';
 import { CourseBatch } from '../entities/courseBatch.entity';
@@ -14,6 +15,8 @@ export class CourseService extends TypeOrmCrudService<Course> {
     private courseUserRepo: Repository<CourseUser>,
     @InjectRepository(CourseBatch)
     private courseBatchRepo: Repository<CourseBatch>,
+    @InjectRepository(User)
+    private userRepo: Repository<User>,
   ) {
     super(repo);
   }
@@ -30,7 +33,7 @@ export class CourseService extends TypeOrmCrudService<Course> {
     });
   }
 
-  async getMyCourses(userId: string): Promise<Course[]> {
+  async getStudentCourses(userId: string): Promise<Course[]> {
     const query = `SELECT course.* from course_user LEFT JOIN course on course_user.courseId = course.id WHERE user_id = $1`;
     return await this.repo.query(query, [userId]);
   }
@@ -91,5 +94,17 @@ export class CourseService extends TypeOrmCrudService<Course> {
       activity: finalActivity,
     });
     return { success: true };
+  }
+
+  //for admin
+  async getStudentSummary(userId: string) {
+    const user = await this.userRepo.findOne({
+      id: userId as any,
+    });
+    const courses = await this.getStudentCourses(userId);
+    return {
+      user,
+      courses,
+    };
   }
 }

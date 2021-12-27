@@ -1,55 +1,149 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TypeOrmCrudService } from '@nestjsx/crud-typeorm';
+import { Repository } from 'typeorm';
+import { StudentWebsiteActivity } from '../entities/StudentWebsiteActivity.entity';
 import { WebsiteActivity } from '../entities/websiteActivity.entity';
 
 @Injectable()
 export class WebsiteActivityService extends TypeOrmCrudService<WebsiteActivity> {
-  constructor(@InjectRepository(WebsiteActivity) repo) {
+  constructor(
+    @InjectRepository(WebsiteActivity) repo,
+    @InjectRepository(StudentWebsiteActivity)
+    private studentWebsiteActivityRepo: Repository<StudentWebsiteActivity>,
+  ) {
     super(repo);
+  }
+
+  async getStudentSummary(interval: 'd' | 'w' | 'm', userId?: string) {
+    if (interval === 'd') {
+      const res = await this.repo.query(`   
+        SELECT sum(student_website_activity."visitWithoutLogin") as visitWithoutLogin, 
+        sum(student_website_activity."visitWithLogin") as visitWithLogin,
+        sum(student_website_activity."totalQuestion") as totalQuestion,
+        sum(student_website_activity."totalAnswer") as totalAnswer,
+        sum(student_website_activity."totalTutorRequest") as totalTutorRequest,
+        sum(student_website_activity."totalTutorRequestAccepted") as totalTutorRequestAccepted,
+        date
+        from student_website_activity group by date order by date desc limit 7 WHERE student_website_activity."userId" = ${userId}
+      `);
+      return res;
+    }
+    if (interval === 'w') {
+      const res = await this.repo.query(`   
+        SELECT sum(student_website_activity."visitWithoutLogin") as visitWithoutLogin, 
+        sum(student_website_activity."visitWithLogin") as visitWithLogin,
+        sum(student_website_activity."totalQuestion") as totalQuestion,
+        sum(student_website_activity."totalAnswer") as totalAnswer,
+        sum(student_website_activity."totalTutorRequest") as totalTutorRequest,
+        sum(student_website_activity."totalTutorRequestAccepted") as totalTutorRequestAccepted,
+        date
+        from student_website_activity group by date order by date desc limit 49 WHERE student_website_activity."userId" = ${userId}
+      `);
+      return res;
+    }
+    const res = await this.repo.query(`   
+        SELECT sum(student_website_activity."visitWithoutLogin") as visitWithoutLogin, 
+        sum(student_website_activity."visitWithLogin") as visitWithLogin,
+        sum(student_website_activity."totalQuestion") as totalQuestion,
+        sum(student_website_activity."totalAnswer") as totalAnswer,
+        sum(student_website_activity."totalTutorRequest") as totalTutorRequest,
+        sum(student_website_activity."totalTutorRequestAccepted") as totalTutorRequestAccepted,
+        date
+        from student_website_activity group by date order by date desc limit 210 WHERE student_website_activity."userId" = ${userId}
+      `);
+    return res;
   }
 
   async getSummary(interval: 'd' | 'w' | 'm') {
     if (interval === 'd') {
       const res = await this.repo.query(`   
-        SELECT (website_activity."visitWithoutLogin") as visitWithoutLogin, 
-        (website_activity."visitWithLogin") as visitWithLogin,
-        (website_activity."totalQuestion") as totalQuestion,
-        (website_activity."totalAnswer") as totalAnswer,
-        (website_activity."totalTutorRequest") as totalTutorRequest,
-        (website_activity."totalTutorRequestAccepted") as totalTutorRequestAccepted
+        SELECT sum(website_activity."visitWithoutLogin") as visitWithoutLogin, 
+        sum(website_activity."visitWithLogin") as visitWithLogin,
+        sum(website_activity."totalQuestion") as totalQuestion,
+        sum(website_activity."totalAnswer") as totalAnswer,
+        sum(website_activity."totalTutorRequest") as totalTutorRequest,
+        sum(website_activity."totalTutorRequestAccepted") as totalTutorRequestAccepted,
+        date
         from website_activity group by date order by date desc limit 7
       `);
-      return res[0];
+      return res;
     }
     if (interval === 'w') {
       const res = await this.repo.query(`   
-        SELECT (website_activity."visitWithoutLogin") as visitWithoutLogin, 
-        (website_activity."visitWithLogin") as visitWithLogin,
-        (website_activity."totalQuestion") as totalQuestion,
-        (website_activity."totalAnswer") as totalAnswer,
-        (website_activity."totalTutorRequest") as totalTutorRequest,
-        (website_activity."totalTutorRequestAccepted") as totalTutorRequestAccepted
+        SELECT sum(website_activity."visitWithoutLogin") as visitWithoutLogin, 
+        sum(website_activity."visitWithLogin") as visitWithLogin,
+        sum(website_activity."totalQuestion") as totalQuestion,
+        sum(website_activity."totalAnswer") as totalAnswer,
+        sum(website_activity."totalTutorRequest") as totalTutorRequest,
+        sum(website_activity."totalTutorRequestAccepted") as totalTutorRequestAccepted,
+        date
         from website_activity group by date order by date desc limit 49
       `);
-      return res[0];
+      return res;
     }
     const res = await this.repo.query(`   
-        SELECT (website_activity."visitWithoutLogin") as visitWithoutLogin, 
-        (website_activity."visitWithLogin") as visitWithLogin,
-        (website_activity."totalQuestion") as totalQuestion,
-        (website_activity."totalAnswer") as totalAnswer,
-        (website_activity."totalTutorRequest") as totalTutorRequest,
-        (website_activity."totalTutorRequestAccepted") as totalTutorRequestAccepted
+        SELECT sum(website_activity."visitWithoutLogin") as visitWithoutLogin, 
+        sum(website_activity."visitWithLogin") as visitWithLogin,
+        sum(website_activity."totalQuestion") as totalQuestion,
+        sum(website_activity."totalAnswer") as totalAnswer,
+        sum(website_activity."totalTutorRequest") as totalTutorRequest,
+        sum(website_activity."totalTutorRequestAccepted") as totalTutorRequestAccepted,
+        date
         from website_activity group by date order by date desc limit 210
       `);
-    return res[0];
+    return res;
   }
 
-  async getDashboardData() {
-    //total user
-    //total course
-    //total question
-    //total tutor
+  async updateWebsiteActivity(dto: WebsiteActivity, userId?: number) {
+    const existing = await this.repo.findOne({
+      date: new Date().toDateString(),
+    });
+    if (existing)
+      await this.repo.update(existing, {
+        visitWithLogin: existing.visitWithLogin + (dto.visitWithLogin || 0),
+        visitWithoutLogin:
+          existing.visitWithoutLogin + (dto.visitWithoutLogin || 0),
+        totalQuestion: existing.totalQuestion + (dto.totalQuestion || 0),
+        totalAnswer: existing.totalAnswer + (dto.totalAnswer || 0),
+        totalTutorRequest:
+          existing.totalTutorRequest + (dto.totalTutorRequest || 0),
+        totalTutorRequestAccepted:
+          existing.totalTutorRequestAccepted +
+          (dto.totalTutorRequestAccepted || 0),
+      });
+    else
+      await this.repo.save(
+        this.repo.create({
+          date: new Date(),
+          ...dto,
+        }),
+      );
+
+    if (userId) {
+      const existing2 = await this.studentWebsiteActivityRepo.findOne({
+        date: new Date().toDateString(),
+      });
+      if (existing2)
+        await this.studentWebsiteActivityRepo.update(existing, {
+          visitWithLogin: existing.visitWithLogin + (dto.visitWithLogin || 0),
+          visitWithoutLogin:
+            existing.visitWithoutLogin + (dto.visitWithoutLogin || 0),
+          totalQuestion: existing.totalQuestion + (dto.totalQuestion || 0),
+          totalAnswer: existing.totalAnswer + (dto.totalAnswer || 0),
+          totalTutorRequest:
+            existing.totalTutorRequest + (dto.totalTutorRequest || 0),
+          totalTutorRequestAccepted:
+            existing.totalTutorRequestAccepted +
+            (dto.totalTutorRequestAccepted || 0),
+        });
+      else
+        await this.studentWebsiteActivityRepo.save(
+          this.studentWebsiteActivityRepo.create({
+            date: new Date(),
+            ...dto,
+          }),
+        );
+    }
   }
 }

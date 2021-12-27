@@ -18,7 +18,7 @@ export class CourseBatch {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Course)
+  @ManyToOne(() => Course, (course) => course.courseBatches)
   course: Course;
 
   @Column()

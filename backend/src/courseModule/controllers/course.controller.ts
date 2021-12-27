@@ -5,6 +5,7 @@ import { Public } from 'src/authModule/public.decorator';
 import { Course } from '../entities/course.entity';
 import { CourseService } from '../services/course.service';
 import { UserRole } from 'src/authModule/roles/roles.enum';
+import { UserData } from 'src/authModule/user.decorator';
 
 @Crud({
   model: {
@@ -43,5 +44,10 @@ export class CourseController implements CrudController<Course> {
   @Public()
   async get1Course(@Param('courseId') courseId: number) {
     return this.service.getOneCourse(courseId);
+  }
+
+  @Get('me')
+  async getMyCourse(@UserData('userId') userId: string) {
+    return this.service.getStudentCourses(userId);
   }
 }
