@@ -3,7 +3,7 @@ import axios from 'axios';
 import GeneralService from '../../../Services/courses/general';
 import { AppDispatch, RootState } from '../../../Store';
 import { loadSuccess, loadFailed } from './general';
-import { Id } from 'Models/Auth';
+import { Id, User } from 'Models/Auth';
 
 const { CancelToken } = axios;
 const source = CancelToken.source();
@@ -58,6 +58,27 @@ export const getOnePublicCourse =
   async (dispatch: AppDispatch, getState: () => RootState) => {
     try {
       const res = await service.getOnePublicCourses(id);
+      if (res.errorCode) {
+        dispatch(loadFailed());
+        sendErrorNotification(res.message);
+        return {
+          result: false,
+          errorMessage: res.message,
+        };
+      }
+      dispatch(loadSuccess({}));
+      return { result: true, data: res };
+    } catch (err) {
+      dispatch(loadFailed());
+      return { result: false };
+    }
+  };
+
+export const registerCourse =
+  (data: any, bypass = false) =>
+  async (dispatch: AppDispatch, getState: () => RootState) => {
+    try {
+      const res = await service.registerCourse(data);
       if (res.errorCode) {
         dispatch(loadFailed());
         sendErrorNotification(res.message);

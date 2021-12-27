@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -11,13 +11,24 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { toast } from 'react-toastify';
 import { useThunkDispatch } from 'common/hooks';
-import { login } from 'Store/Actions/auth';
-import { Redirect, useHistory, Link as RouterLink } from 'react-router-dom';
+import {
+  confirmEmail,
+  confirmForgotPassword,
+  forgotPassword,
+  login,
+} from 'Store/Actions/auth';
+import {
+  Redirect,
+  useHistory,
+  Link as RouterLink,
+  useLocation,
+} from 'react-router-dom';
 import { routes } from 'Components/Routes';
 import { Role } from 'Models/Auth';
-import axios from 'axios';
+import queryString from 'query-string';
 import { useSelector } from 'react-redux';
 import { selectUserId, selectUserRole } from 'Store/Selector/auth';
+import { LoadingBar } from 'common/Components/LoadingBar/FullPageLoadingBar';
 
 export function Copyright(props: any) {
   return (
@@ -37,7 +48,89 @@ export function Copyright(props: any) {
   );
 }
 
-export default function SignInSide() {
+export function ConfirmForgotPassword() {
+  const [loading, setLoading] = useState<boolean | null>(true);
+  const location = useLocation();
+  const dispatch = useThunkDispatch();
+  const query = queryString.parse(location.search);
+
+  useEffect(() => {
+    confirmToken();
+  }, []);
+
+  const confirmToken = async () => {
+    setLoading(true);
+    const res = await dispatch(confirmForgotPassword(query));
+    if (res.result) {
+      return setLoading(false);
+    }
+    return setLoading(null);
+  };
+
+  if (loading === false) {
+    return (
+      <Redirect
+        to={{
+          pathname: routes.RESET_PASSWORD_PAGE,
+          state: {
+            isAuthenticated: true,
+            email: query.email,
+            token: query.token,
+          },
+          search: location.search,
+        }}
+      />
+    );
+  }
+  if (loading === null) {
+    return <Redirect to={routes.LP_HOMEPAGE} />;
+  }
+  if (loading === true) return <LoadingBar height="100vh" />;
+  return null;
+}
+
+export function ConfirmEmail() {
+  const [loading, setLoading] = useState<boolean | null>(true);
+  const location = useLocation();
+  const dispatch = useThunkDispatch();
+  const query = queryString.parse(location.search);
+
+  useEffect(() => {
+    confirmToken();
+  }, []);
+
+  const confirmToken = async () => {
+    setLoading(true);
+    const res = await dispatch(confirmEmail(query));
+    if (res.result) {
+      return setLoading(false);
+    }
+    return setLoading(null);
+  };
+
+  if (loading === false) {
+    return (
+      <Redirect
+        to={{
+          pathname: routes.LOGIN_PAGE,
+          state: {
+            isAuthenticated: true,
+            email: query.email,
+            token: query.token,
+          },
+          search: location.search,
+        }}
+      />
+    );
+  }
+  if (loading === null) {
+    return <Redirect to={routes.LP_HOMEPAGE} />;
+  }
+  if (loading === true) return <LoadingBar height="100vh" />;
+  return null;
+}
+
+export default function ForgotPasswordPage() {
   const dispatch = useThunkDispatch();
   const history = useHistory();
   const userId = useSelector(selectUserId);
@@ -47,26 +140,22 @@ export default function SignInSide() {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    // eslint-disable-next-line no-console
     const formData = {
       email: data.get('email') as string,
-      password: data.get('password') as string,
     };
 
-    if (!formData.email || !formData.password)
+    if (!formData.email)
       return toast.error('Please fill all the required field', {
         position: 'top-right',
       });
 
     setLoading(true);
-    const res: any = await dispatch(login(formData));
+    const res: any = await dispatch(forgotPassword(formData));
     setLoading(false);
 
     if (res.result) {
-      console.log(res);
-      if (res.user.role === Role.STUDENT)
-        return history.push(routes.ADMIN.BASE);
-      return history.push(routes.STAFF.DASHBOARD);
+      toast.success('Reset password link is sent to your email');
+      return history.push(routes.LOGIN_PAGE);
     }
   };
 
@@ -105,7 +194,7 @@ export default function SignInSide() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            Forgot Password
           </Typography>
           <Box
             component="form"
@@ -123,16 +212,9 @@ export default function SignInSide() {
               autoComplete="email"
               autoFocus
             />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-            />
+            <Typography variant="body2" color="textSecondary" align="center">
+              We&apos;ll send you an email with a link to reset your password.
+            </Typography>
             <Button
               type="submit"
               fullWidth
@@ -140,18 +222,16 @@ export default function SignInSide() {
               sx={{ mt: 3, mb: 2 }}
               disabled={loading}
             >
-              Sign In
+              Forgot Password
             </Button>
-            {/* <Grid container>
+
+            <Grid container>
               <Grid item xs>
-                <RouterLink
-                  to={routes.FORGOT_PASSWORD_PAGE}
-                  style={{ color: 'darkred' }}
-                >
-                  Forgot Password
+                <RouterLink to={routes.LOGIN_PAGE} style={{ color: 'darkred' }}>
+                  Back to Sign In?
                 </RouterLink>
               </Grid>
-            </Grid> */}
+            </Grid>
             <Copyright sx={{ mt: 5 }} />
           </Box>
         </Box>

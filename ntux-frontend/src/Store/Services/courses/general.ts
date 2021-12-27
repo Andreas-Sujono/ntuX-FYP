@@ -1,4 +1,4 @@
-import { Id } from '../../../Models/Auth';
+import { Id, User } from '../../../Models/Auth';
 import BaseService from '../base';
 
 export default class CoursesService extends BaseService {
@@ -24,6 +24,11 @@ export default class CoursesService extends BaseService {
     const res = await this.getRequest(`/courses?filter=user||eq||${userId}`);
     return res.data;
   };
+  registerCourse = async (data: any) => {
+    const res = await this.postRequest(`/student-registration`, data);
+    return res.data;
+  };
+
   createCourse = async (data: any) => {
     const res = await this.postRequest(`/courses/`, data);
     return res.data;

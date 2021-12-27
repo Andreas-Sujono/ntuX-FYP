@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "homepage": ".",
-  "proxy": "http://andreassujono.com",
+  "proxy": "https://andreassujono.com",
   "dependencies": {
     "@emotion/react": "^11.7.0",
     "@emotion/styled": "^11.6.0",
@@ -59,7 +59,7 @@
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "start": "PUBLIC_URL=/ react-scripts start",
+    "start": "PUBLIC_URL=/ PORT=8080 react-scripts start",
     "build": "PUBLIC_URL=/ntux GENERATE_SOURCEMAP=false react-scripts build && react-snapshot",
     "test": "react-scripts test",
     "eject": "react-scripts eject",

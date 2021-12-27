@@ -4,6 +4,9 @@ export const routes = {
   LP_COURSE: '/courses/:courseId',
   LOGIN_PAGE: '/login',
   RESET_PASSWORD_PAGE: '/reset-password',
+  FORGOT_PASSWORD_PAGE: '/forgot-password',
+  CONFIRM_FORGOT_PASSWORD_PAGE: '/confirm-forgot-password',
+  CONFIRM_EMAIL_PAGE: '/confirm-email',
   REGISTER_COURSE: '/courses/:courseId/register',
   FORUM: {
     BASE: '/forum',

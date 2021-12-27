@@ -1,3 +1,4 @@
+import { confirmForgotPassword } from './../../../Store/Actions/auth/general/thunk';
 import { lazy } from 'react';
 import { routes } from '../data';
 
@@ -12,6 +13,30 @@ export const routeData = [
     component: lazy(() => import('../../Auth/LoginPage')),
     exact: true,
   },
+  {
+    path: routes.FORGOT_PASSWORD_PAGE,
+    component: lazy(() => import('../../Auth/ForgotPasswordPage')),
+    exact: true,
+  },
+  {
+    path: routes.CONFIRM_FORGOT_PASSWORD_PAGE,
+    component: lazy(
+      () => import('../../Auth/ForgotPasswordPage/ConfirmForgotPassword'),
+    ),
+    exact: true,
+  },
+  {
+    path: routes.CONFIRM_EMAIL_PAGE,
+    component: lazy(() => import('../../Auth/ForgotPasswordPage/ConfirmEmail')),
+    exact: true,
+  },
+
+  {
+    path: routes.CONFIRM_EMAIL_PAGE,
+    component: lazy(() => import('../../Auth/ForgotPasswordPage')),
+    exact: true,
+  },
+
   {
     path: routes.RESET_PASSWORD_PAGE,
     component: lazy(() => import('../../Auth/ResetPassword')),

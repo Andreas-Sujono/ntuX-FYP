@@ -1,6 +1,8 @@
 import axios, { CancelToken } from 'axios';
 import { parseObjectToCamelCase } from '../../common/utils';
 
+const API_URL = 'https://andreassujono.com';
+
 export interface ApiResponse {
   errorCode: number;
   status: number;
@@ -61,9 +63,8 @@ export default class BaseService {
 
   getRequest = async (url: string) => {
     try {
-      const response: ApiResponse = await axios.get(
-        this.joinURL(this._baseUrl, url),
-      );
+      const finalUrl = this.joinURL(API_URL, this._baseUrl, url);
+      const response: ApiResponse = await axios.get(finalUrl);
       if (response.errorCode === 401 || response.status === 401) {
         // unauthorized
         localStorage.clear();
@@ -82,11 +83,7 @@ export default class BaseService {
   postRequest = async (url: string, data: ApiRequestData, config: any = {}) => {
     try {
       const parsedData = this.parseData(data, config);
-      const finalUrl = this.joinURL(
-        'https://andreassujono.com',
-        this._baseUrl,
-        url,
-      );
+      const finalUrl = this.joinURL(API_URL, this._baseUrl, url);
 
       const response = await axios.post(
         finalUrl,
@@ -112,11 +109,7 @@ export default class BaseService {
   ) => {
     try {
       const parsedData = this.parseData(data, config);
-      const finalUrl = this.joinURL(
-        'https://andreassujono.com',
-        this._baseUrl,
-        url,
-      );
+      const finalUrl = this.joinURL(API_URL, this._baseUrl, url);
 
       const response: ApiResponse = await axios.patch(
         finalUrl,
@@ -141,11 +134,7 @@ export default class BaseService {
   ) => {
     try {
       const parsedData = this.parseData(data, config);
-      const finalUrl = this.joinURL(
-        'https://andreassujono.com',
-        this._baseUrl,
-        url,
-      );
+      const finalUrl = this.joinURL(API_URL, this._baseUrl, url);
 
       const response: ApiResponse = await axios.delete(
         finalUrl,
