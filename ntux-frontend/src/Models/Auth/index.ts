@@ -3,9 +3,9 @@ import { PremiumSetting } from 'Models/pointsRewards';
 export type Id = string | number;
 
 export enum Role {
-  STUDENT = 'student',
+  STUDENT = 'STUDENT',
   ADMIN = 'ADMIN',
-  LECTURER = 'lecturer',
+  LECTURER = 'LECTURER',
 }
 
 export interface User {

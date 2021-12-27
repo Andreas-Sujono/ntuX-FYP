@@ -60,11 +60,12 @@ export const login =
       }
       dispatch(
         loadSuccess({
+          isAuthenticated: true,
           user: res.user,
-          token: res.accessToken,
+          token: res.access_token || res.accessToken,
         }),
       );
-      localStorage.setItem('token', res.accessToken);
+      localStorage.setItem('token', res.access_token || res.accessToken);
       return { result: true, user: res.user };
     } catch (err) {
       dispatch(loadFailed());

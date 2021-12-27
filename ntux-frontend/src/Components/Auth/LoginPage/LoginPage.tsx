@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -12,10 +12,12 @@ import Typography from '@mui/material/Typography';
 import { toast } from 'react-toastify';
 import { useThunkDispatch } from 'common/hooks';
 import { login } from 'Store/Actions/auth';
-import { useHistory } from 'react-router-dom';
+import { Redirect, useHistory } from 'react-router-dom';
 import { routes } from 'Components/Routes';
 import { Role } from 'Models/Auth';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
+import { selectUserId, selectUserRole } from 'Store/Selector/auth';
 
 export function Copyright(props: any) {
   return (
@@ -38,6 +40,9 @@ export function Copyright(props: any) {
 export default function SignInSide() {
   const dispatch = useThunkDispatch();
   const history = useHistory();
+  const userId = useSelector(selectUserId);
+  const userRole = useSelector(selectUserRole);
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -53,14 +58,22 @@ export default function SignInSide() {
         position: 'top-right',
       });
 
+    setLoading(true);
     const res: any = await dispatch(login(formData));
+    setLoading(false);
 
     if (res.result) {
+      console.log(res);
       if (res.user.role === Role.STUDENT)
-        return history.push(routes.STAFF.DASHBOARD);
+        return history.push(routes.ADMIN.BASE);
       return history.push(routes.STAFF.DASHBOARD);
     }
   };
+
+  if (userId) {
+    if (userRole === Role.STUDENT) return <Redirect to={routes.ADMIN.BASE} />;
+    return <Redirect to={routes.STAFF.BASE} />;
+  }
 
   return (
     <Grid container component="main" sx={{ height: '100vh' }}>
@@ -125,6 +138,7 @@ export default function SignInSide() {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              disabled={loading}
             >
               Sign In
             </Button>

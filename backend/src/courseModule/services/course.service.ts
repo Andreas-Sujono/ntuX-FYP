@@ -20,7 +20,13 @@ export class CourseService extends TypeOrmCrudService<Course> {
 
   async getPublicAllCourses(): Promise<Course[]> {
     return await this.repo.find({
-      status: CourseStatus.PUBLISHED,
+      where: {
+        status: CourseStatus.PUBLISHED,
+      },
+      relations: ['lecturers', 'courseBatches'],
+      order: {
+        createdAt: 'DESC',
+      },
     });
   }
 
@@ -30,7 +36,11 @@ export class CourseService extends TypeOrmCrudService<Course> {
   }
 
   async getAdminAllCourses(): Promise<Course[]> {
-    return await this.repo.find({});
+    return await this.repo.find({
+      order: {
+        createdAt: 'DESC',
+      },
+    });
   }
 
   async getOneCourse(courseId: number) {
@@ -45,7 +55,7 @@ export class CourseService extends TypeOrmCrudService<Course> {
     });
     return {
       ...(courseDetail[0] || {}),
-      batches: courseBatches,
+      courseBatches,
     };
   }
 

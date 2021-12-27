@@ -4,9 +4,11 @@ import AdminProvider from '../../context/useAdminContext';
 import { routeData } from './data';
 import { routes } from '../data';
 import FullPageLoadingBar from '../../../common/Components/LoadingBar/FullPageLoadingBar';
+import { useSelector } from 'react-redux';
+import { selectUserId } from 'Store/Selector/auth';
 
 const Routes = () => {
-  const isAuthenticated = true; //useSelector(selectIsAuthenticated);
+  const isAuthenticated = !!useSelector(selectUserId);
 
   const getAdminData = () => {
     //call required admin data on every admin page
@@ -17,7 +19,7 @@ const Routes = () => {
   }, []);
 
   if (!isAuthenticated) {
-    return <Redirect to={routes.LP_HOMEPAGE} />;
+    return <Redirect to={routes.LOGIN_PAGE} />;
   }
 
   return (
