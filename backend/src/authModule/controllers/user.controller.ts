@@ -51,7 +51,7 @@ import { UserData } from '../user.decorator';
       decorators: [Roles(UserRole.ADMIN)],
     },
     updateOneBase: {
-      decorators: [Roles(UserRole.ADMIN, UserRole.LECTURER)],
+      decorators: [Roles(UserRole.ADMIN, UserRole.LECTURER, UserRole.STUDENT)],
     },
     deleteOneBase: {
       decorators: [Roles(UserRole.ADMIN)],
@@ -113,7 +113,7 @@ export class UserController implements CrudController<User> {
     @UserData('role') role: string,
     @Param('id') id: string,
   ) {
-    if (role === UserRole.STUDENT && id !== userId) {
+    if (role === UserRole.STUDENT && String(id) !== String(userId)) {
       throw new BadRequestException('You can only update your own account');
     }
     return this.service.updateOne(req, dto);
