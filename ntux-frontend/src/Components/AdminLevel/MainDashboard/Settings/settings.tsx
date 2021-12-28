@@ -12,6 +12,8 @@ import { green } from '@mui/material/colors';
 import TabsContainer from './Tabs/TabsContainer';
 import styled from 'styled-components';
 import { media } from 'common/styling';
+import { useSelector } from 'react-redux';
+import { selectUser } from 'Store/Selector/auth';
 
 export const StyledContainer = styled(Grid)<any>`
   position: relative;
@@ -27,6 +29,7 @@ export const StyledContainer = styled(Grid)<any>`
 `;
 
 function SettingsContent() {
+  const user = useSelector(selectUser);
   return (
     <Container
       sx={{ margin: 0 }}
@@ -59,7 +62,7 @@ function SettingsContent() {
             <Card sx={{ minWidth: 275 }}>
               <CardContent>
                 <Avatar
-                  alt="Andreas Sujono"
+                  alt={user.fullName.toUpperCase()}
                   src="/static/images/avatar/1.jpg"
                   sx={{
                     width: 80,
@@ -69,10 +72,10 @@ function SettingsContent() {
                   }}
                 />
                 <Typography variant="h6" component="div" sx={{ mt: 1 }}>
-                  Andreas Sujono
+                  {user.fullName}
                 </Typography>
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                  andreassujono@gmail.com
+                  {user.email}
                 </Typography>
               </CardContent>
               <CardActions>

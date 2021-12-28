@@ -6,15 +6,19 @@ import { Typography } from '@mui/material';
 import { CourseCard } from '../MyCourses/MyCourses';
 import { LinkText } from 'common/Components/shared/shared';
 import { HowToGetPoints } from '../PointsRewards/components';
+import { useSelector } from 'react-redux';
+import { selectUser } from 'Store/Selector/auth/general';
 
 function DashboardContent() {
+  const user = useSelector(selectUser);
+
   return (
     <Container maxWidth="xl" sx={{ margin: 0, mt: 2, mb: 8, ml: 1, pr: 1 }}>
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <TopBox>
             <Typography component="h3" variant="h5">
-              Welcome back <strong>Andreas Sujono!</strong>
+              Welcome back <strong>{user.fullName}!</strong>
             </Typography>
             <Typography
               component="h3"
@@ -23,7 +27,7 @@ function DashboardContent() {
             >
               Your Points:&nbsp;
               <strong>
-                0 <small>pts</small>
+                {user.totalPoints} <small>pts</small>
               </strong>
             </Typography>
             <Typography component="h3" variant="body1" sx={{ mt: 1 }}>

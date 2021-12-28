@@ -30,6 +30,14 @@ import ArrowIcon from '@mui/icons-material/ArrowBack';
 import { routeData } from '../../CourseLevel/data';
 import { routes } from 'Components/Routes';
 import { makePath } from 'common/utils';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  getCourseAnnouncements,
+  getCourseContents,
+  getOnePublicCourse,
+} from 'Store/Actions/courses';
+import { selectUser } from 'Store/Selector/auth';
+import { selectCourseDetailById } from 'Store/Selector/courses';
 
 const logoImagePath = `${process.env.PUBLIC_URL}/assets/logos/full-colored-logo.svg`;
 
@@ -54,9 +62,15 @@ function MainContainer({ children }: { children: React.ReactNode }) {
 
   const location = useLocation();
   const history = useHistory();
+  const dispatch = useDispatch();
   const match: any = useRouteMatch(routes.COURSES.BASE) || {};
+
   if (match?.params?.courseId === ':courseId')
     match.params = { courseId: null };
+
+  const user = useSelector(selectUser);
+  const course =
+    useSelector(selectCourseDetailById)[match.params.courseId] || {};
 
   const [routeDetails, setRouteDetails] = useState<typeof routeData[0]>(
     routeData[0],
@@ -78,6 +92,12 @@ function MainContainer({ children }: { children: React.ReactNode }) {
 
     setRouteDetails(currentRoute.length ? currentRoute[0] : routeData[0]);
   }, [location.pathname]);
+
+  useEffect(() => {
+    dispatch(getCourseContents(match.params.courseId));
+    dispatch(getCourseAnnouncements(match.params.courseId));
+    dispatch(getOnePublicCourse(match.params.courseId));
+  }, []);
 
   return (
     <BoxContainer>
@@ -108,16 +128,16 @@ function MainContainer({ children }: { children: React.ReactNode }) {
             noWrap
             sx={{ flexGrow: 1, minWidth: '120px' }}
           >
-            EE4013: Computer Networking I
+            {course.code}: {course.name}
           </Typography>
           <ProfileButton>
             <CardHeader
               avatar={
                 <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                  A
+                  {user?.fullName?.charAt(0)?.toUpperCase()}
                 </Avatar>
               }
-              title="Andreas Sujono"
+              title={user?.fullName}
               className="profile-card"
               sx={{
                 width: 'auto',

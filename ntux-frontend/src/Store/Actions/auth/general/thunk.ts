@@ -10,6 +10,7 @@ import {
 } from './general';
 import { LoginRequest, User } from 'Models/Auth';
 import { toast } from 'react-toastify';
+import { selectUserId } from 'Store/Selector/auth';
 
 const { CancelToken } = axios;
 const source = CancelToken.source();
@@ -62,6 +63,7 @@ export const login =
         loadSuccess({
           isAuthenticated: true,
           user: res.user,
+          role: res.user.role,
           token: res.access_token || res.accessToken,
         }),
       );
@@ -182,6 +184,32 @@ export const confirmForgotPassword =
         };
       }
       dispatch(loadSuccess({}));
+      return { result: true };
+    } catch (err) {
+      dispatch(loadFailed());
+      return { result: false };
+    }
+  };
+
+export const updateAccount =
+  (data: Partial<User>, bypass = false) =>
+  async (dispatch: AppDispatch, getState: () => RootState) => {
+    try {
+      const userId = selectUserId(getState());
+      const res = await service.updateAccount(data, userId);
+      if (res.errorCode) {
+        dispatch(loadFailed());
+        toast.error(res.message);
+        return {
+          result: false,
+          errorMessage: res.message,
+        };
+      }
+      dispatch(
+        loadSuccess({
+          user: res.user,
+        }),
+      );
       return { result: true };
     } catch (err) {
       dispatch(loadFailed());

@@ -63,8 +63,12 @@ export default class BaseService {
 
   getRequest = async (url: string) => {
     try {
+      const parsedData = this.parseData({}, {});
       const finalUrl = this.joinURL(API_URL, this._baseUrl, url);
-      const response: ApiResponse = await axios.get(finalUrl);
+      const response: ApiResponse = await axios.get(
+        finalUrl,
+        parsedData.config,
+      );
       if (response.errorCode === 401 || response.status === 401) {
         // unauthorized
         localStorage.clear();

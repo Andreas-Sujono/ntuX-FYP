@@ -15,6 +15,7 @@ import { red } from '@mui/material/colors';
 import { getCourseStatus, makePath } from 'common/utils';
 import { routes } from 'Components/Routes';
 import { useHistory, useParams } from 'react-router-dom';
+import moment from 'moment';
 import { useThunkDispatch } from 'common/hooks';
 import { getOnePublicCourse } from 'Store/Actions/courses';
 import { LoadingBar } from 'common/Components/LoadingBar/FullPageLoadingBar';
@@ -38,6 +39,13 @@ function CourseDetail(): React.ReactElement {
     );
     setCourseData(data || {});
     setLoading(false);
+  };
+
+  const getDateString = (startDate, endDate) => {
+    if (!startDate || !endDate) return '';
+    return `${moment(startDate).format('DD MMMM YYYY')} - ${moment(
+      endDate,
+    ).format('DD MMMM YYYY')}`;
   };
 
   if (loading) {
@@ -67,8 +75,7 @@ function CourseDetail(): React.ReactElement {
               <ul>
                 {courseData?.courseBatches?.map((batch) => (
                   <li key={batch.id}>
-                    {batch.startDate.toLocaleDateString()} -{' '}
-                    {batch.endDate.toLocaleDateString()}
+                    {getDateString(batch.startDate, batch.endDate)}
                   </li>
                 ))}
               </ul>
@@ -76,8 +83,10 @@ function CourseDetail(): React.ReactElement {
               <ul>
                 {courseData?.courseBatches?.map((batch) => (
                   <li key={batch.id}>
-                    {batch.registrationStartsAt.toLocaleDateString()} -{' '}
-                    {batch.registrationEndsAt.toLocaleDateString()}
+                    {getDateString(
+                      batch.registrationStartsAt,
+                      batch.registrationEndsAt,
+                    )}
                   </li>
                 ))}
               </ul>

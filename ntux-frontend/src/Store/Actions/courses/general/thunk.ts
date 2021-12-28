@@ -1,9 +1,15 @@
-import { selectPublicCourses } from './../../../Selector/courses/general';
+import {
+  selectPublicCourses,
+  selectCourseContentById,
+  selectCourseAnnouncementsById,
+  selectCourseDetailById,
+} from './../../../Selector/courses/general';
 import axios from 'axios';
 import GeneralService from '../../../Services/courses/general';
 import { AppDispatch, RootState } from '../../../Store';
 import { loadSuccess, loadFailed } from './general';
 import { Id, User } from 'Models/Auth';
+import { selectUserId } from 'Store/Selector/auth';
 
 const { CancelToken } = axios;
 const source = CancelToken.source();
@@ -57,6 +63,7 @@ export const getOnePublicCourse =
   (id: Id, bypass = false) =>
   async (dispatch: AppDispatch, getState: () => RootState) => {
     try {
+      const prevData = selectCourseDetailById(getState());
       const res = await service.getOnePublicCourses(id);
       if (res.errorCode) {
         dispatch(loadFailed());
@@ -66,7 +73,43 @@ export const getOnePublicCourse =
           errorMessage: res.message,
         };
       }
-      dispatch(loadSuccess({}));
+      dispatch(
+        loadSuccess({
+          courseDetailById: {
+            ...prevData,
+            [id]: res,
+          },
+        }),
+      );
+      return { result: true, data: res };
+    } catch (err) {
+      dispatch(loadFailed());
+      return { result: false };
+    }
+  };
+
+export const getOneCourseRegistered =
+  (id: Id, bypass = false) =>
+  async (dispatch: AppDispatch, getState: () => RootState) => {
+    try {
+      const prevData = selectCourseDetailById(getState());
+      const res = await service.getOneCourseRegistered(id);
+      if (res.errorCode) {
+        dispatch(loadFailed());
+        sendErrorNotification(res.message);
+        return {
+          result: false,
+          errorMessage: res.message,
+        };
+      }
+      dispatch(
+        loadSuccess({
+          courseDetailById: {
+            ...prevData,
+            [id]: res,
+          },
+        }),
+      );
       return { result: true, data: res };
     } catch (err) {
       dispatch(loadFailed());
@@ -89,6 +132,87 @@ export const registerCourse =
       }
       dispatch(loadSuccess({}));
       return { result: true, data: res };
+    } catch (err) {
+      dispatch(loadFailed());
+      return { result: false };
+    }
+  };
+
+export const getMyCourses =
+  (bypass = false) =>
+  async (dispatch: AppDispatch, getState: () => RootState) => {
+    try {
+      const userId = selectUserId(getState());
+      const res = await service.getMyCourses();
+      if (res.errorCode) {
+        dispatch(loadFailed());
+        return {
+          result: false,
+          errorMessage: res.message,
+        };
+      }
+      dispatch(
+        loadSuccess({
+          myCourses: res,
+        }),
+      );
+      return { result: true };
+    } catch (err) {
+      dispatch(loadFailed());
+      return { result: false };
+    }
+  };
+
+export const getCourseContents =
+  (courseId: string, bypass = false) =>
+  async (dispatch: AppDispatch, getState: () => RootState) => {
+    try {
+      const prevData = selectCourseContentById(getState());
+      const res = await service.getCourseContent(courseId);
+      if (res.errorCode) {
+        dispatch(loadFailed());
+        return {
+          result: false,
+          errorMessage: res.message,
+        };
+      }
+      dispatch(
+        loadSuccess({
+          courseContentById: {
+            ...prevData,
+            [courseId]: res,
+          },
+        }),
+      );
+      return { result: true };
+    } catch (err) {
+      dispatch(loadFailed());
+      return { result: false };
+    }
+  };
+
+export const getCourseAnnouncements =
+  (courseId: string, bypass = false) =>
+  async (dispatch: AppDispatch, getState: () => RootState) => {
+    try {
+      const prevData = selectCourseAnnouncementsById(getState());
+      const res = await service.getCourseAnnonucement(courseId);
+      if (res.errorCode) {
+        dispatch(loadFailed());
+        return {
+          result: false,
+          errorMessage: res.message,
+        };
+      }
+      dispatch(
+        loadSuccess({
+          courseAnnouncementsById: {
+            ...prevData,
+            [courseId]: res,
+          },
+        }),
+      );
+      return { result: true };
     } catch (err) {
       dispatch(loadFailed());
       return { result: false };

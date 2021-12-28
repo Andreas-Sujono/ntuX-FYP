@@ -22,6 +22,8 @@ import {
 import data from './sidebarData';
 import { routeData } from '../../data';
 import { routes } from 'Components/Routes';
+import { useSelector } from 'react-redux';
+import { selectUser } from 'Store/Selector/auth';
 
 const logoImagePath = `${process.env.PUBLIC_URL}/assets/logos/full-colored-logo.svg`;
 
@@ -36,6 +38,7 @@ function MainContainer({ children }: { children: React.ReactNode }) {
   const [routeDetails, setRouteDetails] = useState<typeof routeData[0]>(
     routeData[0],
   );
+  const user = useSelector(selectUser);
 
   useEffect(() => {
     const pathname = location.pathname;
@@ -88,10 +91,10 @@ function MainContainer({ children }: { children: React.ReactNode }) {
             <CardHeader
               avatar={
                 <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                  A
+                  {user.fullName.slice(0, 1).toUpperCase()}
                 </Avatar>
               }
-              title="Andreas Sujono"
+              title={user.fullName}
               className="profile-card"
               sx={{
                 width: 'auto',

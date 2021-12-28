@@ -48,6 +48,11 @@ export default class AuthService extends BaseService {
     return res.data;
   };
 
+  updateAccount = async (data: any, userId: string) => {
+    const res = await this.patchRequest(`/auth/user/${userId}`, data);
+    return res.data;
+  };
+
   logout = async () => {
     return {
       errorCode: 0,

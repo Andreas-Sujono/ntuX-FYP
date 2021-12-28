@@ -11,6 +11,11 @@ const initialState = initEntityState({
   publicCourses: [],
   allCourses: [],
   myCourses: [],
+  courseContentById: {},
+  courseAnnouncementsById: {},
+  courseDetailById: {},
+  courseStudentsById: {},
+  courseBatchesById: {},
 });
 
 function reducer(state = initialState, action: AnyAction) {

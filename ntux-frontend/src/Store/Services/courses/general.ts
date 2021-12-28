@@ -20,10 +20,27 @@ export default class CoursesService extends BaseService {
     const res = await this.getRequest(`/courses/${id}`);
     return res.data;
   };
-  getMyCourses = async (userId: Id) => {
-    const res = await this.getRequest(`/courses?filter=user||eq||${userId}`);
+  getMyCourses = async () => {
+    const res = await this.getRequest(`/courses/me`);
     return res.data;
   };
+  getCourseContent = async (courseId: string) => {
+    const res = await this.getRequest(
+      `/course-content?filter=course.id||eq||${courseId}`,
+    );
+    return res.data;
+  };
+  getCourseAnnonucement = async (courseId: string) => {
+    const res = await this.getRequest(
+      `/course-announcement?filter=course.id||eq||${courseId}`,
+    );
+    return res.data;
+  };
+  getOneCourseRegistered = async (id: Id) => {
+    const res = await this.getRequest(`/courses/${id}`);
+    return res.data;
+  };
+
   registerCourse = async (data: any) => {
     const res = await this.postRequest(`/student-registration`, data);
     return res.data;

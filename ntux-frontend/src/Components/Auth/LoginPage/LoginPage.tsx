@@ -71,8 +71,9 @@ export default function SignInSide() {
   };
 
   if (userId) {
-    if (userRole === Role.STUDENT) return <Redirect to={routes.ADMIN.BASE} />;
-    return <Redirect to={routes.STAFF.BASE} />;
+    if (userRole === Role.ADMIN || userRole === Role.LECTURER)
+      return <Redirect to={routes.STAFF.BASE} />;
+    return <Redirect to={routes.ADMIN.BASE} />;
   }
 
   return (

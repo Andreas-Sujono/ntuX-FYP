@@ -7,9 +7,13 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Divider from '@mui/material/Divider';
 import { Box } from '@mui/material';
+import { useSelector } from 'react-redux';
+import { selectUser } from 'Store/Selector/auth';
 // import { StyledBox, StyledForm, BackgroundContainer } from './Styles';
 
 export default function ProfileTab() {
+  const user = useSelector(selectUser);
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -50,10 +54,11 @@ export default function ProfileTab() {
               id="Email"
               type="email"
               name="email"
-              value="andreassujono@gmail.com"
+              value={user.email}
               disabled
               label="Email Address"
               variant="filled"
+              defaultValue={user.email}
             />
           </Grid>
           <Grid item xs={12} sm={6}>
@@ -64,6 +69,7 @@ export default function ProfileTab() {
               fullWidth
               id="fullName"
               label="Full Name (as shown in NRIC/ FIN/ Passport)"
+              defaultValue={user.fullName}
             />
           </Grid>
           <Grid item xs={12} sm={6}>
@@ -73,6 +79,7 @@ export default function ProfileTab() {
               id="familyName"
               label="Family Name"
               name="familyName"
+              defaultValue={user.familyName}
             />
           </Grid>
           <Grid item xs={12} sm={6}>
@@ -82,9 +89,10 @@ export default function ProfileTab() {
               id="givenName"
               label="Given Name"
               name="givenName"
+              defaultValue={user.givenName}
             />
           </Grid>
-          <Grid item xs={12} sm={6}>
+          {/* <Grid item xs={12} sm={6}>
             <TextField
               required
               fullWidth
@@ -92,7 +100,7 @@ export default function ProfileTab() {
               label="Citizenship"
               name="citizenship"
             />
-          </Grid>
+          </Grid> */}
           <Grid item xs={12} sm={6}>
             <TextField
               required
@@ -100,6 +108,7 @@ export default function ProfileTab() {
               id="nationality"
               label="Nationality"
               name="nationality"
+              defaultValue={user.nationality}
             />
           </Grid>
         </Grid>

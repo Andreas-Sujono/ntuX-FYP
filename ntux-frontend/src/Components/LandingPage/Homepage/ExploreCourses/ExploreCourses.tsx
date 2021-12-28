@@ -4,6 +4,7 @@ import { Course } from 'Models/Courses';
 import React, { memo, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
+import moment from 'moment';
 import { getPublicCourses } from 'Store/Actions/courses';
 import { selectPublicCourses } from 'Store/Selector/courses';
 import { Container, CoursesContainer, Title, CourseCard } from './Styles';
@@ -23,6 +24,14 @@ const ExploreCourses: React.FC = () => {
     });
   });
 
+  const getBatchString = (item: Course) => {
+    const batch = item?.courseBatches?.[0];
+    if (!batch) return '';
+    return `${moment(batch.startDate).format('DD MMMM YYYY')} - ${moment(
+      batch.endDate,
+    ).format('DD MMMM YYYY')}`;
+  };
+
   return (
     <Container id="explore-courses">
       <Title>Available Courses</Title>
@@ -41,11 +50,7 @@ const ExploreCourses: React.FC = () => {
                 <div className="hours">{item.totalHours} Hours</div>
               )}
               <div className="batch">
-                Next Batch:{' '}
-                <strong>
-                  {item?.courseBatches?.[0]?.startDate?.toLocaleDateString()} -{' '}
-                  {item?.courseBatches?.[0]?.endDate?.toLocaleDateString()}
-                </strong>
+                Next Batch: <strong>{getBatchString(item)}</strong>
               </div>
             </div>
           </CourseCard>
