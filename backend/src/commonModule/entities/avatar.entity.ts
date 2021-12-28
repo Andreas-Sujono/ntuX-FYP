@@ -1,13 +1,16 @@
+import { User } from 'src/authModule/entities/user.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
 
-@Entity()
-export class AvatarShop {
+@Entity({ name: 'avatar' })
+export class Avatar {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -22,6 +25,10 @@ export class AvatarShop {
 
   @Column()
   pointsRequired: number;
+
+  @ManyToMany(() => User, (user) => user.avatars)
+  @JoinTable()
+  users: User[];
 
   @CreateDateColumn({ type: 'timestamp with time zone' })
   createdAt: Date;

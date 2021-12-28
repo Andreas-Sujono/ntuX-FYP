@@ -26,9 +26,9 @@ import { StudentWebsiteActivity } from './entities/StudentWebsiteActivity.entity
 import { AdminService } from './services/admin.service';
 import { Tutor } from 'src/tutoringModule/entities/tutor.entity';
 import { ForumQuestion } from 'src/forumModule/entities/forumQuestion.entity';
-import { AvatarShop } from './entities/avatarShop.entity';
-import { AvatarShopService } from './services/avatarShop.service';
-import { AvatarShopController } from './controllers/avatarShop.controller';
+import { Avatar } from './entities/avatar.entity';
+import { AvatarService } from './services/avatarShop.service';
+import { AvatarController } from './controllers/avatar.controller';
 
 @Module({
   imports: [
@@ -44,7 +44,7 @@ import { AvatarShopController } from './controllers/avatarShop.controller';
       Tutor,
       ForumAnswer,
       ForumQuestion,
-      AvatarShop,
+      Avatar,
     ]),
   ],
   providers: [
@@ -57,7 +57,7 @@ import { AvatarShopController } from './controllers/avatarShop.controller';
     RewardRedeemedService,
     WebsiteActivityService,
     AdminService,
-    AvatarShopService,
+    AvatarService,
   ],
   exports: [EmailService, LoggerService, EncryptionService],
   controllers: [
@@ -67,7 +67,7 @@ import { AvatarShopController } from './controllers/avatarShop.controller';
     RewardRedeemedController,
     WebsiteActivityController,
     AdminController,
-    AvatarShopController,
+    AvatarController,
   ],
 })
 export class CommonModule {}

@@ -11,7 +11,7 @@ import {
   OneToOne,
   ManyToOne,
 } from 'typeorm';
-import { AvatarShop } from 'src/commonModule/entities/avatarShop.entity';
+import { Avatar } from 'src/commonModule/entities/avatar.entity';
 
 export enum UserRole {
   STUDENT = 'STUDENT',
@@ -30,8 +30,11 @@ export class User {
   @Column({ nullable: true, default: '#f44336' })
   avatarColor: string;
 
-  @ManyToOne(() => AvatarShop)
-  avatar: AvatarShop;
+  @ManyToOne(() => Avatar)
+  currentAvatar: Avatar;
+
+  @ManyToMany(() => Avatar, (avatarShop) => avatarShop.users)
+  avatars: Avatar[];
 
   @Column()
   fullName: string;
