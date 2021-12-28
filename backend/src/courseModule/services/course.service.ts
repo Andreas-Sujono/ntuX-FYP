@@ -34,8 +34,19 @@ export class CourseService extends TypeOrmCrudService<Course> {
   }
 
   async getStudentCourses(userId: string): Promise<Course[]> {
-    const query = `SELECT course.* from course_user LEFT JOIN course on course_user.courseId = course.id WHERE user_id = $1`;
+    const query = `SELECT course.* from course_user LEFT JOIN course on course_user."courseId" = course.id WHERE "userId" = $1`;
     return await this.repo.query(query, [userId]);
+  }
+
+  async getStudentRegistered(userId: string, courseId: string) {
+    const courseUser = await this.courseUserRepo.findOne({
+      where: {
+        user: userId,
+        course: courseId,
+      },
+      relations: ['course', 'courseBatch'],
+    });
+    return courseUser;
   }
 
   async getAdminAllCourses(): Promise<Course[]> {

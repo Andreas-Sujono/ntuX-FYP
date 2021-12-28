@@ -4,6 +4,7 @@ import { Crud, CrudController } from '@nestjsx/crud';
 import { UserRole } from 'src/authModule/entities/user.entity';
 import { GoalTask } from '../entities/goalTask.entity';
 import { GoalTaskService } from '../services/goalTask.entity';
+import { Public } from 'src/authModule/public.decorator';
 
 @Crud({
   model: {
@@ -17,6 +18,12 @@ import { GoalTaskService } from '../services/goalTask.entity';
       'getManyBase',
       // 'deleteOneBase',
     ],
+    getManyBase: {
+      decorators: [Public()],
+    },
+    getOneBase: {
+      decorators: [Public()],
+    },
     createOneBase: {
       decorators: [Roles(UserRole.LECTURER, UserRole.ADMIN)],
     },

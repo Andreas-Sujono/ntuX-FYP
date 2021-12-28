@@ -4,6 +4,7 @@ import { Crud, CrudController } from '@nestjsx/crud';
 import { UserRole } from 'src/authModule/entities/user.entity';
 import { Reward } from '../entities/reward.entity';
 import { RewardService } from '../services/reward.entity';
+import { Public } from 'src/authModule/public.decorator';
 
 @Crud({
   model: {
@@ -17,6 +18,12 @@ import { RewardService } from '../services/reward.entity';
       'getManyBase',
       'deleteOneBase',
     ],
+    getManyBase: {
+      decorators: [Public()],
+    },
+    getOneBase: {
+      decorators: [Public()],
+    },
     createOneBase: {
       decorators: [Roles(UserRole.LECTURER, UserRole.ADMIN)],
     },

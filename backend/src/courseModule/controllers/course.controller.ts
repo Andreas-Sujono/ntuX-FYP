@@ -50,4 +50,12 @@ export class CourseController implements CrudController<Course> {
   async getMyCourse(@UserData('userId') userId: string) {
     return this.service.getStudentCourses(userId);
   }
+
+  @Get(':courseId/registered')
+  async getOneRegistered(
+    @UserData('userId') userId: string,
+    @Param('courseId') courseId: string,
+  ) {
+    return this.service.getStudentRegistered(userId, courseId);
+  }
 }
