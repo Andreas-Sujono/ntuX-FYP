@@ -29,6 +29,7 @@ import { ForumQuestion } from 'src/forumModule/entities/forumQuestion.entity';
 import { Avatar } from './entities/avatar.entity';
 import { AvatarService } from './services/avatarShop.service';
 import { AvatarController } from './controllers/avatar.controller';
+import { PremiumSetting } from './entities/premiumSetting.entity';
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import { AvatarController } from './controllers/avatar.controller';
       ForumAnswer,
       ForumQuestion,
       Avatar,
+      PremiumSetting,
     ]),
   ],
   providers: [
