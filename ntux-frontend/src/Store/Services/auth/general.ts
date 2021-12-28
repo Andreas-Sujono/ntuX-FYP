@@ -1,5 +1,6 @@
 import {
   ConfirmEmailRequest,
+  Id,
   LoginRequest,
   User,
 } from './../../../Models/Auth';
@@ -13,6 +14,11 @@ export default class AuthService extends BaseService {
 
   login = async (data: LoginRequest) => {
     const res = await this.postRequest('/auth/login', data);
+    return res.data;
+  };
+
+  getAccount = async (userId: Id) => {
+    const res = await this.getRequest(`/user/${userId}`);
     return res.data;
   };
 
@@ -49,7 +55,7 @@ export default class AuthService extends BaseService {
   };
 
   updateAccount = async (data: any, userId: string) => {
-    const res = await this.patchRequest(`/auth/user/${userId}`, data);
+    const res = await this.patchRequest(`/user/${userId}`, data);
     return res.data;
   };
 

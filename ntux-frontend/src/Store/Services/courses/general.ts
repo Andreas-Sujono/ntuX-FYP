@@ -37,7 +37,11 @@ export default class CoursesService extends BaseService {
     return res.data;
   };
   getOneCourseRegistered = async (id: Id) => {
-    const res = await this.getRequest(`/courses/${id}`);
+    const res = await this.getRequest(`/courses/${id}/registered`);
+    return res.data;
+  };
+  getRecommendationCourses = async () => {
+    const res = await this.getRequest(`/courses/recommended`);
     return res.data;
   };
 

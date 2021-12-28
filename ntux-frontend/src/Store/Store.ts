@@ -7,6 +7,7 @@ import { createWhitelistFilter } from 'redux-persist-transform-filter';
 import storage from 'redux-persist/lib/storage'; // defaults to localStorage for web
 import auth from './Reducers/auth';
 import courses from './Reducers/courses';
+import pointsRewards from './Reducers/pointsRewards';
 
 const isDevelopment = process.env.NODE_ENV === 'development';
 const middlewares = [thunk];
@@ -24,6 +25,7 @@ const rootReducer = combineReducers({
   router: connectRouter(history),
   auth,
   courses,
+  pointsRewards,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

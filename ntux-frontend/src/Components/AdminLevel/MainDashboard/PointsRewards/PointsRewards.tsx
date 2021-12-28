@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
@@ -9,17 +9,36 @@ import {
   RewardsGallery,
   RewardHistoryTable,
   RewardDetailsModal,
+  AvatarShop,
 } from './components';
 import { LinearProgressWithLabel } from '../MyCourses/Styles';
+import { getLevelAndBadges } from 'common/utils';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectUser } from 'Store/Selector/auth';
+import {
+  getAvatars,
+  getRewards,
+  getRewardsRedeemed,
+} from 'Store/Actions/pointsRewards';
 
 export default function PointsRewards() {
   const [open, setOpen] = React.useState(false);
   const [modalData, setModalData] = React.useState(null);
+  const user = useSelector(selectUser);
+  const dispatch = useDispatch();
 
   const onClickRewardDetails = (data: any) => {
     setModalData(data);
     setOpen(true);
   };
+
+  useEffect(() => {
+    dispatch(getRewards());
+    dispatch(getRewardsRedeemed());
+    dispatch(getAvatars());
+  }, []);
+
+  const data = getLevelAndBadges(user.totalExps);
 
   return (
     <Container maxWidth="xl" sx={{ margin: 0, mt: 2, mb: 8, ml: 1, pr: 1 }}>
@@ -29,16 +48,18 @@ export default function PointsRewards() {
           <TopBox>
             <Grid container sx={{ alignItems: 'center' }}>
               <Grid item xs={1} sx={{ maxWidth: '50px' }}>
-                <MilitaryTechIcon sx={{ fontSize: '3rem', color: 'gold' }} />
+                <MilitaryTechIcon
+                  sx={{ fontSize: '3rem', color: data.badgeColor }}
+                />
               </Grid>
               <Grid item xs={10} md={5} sx={{ ml: 2 }}>
                 <Typography component="h5" variant="h6">
-                  Level 3 (Gold)
+                  Level {data.level} ({data.bagdesLabel})
                 </Typography>
                 <LinearProgressWithLabel
                   variant="determinate"
-                  value={50}
-                  label="680 / 1000 exp"
+                  value={data.progress}
+                  label={`${user.totalExps} / ${data.nextLevelExp} Exp`}
                   sx={{ mt: 0 }}
                   type="string"
                   minWidth={100}
@@ -52,7 +73,7 @@ export default function PointsRewards() {
                 >
                   Your Points:&nbsp;
                   <strong>
-                    0 <small>pts</small>
+                    {user.totalPoints} <small>pts</small>
                   </strong>
                 </Typography>
                 <Typography component="h5" variant="body1" sx={{ mt: 0 }}>
@@ -66,6 +87,9 @@ export default function PointsRewards() {
           <RewardsGallery onClickRewardDetails={onClickRewardDetails} />
         </Grid>
 
+        <Grid item xs={12} lg={12}>
+          <AvatarShop />
+        </Grid>
         <Grid item xs={12} lg={8}>
           <RewardHistoryTable />
         </Grid>

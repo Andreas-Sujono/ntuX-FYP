@@ -7,6 +7,8 @@ import { routeData } from './data';
 import { routes } from '../../Routes';
 import { useDispatch } from 'react-redux';
 import { getMyCourses } from 'Store/Actions/courses';
+import { getMyAccount } from 'Store/Actions/auth';
+import { getGoalTask } from 'Store/Actions/pointsRewards';
 
 const MainDashboardRoutes = () => {
   const location = useLocation();
@@ -26,7 +28,9 @@ const MainDashboardRoutes = () => {
   }, [location.pathname]);
 
   useEffect(() => {
+    dispatch(getMyAccount());
     dispatch(getMyCourses());
+    dispatch(getGoalTask());
   }, []);
 
   return (

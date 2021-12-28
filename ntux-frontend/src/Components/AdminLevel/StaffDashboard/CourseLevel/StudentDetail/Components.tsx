@@ -11,12 +11,12 @@ export default function CourseEnrolled() {
       </Typography>
       <Divider sx={{ mb: 2, mt: 1.2 }} />
       <Grid container spacing={3}>
-        <Grid item xs={12} md={6} sx={{ marginLeft: 0 }}>
+        {/* <Grid item xs={12} md={6} sx={{ marginLeft: 0 }}>
           <CourseCard />
         </Grid>
         <Grid item xs={12} md={6}>
           <CourseCard />
-        </Grid>
+        </Grid> */}
       </Grid>
     </Paper>
   );

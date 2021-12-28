@@ -8,49 +8,51 @@ export default class PointsRewardsService extends BaseService {
   };
 
   getAllRewards = async () => {
-    const res = await this.getRequest('/rewards');
+    const res = await this.getRequest('/reward');
     return res.data;
   };
 
   getStudentRewards = async () => {
-    const res = await this.getRequest('/rewards?filter=isPublished||eq||true');
+    const res = await this.getRequest('/reward?filter=isPublished||eq||true');
     return res.data;
   };
 
   createRewards = async (data: any) => {
-    const res = await this.postRequest(`/rewards/`, data);
+    const res = await this.postRequest(`/reward/`, data);
     return res.data;
   };
 
   updateRewards = async (data: any) => {
-    const res = await this.patchRequest(`/rewards/${data.id}`, data);
+    const res = await this.patchRequest(`/reward/${data.id}`, data);
     return res.data;
   };
 
   deleteRewards = async (id: Id) => {
-    const res = await this.deleteRequest(`/rewards/${id}`, {});
+    const res = await this.deleteRequest(`/reward/${id}`, {});
     return res.data;
   };
 
   getRewardsRedeemed = async (userId: Id) => {
-    const res = await this.getRequest(
-      `/rewards-redeemed?filter=user||eq||${userId}`,
-    );
+    const res = await this.getRequest(`/reward-redeemed`);
+    return res.data;
+  };
+  getAvatars = async () => {
+    const res = await this.getRequest(`/avatar`);
     return res.data;
   };
 
   createRewardsRedeemed = async (data: any) => {
-    const res = await this.postRequest(`/rewards-redeemed/`, data);
+    const res = await this.postRequest(`/reward-redeemed/`, data);
     return res.data;
   };
 
   updateRewardsRedeemed = async (data: any) => {
-    const res = await this.patchRequest(`/rewards-redeemed/${data.id}`, data);
+    const res = await this.patchRequest(`/reward-redeemed/${data.id}`, data);
     return res.data;
   };
 
   deleteRewardsRedeemed = async (id: Id) => {
-    const res = await this.deleteRequest(`/rewards-redeemed/${id}`, {});
+    const res = await this.deleteRequest(`/reward-redeemed/${id}`, {});
     return res.data;
   };
 }

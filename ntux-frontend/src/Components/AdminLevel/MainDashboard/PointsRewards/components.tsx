@@ -13,6 +13,8 @@ import {
   Typography,
   Box,
   Modal,
+  Grid,
+  Avatar,
 } from '@mui/material';
 import Slider from 'react-slick';
 import Card from '@mui/material/Card';
@@ -22,15 +24,24 @@ import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import moment from 'moment';
 import { FeatureBox } from '../Dashboard/Styles';
+import { useSelector } from 'react-redux';
+import {
+  selectAvatars,
+  selectGoalTask,
+  selectRewards,
+  selectRewardsRedeemed,
+} from 'Store/Selector/pointsRewards';
+import { Reward } from 'Models/pointsRewards';
 
-const HowToGetPointsData = [
-  'Finish online course',
-  'Ask answer question in forum discussion',
-  'Answer question in forum discussion',
-  'create your portfolio site',
-  'tutor student',
-];
+// const HowToGetPointsData = [
+//   'Finish online course',
+//   'Ask answer question in forum discussion',
+//   'Answer question in forum discussion',
+//   'create your portfolio site',
+//   'tutor student',
+// ];
 
 const rows = [
   { id: 1, eventName: 'Finish lesson1', createdAt: new Date(), points: 10 },
@@ -74,6 +85,8 @@ export default function PointHistoryTable() {
 }
 
 export function RewardHistoryTable() {
+  const rewardsRedeemed = useSelector(selectRewardsRedeemed);
+
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -85,17 +98,37 @@ export function RewardHistoryTable() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {!rewardsRedeemed.length && (
+            <TableRow>
+              <TableCell colSpan={3}>
+                <Typography
+                  variant="body1"
+                  component="h5"
+                  color="text.tertiary"
+                  sx={{
+                    width: '100%',
+                    height: '150px',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
+                  No Data
+                </Typography>
+              </TableCell>
+            </TableRow>
+          )}
+          {rewardsRedeemed.map((item) => (
             <TableRow
-              key={row.id}
+              key={item.id}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               <TableCell component="th" scope="row">
-                {row.eventName}
+                {item.reward.name}
               </TableCell>
-              <TableCell align="left">{row.points}</TableCell>
+              <TableCell align="left">{item.reward.description}</TableCell>
               <TableCell align="left">
-                {row.createdAt.toLocaleDateString()}
+                {moment(item.createdAt).format('DD MMMM YYYY')}
               </TableCell>
             </TableRow>
           ))}
@@ -105,7 +138,9 @@ export function RewardHistoryTable() {
   );
 }
 
-export const HowToGetPoints = () => {
+export const HowToGetPoints = ({ limit = null }: any) => {
+  let goalTask = useSelector(selectGoalTask);
+  if (limit) goalTask = goalTask.slice(0, limit);
   return (
     <FeatureBox sx={{ padding: '1rem' }}>
       <Typography component="h5" variant="h6">
@@ -113,10 +148,10 @@ export const HowToGetPoints = () => {
       </Typography>
 
       <List dense={false}>
-        {HowToGetPointsData.map((item) => (
-          <ListItem key={item} divider sx={{ p: 0.5 }}>
+        {goalTask.map((item) => (
+          <ListItem key={item.id} divider sx={{ p: 0.5 }}>
             <ListItemText
-              primary={item}
+              primary={item.taskName}
               sx={{ fontSize: '18px' }}
               color="text.secondary"
             />
@@ -125,7 +160,7 @@ export const HowToGetPoints = () => {
               color="text.tertiary"
               sx={{ fontSize: '0.8rem' }}
             >
-              50 pts, 100 exp
+              {item.points} pts, {item.exps} exp
             </Typography>
           </ListItem>
         ))}
@@ -134,20 +169,55 @@ export const HowToGetPoints = () => {
   );
 };
 
+// const defaultRewards: Reward[] = [
+//   {
+//     id: -1,
+//     name: 'Premium Portfolio Setting - 1 Month',
+//     description:
+//       'You can customize the theme of your portfolio and hide the navigation bar and footer',
+//     totalPointsRequired: 250,
+//     totalExpsRequired: 0,
+//     isPublished: true,
+//     imageUrl: 'https://img.idesign.vn/2021/01/heroimg.png',
+//   },
+//   {
+//     id: -2,
+//     name: 'Premium Portfolio Setting - 3 Month',
+//     description:
+//       'You can customize the theme of your portfolio and hide the navigation bar and footer',
+//     totalPointsRequired: 700,
+//     totalExpsRequired: 0,
+//     isPublished: true,
+//     imageUrl: 'https://img.idesign.vn/2021/01/heroimg.png',
+//   },
+//   {
+//     id: -2,
+//     name: 'Points and Exps Multiplier - 1.5x',
+//     description:
+//       'For every points or exps you earn, you will earn 1.5x of the points or exps you earn',
+//     totalPointsRequired: 400,
+//     totalExpsRequired: 0,
+//     isPublished: true,
+//     imageUrl:
+//       'https://image.freepik.com/free-vector/loyalty-program-getting-gift-reward-flat-illustration_169533-11.jpg',
+//   },
+// ];
 export const RewardsGallery = ({ onClickRewardDetails }: any) => {
+  const rewards = useSelector(selectRewards);
+
   const settings = {
     dots: true,
     arrows: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 4,
+    slidesToShow: Math.min(rewards.length, 4),
     slidesToScroll: 1,
     autoPlay: true,
     responsive: [
       {
         breakpoint: 1380,
         settings: {
-          slidesToShow: 4,
+          slidesToShow: Math.min(rewards.length, 4),
           slidesToScroll: 1,
           infinite: true,
           dots: true,
@@ -156,14 +226,14 @@ export const RewardsGallery = ({ onClickRewardDetails }: any) => {
       {
         breakpoint: 1024,
         settings: {
-          slidesToShow: 3,
+          slidesToShow: Math.min(rewards.length, 2),
           slidesToScroll: 1,
         },
       },
       {
-        breakpoint: 800,
+        breakpoint: 700,
         settings: {
-          slidesToShow: 2,
+          slidesToShow: 1,
           slidesToScroll: 1,
         },
       },
@@ -188,34 +258,41 @@ export const RewardsGallery = ({ onClickRewardDetails }: any) => {
         })}
       >
         <Slider {...settings}>
-          {[1, 2, 3, 4, 5, 6].map((item) => (
+          {rewards.map((item: Reward) => (
             <Card
               sx={(theme) => ({
                 [theme.breakpoints.up('md')]: { mr: 0, maxWidth: '94%' },
                 [theme.breakpoints.down('md')]: { mr: 0 },
+                cursor: 'pointer',
               })}
-              key={item}
+              key={item.id}
+              onClick={() => onClickRewardDetails(item)}
             >
               <CardMedia
                 component="img"
                 height="140"
-                image="https://previews.123rf.com/images/ganpanjaneedesign/ganpanjaneedesign1604/ganpanjaneedesign160400045/56067507-red-gift-voucher-coupon-design-ticket-banner-cards-polygon-background.jpg"
-                alt="green iguana"
+                image={item.imageUrl}
+                alt={item.name}
               />
               <CardContent>
                 <Typography variant="h6" component="div">
-                  Voucher 20$
+                  {item.name}
                 </Typography>
-                <Typography gutterBottom variant="body2" component="div">
-                  Cost: 10 pts
+                <Typography
+                  gutterBottom
+                  variant="body2"
+                  component="div"
+                  color="primary"
+                >
+                  Cost: {item.totalPointsRequired} pts
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  Lizards are a widespread group of squamate reptiles
+                  {item.description}
                 </Typography>
               </CardContent>
               <CardActions sx={{ mt: -2 }}>
                 <Button size="small">Reedem</Button>
-                <Button size="small" onClick={() => onClickRewardDetails({})}>
+                <Button size="small" onClick={() => onClickRewardDetails(item)}>
                   See details
                 </Button>
               </CardActions>
@@ -228,6 +305,7 @@ export const RewardsGallery = ({ onClickRewardDetails }: any) => {
 };
 
 export const RewardDetailsModal = ({ open, setOpen, data }: any) => {
+  data = data || {};
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   return (
@@ -249,25 +327,72 @@ export const RewardDetailsModal = ({ open, setOpen, data }: any) => {
           boxShadow: 24,
         }}
       >
-        <Card sx={{ maxWidth: '400px' }}>
+        <Card sx={{ maxWidth: '800px', minWidth: '350px' }}>
           <CardMedia
             component="img"
-            height="140"
-            image="https://previews.123rf.com/images/ganpanjaneedesign/ganpanjaneedesign1604/ganpanjaneedesign160400045/56067507-red-gift-voucher-coupon-design-ticket-banner-cards-polygon-background.jpg"
-            alt="green iguana"
+            height="240"
+            image={data.imageUrl}
+            alt={data.name}
           />
           <CardContent>
             <Typography gutterBottom variant="h6" component="div">
-              Voucher 20$
+              {data.name}
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              Lizards are a widespread group of squamate reptiles, with over
-              6,000 species, ranging across all continents except Antarctica
+              {data.description}
             </Typography>
           </CardContent>
-          <CardActions></CardActions>
+          <CardActions>
+            <Button size="small">Reedem</Button>
+          </CardActions>
         </Card>
       </Box>
     </Modal>
+  );
+};
+
+export const AvatarShop = () => {
+  const avatars = useSelector(selectAvatars);
+
+  return (
+    <Paper sx={{ p: 3 }}>
+      <Typography component="h5" variant="h6">
+        Avatar Shop
+      </Typography>
+      <Typography component="div" variant="body1" color="text.secondary">
+        You can buy avatar from here
+      </Typography>
+
+      <Grid container spacing={3} sx={{ mt: 1 }}>
+        {avatars.map((item) => (
+          <Grid
+            item
+            xs={12}
+            sm={6}
+            md={3}
+            lg={3}
+            key={item.id}
+            sx={{ display: 'flex', columnGap: '1rem', alignItems: 'center' }}
+          >
+            <Avatar
+              alt={item.name}
+              src={item.imageUrl}
+              sx={{ width: 80, height: 80 }}
+            />
+            <div>
+              <Typography component="div" variant="h6" color="text.secondary">
+                {item.name}
+              </Typography>
+              <div
+                style={{ fontSize: '1rem', color: 'red', marginTop: '-4px' }}
+              >
+                Cost: {item.pointsRequired} pts
+              </div>
+              <Button>Buy</Button>
+            </div>
+          </Grid>
+        ))}
+      </Grid>
+    </Paper>
   );
 };

@@ -34,10 +34,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   getCourseAnnouncements,
   getCourseContents,
-  getOnePublicCourse,
+  getOneCourseRegistered,
 } from 'Store/Actions/courses';
 import { selectUser } from 'Store/Selector/auth';
-import { selectCourseDetailById } from 'Store/Selector/courses';
+import { selectCourseRegisteredById } from 'Store/Selector/courses';
 
 const logoImagePath = `${process.env.PUBLIC_URL}/assets/logos/full-colored-logo.svg`;
 
@@ -65,12 +65,12 @@ function MainContainer({ children }: { children: React.ReactNode }) {
   const dispatch = useDispatch();
   const match: any = useRouteMatch(routes.COURSES.BASE) || {};
 
-  if (match?.params?.courseId === ':courseId')
+  if (match?.params?.courseId === ':courseId' || !match?.params?.courseId)
     match.params = { courseId: null };
 
   const user = useSelector(selectUser);
-  const course =
-    useSelector(selectCourseDetailById)[match.params.courseId] || {};
+  const allCourseDetailById = useSelector(selectCourseRegisteredById) || {};
+  const course = allCourseDetailById[match?.params?.courseId] || {};
 
   const [routeDetails, setRouteDetails] = useState<typeof routeData[0]>(
     routeData[0],
@@ -96,7 +96,7 @@ function MainContainer({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     dispatch(getCourseContents(match.params.courseId));
     dispatch(getCourseAnnouncements(match.params.courseId));
-    dispatch(getOnePublicCourse(match.params.courseId));
+    dispatch(getOneCourseRegistered(match.params.courseId));
   }, []);
 
   return (

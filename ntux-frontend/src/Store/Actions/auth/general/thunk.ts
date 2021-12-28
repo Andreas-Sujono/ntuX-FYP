@@ -1,3 +1,4 @@
+import { Id } from './../../../../Models/Auth/index';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import axios from 'axios';
 import AuthService from '../../../Services/auth/general';
@@ -10,7 +11,7 @@ import {
 } from './general';
 import { LoginRequest, User } from 'Models/Auth';
 import { toast } from 'react-toastify';
-import { selectUserId } from 'Store/Selector/auth';
+import { selectUser, selectUserId } from 'Store/Selector/auth';
 
 const { CancelToken } = axios;
 const source = CancelToken.source();
@@ -25,6 +26,31 @@ const sendErrorNotification = (errorMessage = '', errorCode = 0) => {
   if (errorCode === 0) return;
   return; //TODO: send error component
 };
+
+export const getMyAccount =
+  (id?: Id, bypass = false) =>
+  async (dispatch: AppDispatch, getState: () => RootState) => {
+    try {
+      const userId = id || selectUserId(getState());
+      const res = await service.getAccount(userId);
+      if (res.errorCode) {
+        dispatch(loadFailed());
+        return {
+          result: false,
+          errorMessage: res.message,
+        };
+      }
+      dispatch(
+        loadSuccess({
+          user: res,
+        }),
+      );
+      return { result: true };
+    } catch (err) {
+      dispatch(loadFailed());
+      return { result: false };
+    }
+  };
 
 export const signup =
   (data: User, bypass = false) =>
@@ -196,6 +222,7 @@ export const updateAccount =
   async (dispatch: AppDispatch, getState: () => RootState) => {
     try {
       const userId = selectUserId(getState());
+      const user = selectUser(getState());
       const res = await service.updateAccount(data, userId);
       if (res.errorCode) {
         dispatch(loadFailed());
@@ -207,9 +234,13 @@ export const updateAccount =
       }
       dispatch(
         loadSuccess({
-          user: res.user,
+          user: {
+            ...user,
+            ...data,
+          },
         }),
       );
+      toast.success('profile is updated');
       return { result: true };
     } catch (err) {
       dispatch(loadFailed());

@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   selectPublicCourses,
   selectCourseContentById,
   selectCourseAnnouncementsById,
-  selectCourseDetailById,
+  selectCourseRegisteredById,
 } from './../../../Selector/courses/general';
 import axios from 'axios';
 import GeneralService from '../../../Services/courses/general';
@@ -10,6 +11,7 @@ import { AppDispatch, RootState } from '../../../Store';
 import { loadSuccess, loadFailed } from './general';
 import { Id, User } from 'Models/Auth';
 import { selectUserId } from 'Store/Selector/auth';
+import { logout } from 'Store/Actions/auth';
 
 const { CancelToken } = axios;
 const source = CancelToken.source();
@@ -63,7 +65,6 @@ export const getOnePublicCourse =
   (id: Id, bypass = false) =>
   async (dispatch: AppDispatch, getState: () => RootState) => {
     try {
-      const prevData = selectCourseDetailById(getState());
       const res = await service.getOnePublicCourses(id);
       if (res.errorCode) {
         dispatch(loadFailed());
@@ -73,14 +74,7 @@ export const getOnePublicCourse =
           errorMessage: res.message,
         };
       }
-      dispatch(
-        loadSuccess({
-          courseDetailById: {
-            ...prevData,
-            [id]: res,
-          },
-        }),
-      );
+      dispatch(loadSuccess({}));
       return { result: true, data: res };
     } catch (err) {
       dispatch(loadFailed());
@@ -92,7 +86,7 @@ export const getOneCourseRegistered =
   (id: Id, bypass = false) =>
   async (dispatch: AppDispatch, getState: () => RootState) => {
     try {
-      const prevData = selectCourseDetailById(getState());
+      const prevData = selectCourseRegisteredById(getState());
       const res = await service.getOneCourseRegistered(id);
       if (res.errorCode) {
         dispatch(loadFailed());
@@ -104,9 +98,12 @@ export const getOneCourseRegistered =
       }
       dispatch(
         loadSuccess({
-          courseDetailById: {
+          courseRegisteredById: {
             ...prevData,
-            [id]: res,
+            [id]: {
+              ...res.course,
+              courseBatch: res.courseBatch,
+            },
           },
         }),
       );
@@ -144,7 +141,11 @@ export const getMyCourses =
     try {
       const userId = selectUserId(getState());
       const res = await service.getMyCourses();
+      console.log(res);
       if (res.errorCode) {
+        if (res.errorCode === 401) {
+          logout()(dispatch, getState);
+        }
         dispatch(loadFailed());
         return {
           result: false,
@@ -210,6 +211,30 @@ export const getCourseAnnouncements =
             ...prevData,
             [courseId]: res,
           },
+        }),
+      );
+      return { result: true };
+    } catch (err) {
+      dispatch(loadFailed());
+      return { result: false };
+    }
+  };
+
+export const getRecommendationCourses =
+  (bypass = false) =>
+  async (dispatch: AppDispatch, getState: () => RootState) => {
+    try {
+      const res = await service.getRecommendationCourses();
+      if (res.errorCode) {
+        dispatch(loadFailed());
+        return {
+          result: false,
+          errorMessage: res.message,
+        };
+      }
+      dispatch(
+        loadSuccess({
+          recommendationCourses: res,
         }),
       );
       return { result: true };

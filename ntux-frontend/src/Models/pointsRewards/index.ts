@@ -25,13 +25,13 @@ export interface Reward {
   name: string;
   description: string;
   imageUrl?: string;
-  totalPointsGet: number;
-  totalExpsGet: number;
+  totalPointsRequired: number;
+  totalExpsRequired: number;
   isPublished: boolean;
-  islimitedOnePerStudent: boolean;
-  totalLimit: number;
-  createdAt: Date;
-  updatedAt: Date;
+  islimitedOnePerStudent?: boolean;
+  totalLimit?: number;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export interface RewardRedeemed {

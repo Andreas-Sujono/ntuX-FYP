@@ -1,6 +1,7 @@
 import { CourseBatch } from './../../Models/Courses/index';
 import { v4 as uuidv4 } from 'uuid';
 import queryString from 'query-string';
+import { get } from 'lodash';
 
 export function searchFromListOfObject(
   list: any[],
@@ -16,7 +17,8 @@ export function searchFromListOfObject(
 
     for (let i = 0; i < keys.length; i += 1) {
       const key = keys[i];
-      if (searchRe.test(item[key])) {
+      const valueByKey = get(item, key);
+      if (searchRe.test(valueByKey)) {
         isFiltered = true;
         break;
       }
@@ -98,4 +100,97 @@ export const getCourseStatus = (batches: CourseBatch[]) => {
   if (isFuture) return 'Close Registration';
 
   return status;
+};
+
+const minPoints = [
+  0,
+  100,
+  250,
+  400,
+  750,
+  1000,
+  1500,
+  2000,
+  3000,
+  4000,
+  5000,
+  7500,
+  10000,
+  15000, //14
+  20000,
+  25000,
+  30000,
+  35000,
+  40000,
+  45000,
+  50000,
+  55000,
+  60000,
+  65000,
+  70000, //25
+  75000,
+  80000,
+  85000,
+  90000,
+  95000,
+  100000,
+  105000,
+  110000,
+  115000,
+  120000, //35
+  125000,
+  130000,
+  135000,
+  140000,
+  145000,
+  150000,
+  155000,
+  160000,
+  165000, //45
+  170000,
+  175000,
+  180000,
+  185000,
+  190000,
+  195000,
+  200000,
+  205000,
+  210000,
+  215000,
+  220000, //55
+];
+
+export const getLevelAndBadges = (exps: number) => {
+  let level = 0;
+  for (let i = 0; i < minPoints.length; i++) {
+    if (exps >= minPoints[i]) {
+      level = i + 1;
+    } else {
+      break;
+    }
+  }
+
+  let badges = 'bronze';
+  if (level > 30) badges = 'diamond';
+  else if (level > 20) badges = 'platinum';
+  else if (level > 10) badges = 'gold';
+  else if (level > 5) badges = 'silver';
+
+  const nextLevelExp = minPoints[Math.max(level, 0)];
+  const currentLevelMinExp = minPoints[Math.max(level - 1, 0)];
+  let badgeColor = '#c3883c';
+  if (badges === 'diamond') badgeColor = '#4c6fb3';
+  else if (badges === 'platinum') badgeColor = '44bb61';
+  else if (badges === 'gold') badgeColor = '#bbc23d';
+  else if (badges === 'silver') badgeColor = '#b8b8b8';
+
+  return {
+    level,
+    badges,
+    bagdesLabel: badges.charAt(0).toUpperCase() + badges.slice(1),
+    badgeColor,
+    nextLevelExp,
+    progress:
+      100 - ((nextLevelExp - exps) / (nextLevelExp - currentLevelMinExp)) * 100,
+  };
 };

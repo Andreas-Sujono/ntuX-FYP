@@ -45,6 +45,7 @@ export interface Course {
   updatedAt: Date;
   courseBatches?: CourseBatch[];
   courseContents?: CourseContent[];
+  courseBatch?: CourseBatch;
   studentRegistrations?: StudentRegistration[];
   courseAnnouncements?: CourseAnnouncement[];
 }
