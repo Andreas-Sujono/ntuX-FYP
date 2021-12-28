@@ -17,6 +17,22 @@ import { UserData } from '../user.decorator';
   model: {
     type: User,
   },
+  query: {
+    join: {
+      currentAvatar: {
+        eager: true,
+      },
+      avatars: {
+        eager: true,
+      },
+      courses: {
+        eager: true,
+      },
+      premiumSetting: {
+        eager: true,
+      },
+    },
+  },
   routes: {
     only: [
       'getOneBase',
@@ -49,6 +65,18 @@ export class UserController implements CrudController<User> {
   @Override()
   async createOne(req: CrudRequest, dto: User) {
     return this.service.createUser(dto);
+  }
+
+  @Override()
+  async getMany() {
+    const res = await this.service.find();
+    res.forEach((item) => {
+      delete item.confirmationCode;
+      delete item.hashedPassword;
+      delete item.NRIC;
+      delete item.dateOfBirth;
+    });
+    return res;
   }
 
   @Get('top')

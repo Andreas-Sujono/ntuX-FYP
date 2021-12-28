@@ -61,6 +61,8 @@ export class CourseService extends TypeOrmCrudService<Course> {
       },
       relations: ['course'],
     });
+    if (coursesRegistered.length === 0) return this.repo.find();
+
     const coursesNotRegistered = await this.repo.query(`
       select * from course where id not in (${coursesRegistered
         .map((course) => course.course.id)
