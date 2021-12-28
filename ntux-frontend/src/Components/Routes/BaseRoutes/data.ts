@@ -1,4 +1,3 @@
-import { confirmForgotPassword } from './../../../Store/Actions/auth/general/thunk';
 import { lazy } from 'react';
 import { routes } from '../data';
 

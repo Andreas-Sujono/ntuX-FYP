@@ -8,6 +8,7 @@ import storage from 'redux-persist/lib/storage'; // defaults to localStorage for
 import auth from './Reducers/auth';
 import courses from './Reducers/courses';
 import pointsRewards from './Reducers/pointsRewards';
+import admin from './Reducers/admin';
 
 const isDevelopment = process.env.NODE_ENV === 'development';
 const middlewares = [thunk];
@@ -26,6 +27,7 @@ const rootReducer = combineReducers({
   auth,
   courses,
   pointsRewards,
+  admin,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

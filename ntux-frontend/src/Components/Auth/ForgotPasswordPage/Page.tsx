@@ -15,7 +15,6 @@ import {
   confirmEmail,
   confirmForgotPassword,
   forgotPassword,
-  login,
 } from 'Store/Actions/auth';
 import {
   Redirect,

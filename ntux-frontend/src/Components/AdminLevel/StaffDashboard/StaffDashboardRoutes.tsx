@@ -5,9 +5,18 @@ import StudentMainContainer from './Container/MainContainer';
 import CourseContainer from './Container/CourseContainer';
 import { routeData } from './data';
 import { routes } from '../../Routes';
+import { useDispatch } from 'react-redux';
+import {
+  getAllCourses,
+  getAllUsers,
+  getSummary,
+  getWebsiteActivity,
+} from 'Store/Actions/admin';
+import { getMyAccount } from 'Store/Actions/auth';
 
 const StaffDashboardRoutes = () => {
   const location = useLocation();
+  const dispatch = useDispatch();
   const [isCourseLevel, setIsCourseLevel] = useState(false);
   const MainContainer = isCourseLevel ? CourseContainer : StudentMainContainer;
 
@@ -21,6 +30,14 @@ const StaffDashboardRoutes = () => {
       setIsCourseLevel(false);
     }
   }, [location.pathname]);
+
+  useEffect(() => {
+    dispatch(getAllCourses());
+    dispatch(getWebsiteActivity());
+    dispatch(getSummary());
+    dispatch(getAllUsers());
+    dispatch(getMyAccount());
+  }, []);
 
   return (
     <MainContainer>

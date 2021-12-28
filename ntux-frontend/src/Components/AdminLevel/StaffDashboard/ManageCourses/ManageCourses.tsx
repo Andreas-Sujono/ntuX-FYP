@@ -7,9 +7,11 @@ import { CourseCard as LPCourseCard } from '../../../LandingPage/Homepage/Explor
 import SearchIcon from '@mui/icons-material/Search';
 import { useHistory } from 'react-router-dom';
 import { routes } from '../../../Routes';
-import { makePath } from 'common/utils';
+import { getCourseStatus, makePath } from 'common/utils';
+import { useSelector } from 'react-redux';
+import { selectAllCourses } from 'Store/Selector/admin';
 
-export const CourseCard = () => {
+export const CourseCard = ({ data }: any) => {
   const history = useHistory();
   const cousePath = makePath(routes.STAFF_COURSES.BASE, { courseId: 1 });
   return (
@@ -17,12 +19,14 @@ export const CourseCard = () => {
       onClick={() => history.push(cousePath)}
       style={{ maxWidth: '350px' }}
     >
-      <img src="https://i.pcmag.com/imagery/articles/00tLYTqwmgFvacZlYPc5ecO-8.1583853669.fit_lim.jpg" />
+      <img src={data.imageUrl} />
       <div className="details" style={{ padding: '1.1rem' }}>
-        <div className="name">EE017: Computer Networking I</div>
-        <div className="hours">16 Hours</div>
+        <div className="name">
+          {data.code}: {data.name}
+        </div>
+        <div className="hours">{data.totalHours} Hours</div>
         <div className="batch" style={{ color: 'green' }}>
-          Open Registration
+          {getCourseStatus([])}
         </div>
       </div>
     </LPCourseCard>
@@ -30,6 +34,7 @@ export const CourseCard = () => {
 };
 
 export default function ManageCourses() {
+  const allCourses = useSelector(selectAllCourses);
   return (
     <Container maxWidth="lg" sx={{ margin: 0, mt: 6, mb: 8, ml: 1, pr: 1 }}>
       <Grid container spacing={3}>
@@ -65,10 +70,9 @@ export default function ManageCourses() {
               rowGap: '1rem',
             }}
           >
-            <CourseCard />
-            <CourseCard />
-            <CourseCard />
-            <CourseCard />
+            {allCourses.map((item) => (
+              <CourseCard key={item.id} data={item} />
+            ))}
           </Box>
         </Grid>
       </Grid>

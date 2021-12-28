@@ -1,4 +1,4 @@
-import { Id, User } from '../../../Models/Auth';
+import { Id } from '../../../Models/Auth';
 import BaseService from '../base';
 
 export default class CoursesService extends BaseService {

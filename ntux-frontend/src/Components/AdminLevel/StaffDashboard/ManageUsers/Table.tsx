@@ -8,44 +8,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Button } from '@mui/material';
 
-function createData(
-  name: any,
-  calories: any,
-  fat: any,
-  carbs: any,
-  protein: any,
-) {
-  return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-  {
-    name: 'Andreas Sujono',
-    role: 'student',
-    status: 'confirmed',
-    createdAt: new Date(),
-  },
-  {
-    name: 'Andreas Sujono',
-    role: 'student',
-    status: 'confirmed',
-    createdAt: new Date(),
-  },
-  {
-    name: 'Andreas Sujono',
-    role: 'student',
-    status: 'confirmed',
-    createdAt: new Date(),
-  },
-  {
-    name: 'Andreas Sujono',
-    role: 'student',
-    status: 'confirmed',
-    createdAt: new Date(),
-  },
-];
-
-export default function TableComponent() {
+export default function TableComponent({ data }: any) {
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -59,18 +22,20 @@ export default function TableComponent() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {data.map((row) => (
             <TableRow
-              key={row.name}
+              key={row.id}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               <TableCell component="th" scope="row" sx={{ fontSize: '1rem' }}>
-                {row.name}
+                {row.fullName}
               </TableCell>
               <TableCell align="left">{row.role}</TableCell>
-              <TableCell align="left">{row.status}</TableCell>
               <TableCell align="left">
-                {row.createdAt.toLocaleDateString()}
+                {row.emailVerifiesAt ? 'Verified' : 'Not Verified'}
+              </TableCell>
+              <TableCell align="left">
+                {new Date(row.createdAt).toLocaleDateString()}
               </TableCell>
               <TableCell align="left">
                 <Button>Edit</Button>

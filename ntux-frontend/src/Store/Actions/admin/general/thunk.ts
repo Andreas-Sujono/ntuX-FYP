@@ -1,11 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import axios from 'axios';
-import GeneralService from '../../../Services/pointsRewards/general';
+import GeneralService from '../../../Services/admin/general';
 import { AppDispatch, RootState } from '../../../Store';
 import { loadSuccess, loadFailed } from './general';
-import { Id, User } from 'Models/Auth';
 import { selectUserId } from 'Store/Selector/auth';
-import { selectIsActivityAdded } from 'Store/Selector/pointsRewards';
+import { logout } from 'Store/Actions/auth';
 
 const { CancelToken } = axios;
 const source = CancelToken.source();
@@ -21,11 +20,14 @@ const sendErrorNotification = (errorMessage = '', errorCode = 0) => {
   return; //TODO: send error component
 };
 
-export const getGoalTask =
+export const getSummary =
   (bypass = false) =>
   async (dispatch: AppDispatch, getState: () => RootState) => {
     try {
-      const res = await service.getGoalTask();
+      const res = await service.getSummary();
+      if (res.errorCode === 401) {
+        logout()(dispatch, getState);
+      }
       if (res.errorCode) {
         dispatch(loadFailed());
         sendErrorNotification(res.message);
@@ -36,7 +38,7 @@ export const getGoalTask =
       }
       dispatch(
         loadSuccess({
-          goalTask: res,
+          summary: res,
         }),
       );
       return { result: true };
@@ -46,7 +48,82 @@ export const getGoalTask =
     }
   };
 
-export const getRewards =
+export const getWebsiteActivity =
+  (bypass = false) =>
+  async (dispatch: AppDispatch, getState: () => RootState) => {
+    try {
+      const res = await service.getWebsiteActivity();
+      if (res.errorCode) {
+        dispatch(loadFailed());
+        sendErrorNotification(res.message);
+        return {
+          result: false,
+          errorMessage: res.message,
+        };
+      }
+      dispatch(
+        loadSuccess({
+          websiteActivities: res,
+        }),
+      );
+      return { result: true };
+    } catch (err) {
+      dispatch(loadFailed());
+      return { result: false };
+    }
+  };
+
+export const getAllCourses =
+  (bypass = false) =>
+  async (dispatch: AppDispatch, getState: () => RootState) => {
+    try {
+      const res = await service.getAllCourses();
+      if (res.errorCode) {
+        dispatch(loadFailed());
+        sendErrorNotification(res.message);
+        return {
+          result: false,
+          errorMessage: res.message,
+        };
+      }
+      dispatch(
+        loadSuccess({
+          allCourses: res,
+        }),
+      );
+      return { result: true };
+    } catch (err) {
+      dispatch(loadFailed());
+      return { result: false };
+    }
+  };
+
+export const getAllUsers =
+  (bypass = false) =>
+  async (dispatch: AppDispatch, getState: () => RootState) => {
+    try {
+      const res = await service.getAllUsers();
+      if (res.errorCode) {
+        dispatch(loadFailed());
+        sendErrorNotification(res.message);
+        return {
+          result: false,
+          errorMessage: res.message,
+        };
+      }
+      dispatch(
+        loadSuccess({
+          allUsers: res,
+        }),
+      );
+      return { result: true };
+    } catch (err) {
+      dispatch(loadFailed());
+      return { result: false };
+    }
+  };
+
+export const getAllRewards =
   (bypass = false) =>
   async (dispatch: AppDispatch, getState: () => RootState) => {
     try {
@@ -61,7 +138,7 @@ export const getRewards =
       }
       dispatch(
         loadSuccess({
-          rewards: res,
+          allRewards: res,
         }),
       );
       return { result: true };
@@ -71,12 +148,11 @@ export const getRewards =
     }
   };
 
-export const getRewardsRedeemed =
+export const getAllQuestions =
   (bypass = false) =>
   async (dispatch: AppDispatch, getState: () => RootState) => {
     try {
-      const userId = selectUserId(getState());
-      const res = await service.getRewardsRedeemed(userId);
+      const res = await service.getAllQuestions();
       if (res.errorCode) {
         dispatch(loadFailed());
         sendErrorNotification(res.message);
@@ -87,62 +163,12 @@ export const getRewardsRedeemed =
       }
       dispatch(
         loadSuccess({
-          rewardsRedeemed: res,
+          allQuestions: res,
         }),
       );
       return { result: true };
     } catch (err) {
       dispatch(loadFailed());
-      return { result: false };
-    }
-  };
-
-export const getAvatars =
-  (bypass = false) =>
-  async (dispatch: AppDispatch, getState: () => RootState) => {
-    try {
-      const userId = selectUserId(getState());
-      const res = await service.getAvatars();
-      if (res.errorCode) {
-        dispatch(loadFailed());
-        sendErrorNotification(res.message);
-        return {
-          result: false,
-          errorMessage: res.message,
-        };
-      }
-      dispatch(
-        loadSuccess({
-          avatars: res,
-        }),
-      );
-      return { result: true };
-    } catch (err) {
-      dispatch(loadFailed());
-      return { result: false };
-    }
-  };
-
-export const addWebsiteVisitActivity =
-  (bypass = false) =>
-  async (dispatch: AppDispatch, getState: () => RootState) => {
-    try {
-      const prev = selectIsActivityAdded(getState());
-      const userId = selectUserId(getState());
-
-      if (prev && !bypass) return { result: true };
-
-      const res = await service.addWebsiteActivity({
-        visitWithoutLogin: !userId ? 1 : 0,
-        visitWithLogin: userId ? 1 : 0,
-      });
-      dispatch(
-        loadSuccess({
-          isActivityAdded: true,
-        }),
-      );
-      return { result: true };
-    } catch (err) {
       return { result: false };
     }
   };

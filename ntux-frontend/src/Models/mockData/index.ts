@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { User } from 'Models/Auth';
 
 export const mockUserL: any = {

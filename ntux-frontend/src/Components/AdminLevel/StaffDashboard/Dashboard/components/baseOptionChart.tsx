@@ -1,7 +1,7 @@
 import React from 'react';
 import { alpha, useTheme } from '@mui/material/styles';
 import { GlobalStyles } from '@mui/material';
-import { blue, green, red, yellow, orange } from '@mui/material/colors';
+import { blue, green, orange } from '@mui/material/colors';
 
 export function BaseOptionChartStyle() {
   const theme = useTheme();

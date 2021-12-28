@@ -1,12 +1,29 @@
 import React, { Suspense, memo } from 'react';
-import { Route, Switch, Redirect } from 'react-router-dom';
+import {
+  Route,
+  Switch,
+  Redirect,
+  useLocation,
+  matchPath,
+} from 'react-router-dom';
 import { LoadingBar } from 'react-dre/lib/LoadingBar';
 import { routeData } from './data';
 import { routes } from '../Routes';
+import { useSelector } from 'react-redux';
+import { selectUserRole } from 'Store/Selector/auth';
+import { Role } from 'Models/Auth';
 
 const AdminRoutes = () => {
-  const isAdmin = true;
+  const location = useLocation();
+  const role = useSelector(selectUserRole);
+
+  const isAdmin = role !== Role.STUDENT;
   const base = isAdmin ? routes.STAFF.BASE : routes.ADMIN.BASE;
+
+  const isAdminPath = matchPath(location.pathname, { path: routes.STAFF.BASE });
+
+  if (role === Role.STUDENT && isAdminPath)
+    return <Redirect to={routes.LP_HOMEPAGE} />;
 
   return (
     <Suspense

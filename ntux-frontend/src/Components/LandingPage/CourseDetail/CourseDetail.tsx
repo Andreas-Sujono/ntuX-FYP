@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { memo, useEffect } from 'react';
 import { PageContentContainer } from 'Components/shared/Shared.styles';
 import {

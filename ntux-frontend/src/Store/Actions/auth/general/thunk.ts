@@ -85,6 +85,7 @@ export const login =
           errorMessage: res.message,
         };
       }
+      localStorage.setItem('token', res.access_token || res.accessToken);
       dispatch(
         loadSuccess({
           isAuthenticated: true,
@@ -93,7 +94,7 @@ export const login =
           token: res.access_token || res.accessToken,
         }),
       );
-      localStorage.setItem('token', res.access_token || res.accessToken);
+      await setTimeout(() => null, 10); //wait for token is set
       return { result: true, user: res.user };
     } catch (err) {
       dispatch(loadFailed());

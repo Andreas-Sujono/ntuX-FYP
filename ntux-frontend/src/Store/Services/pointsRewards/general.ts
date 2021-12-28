@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Id } from '../../../Models/Auth';
 import BaseService from '../base';
 
@@ -32,7 +33,7 @@ export default class PointsRewardsService extends BaseService {
     return res.data;
   };
 
-  getRewardsRedeemed = async (userId: Id) => {
+  getRewardsRedeemed = async (userId?: Id) => {
     const res = await this.getRequest(`/reward-redeemed`);
     return res.data;
   };

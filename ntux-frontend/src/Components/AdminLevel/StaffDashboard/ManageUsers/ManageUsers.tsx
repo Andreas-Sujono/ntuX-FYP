@@ -4,8 +4,11 @@ import TextField from '@mui/material/TextField';
 import { IconButton, InputAdornment, Paper, Button, Grid } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import Table from './Table';
+import { selectAllUsers } from 'Store/Selector/admin';
+import { useSelector } from 'react-redux';
 
 export default function ManageUsers() {
+  const allUsers = useSelector(selectAllUsers);
   return (
     <Container maxWidth="lg" sx={{ margin: 0, mt: 4, mb: 8, ml: 0, mr: 1 }}>
       <Paper sx={{ p: 2, minHeight: '80vh' }}>
@@ -34,7 +37,7 @@ export default function ManageUsers() {
           </Grid>
         </Grid>
 
-        <Table />
+        <Table data={allUsers} />
       </Paper>
     </Container>
   );

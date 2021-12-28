@@ -12,10 +12,9 @@ import Typography from '@mui/material/Typography';
 import { toast } from 'react-toastify';
 import { useThunkDispatch } from 'common/hooks';
 import { login } from 'Store/Actions/auth';
-import { Redirect, useHistory, Link as RouterLink } from 'react-router-dom';
+import { Redirect, useHistory } from 'react-router-dom';
 import { routes } from 'Components/Routes';
 import { Role } from 'Models/Auth';
-import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { selectUserId, selectUserRole } from 'Store/Selector/auth';
 

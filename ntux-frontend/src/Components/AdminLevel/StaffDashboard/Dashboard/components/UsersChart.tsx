@@ -28,10 +28,13 @@ const ChartWrapperStyle = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-const CHART_DATA = [100, 10, 10];
-
-export default function UsersChart() {
+export default function UsersChart({ data }: any) {
   const theme = useTheme();
+  const CHART_DATA = [
+    data.totalStudents || 0,
+    data.totalAdmins || 0,
+    data.totalLecturers || 0,
+  ];
 
   const chartOptions = merge(BaseOptionChart(), {
     colors: [
@@ -73,7 +76,7 @@ export default function UsersChart() {
   return (
     <Card sx={{ height: '100%' }}>
       <BaseOptionChartStyle />
-      <CardHeader title="Total Users: 120" />
+      <CardHeader title={`Total Users: ${data.totalUser || 0}`} />
       <ChartWrapperStyle dir="ltr">
         <ReactApexChart
           type="pie"

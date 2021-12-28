@@ -2,7 +2,7 @@ import React from 'react';
 import { Typography, Paper, Box, Button } from '@mui/material';
 import { CourseCard } from '../../ManageCourses/ManageCourses';
 
-function PopularCourses() {
+function PopularCourses({ data }: any) {
   return (
     <Paper sx={{ p: 3 }}>
       <Typography variant="h6" component="h2" sx={{ fontWeight: 500 }}>
@@ -18,9 +18,9 @@ function PopularCourses() {
           mt: 4,
         }}
       >
-        <CourseCard />
-        <CourseCard />
-        <CourseCard />
+        {data.map((item) => (
+          <CourseCard key={item.id} data={item} />
+        ))}
       </Box>
     </Paper>
   );

@@ -30,7 +30,7 @@ import ArrowIcon from '@mui/icons-material/ArrowBack';
 import { routeData } from '../../CourseLevel/data';
 import { routes } from 'Components/Routes';
 import { makePath } from 'common/utils';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import {
   getCourseAnnouncements,
   getCourseContents,
