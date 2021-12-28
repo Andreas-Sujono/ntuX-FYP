@@ -11,6 +11,13 @@ import { UserData } from 'src/authModule/user.decorator';
   model: {
     type: Course,
   },
+  query: {
+    join: {
+      courseBatches: {
+        eager: true,
+      },
+    },
+  },
   routes: {
     only: [
       'getOneBase',

@@ -101,11 +101,11 @@ export class User {
   @Column({ nullable: true, default: 1 })
   level: number;
 
-  @Exclude()
+  // @Exclude()
   @Column({ nullable: true, type: 'timestamp with time zone' })
   emailVerifiesAt: Date;
 
-  @Exclude()
+  // @Exclude()
   @CreateDateColumn({ type: 'timestamp with time zone' })
   createdAt: Date;
 

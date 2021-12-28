@@ -18,12 +18,12 @@ export class WebsiteActivityService extends TypeOrmCrudService<WebsiteActivity> 
   async getStudentSummary(interval: 'd' | 'w' | 'm', userId?: string) {
     if (interval === 'd') {
       const res = await this.repo.query(`   
-        SELECT sum(student_website_activity."visitWithoutLogin") as visitWithoutLogin, 
-        sum(student_website_activity."visitWithLogin") as visitWithLogin,
-        sum(student_website_activity."totalQuestion") as totalQuestion,
-        sum(student_website_activity."totalAnswer") as totalAnswer,
-        sum(student_website_activity."totalTutorRequest") as totalTutorRequest,
-        sum(student_website_activity."totalTutorRequestAccepted") as totalTutorRequestAccepted,
+        SELECT sum(student_website_activity."visitWithoutLogin") as "visitWithoutLogin", 
+        sum(student_website_activity."visitWithLogin") as "visitWithLogin",
+        sum(student_website_activity."totalQuestion") as "totalQuestion",
+        sum(student_website_activity."totalAnswer") as "totalAnswer",
+        sum(student_website_activity."totalTutorRequest") as "totalTutorRequest",
+        sum(student_website_activity."totalTutorRequestAccepted") as "totalTutorRequestAccepted",
         date
         from student_website_activity group by date order by date desc limit 7 WHERE student_website_activity."userId" = ${userId}
       `);
@@ -31,24 +31,24 @@ export class WebsiteActivityService extends TypeOrmCrudService<WebsiteActivity> 
     }
     if (interval === 'w') {
       const res = await this.repo.query(`   
-        SELECT sum(student_website_activity."visitWithoutLogin") as visitWithoutLogin, 
-        sum(student_website_activity."visitWithLogin") as visitWithLogin,
-        sum(student_website_activity."totalQuestion") as totalQuestion,
-        sum(student_website_activity."totalAnswer") as totalAnswer,
-        sum(student_website_activity."totalTutorRequest") as totalTutorRequest,
-        sum(student_website_activity."totalTutorRequestAccepted") as totalTutorRequestAccepted,
+        SELECT sum(student_website_activity."visitWithoutLogin") as "visitWithoutLogin", 
+        sum(student_website_activity."visitWithLogin") as "visitWithLogin",
+        sum(student_website_activity."totalQuestion") as "totalQuestion",
+        sum(student_website_activity."totalAnswer") as "totalAnswer",
+        sum(student_website_activity."totalTutorRequest") as "totalTutorRequest",
+        sum(student_website_activity."totalTutorRequestAccepted") as "totalTutorRequestAccepted",
         date
         from student_website_activity group by date order by date desc limit 49 WHERE student_website_activity."userId" = ${userId}
       `);
       return res;
     }
     const res = await this.repo.query(`   
-        SELECT sum(student_website_activity."visitWithoutLogin") as visitWithoutLogin, 
-        sum(student_website_activity."visitWithLogin") as visitWithLogin,
-        sum(student_website_activity."totalQuestion") as totalQuestion,
-        sum(student_website_activity."totalAnswer") as totalAnswer,
-        sum(student_website_activity."totalTutorRequest") as totalTutorRequest,
-        sum(student_website_activity."totalTutorRequestAccepted") as totalTutorRequestAccepted,
+        SELECT sum(student_website_activity."visitWithoutLogin") as "visitWithoutLogin", 
+        sum(student_website_activity."visitWithLogin") as "visitWithLogin",
+        sum(student_website_activity."totalQuestion") as "totalQuestion",
+        sum(student_website_activity."totalAnswer") as "totalAnswer",
+        sum(student_website_activity."totalTutorRequest") as "totalTutorRequest",
+        sum(student_website_activity."totalTutorRequestAccepted") as "totalTutorRequestAccepted",
         date
         from student_website_activity group by date order by date desc limit 210 WHERE student_website_activity."userId" = ${userId}
       `);
@@ -58,12 +58,12 @@ export class WebsiteActivityService extends TypeOrmCrudService<WebsiteActivity> 
   async getSummary(interval: 'd' | 'w' | 'm') {
     if (interval === 'd') {
       const res = await this.repo.query(`   
-        SELECT sum(website_activity."visitWithoutLogin") as visitWithoutLogin, 
-        sum(website_activity."visitWithLogin") as visitWithLogin,
-        sum(website_activity."totalQuestion") as totalQuestion,
-        sum(website_activity."totalAnswer") as totalAnswer,
-        sum(website_activity."totalTutorRequest") as totalTutorRequest,
-        sum(website_activity."totalTutorRequestAccepted") as totalTutorRequestAccepted,
+        SELECT sum(website_activity."visitWithoutLogin") as "visitWithoutLogin", 
+        sum(website_activity."visitWithLogin") as "visitWithLogin",
+        sum(website_activity."totalQuestion") as "totalQuestion",
+        sum(website_activity."totalAnswer") as "totalAnswer",
+        sum(website_activity."totalTutorRequest") as "totalTutorRequest",
+        sum(website_activity."totalTutorRequestAccepted") as "totalTutorRequestAccepted",
         date
         from website_activity group by date order by date desc limit 7
       `);
@@ -71,24 +71,24 @@ export class WebsiteActivityService extends TypeOrmCrudService<WebsiteActivity> 
     }
     if (interval === 'w') {
       const res = await this.repo.query(`   
-        SELECT sum(website_activity."visitWithoutLogin") as visitWithoutLogin, 
-        sum(website_activity."visitWithLogin") as visitWithLogin,
-        sum(website_activity."totalQuestion") as totalQuestion,
-        sum(website_activity."totalAnswer") as totalAnswer,
-        sum(website_activity."totalTutorRequest") as totalTutorRequest,
-        sum(website_activity."totalTutorRequestAccepted") as totalTutorRequestAccepted,
+        SELECT sum(website_activity."visitWithoutLogin") as "visitWithoutLogin", 
+        sum(website_activity."visitWithLogin") as "visitWithLogin",
+        sum(website_activity."totalQuestion") as "totalQuestion",
+        sum(website_activity."totalAnswer") as "totalAnswer",
+        sum(website_activity."totalTutorRequest") as "totalTutorRequest",
+        sum(website_activity."totalTutorRequestAccepted") as "totalTutorRequestAccepted",
         date
         from website_activity group by date order by date desc limit 49
       `);
       return res;
     }
     const res = await this.repo.query(`   
-        SELECT sum(website_activity."visitWithoutLogin") as visitWithoutLogin, 
-        sum(website_activity."visitWithLogin") as visitWithLogin,
-        sum(website_activity."totalQuestion") as totalQuestion,
-        sum(website_activity."totalAnswer") as totalAnswer,
-        sum(website_activity."totalTutorRequest") as totalTutorRequest,
-        sum(website_activity."totalTutorRequestAccepted") as totalTutorRequestAccepted,
+        SELECT sum(website_activity."visitWithoutLogin") as "visitWithoutLogin", 
+        sum(website_activity."visitWithLogin") as "visitWithLogin",
+        sum(website_activity."totalQuestion") as "totalQuestion",
+        sum(website_activity."totalAnswer") as "totalAnswer",
+        sum(website_activity."totalTutorRequest") as "totalTutorRequest",
+        sum(website_activity."totalTutorRequestAccepted") as "totalTutorRequestAccepted",
         date
         from website_activity group by date order by date desc limit 210
       `);
