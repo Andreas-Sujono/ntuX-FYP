@@ -145,5 +145,9 @@ export class WebsiteActivityService extends TypeOrmCrudService<WebsiteActivity> 
           }),
         );
     }
+
+    return {
+      success: true,
+    };
   }
 }
