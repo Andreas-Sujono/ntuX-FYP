@@ -26,10 +26,10 @@ import { UserData } from '../user.decorator';
       'deleteOneBase',
     ],
     getManyBase: {
-      decorators: [Roles(UserRole.ADMIN, UserRole.LECTURER)],
+      decorators: [Public()],
     },
     getOneBase: {
-      decorators: [Roles(UserRole.ADMIN, UserRole.LECTURER)],
+      decorators: [Public()],
     },
     createOneBase: {
       decorators: [Roles(UserRole.ADMIN)],
