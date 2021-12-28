@@ -13,7 +13,6 @@ export class PremiumSetting {
   id: number;
 
   @OneToOne(() => User, (user) => user.premiumSetting)
-  @JoinTable()
   user: User;
 
   @Column({ nullable: true, default: false })

@@ -11,9 +11,10 @@ import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.strategy';
 import { PremiumSetting } from 'src/commonModule/entities/premiumSetting.entity';
 import { Avatar } from 'src/commonModule/entities/avatar.entity';
+import { Course } from 'src/courseModule/entities/course.entity';
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User, PremiumSetting, Avatar]),
+    TypeOrmModule.forFeature([User, PremiumSetting, Avatar, Course]),
     PassportModule,
     CommonModule,
     JwtModule.register({

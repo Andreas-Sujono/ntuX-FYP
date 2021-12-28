@@ -79,6 +79,26 @@ export class UserController implements CrudController<User> {
     return res;
   }
 
+  @Override()
+  @Public()
+  async getOne(@UserData('userId') userId: string, @Param('id') id: string) {
+    const res = await this.service.findOne({
+      where: {
+        id,
+      },
+      relations: ['avatars', 'currentAvatar', 'courses', 'premiumSetting'],
+    });
+
+    if (userId !== id) {
+      delete res.confirmationCode;
+      delete res.hashedPassword;
+      delete res.NRIC;
+      delete res.dateOfBirth;
+    }
+
+    return res;
+  }
+
   @Get('top')
   @Public()
   async getTopUsers() {

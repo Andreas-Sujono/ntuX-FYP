@@ -10,6 +10,8 @@ import {
   ManyToMany,
   OneToOne,
   ManyToOne,
+  JoinTable,
+  JoinColumn,
 } from 'typeorm';
 import { Avatar } from 'src/commonModule/entities/avatar.entity';
 
@@ -35,6 +37,13 @@ export class User {
 
   @ManyToMany(() => Avatar, (avatarShop) => avatarShop.users)
   avatars: Avatar[];
+
+  @ManyToMany(() => Course, (course) => course.lecturers)
+  courses: Course[]; //for lecturers only
+
+  @OneToOne(() => PremiumSetting, (premiumSetting) => premiumSetting.user)
+  @JoinColumn()
+  premiumSetting: PremiumSetting;
 
   @Column()
   fullName: string;
@@ -107,10 +116,4 @@ export class User {
   @Exclude()
   @Column({ nullable: true, type: 'timestamp with time zone' })
   deletedAt: Date;
-
-  @ManyToMany(() => Course)
-  courses: Course[]; //for lecturers only
-
-  @OneToOne(() => PremiumSetting, (premiumSetting) => premiumSetting.user)
-  premiumSetting: PremiumSetting;
 }
