@@ -55,4 +55,9 @@ export default class PointsRewardsService extends BaseService {
     const res = await this.deleteRequest(`/reward-redeemed/${id}`, {});
     return res.data;
   };
+
+  addWebsiteActivity = async (data: any) => {
+    const res = await this.postRequest(`/website-activity`, data);
+    return res.data;
+  };
 }

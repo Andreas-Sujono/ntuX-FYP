@@ -1,17 +1,43 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import queryString from 'query-string';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import { Typography, Paper, Divider } from '@mui/material';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useRouteMatch } from 'react-router-dom';
+import { routes } from 'Components/Routes';
+import { useSelector } from 'react-redux';
+import { selectCourseContentById } from 'Store/Selector/courses';
+import { CourseContent } from 'Models/Courses';
+import EditorShower from 'common/Components/EditorShower';
 
-export default function CourseContent() {
+export default function CourseContentPage() {
   const location = useLocation();
+  const match: any = useRouteMatch(routes.COURSES.BASE) || {};
+  const [finalBlocks, setFinalBlocks] = useState([]);
+
+  if (match?.params?.courseId === ':courseId' || !match?.params?.courseId)
+    match.params = { courseId: null };
+
   const { pageId: queryPageId } = queryString.parse(location.search);
+
+  const allCourseContentsById = useSelector(selectCourseContentById) || {};
+  const courseContents: CourseContent[] =
+    allCourseContentsById[match?.params?.courseId] || [];
+
+  useEffect(() => {
+    const chosenCourseContent = courseContents.find(
+      (item) => item.pageId === queryPageId,
+    );
+
+    if (chosenCourseContent) {
+      setFinalBlocks(chosenCourseContent?.metadata || []);
+    }
+  }, [allCourseContentsById]);
 
   return (
     <Container maxWidth="xl" sx={{ margin: 0, mt: 2, mb: 6, ml: 1, mr: 1 }}>
-      <Grid container sx={{ pr: 2 }}>
+      <EditorShower blocks={finalBlocks} />
+      {/* <Grid container sx={{ pr: 2 }}>
         <Grid item xs={12} sx={{ mt: 3 }} maxWidth={'lg'}>
           <Paper
             sx={{
@@ -42,7 +68,7 @@ export default function CourseContent() {
             </Typography>
           </Paper>
         </Grid>
-      </Grid>
+      </Grid> */}
     </Container>
   );
 }

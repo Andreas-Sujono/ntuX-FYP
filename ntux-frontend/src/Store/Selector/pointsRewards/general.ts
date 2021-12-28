@@ -15,3 +15,6 @@ export const selectRewardsRedeemed = (state: RootState) =>
   selectGeneralState(state).rewardsRedeemed as RewardRedeemed[];
 export const selectAvatars = (state: RootState) =>
   selectGeneralState(state).avatars;
+
+export const selectIsActivityAdded = (state: RootState) =>
+  selectGeneralState(state).isActivityAdded;

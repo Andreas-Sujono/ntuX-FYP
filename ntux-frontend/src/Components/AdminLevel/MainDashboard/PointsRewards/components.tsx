@@ -360,7 +360,8 @@ export const AvatarShop = () => {
         Avatar Shop
       </Typography>
       <Typography component="div" variant="body1" color="text.secondary">
-        You can buy avatar from here
+        You can buy avatar with your points. Choose your avatar in the profile
+        settings
       </Typography>
 
       <Grid container spacing={3} sx={{ mt: 1 }}>

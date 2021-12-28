@@ -11,10 +11,14 @@ import { routes } from '../data';
 import TopNav from '../../LandingPage/TopNav';
 import Footer from '../../LandingPage/Footer';
 import FullPageLoadingBar from '../../../common/Components/LoadingBar/FullPageLoadingBar';
+import { useDispatch } from 'react-redux';
+import { addWebsiteVisitActivity } from 'Store/Actions/pointsRewards';
 
 const Routes = () => {
   const location = useLocation();
   const [isAdminRoutes, setIsAdminRoutes] = useState(false);
+
+  const dispatch = useDispatch();
 
   const checkAdminPath = () => {
     if (
@@ -40,6 +44,10 @@ const Routes = () => {
     });
     checkAdminPath();
   }, [location.pathname]);
+
+  useEffect(() => {
+    dispatch(addWebsiteVisitActivity());
+  }, []);
 
   return (
     <Suspense fallback={<FullPageLoadingBar />}>

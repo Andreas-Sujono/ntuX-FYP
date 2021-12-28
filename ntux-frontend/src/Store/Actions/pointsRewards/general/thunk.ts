@@ -4,6 +4,7 @@ import { AppDispatch, RootState } from '../../../Store';
 import { loadSuccess, loadFailed } from './general';
 import { Id, User } from 'Models/Auth';
 import { selectUserId } from 'Store/Selector/auth';
+import { selectIsActivityAdded } from 'Store/Selector/pointsRewards';
 
 const { CancelToken } = axios;
 const source = CancelToken.source();
@@ -117,6 +118,30 @@ export const getAvatars =
       return { result: true };
     } catch (err) {
       dispatch(loadFailed());
+      return { result: false };
+    }
+  };
+
+export const addWebsiteVisitActivity =
+  (bypass = false) =>
+  async (dispatch: AppDispatch, getState: () => RootState) => {
+    try {
+      const prev = selectIsActivityAdded(getState());
+      const userId = selectUserId(getState());
+
+      if (prev && !bypass) return { result: true };
+
+      const res = await service.addWebsiteActivity({
+        visitWithoutLogin: !userId ? 1 : 0,
+        visitWithLogin: userId ? 1 : 0,
+      });
+      dispatch(
+        loadSuccess({
+          isActivityAdded: true,
+        }),
+      );
+      return { result: true };
+    } catch (err) {
       return { result: false };
     }
   };

@@ -37,11 +37,17 @@ import {
   getOneCourseRegistered,
 } from 'Store/Actions/courses';
 import { selectUser } from 'Store/Selector/auth';
-import { selectCourseRegisteredById } from 'Store/Selector/courses';
+import {
+  selectCourseContentById,
+  selectCourseRegisteredById,
+} from 'Store/Selector/courses';
+import { CourseContent } from 'Models/Courses';
+import { useThunkDispatch } from 'common/hooks';
+import { LoadingBar } from 'common/Components/LoadingBar/FullPageLoadingBar';
 
 const logoImagePath = `${process.env.PUBLIC_URL}/assets/logos/full-colored-logo.svg`;
 
-const courseContentData = [
+const defaultContents = [
   {
     id: 101,
     name: 'Lesson 1',
@@ -54,15 +60,14 @@ const courseContentData = [
 
 function MainContainer({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState(window.innerWidth < 550 ? false : true);
+  const [loading, setLoading] = useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
   };
 
-  const firstCourseContentPageId = courseContentData[0].id || null;
-
   const location = useLocation();
   const history = useHistory();
-  const dispatch = useDispatch();
+  const dispatch = useThunkDispatch();
   const match: any = useRouteMatch(routes.COURSES.BASE) || {};
 
   if (match?.params?.courseId === ':courseId' || !match?.params?.courseId)
@@ -70,7 +75,13 @@ function MainContainer({ children }: { children: React.ReactNode }) {
 
   const user = useSelector(selectUser);
   const allCourseDetailById = useSelector(selectCourseRegisteredById) || {};
+  const allCourseContentsById = useSelector(selectCourseContentById) || {};
   const course = allCourseDetailById[match?.params?.courseId] || {};
+  const courseContents: CourseContent[] =
+    allCourseContentsById[match?.params?.courseId] || [];
+
+  const firstCourseContentPageId =
+    courseContents[0]?.pageId || defaultContents[0].id;
 
   const [routeDetails, setRouteDetails] = useState<typeof routeData[0]>(
     routeData[0],
@@ -94,10 +105,18 @@ function MainContainer({ children }: { children: React.ReactNode }) {
   }, [location.pathname]);
 
   useEffect(() => {
-    dispatch(getCourseContents(match.params.courseId));
-    dispatch(getCourseAnnouncements(match.params.courseId));
-    dispatch(getOneCourseRegistered(match.params.courseId));
+    getAllData();
   }, []);
+
+  const getAllData = async () => {
+    setLoading(true);
+    await Promise.all([
+      dispatch(getOneCourseRegistered(match.params.courseId)),
+      dispatch(getCourseContents(match.params.courseId)),
+      dispatch(getCourseAnnouncements(match.params.courseId)),
+    ]);
+    setLoading(false);
+  };
 
   return (
     <BoxContainer>
@@ -215,11 +234,11 @@ function MainContainer({ children }: { children: React.ReactNode }) {
             </DrawerList>
 
             {item.id === '2' &&
-              courseContentData.map((item2) => (
+              courseContents.map((item2) => (
                 //course content
                 <ListItemButton
                   key={item2.id}
-                  selected={String(item2.id) === courseContentPageId}
+                  selected={String(item2.pageId) === courseContentPageId}
                   onClick={() => {
                     history.push(
                       makePath(
@@ -228,7 +247,7 @@ function MainContainer({ children }: { children: React.ReactNode }) {
                         undefined,
                         item.id === '2'
                           ? {
-                              pageId: item2.id,
+                              pageId: item2.pageId,
                             }
                           : {},
                       ),
@@ -239,7 +258,7 @@ function MainContainer({ children }: { children: React.ReactNode }) {
                   }}
                   sx={{ flexGrow: 0, pl: 12 }}
                 >
-                  <ListItemText primary={item2.name} />
+                  <ListItemText primary={item2.pageName} />
                 </ListItemButton>
               ))}
           </React.Fragment>
@@ -263,7 +282,8 @@ function MainContainer({ children }: { children: React.ReactNode }) {
             sx={{ m: 0, p: 0, padding: 0, paddingLeft: 0 }}
             style={{ padding: 0, maxWidth: '100%' }}
           >
-            {children}
+            {loading && <LoadingBar height="70vh" />}
+            {!loading && children}
           </Container>
         </div>
       </Box>

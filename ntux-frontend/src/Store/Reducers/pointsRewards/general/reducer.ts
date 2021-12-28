@@ -14,6 +14,7 @@ const initialState = initEntityState({
   rewardsRedeemed: [],
   avatars: [],
   myAvatars: [],
+  isActivityAdded: false, //user with login
 });
 
 function reducer(state = initialState, action: AnyAction) {
