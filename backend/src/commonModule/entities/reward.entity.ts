@@ -21,16 +21,19 @@ export class Reward {
   imageUrl: string;
 
   @Column({ nullable: true })
-  totalPointsGet: number;
+  totalPointsRequired: number;
 
   @Column({ nullable: true })
-  totalExpsGet: number;
+  totalExpsRequired: number;
 
   @Column({ nullable: true, default: false })
   isPublished: boolean;
 
   @Column({ nullable: true, default: false })
   islimitedOnePerStudent: boolean;
+
+  @Column({ nullable: true, default: false })
+  isDefault: boolean;
 
   @Column({ nullable: true })
   totalLimit: number;
