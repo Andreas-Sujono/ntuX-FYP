@@ -58,4 +58,9 @@ export class CourseController implements CrudController<Course> {
   ) {
     return this.service.getStudentRegistered(userId, courseId);
   }
+
+  @Get('recommended')
+  async getRecommended(@UserData('userId') userId: string) {
+    return this.service.getRecommendationCourses(userId);
+  }
 }

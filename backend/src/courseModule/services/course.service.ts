@@ -33,9 +33,14 @@ export class CourseService extends TypeOrmCrudService<Course> {
     });
   }
 
-  async getStudentCourses(userId: string): Promise<Course[]> {
-    const query = `SELECT course.* from course_user LEFT JOIN course on course_user."courseId" = course.id WHERE "userId" = $1`;
-    return await this.repo.query(query, [userId]);
+  async getStudentCourses(userId: string): Promise<CourseUser[]> {
+    const res = await this.courseUserRepo.find({
+      where: {
+        user: userId as any,
+      },
+      relations: ['course', 'courseBatch'],
+    });
+    return res;
   }
 
   async getStudentRegistered(userId: string, courseId: string) {
@@ -44,9 +49,24 @@ export class CourseService extends TypeOrmCrudService<Course> {
         user: userId,
         course: courseId,
       },
-      relations: ['course', 'courseBatch'],
+      relations: ['course', 'courseBatch', 'course.lecturers'],
     });
     return courseUser;
+  }
+
+  async getRecommendationCourses(userId: string) {
+    const coursesRegistered = await this.courseUserRepo.find({
+      where: {
+        user: userId as any,
+      },
+      relations: ['course'],
+    });
+    const coursesNotRegistered = await this.repo.query(`
+      select * from course where id not in (${coursesRegistered
+        .map((course) => course.course.id)
+        .join(',')})
+    `);
+    return coursesNotRegistered;
   }
 
   async getAdminAllCourses(): Promise<Course[]> {
