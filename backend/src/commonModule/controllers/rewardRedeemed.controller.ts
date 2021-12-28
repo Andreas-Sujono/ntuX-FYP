@@ -42,6 +42,16 @@ export class RewardRedeemedController
   constructor(public service: RewardRedeemedService) {}
 
   @Override()
+  async getMany(@UserData('userId') userId: number) {
+    return this.service.find({
+      where: {
+        user: userId,
+      },
+      relations: ['reward'],
+    });
+  }
+
+  @Override()
   async createOne(
     @ParsedBody() dto: RewardRedeemed,
     @UserData('userId') userId: number,
