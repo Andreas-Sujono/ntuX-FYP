@@ -62,6 +62,21 @@ import { UserData } from '../user.decorator';
 export class UserController implements CrudController<User> {
   constructor(public service: UserService) {}
 
+  @Get('all/lecturers')
+  @Public()
+  async getAllLecturers() {
+    const res = await this.service.find({
+      role: UserRole.LECTURER,
+    });
+    res.forEach((item) => {
+      delete item.NRIC;
+      delete item.dateOfBirth;
+      delete item.confirmationCode;
+      delete item.hashedPassword;
+    });
+    return res;
+  }
+
   @Override()
   async createOne(req: CrudRequest, dto: User) {
     return this.service.createUser(dto);
@@ -103,13 +118,6 @@ export class UserController implements CrudController<User> {
   @Public()
   async getTopUsers() {
     return this.service.getTopUsers();
-  }
-
-  @Get('lecturers')
-  async getAllLecturers() {
-    return this.service.find({
-      role: UserRole.LECTURER,
-    });
   }
 
   @Override()
