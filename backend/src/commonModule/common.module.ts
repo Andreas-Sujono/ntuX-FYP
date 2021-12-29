@@ -32,12 +32,10 @@ import { AvatarController } from './controllers/avatar.controller';
 import { PremiumSetting } from './entities/premiumSetting.entity';
 import { CommonController } from './controllers/common.controller';
 import { CommonService } from './services/common.service';
-import { NestjsFormDataModule } from 'nestjs-form-data';
 import { StorageService } from './services/storage.service';
 
 @Module({
   imports: [
-    NestjsFormDataModule,
     TypeOrmModule.forFeature([
       GoalTask,
       PointEvents,
