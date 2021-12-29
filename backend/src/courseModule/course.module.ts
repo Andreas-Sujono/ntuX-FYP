@@ -19,9 +19,11 @@ import { StudentRegistration } from './entities/studentRegistration.entity';
 import { StudentRegistrationController } from './controllers/studentRegistration.controller';
 import { StudentRegistrationService } from './services/studentRegistration.service';
 import { User } from 'src/authModule/entities/user.entity';
+import { NestjsFormDataModule } from 'nestjs-form-data';
 
 @Module({
   imports: [
+    NestjsFormDataModule,
     TypeOrmModule.forFeature([
       Course,
       CourseUser,

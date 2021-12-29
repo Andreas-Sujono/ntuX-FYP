@@ -30,9 +30,14 @@ import { Avatar } from './entities/avatar.entity';
 import { AvatarService } from './services/avatarShop.service';
 import { AvatarController } from './controllers/avatar.controller';
 import { PremiumSetting } from './entities/premiumSetting.entity';
+import { CommonController } from './controllers/common.controller';
+import { CommonService } from './services/common.service';
+import { NestjsFormDataModule } from 'nestjs-form-data';
+import { StorageService } from './services/storage.service';
 
 @Module({
   imports: [
+    NestjsFormDataModule,
     TypeOrmModule.forFeature([
       GoalTask,
       PointEvents,
@@ -60,8 +65,10 @@ import { PremiumSetting } from './entities/premiumSetting.entity';
     WebsiteActivityService,
     AdminService,
     AvatarService,
+    CommonService,
+    StorageService,
   ],
-  exports: [EmailService, LoggerService, EncryptionService],
+  exports: [EmailService, LoggerService, EncryptionService, StorageService],
   controllers: [
     GoalTaskController,
     PortfolioController,
@@ -70,6 +77,7 @@ import { PremiumSetting } from './entities/premiumSetting.entity';
     WebsiteActivityController,
     AdminController,
     AvatarController,
+    CommonController,
   ],
 })
 export class CommonModule {}

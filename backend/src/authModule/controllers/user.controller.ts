@@ -105,6 +105,13 @@ export class UserController implements CrudController<User> {
     return this.service.getTopUsers();
   }
 
+  @Get('lecturers')
+  async getAllLecturers() {
+    return this.service.find({
+      role: UserRole.LECTURER,
+    });
+  }
+
   @Override()
   async updateOne(
     @ParsedRequest() req: CrudRequest,
