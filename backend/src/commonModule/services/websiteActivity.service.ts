@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TypeOrmCrudService } from '@nestjsx/crud-typeorm';
 import { Repository } from 'typeorm';
+import * as moment from 'moment-timezone';
 import { StudentWebsiteActivity } from '../entities/StudentWebsiteActivity.entity';
 import { WebsiteActivity } from '../entities/websiteActivity.entity';
 
@@ -96,8 +97,12 @@ export class WebsiteActivityService extends TypeOrmCrudService<WebsiteActivity> 
   }
 
   async updateWebsiteActivity(dto: WebsiteActivity, userId?: number) {
+    const userDate = moment(dto.date || new Date())
+      .tz('Asia/Singapore')
+      .format('YYYY-MM-DD');
+    //change to SG time
     const existing = await this.repo.findOne({
-      date: new Date().toDateString(),
+      date: userDate,
     });
     if (existing)
       await this.repo.update(existing, {
@@ -115,14 +120,14 @@ export class WebsiteActivityService extends TypeOrmCrudService<WebsiteActivity> 
     else
       await this.repo.save(
         this.repo.create({
-          date: new Date(),
+          date: userDate,
           ...dto,
         }),
       );
 
     if (userId) {
       const existing2 = await this.studentWebsiteActivityRepo.findOne({
-        date: new Date().toDateString(),
+        date: userDate,
       });
       if (existing2)
         await this.studentWebsiteActivityRepo.update(existing, {
@@ -140,7 +145,7 @@ export class WebsiteActivityService extends TypeOrmCrudService<WebsiteActivity> 
       else
         await this.studentWebsiteActivityRepo.save(
           this.studentWebsiteActivityRepo.create({
-            date: new Date(),
+            date: userDate,
             ...dto,
           }),
         );

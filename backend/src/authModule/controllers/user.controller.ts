@@ -83,6 +83,7 @@ export class UserController implements CrudController<User> {
   }
 
   @Override()
+  @Public()
   async getMany() {
     const res = await this.service.find();
     res.forEach((item) => {

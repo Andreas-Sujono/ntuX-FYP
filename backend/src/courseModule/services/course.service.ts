@@ -54,6 +54,22 @@ export class CourseService extends TypeOrmCrudService<Course> {
     return courseUser;
   }
 
+  async adminGetOneCourse(courseId: string) {
+    const courseUser = await this.repo.findOne({
+      where: {
+        id: courseId,
+      },
+      relations: [
+        'courseBatches',
+        'courseAnnouncements',
+        'courseContents',
+        'studentRegistrations',
+        'lecturers',
+      ],
+    });
+    return courseUser;
+  }
+
   async getRecommendationCourses(userId: string) {
     const coursesRegistered = await this.courseUserRepo.find({
       where: {

@@ -1,6 +1,6 @@
 import { Roles } from './../../authModule/roles/roles.decorator';
 import { Controller, Get, Param, Post } from '@nestjs/common';
-import { Crud, CrudController } from '@nestjsx/crud';
+import { Crud, CrudController, CrudRequest, Override } from '@nestjsx/crud';
 import { Public } from 'src/authModule/public.decorator';
 import { Course } from '../entities/course.entity';
 import { CourseService } from '../services/course.service';
@@ -69,5 +69,10 @@ export class CourseController implements CrudController<Course> {
   @Get('recommended')
   async getRecommended(@UserData('userId') userId: string) {
     return this.service.getRecommendationCourses(userId);
+  }
+
+  @Override()
+  async getOne(@Param('id') id: string) {
+    return this.service.adminGetOneCourse(id);
   }
 }
