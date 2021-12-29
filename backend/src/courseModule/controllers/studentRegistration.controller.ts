@@ -20,6 +20,9 @@ import { StudentRegistrationService } from '../services/studentRegistration.serv
       courseBatch: {
         eager: true,
       },
+      user: {
+        eager: true,
+      },
     },
   },
   routes: {

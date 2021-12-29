@@ -30,7 +30,7 @@ export class CourseContent {
   pageOrder: number;
 
   @Column('json')
-  metadata: string;
+  metadata: any;
 
   @CreateDateColumn({ type: 'timestamp with time zone' })
   createdAt: Date;

@@ -1,8 +1,10 @@
+import { CourseContent } from './../entities/courseContent.entity';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TypeOrmCrudService } from '@nestjsx/crud-typeorm';
 import { User } from 'src/authModule/entities/user.entity';
 import { Repository } from 'typeorm';
+import { v4 as uuid } from 'uuid';
 import { Course, CourseStatus } from '../entities/course.entity';
 import { CourseBatch } from '../entities/courseBatch.entity';
 import { CourseUser } from '../entities/courseUser.entity';
@@ -17,6 +19,8 @@ export class CourseService extends TypeOrmCrudService<Course> {
     private courseBatchRepo: Repository<CourseBatch>,
     @InjectRepository(User)
     private userRepo: Repository<User>,
+    @InjectRepository(CourseContent)
+    private courseContentRepo: Repository<CourseContent>,
   ) {
     super(repo);
   }
@@ -155,5 +159,29 @@ export class CourseService extends TypeOrmCrudService<Course> {
       user,
       courses,
     };
+  }
+
+  async createCourse(req: any, dto: Course) {
+    const created = await this.createOne(req, dto);
+
+    await this.courseContentRepo.save(
+      this.courseContentRepo.create({
+        course: created.id as any,
+        courseBatch: null,
+        pageName: 'Lesson 1',
+        pageId: '101', //default
+        pageOrder: 1,
+        metadata: [
+          {
+            id: uuid(),
+            html: 'Lesson 1',
+            tag: 'h1',
+            imageUrl: '',
+          },
+        ],
+        createdAt: new Date(),
+      }),
+    );
+    return created;
   }
 }
