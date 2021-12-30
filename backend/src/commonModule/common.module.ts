@@ -33,6 +33,11 @@ import { PremiumSetting } from './entities/premiumSetting.entity';
 import { CommonController } from './controllers/common.controller';
 import { CommonService } from './services/common.service';
 import { StorageService } from './services/storage.service';
+import { CourseService } from 'src/courseModule/services/course.service';
+import { Course } from 'src/courseModule/entities/course.entity';
+import { CourseUser } from 'src/courseModule/entities/courseUser.entity';
+import { CourseBatch } from 'src/courseModule/entities/courseBatch.entity';
+import { CourseContent } from 'src/courseModule/entities/courseContent.entity';
 
 @Module({
   imports: [
@@ -50,6 +55,10 @@ import { StorageService } from './services/storage.service';
       ForumQuestion,
       Avatar,
       PremiumSetting,
+      Course,
+      CourseUser,
+      CourseBatch,
+      CourseContent,
     ]),
   ],
   providers: [
@@ -65,6 +74,7 @@ import { StorageService } from './services/storage.service';
     AvatarService,
     CommonService,
     StorageService,
+    CourseService,
   ],
   exports: [EmailService, LoggerService, EncryptionService, StorageService],
   controllers: [

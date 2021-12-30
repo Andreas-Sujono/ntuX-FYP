@@ -1,5 +1,5 @@
 import { Roles } from '../../authModule/roles/roles.decorator';
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Query } from '@nestjs/common';
 import { UserRole } from 'src/authModule/entities/user.entity';
 import { AdminService } from '../services/admin.service';
 
@@ -11,5 +11,11 @@ export class AdminController {
   @Roles(UserRole.ADMIN, UserRole.LECTURER)
   async getSummary() {
     return this.adminService.getSummary();
+  }
+
+  @Get('user/summary')
+  @Roles(UserRole.ADMIN, UserRole.LECTURER)
+  async getUserSummary(@Query('userId') userId: string) {
+    return this.adminService.getUserSummary(userId);
   }
 }

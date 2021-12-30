@@ -5,6 +5,8 @@ import { User, UserRole } from 'src/authModule/entities/user.entity';
 import { ForumQuestion } from 'src/forumModule/entities/forumQuestion.entity';
 import { Tutor } from 'src/tutoringModule/entities/tutor.entity';
 import { IsNull, Repository } from 'typeorm';
+import { WebsiteActivityService } from './websiteActivity.service';
+import { CourseService } from 'src/courseModule/services/course.service';
 
 @Injectable()
 export class AdminService {
@@ -15,6 +17,8 @@ export class AdminService {
     private forumQuestionRepo: Repository<ForumQuestion>,
     @InjectRepository(ForumAnswer)
     private forumAnswerRepo: Repository<ForumAnswer>,
+    private websiteActivityService: WebsiteActivityService,
+    private courseService: CourseService,
   ) {}
 
   async getSummary() {
@@ -54,6 +58,20 @@ export class AdminService {
       totalTutors,
       totalQuestions,
       totalAnswers,
+    };
+  }
+
+  async getUserSummary(userId: string) {
+    const [activitySummary, user, userCourses] = await Promise.all([
+      this.websiteActivityService.getStudentSummary('m', userId),
+      this.userRepo.findOne({ id: userId as any }),
+      this.courseService.getStudentCourses(userId),
+    ]);
+
+    return {
+      ...user,
+      activitySummary,
+      courses: userCourses,
     };
   }
 }

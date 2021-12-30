@@ -1,7 +1,14 @@
 import { Roles } from './../../authModule/roles/roles.decorator';
 import { CourseContent } from './../entities/courseContent.entity';
 import { Body, Controller } from '@nestjs/common';
-import { Crud, CrudController, Override } from '@nestjsx/crud';
+import {
+  Crud,
+  CrudController,
+  CrudRequest,
+  Override,
+  ParsedBody,
+  ParsedRequest,
+} from '@nestjsx/crud';
 import { CourseContentService } from '../services/courseContent.service';
 import { UserRole } from 'src/authModule/entities/user.entity';
 
@@ -42,8 +49,14 @@ import { UserRole } from 'src/authModule/entities/user.entity';
 export class CourseContentController implements CrudController<CourseContent> {
   constructor(public service: CourseContentService) {}
 
+  // @Override()
+  // async createOrUpdateContent(@Body() body: any) {
+  //   return this.service.createOrUpdateCourseContent(body.content);
+  // }
+
   @Override()
-  async createOrUpdateContent(@Body() body: any) {
-    return this.service.createOrUpdateCourseContent(body.content);
+  async createOne(@ParsedRequest() req: CrudRequest, @ParsedBody() dto: any) {
+    delete dto.id;
+    return this.service.createOne(req, dto);
   }
 }

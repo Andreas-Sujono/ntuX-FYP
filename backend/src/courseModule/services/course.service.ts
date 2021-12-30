@@ -184,4 +184,16 @@ export class CourseService extends TypeOrmCrudService<Course> {
     );
     return created;
   }
+
+  async deleteCourse(req: any, id: string) {
+    await this.repo.query(`
+      delete from course_content where "courseId" = ${id};
+      delete from course_batch where "courseId" = ${id};
+      delete from course_announcement where "courseId" = ${id};
+      delete from course_user where "courseId" = ${id};
+      delete from student_registration where "courseId" = ${id};
+      delete from course_lecturers_user where "courseId" = ${id};
+    `);
+    return await this.deleteOne(req);
+  }
 }
