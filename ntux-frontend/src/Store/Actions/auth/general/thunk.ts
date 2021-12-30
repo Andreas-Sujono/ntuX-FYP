@@ -33,11 +33,12 @@ export const getMyAccount =
   async (dispatch: AppDispatch, getState: () => RootState) => {
     try {
       const userId = id || selectUserId(getState());
-      if (!userId) return;
+      if (!userId) return logout()(dispatch, getState);
       const res = await service.getAccount(userId);
       if (res.errorCode) {
         dispatch(loadFailed());
         if (res.errorCode === 401) return logout()(dispatch, getState);
+        logout()(dispatch, getState);
         return {
           result: false,
           errorMessage: res.message,
@@ -113,6 +114,7 @@ export const logout =
   (bypass = false) =>
   async (dispatch: AppDispatch, getState: () => RootState) => {
     try {
+      console.log('logout');
       const res = await service.logout();
       if (res.errorCode) {
         dispatch(loadFailed());
@@ -121,13 +123,15 @@ export const logout =
         };
       }
       resetAllState(dispatch);
+      localStorage.removeItem('token');
       dispatch(
         loadSuccess({
           user: null,
           role: null,
+          isAuthenticated: false,
+          token: null,
         }),
       );
-      localStorage.removeItem('token');
 
       return { result: true };
     } catch (err) {

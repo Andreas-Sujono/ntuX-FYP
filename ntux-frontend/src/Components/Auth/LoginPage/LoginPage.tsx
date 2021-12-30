@@ -69,11 +69,11 @@ export default function SignInSide() {
     }
   };
 
-  if (userId) {
-    if (userRole === Role.ADMIN || userRole === Role.LECTURER)
-      return <Redirect to={routes.STAFF.BASE} />;
-    return <Redirect to={routes.ADMIN.BASE} />;
-  }
+  // if (userId) {
+  //   if (userRole === Role.ADMIN || userRole === Role.LECTURER)
+  //     return <Redirect to={routes.STAFF.BASE} />;
+  //   return <Redirect to={routes.ADMIN.BASE} />;
+  // }
 
   return (
     <Grid container component="main" sx={{ height: '100vh' }}>

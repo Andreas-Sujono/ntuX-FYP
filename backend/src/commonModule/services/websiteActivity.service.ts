@@ -131,16 +131,16 @@ export class WebsiteActivityService extends TypeOrmCrudService<WebsiteActivity> 
         user: userId as any,
       });
       if (existing2)
-        await this.studentWebsiteActivityRepo.update(existing, {
-          visitWithLogin: existing.visitWithLogin + (dto.visitWithLogin || 0),
+        await this.studentWebsiteActivityRepo.update(existing2, {
+          visitWithLogin: existing2.visitWithLogin + (dto.visitWithLogin || 0),
           visitWithoutLogin:
-            existing.visitWithoutLogin + (dto.visitWithoutLogin || 0),
-          totalQuestion: existing.totalQuestion + (dto.totalQuestion || 0),
-          totalAnswer: existing.totalAnswer + (dto.totalAnswer || 0),
+            existing2.visitWithoutLogin + (dto.visitWithoutLogin || 0),
+          totalQuestion: existing2.totalQuestion + (dto.totalQuestion || 0),
+          totalAnswer: existing2.totalAnswer + (dto.totalAnswer || 0),
           totalTutorRequest:
-            existing.totalTutorRequest + (dto.totalTutorRequest || 0),
+            existing2.totalTutorRequest + (dto.totalTutorRequest || 0),
           totalTutorRequestAccepted:
-            existing.totalTutorRequestAccepted +
+            existing2.totalTutorRequestAccepted +
             (dto.totalTutorRequestAccepted || 0),
         });
       else
