@@ -26,7 +26,7 @@ export class WebsiteActivityService extends TypeOrmCrudService<WebsiteActivity> 
         sum(student_website_activity."totalTutorRequest") as "totalTutorRequest",
         sum(student_website_activity."totalTutorRequestAccepted") as "totalTutorRequestAccepted",
         date
-        from student_website_activity group by date order by date desc limit 7 WHERE student_website_activity."userId" = ${userId}
+        from student_website_activity  WHERE student_website_activity."userId" = ${userId} group by date order by date desc limit 7
       `);
       return res;
     }
@@ -39,7 +39,7 @@ export class WebsiteActivityService extends TypeOrmCrudService<WebsiteActivity> 
         sum(student_website_activity."totalTutorRequest") as "totalTutorRequest",
         sum(student_website_activity."totalTutorRequestAccepted") as "totalTutorRequestAccepted",
         date
-        from student_website_activity group by date order by date desc limit 49 WHERE student_website_activity."userId" = ${userId}
+        from student_website_activity  WHERE student_website_activity."userId" = ${userId} group by date order by date desc limit 49
       `);
       return res;
     }
@@ -51,7 +51,7 @@ export class WebsiteActivityService extends TypeOrmCrudService<WebsiteActivity> 
         sum(student_website_activity."totalTutorRequest") as "totalTutorRequest",
         sum(student_website_activity."totalTutorRequestAccepted") as "totalTutorRequestAccepted",
         date
-        from student_website_activity group by date order by date desc limit 210 WHERE student_website_activity."userId" = ${userId}
+        from student_website_activity WHERE student_website_activity."userId" = ${userId} group by date order by date desc limit 210
       `);
     return res;
   }
@@ -128,6 +128,7 @@ export class WebsiteActivityService extends TypeOrmCrudService<WebsiteActivity> 
     if (userId) {
       const existing2 = await this.studentWebsiteActivityRepo.findOne({
         date: userDate,
+        user: userId as any,
       });
       if (existing2)
         await this.studentWebsiteActivityRepo.update(existing, {
@@ -146,6 +147,7 @@ export class WebsiteActivityService extends TypeOrmCrudService<WebsiteActivity> 
         await this.studentWebsiteActivityRepo.save(
           this.studentWebsiteActivityRepo.create({
             date: userDate,
+            user: userId as any,
             ...dto,
           }),
         );
