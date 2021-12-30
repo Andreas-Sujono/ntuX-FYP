@@ -78,14 +78,18 @@ export class UserController implements CrudController<User> {
   }
 
   @Override()
-  async createOne(req: CrudRequest, dto: User) {
+  async createOne(@ParsedBody() dto: User) {
     return this.service.createUser(dto);
   }
 
   @Override()
   @Public()
   async getMany() {
-    const res = await this.service.find();
+    const res = await this.service.find({
+      order: {
+        createdAt: 'DESC',
+      },
+    });
     res.forEach((item) => {
       delete item.confirmationCode;
       delete item.hashedPassword;

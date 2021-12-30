@@ -1,6 +1,13 @@
 import { Roles } from '../../authModule/roles/roles.decorator';
 import { Controller } from '@nestjs/common';
-import { Crud, CrudController } from '@nestjsx/crud';
+import {
+  Crud,
+  CrudController,
+  Override,
+  ParsedRequest,
+  CrudRequest,
+  ParsedBody,
+} from '@nestjsx/crud';
 import { UserRole } from 'src/authModule/entities/user.entity';
 import { Reward } from '../entities/reward.entity';
 import { RewardService } from '../services/reward.entity';
@@ -38,4 +45,13 @@ import { Public } from 'src/authModule/public.decorator';
 @Controller('reward')
 export class RewardController implements CrudController<Reward> {
   constructor(public service: RewardService) {}
+
+  @Override()
+  async createOne(
+    @ParsedRequest() req: CrudRequest,
+    @ParsedBody() dto: Reward,
+  ) {
+    delete dto.id;
+    return this.service.createOne(req, dto);
+  }
 }

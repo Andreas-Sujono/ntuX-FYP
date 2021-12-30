@@ -1,6 +1,13 @@
 import { Roles } from './../../authModule/roles/roles.decorator';
 import { Controller } from '@nestjs/common';
-import { Crud, CrudController } from '@nestjsx/crud';
+import {
+  Crud,
+  CrudController,
+  CrudRequest,
+  Override,
+  ParsedBody,
+  ParsedRequest,
+} from '@nestjsx/crud';
 import { CourseAnnouncement } from '../entities/courseAnnouncement.entity';
 import { CourseAnnouncementService } from '../services/courseAnnouncement.service';
 import { UserRole } from 'src/authModule/entities/user.entity';
@@ -43,4 +50,10 @@ export class CourseAnnouncementController
   implements CrudController<CourseAnnouncement>
 {
   constructor(public service: CourseAnnouncementService) {}
+
+  @Override()
+  async createOne(@ParsedRequest() req: CrudRequest, @ParsedBody() dto: any) {
+    delete dto.id;
+    return this.service.createOne(req, dto);
+  }
 }

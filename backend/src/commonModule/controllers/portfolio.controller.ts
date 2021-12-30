@@ -1,6 +1,13 @@
 import { Roles } from '../../authModule/roles/roles.decorator';
 import { Controller } from '@nestjs/common';
-import { Crud, CrudController } from '@nestjsx/crud';
+import {
+  Crud,
+  CrudController,
+  Override,
+  ParsedRequest,
+  ParsedBody,
+  CrudRequest,
+} from '@nestjsx/crud';
 import { Portfolio } from '../entities/portfolio.entity';
 import { PortfolioService } from '../services/Portfolio.service';
 import { UserRole } from 'src/authModule/entities/user.entity';
@@ -38,4 +45,10 @@ import { Public } from 'src/authModule/public.decorator';
 @Controller('portfolio')
 export class PortfolioController implements CrudController<Portfolio> {
   constructor(public service: PortfolioService) {}
+
+  @Override()
+  async createOne(@ParsedRequest() req: CrudRequest, @ParsedBody() dto: any) {
+    delete dto.id;
+    return this.service.createOne(req, dto);
+  }
 }

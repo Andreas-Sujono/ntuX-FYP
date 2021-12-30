@@ -56,6 +56,7 @@ export class RewardRedeemedController
     @ParsedBody() dto: RewardRedeemed,
     @UserData('userId') userId: number,
   ) {
+    delete dto.id;
     return this.service.createRewardRedeemed(dto, userId);
   }
 }
