@@ -55,7 +55,7 @@ export class WebsiteActivityController
   ) {
     return this.service.updateWebsiteActivity(
       dto,
-      userId || (dto as any)?.user,
+      userId || (dto as any)?.user || null,
     );
   }
 }
