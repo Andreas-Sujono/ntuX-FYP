@@ -20,7 +20,7 @@ export default class AdminService extends BaseService {
     return res.data;
   };
   getAllUsers = async () => {
-    const res = await this.getRequest('/user/');
+    const res = await this.getRequest('/user/?sort=createdAt,DESC');
     return res.data;
   };
   getAllCourses = async () => {
@@ -64,6 +64,7 @@ export default class AdminService extends BaseService {
     const res = await this.deleteRequest(`/courses/${id}`, {});
     return res.data;
   };
+
   createCourseContent = async (data: any) => {
     const res = await this.postRequest(`/course-content/`, data);
     return res.data;
@@ -74,6 +75,32 @@ export default class AdminService extends BaseService {
   };
   deleteCourseContent = async (id: Id) => {
     const res = await this.deleteRequest(`/course-content/${id}`, {});
+    return res.data;
+  };
+
+  createReward = async (data: any) => {
+    const res = await this.postRequest(`/reward/`, data);
+    return res.data;
+  };
+  updateReward = async (data: any) => {
+    const res = await this.patchRequest(`/reward/${data.id}`, data);
+    return res.data;
+  };
+  deleteReward = async (id: Id) => {
+    const res = await this.deleteRequest(`/reward/${id}`, {});
+    return res.data;
+  };
+
+  createUser = async (data: any) => {
+    const res = await this.postRequest(`/user/`, data);
+    return res.data;
+  };
+  updateUser = async (data: any) => {
+    const res = await this.patchRequest(`/user/${data.id}`, data);
+    return res.data;
+  };
+  deleteUser = async (id: Id) => {
+    const res = await this.deleteRequest(`/user/${id}`, {});
     return res.data;
   };
 }

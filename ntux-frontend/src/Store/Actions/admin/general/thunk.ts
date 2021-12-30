@@ -368,3 +368,131 @@ export const adminGetOneCourse =
       return { result: false };
     }
   };
+
+export const createReward =
+  (data: any, bypass = false) =>
+  async (dispatch: AppDispatch, getState: () => RootState) => {
+    try {
+      const res = await service.createReward(data);
+      if (res.errorCode) {
+        dispatch(loadFailed());
+        sendErrorNotification(res.message);
+        return {
+          result: false,
+          errorMessage: res.message,
+        };
+      }
+      dispatch(loadSuccess({}));
+      getAllRewards()(dispatch, getState);
+      return { result: true };
+    } catch (err) {
+      dispatch(loadFailed());
+      return { result: false };
+    }
+  };
+export const updateRewards =
+  (data: any, bypass = false) =>
+  async (dispatch: AppDispatch, getState: () => RootState) => {
+    try {
+      const res = await service.updateReward(data);
+      if (res.errorCode) {
+        dispatch(loadFailed());
+        sendErrorNotification(res.message);
+        return {
+          result: false,
+          errorMessage: res.message,
+        };
+      }
+      dispatch(loadSuccess({}));
+      getAllRewards()(dispatch, getState);
+      return { result: true };
+    } catch (err) {
+      dispatch(loadFailed());
+      return { result: false };
+    }
+  };
+export const deleteRewards =
+  (data: any, bypass = false) =>
+  async (dispatch: AppDispatch, getState: () => RootState) => {
+    try {
+      const res = await service.deleteReward(data);
+      if (res.errorCode) {
+        dispatch(loadFailed());
+        sendErrorNotification(res.message);
+        return {
+          result: false,
+          errorMessage: res.message,
+        };
+      }
+      dispatch(loadSuccess({}));
+      getAllRewards()(dispatch, getState);
+      return { result: true };
+    } catch (err) {
+      dispatch(loadFailed());
+      return { result: false };
+    }
+  };
+
+export const createUser =
+  (data: any, bypass = false) =>
+  async (dispatch: AppDispatch, getState: () => RootState) => {
+    try {
+      const res = await service.createUser(data);
+      if (res.errorCode) {
+        dispatch(loadFailed());
+        sendErrorNotification(res.message);
+        return {
+          result: false,
+          errorMessage: res.message,
+        };
+      }
+      dispatch(loadSuccess({}));
+      getAllUsers()(dispatch, getState);
+      return { result: true };
+    } catch (err) {
+      dispatch(loadFailed());
+      return { result: false };
+    }
+  };
+export const updateUser =
+  (data: any, bypass = false) =>
+  async (dispatch: AppDispatch, getState: () => RootState) => {
+    try {
+      const res = await service.updateUser(data);
+      if (res.errorCode) {
+        dispatch(loadFailed());
+        sendErrorNotification(res.message);
+        return {
+          result: false,
+          errorMessage: res.message,
+        };
+      }
+      dispatch(loadSuccess({}));
+      getAllUsers()(dispatch, getState);
+      return { result: true };
+    } catch (err) {
+      dispatch(loadFailed());
+      return { result: false };
+    }
+  };
+export const deleteUser =
+  (data: any, bypass = false) =>
+  async (dispatch: AppDispatch, getState: () => RootState) => {
+    try {
+      const res = await service.deleteUser(data);
+      if (res.errorCode) {
+        dispatch(loadFailed());
+        sendErrorNotification(res.message);
+        return {
+          result: false,
+          errorMessage: res.message,
+        };
+      }
+      dispatch(loadSuccess({}));
+      getAllUsers()(dispatch, getState);
+      return { result: true };
+    } catch (err) {
+      dispatch(loadFailed());
+      return { result: false };
+    }
+  };
