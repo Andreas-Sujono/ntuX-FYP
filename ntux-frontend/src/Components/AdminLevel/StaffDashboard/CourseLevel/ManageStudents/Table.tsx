@@ -12,7 +12,7 @@ import { makePath } from 'common/utils';
 import { routes } from 'Components/Routes';
 import { useHistory } from 'react-router-dom';
 
-export default function TableComponent({ data }: any) {
+export default function TableComponent({ data, courseId }: any) {
   const history = useHistory();
   return (
     <TableContainer component={Paper}>
@@ -40,8 +40,8 @@ export default function TableComponent({ data }: any) {
                   console.log('push');
                   history.push(
                     makePath(routes.STAFF_COURSES.STUDENT_DETAIL, {
-                      courseId: data.course.id,
-                      studentId: data.user?.id || 1,
+                      courseId: row?.course?.id || courseId,
+                      studentId: row?.user?.id || 1,
                     }),
                   );
                 }}

@@ -1,9 +1,10 @@
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import Paper from '@mui/material/Paper';
 import { Grid, Typography, Divider, TextField, Button } from '@mui/material';
 import { CourseCard } from 'Components/AdminLevel/MainDashboard/MyCourses/MyCourses';
 
-export default function CourseEnrolled() {
+export default function CourseEnrolled({ data }: any) {
+  console.log('data in CourseEnrolled', data);
   return (
     <Paper sx={{ mt: 3, p: 2 }}>
       <Typography component="h3" variant="h6">
@@ -11,22 +12,30 @@ export default function CourseEnrolled() {
       </Typography>
       <Divider sx={{ mb: 2, mt: 1.2 }} />
       <Grid container spacing={3}>
-        {/* <Grid item xs={12} md={6} sx={{ marginLeft: 0 }}>
-          <CourseCard />
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <CourseCard />
-        </Grid> */}
+        {data.map((item: any) => (
+          <Grid item xs={12} md={6} sx={{ marginLeft: 0 }} key={item.id}>
+            <CourseCard course={item.course} courseBatch={item.courseBatch} />
+          </Grid>
+        ))}
       </Grid>
     </Paper>
   );
 }
 
-export function BasicDetails() {
+export function BasicDetails({ data }: any) {
+  const [formData, setFormData] = useState(data || {});
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
+    // const formData = new FormData(event.currentTarget);
   };
+
+  const onUpdate = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [event.target.name]: event.target.value });
+  };
+
+  useEffect(() => {
+    setFormData(data || {});
+  }, [data]);
 
   return (
     <Paper sx={{ mt: 3, p: 2, maxWidth: '1080px' }}>
@@ -37,12 +46,15 @@ export function BasicDetails() {
       <Grid container spacing={3}>
         <Grid item xs={12} sm={6}>
           <TextField
-            autoComplete="given-name"
             name="fullName"
             required
             fullWidth
             id="fullName"
             label="Full Name (as shown in NRIC/ FIN/ Passport)"
+            value={formData.fullName}
+            InputLabelProps={{
+              shrink: true,
+            }}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -52,6 +64,11 @@ export function BasicDetails() {
             id="familyName"
             label="Family Name"
             name="familyName"
+            value={formData.familyName}
+            onChange={onUpdate}
+            InputLabelProps={{
+              shrink: true,
+            }}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -61,9 +78,14 @@ export function BasicDetails() {
             id="givenName"
             label="Given Name"
             name="givenName"
+            value={formData.givenName}
+            onChange={onUpdate}
+            InputLabelProps={{
+              shrink: true,
+            }}
           />
         </Grid>
-        <Grid item xs={12} sm={6}>
+        {/* <Grid item xs={12} sm={6}>
           <TextField
             required
             fullWidth
@@ -71,7 +93,7 @@ export function BasicDetails() {
             label="Citizenship"
             name="citizenship"
           />
-        </Grid>
+        </Grid> */}
         <Grid item xs={12} sm={6}>
           <TextField
             required
@@ -79,15 +101,26 @@ export function BasicDetails() {
             id="nationality"
             label="Nationality"
             name="nationality"
+            value={formData.nationality}
+            onChange={onUpdate}
+            InputLabelProps={{
+              shrink: true,
+            }}
           />
         </Grid>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={12}>
           <TextField
             required
             fullWidth
             id="email"
             label="Email Address"
             name="email"
+            value={formData.email}
+            onChange={onUpdate}
+            disabled
+            InputLabelProps={{
+              shrink: true,
+            }}
           />
         </Grid>
         <Grid item xs={12} sm={6}>

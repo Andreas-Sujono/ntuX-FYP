@@ -6,6 +6,7 @@ import { loadSuccess, loadFailed } from './general';
 import { Id, User } from 'Models/Auth';
 import { selectUserId } from 'Store/Selector/auth';
 import { selectIsActivityAdded } from 'Store/Selector/pointsRewards';
+import { toast } from 'react-toastify';
 
 const { CancelToken } = axios;
 const source = CancelToken.source();
@@ -16,8 +17,9 @@ const service = new GeneralService({
   cancelToken: source.token,
 });
 
-const sendErrorNotification = (errorMessage = '', errorCode = 0) => {
-  if (errorCode === 0) return;
+const sendErrorNotification = (errorMessage = '', errorCode = 1) => {
+  if (errorCode === 0 || errorCode === 401) return;
+  toast.error(errorMessage);
   return; //TODO: send error component
 };
 
@@ -136,6 +138,7 @@ export const addWebsiteVisitActivity =
         date: new Date().toLocaleString(),
         visitWithoutLogin: !userId ? 1 : 0,
         visitWithLogin: userId ? 1 : 0,
+        user: userId || null,
       });
       dispatch(
         loadSuccess({

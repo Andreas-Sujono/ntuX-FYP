@@ -15,8 +15,8 @@ const service = new GeneralService({
   cancelToken: source.token,
 });
 
-const sendErrorNotification = (errorMessage = '', errorCode = 0) => {
-  if (errorCode === 0) return;
+const sendErrorNotification = (errorMessage = '', errorCode = 1) => {
+  if (errorCode === 0 || errorCode === 401) return;
   toast.error(errorMessage);
   return; //TODO: send error component
 };
@@ -39,7 +39,7 @@ export const createCourseContent =
         loadSuccess({
           allCourseContentsByCourseId: {
             ...prevContents,
-            [data.course]: [...prevContents[data.course], data],
+            [data.course]: [...prevContents[data.course], { ...data, ...res }],
           },
         }),
       );
@@ -90,7 +90,7 @@ export const deleteCourseContent =
   async (dispatch: AppDispatch, getState: () => RootState) => {
     try {
       const prevContents = selectAllCourseContentsByCourseId(getState());
-      const res = await service.deleteCourse(data);
+      const res = await service.deleteCourseContent(data.id);
       if (res.errorCode) {
         dispatch(loadFailed());
         sendErrorNotification(res.message);
@@ -103,7 +103,7 @@ export const deleteCourseContent =
         loadSuccess({
           allCourseContentsByCourseId: {
             ...prevContents,
-            [data.course]: prevContents[data.course].filter((item) => {
+            [data.courseId]: prevContents[data.courseId].filter((item) => {
               if (String(item.id) == String(data.id)) {
                 return false;
               }

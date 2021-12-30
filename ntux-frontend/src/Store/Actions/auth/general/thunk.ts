@@ -22,8 +22,9 @@ const service = new AuthService({
   cancelToken: source.token,
 });
 
-const sendErrorNotification = (errorMessage = '', errorCode = 0) => {
-  if (errorCode === 0) return;
+const sendErrorNotification = (errorMessage = '', errorCode = 1) => {
+  if (errorCode === 0 || errorCode === 401) return;
+  toast.error(errorMessage);
   return; //TODO: send error component
 };
 
@@ -32,9 +33,11 @@ export const getMyAccount =
   async (dispatch: AppDispatch, getState: () => RootState) => {
     try {
       const userId = id || selectUserId(getState());
+      if (!userId) return;
       const res = await service.getAccount(userId);
       if (res.errorCode) {
         dispatch(loadFailed());
+        if (res.errorCode === 401) return logout()(dispatch, getState);
         return {
           result: false,
           errorMessage: res.message,

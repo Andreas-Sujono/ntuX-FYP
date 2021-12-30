@@ -24,8 +24,8 @@ const service = new GeneralService({
   cancelToken: source.token,
 });
 
-const sendErrorNotification = (errorMessage = '', errorCode = 0) => {
-  if (errorCode === 0) return;
+const sendErrorNotification = (errorMessage = '', errorCode = 1) => {
+  if (errorCode === 0 || errorCode === 401) return;
   toast.error(errorMessage);
   return; //TODO: send error component
 };
@@ -50,6 +50,10 @@ export const getSummary =
       const res = await service.getSummary();
       if (res.errorCode === 401) {
         logout()(dispatch, getState);
+        dispatch(loadFailed());
+        return {
+          result: false,
+        };
       }
       if (res.errorCode) {
         dispatch(loadFailed());

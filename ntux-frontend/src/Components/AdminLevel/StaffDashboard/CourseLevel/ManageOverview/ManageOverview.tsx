@@ -9,18 +9,29 @@ import {
   AppBar,
   Toolbar,
   Button,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from '@mui/material';
 import { useSelector } from 'react-redux';
-import { useRouteMatch } from 'react-router-dom';
+import { useHistory, useRouteMatch } from 'react-router-dom';
 import { routes } from 'Components/Routes';
 import { selectAllCourseDetailByCourseId } from 'Store/Selector/admin';
 import { SelectLecturers } from '../../ManageCourses/ManageCourses';
 import { FileInput } from 'common/Components/Input';
+import { useThunkDispatch } from 'common/hooks';
+import { deleteCourse, updateCourse, uploadFile } from 'Store/Actions/admin';
+import { toast } from 'react-toastify';
 
 export default function ManageOverview() {
-  const [personName, setPersonName] = useState([]);
-  const [lecturers, setLecturers] = useState([]);
+  const [lecturers, setLecturers] = useState<any>([]);
   const [fileData, setFileData] = useState<any>(null);
+  const [status, setStatus] = useState('DRAFT');
+  const [loading, setLoading] = useState(false);
+
+  const dispatch = useThunkDispatch();
+  const history = useHistory();
 
   const match: any = useRouteMatch(routes.STAFF_COURSES.BASE) || {};
   if (match?.params?.courseId === ':courseId')
@@ -30,19 +41,64 @@ export default function ManageOverview() {
     useSelector(selectAllCourseDetailByCourseId) || {};
   const course = allCourseDetailById[match?.params?.courseId] || {};
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  useEffect(() => {
+    setStatus(course.status);
+  }, [course]);
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    // eslint-disable-next-line no-console
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    const formData = new FormData(event.currentTarget);
+    const courseData: any = {
+      name: formData.get('name') as string,
+      code: formData.get('code') as string,
+      totalHours: Number(formData.get('totalHours') as string),
+      lecturers: lecturers.map((item) => ({ id: item.id })),
+      description: formData.get('description') as string,
+      objectives: formData.get('objectives') as string,
+      outline: formData.get('outline') as string,
+      status,
+      course: match.params.courseId,
+    };
+
+    if (
+      !courseData.name ||
+      !courseData.code ||
+      !courseData.totalHours ||
+      !courseData.lecturers.length
+    ) {
+      toast.error('Please fill all the fields');
+      return;
+    }
+
+    setLoading(true);
+    if (fileData?.file) {
+      const { url } = await dispatch(uploadFile(fileData?.file));
+      courseData.imageUrl = url;
+    }
+
+    await dispatch(updateCourse(courseData));
+    toast.success('Couse is updated succesfully');
+    setLoading(false);
+  };
+
+  const onDeleteCourse = async () => {
+    const result = window.confirm(
+      'Are you sure you want to delete this course?',
+    );
+    if (!result) return;
+    setLoading(true);
+    const res = await dispatch(deleteCourse(match.params.courseId));
+    setLoading(false);
+
+    if (res.result) {
+      toast.success('Couse is deleted succesfully');
+      history.push(routes.STAFF.DASHBOARD);
+    }
   };
 
   useEffect(() => {
     setLecturers(
-      course.lecturers.map((item) => ({
+      course?.lecturers?.map((item) => ({
         id: item.id,
         fullName: item.fullName,
       })) || [],
@@ -83,23 +139,49 @@ export default function ManageOverview() {
           </Grid>
           <Grid item xs={12} sm={6}>
             <TextField
-              name="CourseCode"
+              name="code"
               required
               fullWidth
-              id="CourseCode"
+              id="code"
               label="Course Code"
               defaultValue={course.code}
             />
           </Grid>
           <Grid item xs={12} sm={6}>
             <TextField
-              name="courseName"
+              name="name"
               required
               fullWidth
-              id="courseName"
+              id="name"
               label="Course Name"
               defaultValue={course.name}
             />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              name="totalHours"
+              required
+              fullWidth
+              id="totalHours"
+              label="Total Hours"
+              defaultValue={course.totalHours}
+              type="number"
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">Status</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={status}
+                label="Status"
+                onChange={(e: any) => setStatus(e.target.value)}
+              >
+                <MenuItem value={'DRAFT'}>DRAFT</MenuItem>
+                <MenuItem value={'PUBLISHED'}>PUBLISHED</MenuItem>
+              </Select>
+            </FormControl>
           </Grid>
           <Grid item xs={12} sm={12}>
             <SelectLecturers data={lecturers} setData={setLecturers} />
@@ -108,10 +190,10 @@ export default function ManageOverview() {
             <TextField
               required
               fullWidth
-              id="aboutCourse"
+              id="description"
               label="About Course"
               type="textarea"
-              name="aboutCourse"
+              name="description"
               rows={6}
               multiline
               defaultValue={course.description}
@@ -121,10 +203,10 @@ export default function ManageOverview() {
             <TextField
               required
               fullWidth
-              id="courseObjectives"
+              id="objectives"
               label="Course Objectives"
               type="textarea"
-              name="courseObjectives"
+              name="objectives"
               rows={6}
               multiline
               defaultValue={course.objectives}
@@ -134,38 +216,46 @@ export default function ManageOverview() {
             <TextField
               required
               fullWidth
-              id="courseOutlines"
+              id="outline"
               label="Course Outlines"
               type="textarea"
-              name="courseOutlines"
+              name="outline"
               rows={6}
               multiline
               defaultValue={course.outline}
             />
           </Grid>
         </Grid>
+
+        <AppBar
+          position="fixed"
+          color="secondary"
+          sx={{ top: 'auto', bottom: 0, background: 'white' }}
+        >
+          <Toolbar>
+            <Container
+              maxWidth="lg"
+              sx={{
+                display: 'fles',
+                justifyContent: 'flex-end',
+                columnGap: '1rem',
+              }}
+            >
+              <Button
+                variant="contained"
+                sx={{ mr: 1 }}
+                type="submit"
+                disabled={loading}
+              >
+                Update
+              </Button>
+              <Button type="button" onClick={onDeleteCourse}>
+                Delete Course
+              </Button>
+            </Container>
+          </Toolbar>
+        </AppBar>
       </Paper>
-      <AppBar
-        position="fixed"
-        color="secondary"
-        sx={{ top: 'auto', bottom: 0, background: 'white' }}
-      >
-        <Toolbar>
-          <Container
-            maxWidth="lg"
-            sx={{
-              display: 'fles',
-              justifyContent: 'flex-end',
-              columnGap: '1rem',
-            }}
-          >
-            <Button variant="contained" sx={{ mr: 1 }}>
-              Update
-            </Button>
-            <Button>Delete Course</Button>
-          </Container>
-        </Toolbar>
-      </AppBar>
     </Container>
   );
 }

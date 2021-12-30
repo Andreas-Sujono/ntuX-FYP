@@ -57,7 +57,7 @@ export default class AdminService extends BaseService {
     return res.data;
   };
   updateCourse = async (data: any) => {
-    const res = await this.patchRequest(`/courses/${data.id}`, data);
+    const res = await this.patchRequest(`/courses/${data.course}`, data);
     return res.data;
   };
   deleteCourse = async (id: Id) => {
@@ -99,8 +99,49 @@ export default class AdminService extends BaseService {
     const res = await this.patchRequest(`/user/${data.id}`, data);
     return res.data;
   };
+  changeStatusRegistration = async (data: any) => {
+    const res = await this.patchRequest(
+      `/student-registration/${data.id}/status`,
+      data,
+    );
+    return res.data;
+  };
   deleteUser = async (id: Id) => {
     const res = await this.deleteRequest(`/user/${id}`, {});
+    return res.data;
+  };
+
+  createBatch = async (data: any) => {
+    const res = await this.postRequest(`/course-batch/`, data);
+    return res.data;
+  };
+  updateBatch = async (data: any) => {
+    const res = await this.patchRequest(`/course-batch/${data.id}`, data);
+    return res.data;
+  };
+  deleteBatch = async (id: Id) => {
+    const res = await this.deleteRequest(`/course-batch/${id}`, {});
+    return res.data;
+  };
+
+  createCourseAnnouncement = async (data: any) => {
+    const res = await this.postRequest(`/course-announcement/`, data);
+    return res.data;
+  };
+  updateCourseAnnouncement = async (data: any) => {
+    const res = await this.patchRequest(
+      `/course-announcement/${data.id}`,
+      data,
+    );
+    return res.data;
+  };
+  deleteCourseAnnouncement = async (id: Id) => {
+    const res = await this.deleteRequest(`/course-announcement/${id}`, {});
+    return res.data;
+  };
+
+  getStudentSummary = async (userId: Id) => {
+    const res = await this.getRequest(`/admin/user/summary?userId=${userId}`);
     return res.data;
   };
 }

@@ -142,7 +142,7 @@ export default class BaseService {
 
       const response: ApiResponse = await axios.delete(
         finalUrl,
-        parsedData.data,
+        parsedData.config,
       );
       return parseObjectToCamelCase(response);
     } catch (err: any) {

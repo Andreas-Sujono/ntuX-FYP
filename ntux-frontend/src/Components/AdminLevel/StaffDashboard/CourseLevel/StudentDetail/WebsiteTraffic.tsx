@@ -2,46 +2,51 @@ import React from 'react';
 import { merge } from 'lodash';
 import ReactApexChart from 'react-apexcharts';
 import { Card, CardHeader, Box } from '@mui/material';
+import moment from 'moment';
 import { BaseOptionChart } from '../../Dashboard/components/baseOptionChart';
 
-// ----------------------------------------------------------------------
+export default function AppWebsiteVisits({ data }: any) {
+  const INTERVAL = 'd';
 
-const CHART_DATA = [
-  {
-    name: 'Student Visit',
-    type: 'line',
-    data: [44, 55, 41, 67, 22, 43, 21, 41, 56, 27, 43],
-  },
-  {
-    name: 'Question Asked',
-    type: 'column',
-    data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39],
-  },
-  {
-    name: 'Solution Answered',
-    type: 'column',
-    data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30],
-  },
-];
+  const parsedData = React.useMemo(() => {
+    data.sort((a, b) => a.date - b.date);
 
-export default function AppWebsiteVisits() {
+    // if (INTERVAL === 'm') {
+    //   return data.slice(0, 12);
+    // }
+    // if (INTERVAL === 'w') {
+    //   return data.slice(0, 12);
+    // }
+
+    return data.slice(0, 12);
+  }, [data, INTERVAL]);
+
+  const CHART_DATA = React.useMemo(
+    () => [
+      {
+        name: 'Student Visit',
+        type: 'line',
+        data: data.map((item) => item.visitWithLogin),
+      },
+      {
+        name: 'Question Asked',
+        type: 'column',
+        data: data.map((item) => item.totalQuestion),
+      },
+      {
+        name: 'Solution Answered',
+        type: 'column',
+        data: data.map((item) => item.totalAnswer),
+      },
+    ],
+    [parsedData],
+  );
+
   const chartOptions = merge(BaseOptionChart(), {
     stroke: { width: [2, 0, 0] },
     plotOptions: { bar: { columnWidth: '11%', borderRadius: 4 } },
     fill: { type: ['solid', 'gradient', 'gradient'] },
-    labels: [
-      '01/01/2021',
-      '02/01/2021',
-      '03/01/2021',
-      '04/01/2021',
-      '05/01/2021',
-      '06/01/2021',
-      '07/01/2021',
-      '08/01/2021',
-      '09/01/2021',
-      '10/01/2021',
-      '11/01/2021',
-    ],
+    labels: parsedData.map((item) => moment(item.date).format('MM/DD/YYYY')),
     xaxis: { type: 'datetime' },
     tooltip: {
       shared: true,
@@ -61,7 +66,13 @@ export default function AppWebsiteVisits() {
     <Card>
       <CardHeader
         title="Student Activities"
-        subheader="For the past 12 weeks"
+        subheader={`For the past ${
+          INTERVAL === 'd'
+            ? '12 Days'
+            : INTERVAL === 'm'
+            ? '12 Months'
+            : '12 Weeks'
+        }`}
       />
       <Box sx={{ p: 3, pb: 1, pt: 1 }} dir="ltr">
         <ReactApexChart

@@ -12,6 +12,7 @@ import { loadSuccess, loadFailed } from './general';
 import { Id, User } from 'Models/Auth';
 import { selectUserId } from 'Store/Selector/auth';
 import { logout } from 'Store/Actions/auth';
+import { toast } from 'react-toastify';
 
 const { CancelToken } = axios;
 const source = CancelToken.source();
@@ -22,8 +23,9 @@ const service = new GeneralService({
   cancelToken: source.token,
 });
 
-const sendErrorNotification = (errorMessage = '', errorCode = 0) => {
-  if (errorCode === 0) return;
+const sendErrorNotification = (errorMessage = '', errorCode = 1) => {
+  if (errorCode === 0 || errorCode === 401) return;
+  toast.error(errorMessage);
   return; //TODO: send error component
 };
 
@@ -145,6 +147,7 @@ export const getMyCourses =
       if (res.errorCode) {
         if (res.errorCode === 401) {
           logout()(dispatch, getState);
+          return { result: true };
         }
         dispatch(loadFailed());
         return {

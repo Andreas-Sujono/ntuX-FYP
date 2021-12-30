@@ -23,6 +23,8 @@ export default function ManageStudents() {
     dispatch(getAllStudentRegistrations(match?.params?.courseId));
   }, []);
 
+  console.log(data);
+
   return (
     <Container maxWidth="lg" sx={{ margin: 0, mt: 4, mb: 8, ml: 0, mr: 1 }}>
       <Paper sx={{ p: 2, minHeight: '80vh' }}>
@@ -51,7 +53,7 @@ export default function ManageStudents() {
           </Grid>
         </Grid>
 
-        <Table data={data} />
+        <Table data={data} courseId={match?.params?.courseId} />
       </Paper>
     </Container>
   );

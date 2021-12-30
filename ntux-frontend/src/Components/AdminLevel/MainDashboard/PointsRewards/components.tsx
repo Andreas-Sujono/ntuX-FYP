@@ -264,6 +264,7 @@ export const RewardsGallery = ({ onClickRewardDetails }: any) => {
                 [theme.breakpoints.up('md')]: { mr: 0, maxWidth: '94%' },
                 [theme.breakpoints.down('md')]: { mr: 0 },
                 cursor: 'pointer',
+                height: '330px',
               })}
               key={item.id}
               onClick={() => onClickRewardDetails(item)}
@@ -275,7 +276,11 @@ export const RewardsGallery = ({ onClickRewardDetails }: any) => {
                 alt={item.name}
               />
               <CardContent>
-                <Typography variant="h6" component="div">
+                <Typography
+                  variant="h6"
+                  component="div"
+                  sx={{ height: '60px', overflow: 'hidden' }}
+                >
                   {item.name}
                 </Typography>
                 <Typography
@@ -286,7 +291,11 @@ export const RewardsGallery = ({ onClickRewardDetails }: any) => {
                 >
                   Cost: {item.totalPointsRequired} pts
                 </Typography>
-                <Typography variant="body2" color="text.secondary">
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{ height: '40px', overflow: 'hidden' }}
+                >
                   {item.description}
                 </Typography>
               </CardContent>

@@ -10,18 +10,23 @@ import {
   Button,
   Box,
 } from '@mui/material';
-import { useLocation, useRouteMatch } from 'react-router-dom';
+import { useHistory, useLocation, useRouteMatch } from 'react-router-dom';
 import Editor from 'common/Components/Editor';
 import { routes } from 'Components/Routes';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectAllCourseContentsByCourseId } from 'Store/Selector/admin';
 import { toast } from 'react-toastify';
-import { updateCourseContent } from 'Store/Actions/admin/general/courseContent.thunk';
+import { makePath } from 'common/utils';
+import {
+  deleteCourseContent,
+  updateCourseContent,
+} from 'Store/Actions/admin/general/courseContent.thunk';
 
 export default function ManageCourseContent() {
   const location = useLocation();
   const { pageId: queryPageId } = queryString.parse(location.search);
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const match: any = useRouteMatch(routes.STAFF_COURSES.BASE) || {};
   if (match?.params?.courseId === ':courseId')
@@ -70,6 +75,26 @@ export default function ManageCourseContent() {
     );
   };
 
+  const deletePageContent = async () => {
+    const confirm = window.confirm(
+      'Are you sure you want to delete this page?',
+    );
+    if (!confirm) return;
+
+    await dispatch(
+      deleteCourseContent({
+        id: chosenData?.id,
+        courseId: match?.params?.courseId,
+      }),
+    );
+    toast.success('Page is deleted successfully');
+    history.push(
+      makePath(routes.STAFF_COURSES.BASE, {
+        courseId: match?.params?.courseId,
+      }),
+    );
+  };
+
   return (
     <Container maxWidth="xl" sx={{ margin: 0, mt: 4, mb: 6, ml: 1, mr: 1 }}>
       <Grid
@@ -96,7 +121,9 @@ export default function ManageCourseContent() {
             onChange={(e) => setPageName(e.target.value)}
           />
           <Button onClick={updatePageName}>Update</Button>
-          {data.length > 1 && <Button>Delete</Button>}
+          {data.length > 1 && (
+            <Button onClick={deletePageContent}>Delete</Button>
+          )}
         </Grid>
       </Grid>
 
