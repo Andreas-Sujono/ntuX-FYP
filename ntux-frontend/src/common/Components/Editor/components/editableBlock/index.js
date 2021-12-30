@@ -11,6 +11,7 @@ import TagSelectorMenu from '../tagSelectorMenu';
 import ActionMenu from '../actionMenu';
 import DragHandleIcon from '../../images/draggable.svg';
 import { setCaretToEnd, getCaretCoordinates, getSelection } from '../../utils';
+import { createId } from '../../../../utils';
 
 const CMD_KEY = '/';
 
@@ -43,6 +44,7 @@ class EditableBlock extends React.Component {
       html: '',
       tag: 'p',
       imageUrl: '',
+      videoUrl: '',
       placeholder: false,
       previousKey: null,
       isTyping: false,
@@ -71,14 +73,35 @@ class EditableBlock extends React.Component {
       position: this.props.position,
       content: this.props.html || this.props.imageUrl,
     });
+    this.blockId = 'p' + createId();
     if (!hasPlaceholder) {
       this.setState({
         ...this.state,
         html: this.props.html,
         tag: this.props.tag,
         imageUrl: this.props.imageUrl,
+        videoUrl: this.props.videoUrl,
       });
     }
+    [].forEach.call(
+      document.querySelectorAll(`p[contenteditable="true"]`),
+      function (el) {
+        const isExist = el.getAttribute('data-hasPasteListener');
+        if (isExist) return;
+
+        el.addEventListener(
+          'paste',
+          function (e) {
+            e.preventDefault();
+
+            var text = e.clipboardData.getData('text/plain');
+            document.execCommand('insertHTML', false, text);
+          },
+          false,
+        );
+        el.setAttribute('data-hasPasteListener', true);
+      },
+    );
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -91,6 +114,7 @@ class EditableBlock extends React.Component {
     const htmlChanged = this.props.html !== this.state.html;
     const tagChanged = this.props.tag !== this.state.tag;
     const imageChanged = this.props.imageUrl !== this.state.imageUrl;
+    const videoChanged = this.props.videoUrl !== this.state.videoUrl;
     if (
       ((stoppedTyping && htmlChanged) || tagChanged || imageChanged) &&
       hasNoPlaceholder
@@ -100,6 +124,7 @@ class EditableBlock extends React.Component {
         html: this.state.html,
         tag: this.state.tag,
         imageUrl: this.state.imageUrl,
+        videoUrl: this.state.videoUrl,
       });
     }
   }
@@ -255,6 +280,26 @@ class EditableBlock extends React.Component {
           ref: this.contentEditable.current,
         });
       });
+    } else if (tag === 'iframe') {
+      this.setState({ ...this.state, tag: tag }, () => {
+        this.closeTagSelectorMenu();
+        // Add new block so that the user can continue writing
+
+        const url = prompt('Enter the URL of the iframe:');
+        this.setState(
+          { ...this.state.state, videoUrl: url, imageUrl: url },
+          () => {
+            // after adding an video
+            this.props.addBlock({
+              id: this.props.id,
+              html: '',
+              tag: 'p',
+              imageUrl: '',
+              ref: this.contentEditable.current,
+            });
+          },
+        );
+      });
     } else {
       if (this.state.isTyping) {
         // Update the tag and restore the html backup without the command
@@ -272,13 +317,12 @@ class EditableBlock extends React.Component {
 
   async handleImageUpload() {
     if (this.fileInput && this.fileInput.files[0]) {
-      const pageId = this.props.pageId;
       const imageFile = this.fileInput.files[0];
       const formData = new FormData();
       formData.append('image', imageFile);
       try {
         // const response = await fetch(
-        //   `${process.env.NEXT_PUBLIC_API}/pages/images?pageId=${pageId}`,
+        //   `${process.env.NEXT_PUBLIC_API}/pages/images`,
         //   {
         //     method: 'POST',
         //     credentials: 'include',
@@ -353,6 +397,13 @@ class EditableBlock extends React.Component {
     }
   }
 
+  isValidYoutube = (url) => {
+    if (url.startsWith('https://www.youtube.com/embed/')) {
+      return true;
+    }
+    return false;
+  };
+
   render() {
     return (
       <>
@@ -394,7 +445,7 @@ class EditableBlock extends React.Component {
                   onClick={this.handleDragHandleClick}
                 />
               </span>
-              {this.state.tag !== 'img' && (
+              {this.state.tag !== 'img' && this.state.tag !== 'iframe' && (
                 <ContentEditable
                   innerRef={this.contentEditable}
                   data-position={this.props.position}
@@ -416,7 +467,9 @@ class EditableBlock extends React.Component {
                       : null,
                     this.state.placeholder ? styles.placeholder : null,
                     snapshot.isDragging ? styles.isDragging : null,
+                    this.blockId,
                   ].join(' ')}
+                  disabled={this.props.isDisabled}
                 />
               )}
               {this.state.tag === 'img' && (
@@ -449,11 +502,54 @@ class EditableBlock extends React.Component {
                   )}
                   {this.state.imageUrl && (
                     <img
-                      // eslint-disable-next-line no-undef
-                      src={process.env.PUBLIC_URL + '/' + this.state.imageUrl}
+                      src={this.state.imageUrl}
                       alt={/[^\/]+(?=\.[^\/.]*$)/.exec(this.state.imageUrl)[0]}
+                      style={{
+                        maxWidth: '1000px',
+                        marginRight: 'auto',
+                        maxHeight: '500px',
+                      }}
                     />
                   )}
+                </div>
+              )}
+              {this.state.tag === 'iframe' && (
+                <div
+                  data-position={this.props.position}
+                  data-tag={this.state.tag}
+                  ref={this.contentEditable}
+                  className={[
+                    styles.iframe,
+                    this.state.actionMenuOpen || this.state.tagSelectorMenuOpen
+                      ? styles.blockSelected
+                      : null,
+                  ].join(' ')}
+                >
+                  {(!this.state.imageUrl ||
+                    !this.isValidYoutube(this.state.imageUrl)) && (
+                    <label
+                      htmlFor={`${this.props.id}_fileInput`}
+                      className={styles.fileInputLabel}
+                    >
+                      No video Selected.
+                    </label>
+                  )}
+                  {this.state.imageUrl &&
+                    this.isValidYoutube(this.state.imageUrl) && (
+                      <iframe
+                        height="400"
+                        src={this.state.imageUrl}
+                        title="YouTube video player"
+                        frameBorder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                        style={{
+                          width: '100%',
+                          maxWidth: '700px',
+                          maxHeight: '800px',
+                        }}
+                      ></iframe>
+                    )}
                 </div>
               )}
             </div>

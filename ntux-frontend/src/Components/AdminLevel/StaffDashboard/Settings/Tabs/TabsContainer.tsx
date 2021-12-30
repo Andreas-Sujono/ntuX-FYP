@@ -50,17 +50,17 @@ export default function TabsContainer() {
           aria-label="basic tabs example"
         >
           <Tab label="Profile" {...a11yProps(0)} />
-          <Tab label="Change Password" {...a11yProps(1)} />
-          <Tab label="Logout" {...a11yProps(2)} />
+          {/* <Tab label="Change Password" {...a11yProps(1)} /> */}
+          <Tab label="Logout" {...a11yProps(1)} />
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
         <ProfileTab />
       </TabPanel>
-      <TabPanel value={value} index={1}>
+      {/* <TabPanel value={value} index={1}>
         <ChangePasswordTab />
-      </TabPanel>
-      <TabPanel value={value} index={2}>
+      </TabPanel> */}
+      <TabPanel value={value} index={1}>
         <Grid item xs={12}>
           <Typography component="h3" variant="h6">
             Logout

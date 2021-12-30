@@ -13,6 +13,7 @@ import Footer from '../../LandingPage/Footer';
 import FullPageLoadingBar from '../../../common/Components/LoadingBar/FullPageLoadingBar';
 import { useDispatch } from 'react-redux';
 import { addWebsiteVisitActivity } from 'Store/Actions/pointsRewards';
+import { getMyAccount } from 'Store/Actions/auth';
 
 const Routes = () => {
   const location = useLocation();
@@ -47,6 +48,7 @@ const Routes = () => {
 
   useEffect(() => {
     dispatch(addWebsiteVisitActivity());
+    dispatch(getMyAccount());
   }, []);
 
   return (

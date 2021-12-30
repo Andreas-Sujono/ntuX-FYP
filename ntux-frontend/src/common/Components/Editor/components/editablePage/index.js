@@ -8,6 +8,7 @@ import { usePrevious } from '../../hooks';
 import { objectId, setCaretToEnd } from '../../utils';
 import { useThunkDispatch } from '../../../../hooks';
 import { updateCourseContent } from '../../../../../Store/Actions/admin/general';
+import { isEqual } from 'lodash';
 
 // A page is represented by an array containing several blocks
 // [
@@ -31,7 +32,14 @@ import { updateCourseContent } from '../../../../../Store/Actions/admin/general'
 //   }
 // ]
 
-const EditablePage = ({ id, fetchedBlocks, err, courseId }) => {
+const EditablePage = ({
+  id,
+  fetchedBlocks,
+  err,
+  courseId,
+  handleUpdate,
+  isDisabled,
+}) => {
   if (err) {
     return (
       <Notice status="ERROR">
@@ -52,13 +60,14 @@ const EditablePage = ({ id, fetchedBlocks, err, courseId }) => {
     const updatePageOnServer = async (_blocks) => {
       try {
         // Update the page on the server
-        await dispatch(
-          updateCourseContent({
-            pageId: id,
-            course: courseId,
-            metadata: _blocks,
-          }),
-        );
+        // await dispatch(
+        //   updateCourseContent({
+        //     pageId: id,
+        //     course: courseId,
+        //     metadata: _blocks,
+        //   }),
+        // );
+        handleUpdate(_blocks, id);
       } catch (_err) {
         console.log(_err);
       }
@@ -67,6 +76,10 @@ const EditablePage = ({ id, fetchedBlocks, err, courseId }) => {
       updatePageOnServer(blocks);
     }
   }, [blocks, prevBlocks]);
+
+  useEffect(() => {
+    if (!isEqual(blocks, fetchedBlocks)) setBlocks(fetchedBlocks);
+  }, [fetchedBlocks]);
 
   // Handling the cursor and focus on adding and deleting blocks
   useEffect(() => {
@@ -172,7 +185,7 @@ const EditablePage = ({ id, fetchedBlocks, err, courseId }) => {
   return (
     <>
       <DragDropContext onDragEnd={onDragEndHandler}>
-        <Droppable droppableId={id}>
+        <Droppable droppableId={String(id)}>
           {(provided) => (
             <div ref={provided.innerRef} {...provided.droppableProps}>
               {blocks.map((block) => {
@@ -185,10 +198,11 @@ const EditablePage = ({ id, fetchedBlocks, err, courseId }) => {
                     tag={block.tag}
                     html={block.html}
                     imageUrl={block.imageUrl}
-                    pageId={id}
+                    videoUrl={block.videoUrl}
                     addBlock={addBlockHandler}
                     deleteBlock={deleteBlockHandler}
                     updateBlock={updateBlockHandler}
+                    isDisabled={isDisabled}
                   />
                 );
               })}

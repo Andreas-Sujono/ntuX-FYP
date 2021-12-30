@@ -1,16 +1,17 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect } from 'react';
 import { matchSorter } from 'match-sorter';
 
 import styles from './styles.module.scss';
 
-const MENU_HEIGHT = 150;
+const MENU_HEIGHT = 180;
 const allowedTags = [
-  {
-    id: 'page-title',
-    tag: 'h1',
-    label: 'Page Title',
-  },
+  // {
+  //   id: 'page-title',
+  //   tag: 'h1',
+  //   label: 'Page Title',
+  // },
   {
     id: 'heading',
     tag: 'h2',
@@ -31,12 +32,17 @@ const allowedTags = [
     tag: 'img',
     label: 'Image',
   },
+  {
+    id: 'video',
+    tag: 'iframe',
+    label: 'Embed youtube',
+  },
 ];
 
 const TagSelectorMenu = ({ position, closeMenu, handleSelection }) => {
   const [tagList, setTagList] = useState(allowedTags);
   const [selectedTag, setSelectedTag] = useState(0);
-  const [command, setCommand] = useState('');
+  // const [command, setCommand] = useState('');
 
   // If the tag selector menu is display outside the top viewport,
   // we display it below the block
@@ -47,9 +53,9 @@ const TagSelectorMenu = ({ position, closeMenu, handleSelection }) => {
   const x = position.x;
 
   // Filter tagList based on given command
-  useEffect(() => {
-    setTagList(matchSorter(allowedTags, command, { keys: ['tag'] }));
-  }, [command]);
+  // useEffect(() => {
+  //   setTagList(matchSorter(allowedTags, command, { keys: ['tag'] }));
+  // }, [command]);
 
   // Attach listener to allow tag selection via keyboard
   // useEffect(() => {

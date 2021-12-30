@@ -9,13 +9,22 @@ const defaultBlocks = [
     imageUrl: '',
   },
 ];
-const Editor = ({ pid, blocks, err, courseId }: any) => {
+const Editor = ({
+  pid,
+  blocks,
+  err,
+  courseId,
+  handleUpdate,
+  isDisabled,
+}: any) => {
   return (
     <EditablePage
       id={pid || '101'}
       fetchedBlocks={blocks || defaultBlocks}
       err={err || ''}
       courseId={courseId}
+      handleUpdate={handleUpdate}
+      isDisabled={isDisabled}
     />
   );
 };

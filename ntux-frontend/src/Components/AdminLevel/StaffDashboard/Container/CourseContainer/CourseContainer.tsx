@@ -34,7 +34,7 @@ import data from './sidebarData';
 import ArrowIcon from '@mui/icons-material/ArrowBack';
 import { routeData } from '../../CourseLevel/data';
 import { routes } from 'Components/Routes';
-import { makePath } from 'common/utils';
+import { createId, makePath } from 'common/utils';
 import { useThunkDispatch } from 'common/hooks';
 import { adminGetOneCourse } from 'Store/Actions/admin';
 import { LoadingBar } from 'common/Components/LoadingBar/FullPageLoadingBar';
@@ -45,6 +45,7 @@ import {
   selectAllCourseDetailByCourseId,
 } from 'Store/Selector/admin';
 import { CourseContent } from 'Models/Courses';
+import { createCourseContent } from 'Store/Actions/admin/general/courseContent.thunk';
 
 const logoImagePath = `${process.env.PUBLIC_URL}/assets/logos/full-colored-logo.svg`;
 
@@ -59,7 +60,6 @@ function CourseContainer({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState(window.innerWidth < 550 ? false : true);
   const [loading, setLoading] = useState(true);
   const [pageNames, setPageNames] = useState<any>([]);
-  const [editPageId, setEditPageId] = useState(null);
 
   const toggleDrawer = () => {
     setOpen(!open);
@@ -81,20 +81,23 @@ function CourseContainer({ children }: { children: React.ReactNode }) {
     allCourseContentsById[match?.params?.courseId] || [];
 
   const firstCourseContentPageId =
-    courseContents[0]?.pageId || defaultContents[0].id;
+    courseContents[0]?.id || defaultContents[0].id;
 
   const [routeDetails, setRouteDetails] = useState<typeof routeData[0]>(
     routeData[0],
   );
+
   const { pageId: courseContentPageId } = queryString.parse(location.search);
+  const [chosenContentId, setChoseContentId] = useState(courseContentPageId);
 
   useEffect(() => {
     getAllData();
   }, []);
 
   useEffect(() => {
-    setPageNames(courseContents);
-  }, [courseContents]);
+    const { pageId: _courseContentPageId } = queryString.parse(location.search);
+    setChoseContentId(_courseContentPageId);
+  }, [location.search]);
 
   const getAllData = async () => {
     setLoading(true);
@@ -118,23 +121,34 @@ function CourseContainer({ children }: { children: React.ReactNode }) {
     setRouteDetails(currentRoute.length ? currentRoute[0] : routeData[0]);
   }, [location.pathname]);
 
-  const updatePageName = (pageId, name) => {
-    const updated = pageNames.map((item) => {
-      if (item !== pageId) return item;
-      return {
-        ...item,
-        pageName: name,
-      };
-    });
-    setPageNames(updated);
-  };
+  // const updatePageName = (pageId, name) => {
+  //   const updated = pageNames.map((item) => {
+  //     if (item != pageId) return item;
+  //     return {
+  //       ...item,
+  //       pageName: name,
+  //     };
+  //   });
+  //   setPageNames(updated);
+  // };
 
-  const onClickPageName = (pageId) => {
-    setEditPageId(pageId);
-  };
-
-  const onClickAddPageName = () => {
-    console.log('');
+  const onClickAddPageName = async () => {
+    await dispatch(
+      createCourseContent({
+        pageId: createId(),
+        pageName: 'New Page',
+        course: match.params.courseId,
+        pageOrder: courseContents.length + 1,
+        metadata: [
+          {
+            id: createId(),
+            html: 'Lesson 1',
+            tag: 'h1',
+            imageUrl: '',
+          },
+        ],
+      }),
+    );
   };
 
   return (
@@ -233,7 +247,7 @@ function CourseContainer({ children }: { children: React.ReactNode }) {
                       item.path,
                       match?.params || {},
                       undefined,
-                      item.id === '2'
+                      String(item.id) === '2'
                         ? {
                             pageId: firstCourseContentPageId,
                           }
@@ -253,11 +267,11 @@ function CourseContainer({ children }: { children: React.ReactNode }) {
             </DrawerList>
 
             {item.id === '2' &&
-              pageNames.map((item2: any) => (
+              courseContents.map((item2: any) => (
                 //course content
                 <ListItemButton
                   key={item2.id}
-                  selected={String(item2.pageId) === courseContentPageId}
+                  selected={String(item2.id) == chosenContentId}
                   sx={{ flexGrow: 0, pl: 12 }}
                   onClick={() => {
                     history.push(
@@ -267,7 +281,7 @@ function CourseContainer({ children }: { children: React.ReactNode }) {
                         undefined,
                         item.id === '2'
                           ? {
-                              pageId: item2.pageId,
+                              pageId: item2.id,
                             }
                           : {},
                       ),
@@ -291,6 +305,7 @@ function CourseContainer({ children }: { children: React.ReactNode }) {
                   display: 'flex',
                 }}
                 disableTypography
+                onClick={onClickAddPageName}
               >
                 <AddOutlinedIcon sx={{ display: 'inline' }} />
                 <ListAddPage

@@ -39,12 +39,12 @@ const data: SidebarItem[] = [
     path: routes.STAFF.MANAGE_USERS,
     Icon: PeopleIcon,
   },
-  {
-    id: '4',
-    name: 'Manage Forum',
-    path: routes.STAFF.MANAGE_FORUM,
-    Icon: ForumIcon,
-  },
+  // {
+  //   id: '4',
+  //   name: 'Manage Forum',
+  //   path: routes.STAFF.MANAGE_FORUM,
+  //   Icon: ForumIcon,
+  // },
   {
     id: '5',
     name: 'Manage Rewards',

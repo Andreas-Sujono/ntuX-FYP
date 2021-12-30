@@ -315,96 +315,6 @@ export const deleteCourse =
     }
   };
 
-export const createCourseContent =
-  (data: any, bypass = false) =>
-  async (dispatch: AppDispatch, getState: () => RootState) => {
-    try {
-      const res = await service.createCourseContent(data);
-      if (res.errorCode) {
-        dispatch(loadFailed());
-        sendErrorNotification(res.message);
-        return {
-          result: false,
-          errorMessage: res.message,
-        };
-      }
-      dispatch(loadSuccess({}));
-      return { result: true, res };
-    } catch (err) {
-      dispatch(loadFailed());
-      return { result: false };
-    }
-  };
-
-export const updateCourseContent =
-  (data: any, bypass = false) =>
-  async (dispatch: AppDispatch, getState: () => RootState) => {
-    try {
-      const prevContents = selectAllCourseContentsByCourseId(getState());
-      const res = await service.updateCourseContent(data);
-      if (res.errorCode) {
-        dispatch(loadFailed());
-        sendErrorNotification(res.message);
-        return {
-          result: false,
-          errorMessage: res.message,
-        };
-      }
-      dispatch(
-        loadSuccess({
-          allCourseContentsByCourseId: {
-            ...prevContents,
-            [data.course]: prevContents[data.course].map((item) => {
-              if (item.pageId === data.pageId) {
-                return res;
-              }
-              return item;
-            }),
-          },
-        }),
-      );
-      return { result: true, res };
-    } catch (err) {
-      dispatch(loadFailed());
-      return { result: false };
-    }
-  };
-
-export const deleteCourseContent =
-  (data: any, bypass = false) =>
-  async (dispatch: AppDispatch, getState: () => RootState) => {
-    try {
-      const prevContents = selectAllCourseContentsByCourseId(getState());
-      const res = await service.deleteCourse(data);
-      if (res.errorCode) {
-        dispatch(loadFailed());
-        sendErrorNotification(res.message);
-        return {
-          result: false,
-          errorMessage: res.message,
-        };
-      }
-      dispatch(
-        loadSuccess({
-          allCourseContentsByCourseId: {
-            ...prevContents,
-            [data.course]: prevContents[data.course].filter((item) => {
-              if (item.pageId === data.pageId) {
-                return false;
-              }
-              return true;
-            }),
-          },
-        }),
-      );
-      getAllCourses()(dispatch, getState);
-      return { result: true, res };
-    } catch (err) {
-      dispatch(loadFailed());
-      return { result: false };
-    }
-  };
-
 export const adminGetOneCourse =
   (courseId: Id, bypass = false) =>
   async (dispatch: AppDispatch, getState: () => RootState) => {
@@ -426,6 +336,7 @@ export const adminGetOneCourse =
           errorMessage: res.message,
         };
       }
+      res.courseContents.sort((a, b) => a.pageOrder - b.pageOrder);
       dispatch(
         loadSuccess({
           allCourseBatchesByCourseId: {

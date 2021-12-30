@@ -7,17 +7,31 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Divider from '@mui/material/Divider';
 import { Box } from '@mui/material';
+import { useSelector } from 'react-redux';
+import { selectUser } from 'Store/Selector/auth';
+import { useThunkDispatch } from 'common/hooks';
+import { updateAccount } from 'Store/Actions/auth';
 // import { StyledBox, StyledForm, BackgroundContainer } from './Styles';
 
 export default function ProfileTab() {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const user = useSelector(selectUser);
+  const dispatch = useThunkDispatch();
+  const [loading, setLoading] = React.useState(false);
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    // eslint-disable-next-line no-console
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    const formData = {
+      // profileImage: data.get('profileImage') as string,
+      fullName: data.get('fullName') as string,
+      familyName: data.get('familyName') as string,
+      givenName: data.get('givenName') as string,
+      nationality: data.get('nationality') as string,
+    };
+
+    setLoading(true);
+    await dispatch(updateAccount(formData));
+    setLoading(false);
   };
 
   return (
@@ -30,30 +44,30 @@ export default function ProfileTab() {
             </Typography>
             <Divider sx={{ mb: 2, mt: 0.5 }} />
           </Grid>
-          <Grid item xs={12} sm={12}>
+          {/* <Grid item xs={12} sm={12}>
             <TextField
               fullWidth
               id="file"
               type="file"
               name="file"
-              value=""
               label="Profile Image"
               // variant="filled"
               InputLabelProps={{
                 shrink: true,
               }}
             />
-          </Grid>
+          </Grid> */}
           <Grid item xs={12} sm={6}>
             <TextField
               fullWidth
               id="Email"
               type="email"
               name="email"
-              value="andreassujono@gmail.com"
+              value={user.email}
               disabled
               label="Email Address"
               variant="filled"
+              defaultValue={user.email}
             />
           </Grid>
           <Grid item xs={12} sm={6}>
@@ -64,6 +78,7 @@ export default function ProfileTab() {
               fullWidth
               id="fullName"
               label="Full Name (as shown in NRIC/ FIN/ Passport)"
+              defaultValue={user.fullName}
             />
           </Grid>
           <Grid item xs={12} sm={6}>
@@ -73,6 +88,7 @@ export default function ProfileTab() {
               id="familyName"
               label="Family Name"
               name="familyName"
+              defaultValue={user.familyName}
             />
           </Grid>
           <Grid item xs={12} sm={6}>
@@ -82,9 +98,10 @@ export default function ProfileTab() {
               id="givenName"
               label="Given Name"
               name="givenName"
+              defaultValue={user.givenName}
             />
           </Grid>
-          <Grid item xs={12} sm={6}>
+          {/* <Grid item xs={12} sm={6}>
             <TextField
               required
               fullWidth
@@ -92,7 +109,7 @@ export default function ProfileTab() {
               label="Citizenship"
               name="citizenship"
             />
-          </Grid>
+          </Grid> */}
           <Grid item xs={12} sm={6}>
             <TextField
               required
@@ -100,6 +117,7 @@ export default function ProfileTab() {
               id="nationality"
               label="Nationality"
               name="nationality"
+              defaultValue={user.nationality}
             />
           </Grid>
         </Grid>
@@ -108,6 +126,7 @@ export default function ProfileTab() {
           fullWidth
           variant="contained"
           sx={{ mt: 3, mb: 2 }}
+          disabled={loading}
         >
           Update Profile
         </Button>

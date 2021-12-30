@@ -69,7 +69,7 @@ export default class AdminService extends BaseService {
     return res.data;
   };
   updateCourseContent = async (data: any) => {
-    const res = await this.patchRequest(`/course-content/${data.course}`, data);
+    const res = await this.patchRequest(`/course-content/${data.id}`, data);
     return res.data;
   };
   deleteCourseContent = async (id: Id) => {

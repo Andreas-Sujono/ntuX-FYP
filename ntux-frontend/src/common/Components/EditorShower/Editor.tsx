@@ -9,14 +9,24 @@ const defaultBlocks = [
     imageUrl: '',
   },
 ];
-const EditorShower = ({ pid, blocks, err }: any) => {
+const Editor = ({
+  pid,
+  blocks,
+  err,
+  courseId,
+  handleUpdate,
+  isDisabled,
+}: any) => {
   return (
     <EditablePage
-      id={pid || '12345678'}
-      fetchedBlocks={blocks.length ? blocks : defaultBlocks}
+      id={pid || '101'}
+      fetchedBlocks={blocks || defaultBlocks}
       err={err || ''}
+      courseId={courseId}
+      handleUpdate={handleUpdate}
+      isDisabled={isDisabled}
     />
   );
 };
 
-export default EditorShower;
+export default Editor;

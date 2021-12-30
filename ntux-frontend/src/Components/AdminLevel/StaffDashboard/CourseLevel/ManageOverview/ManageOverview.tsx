@@ -162,7 +162,6 @@ export default function ManageOverview() {
             <Button variant="contained" sx={{ mr: 1 }}>
               Update
             </Button>
-            <Button sx={{ mr: 1 }}>Cancel</Button>
             <Button>Delete Course</Button>
           </Container>
         </Toolbar>

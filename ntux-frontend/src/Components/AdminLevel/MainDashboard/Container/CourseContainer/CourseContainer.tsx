@@ -234,7 +234,7 @@ function MainContainer({ children }: { children: React.ReactNode }) {
                 //course content
                 <ListItemButton
                   key={item2.id}
-                  selected={String(item2.pageId) === courseContentPageId}
+                  selected={String(item2.id) === courseContentPageId}
                   onClick={() => {
                     history.push(
                       makePath(
@@ -243,7 +243,7 @@ function MainContainer({ children }: { children: React.ReactNode }) {
                         undefined,
                         item.id === '2'
                           ? {
-                              pageId: item2.pageId,
+                              pageId: item2.id,
                             }
                           : {},
                       ),

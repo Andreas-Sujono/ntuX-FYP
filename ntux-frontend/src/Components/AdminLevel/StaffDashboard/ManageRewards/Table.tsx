@@ -8,38 +8,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Button } from '@mui/material';
 
-const rows = [
-  {
-    name: 'Voucher 50$',
-    description: 'lorem ipsum dolor sit amet',
-    reedemCount: 5,
-    status: 'Active',
-    createdAt: new Date(),
-  },
-  {
-    name: 'Voucher 50$',
-    description: 'lorem ipsum dolor sit amet',
-    reedemCount: 5,
-    status: 'Active',
-    createdAt: new Date(),
-  },
-  {
-    name: 'Voucher 50$',
-    description: 'lorem ipsum dolor sit amet',
-    reedemCount: 5,
-    status: 'Active',
-    createdAt: new Date(),
-  },
-  {
-    name: 'Voucher 50$',
-    description: 'lorem ipsum dolor sit amet',
-    reedemCount: 5,
-    status: 'Active',
-    createdAt: new Date(),
-  },
-];
-
-export default function RewardTable() {
+export default function RewardTable({ data }: any) {
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -53,20 +22,22 @@ export default function RewardTable() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {data.map((row) => (
             <TableRow
-              key={row.name}
+              key={row.id}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               <TableCell component="th" scope="row" sx={{ fontSize: '1rem' }}>
                 {row.name}
               </TableCell>
               <TableCell align="left">{row.description}</TableCell>
-              <TableCell align="left">{row.status}</TableCell>
-              <TableCell align="left">{row.reedemCount}</TableCell>
               <TableCell align="left">
-                <Button>Edit</Button>
-                <Button>Delete</Button>
+                {row.isPublished ? 'Active' : 'Inactive'}
+              </TableCell>
+              <TableCell align="left">10</TableCell>
+              <TableCell align="left">
+                <Button disabled={row.isDefault}>Edit</Button>
+                {!row.isDefault && <Button>Delete</Button>}
               </TableCell>
             </TableRow>
           ))}
