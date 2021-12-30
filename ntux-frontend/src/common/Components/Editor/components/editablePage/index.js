@@ -6,30 +6,32 @@ import EditableBlock from '../editableBlock';
 import Notice from '../notice';
 import { usePrevious } from '../../hooks';
 import { objectId, setCaretToEnd } from '../../utils';
+import { useThunkDispatch } from '../../../../hooks';
+import { updateCourseContent } from '../../../../../Store/Actions/admin/general';
 
 // A page is represented by an array containing several blocks
 // [
 //   {
-//     _id: "5f54d75b114c6d176d7e9765",
+//     id: "5f54d75b114c6d176d7e9765",
 //     html: "Heading",
 //     tag: "h1",
 //     imageUrl: "",
 //   },
 //   {
-//     _id: "5f54d75b114c6d176d7e9766",
+//     id: "5f54d75b114c6d176d7e9766",
 //     html: "I am a <strong>paragraph</strong>",
 //     tag: "p",
 //     imageUrl: "",
 //   },
 //   {
-//     _id: "5f54d75b114c6d176d7e9767",
+//     id: "5f54d75b114c6d176d7e9767",
 //     html: "/im",
 //     tag: "img",
 //     imageUrl: "images/test.png",
 //   }
 // ]
 
-const EditablePage = ({ id, fetchedBlocks, err }) => {
+const EditablePage = ({ id, fetchedBlocks, err, courseId }) => {
   if (err) {
     return (
       <Notice status="ERROR">
@@ -41,6 +43,7 @@ const EditablePage = ({ id, fetchedBlocks, err }) => {
 
   const [blocks, setBlocks] = useState(fetchedBlocks);
   const [currentBlockId, setCurrentBlockId] = useState(null);
+  const dispatch = useThunkDispatch();
 
   const prevBlocks = usePrevious(blocks);
 
@@ -49,6 +52,13 @@ const EditablePage = ({ id, fetchedBlocks, err }) => {
     const updatePageOnServer = async (_blocks) => {
       try {
         // Update the page on the server
+        await dispatch(
+          updateCourseContent({
+            pageId: id,
+            course: courseId,
+            metadata: _blocks,
+          }),
+        );
       } catch (_err) {
         console.log(_err);
       }
@@ -63,7 +73,7 @@ const EditablePage = ({ id, fetchedBlocks, err }) => {
     // If a new block was added, move the caret to it
     if (prevBlocks && prevBlocks.length + 1 === blocks.length) {
       const nextBlockPosition =
-        blocks.map((b) => b._id).indexOf(currentBlockId) + 1 + 1;
+        blocks.map((b) => b.id).indexOf(currentBlockId) + 1 + 1;
       const nextBlock = document.querySelector(
         `[data-position="${nextBlockPosition}"]`,
       );
@@ -74,7 +84,7 @@ const EditablePage = ({ id, fetchedBlocks, err }) => {
     // If a block was deleted, move the caret to the end of the last block
     if (prevBlocks && prevBlocks.length - 1 === blocks.length) {
       const lastBlockPosition = prevBlocks
-        .map((b) => b._id)
+        .map((b) => b.id)
         .indexOf(currentBlockId);
       const lastBlock = document.querySelector(
         `[data-position="${lastBlockPosition}"]`,
@@ -96,7 +106,7 @@ const EditablePage = ({ id, fetchedBlocks, err }) => {
   };
 
   const updateBlockHandler = (currentBlock) => {
-    const index = blocks.map((b) => b._id).indexOf(currentBlock.id);
+    const index = blocks.map((b) => b.id).indexOf(currentBlock.id);
     const oldBlock = blocks[index];
     const updatedBlocks = [...blocks];
     updatedBlocks[index] = {
@@ -115,9 +125,9 @@ const EditablePage = ({ id, fetchedBlocks, err }) => {
 
   const addBlockHandler = (currentBlock) => {
     setCurrentBlockId(currentBlock.id);
-    const index = blocks.map((b) => b._id).indexOf(currentBlock.id);
+    const index = blocks.map((b) => b.id).indexOf(currentBlock.id);
     const updatedBlocks = [...blocks];
-    const newBlock = { _id: objectId(), tag: 'p', html: '', imageUrl: '' };
+    const newBlock = { id: objectId(), tag: 'p', html: '', imageUrl: '' };
     updatedBlocks.splice(index + 1, 0, newBlock);
     updatedBlocks[index] = {
       ...updatedBlocks[index],
@@ -131,7 +141,7 @@ const EditablePage = ({ id, fetchedBlocks, err }) => {
   const deleteBlockHandler = (currentBlock) => {
     if (blocks.length > 1) {
       setCurrentBlockId(currentBlock.id);
-      const index = blocks.map((b) => b._id).indexOf(currentBlock.id);
+      const index = blocks.map((b) => b.id).indexOf(currentBlock.id);
       const deletedBlock = blocks[index];
       const updatedBlocks = [...blocks];
       updatedBlocks.splice(index, 1);
@@ -166,13 +176,12 @@ const EditablePage = ({ id, fetchedBlocks, err }) => {
           {(provided) => (
             <div ref={provided.innerRef} {...provided.droppableProps}>
               {blocks.map((block) => {
-                const position =
-                  blocks.map((b) => b._id).indexOf(block._id) + 1;
+                const position = blocks.map((b) => b.id).indexOf(block.id) + 1;
                 return (
                   <EditableBlock
-                    key={block._id}
+                    key={block.id}
                     position={position}
-                    id={block._id}
+                    id={block.id}
                     tag={block.tag}
                     html={block.html}
                     imageUrl={block.imageUrl}

@@ -6,19 +6,19 @@ import Notice from '../notice';
 // A page is represented by an array containing several blocks
 // [
 //   {
-//     _id: "5f54d75b114c6d176d7e9765",
+//     id: "5f54d75b114c6d176d7e9765",
 //     html: "Heading",
 //     tag: "h1",
 //     imageUrl: "",
 //   },
 //   {
-//     _id: "5f54d75b114c6d176d7e9766",
+//     id: "5f54d75b114c6d176d7e9766",
 //     html: "I am a <strong>paragraph</strong>",
 //     tag: "p",
 //     imageUrl: "",
 //   },
 //   {
-//     _id: "5f54d75b114c6d176d7e9767",
+//     id: "5f54d75b114c6d176d7e9767",
 //     html: "/im",
 //     tag: "img",
 //     imageUrl: "images/test.png",
@@ -42,12 +42,12 @@ const EditablePage = ({ id, fetchedBlocks: blocks, err }) => {
       style={{ background: 'white', padding: '1rem 2rem', marginTop: '2rem' }}
     >
       {blocks.map((block) => {
-        const position = blocks.map((b) => b._id).indexOf(block._id) + 1;
+        const position = blocks.map((b) => b.id).indexOf(block.id) + 1;
         return (
           <EditableBlock
-            key={block._id}
+            key={block.id}
             position={position}
-            id={block._id}
+            id={block.id}
             tag={block.tag}
             html={block.html}
             imageUrl={block.imageUrl}

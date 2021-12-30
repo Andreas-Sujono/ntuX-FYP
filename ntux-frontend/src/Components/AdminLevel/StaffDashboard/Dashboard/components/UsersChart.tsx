@@ -1,5 +1,5 @@
 import { merge } from 'lodash';
-import React from 'react';
+import React, { memo } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import { useTheme, styled } from '@mui/material/styles';
 import { Card, CardHeader } from '@mui/material';
@@ -28,7 +28,7 @@ const ChartWrapperStyle = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-export default function UsersChart({ data }: any) {
+function UsersChart({ data }: any) {
   const theme = useTheme();
   const CHART_DATA = [
     data.totalStudents || 0,
@@ -88,3 +88,5 @@ export default function UsersChart({ data }: any) {
     </Card>
   );
 }
+
+export default memo(UsersChart);

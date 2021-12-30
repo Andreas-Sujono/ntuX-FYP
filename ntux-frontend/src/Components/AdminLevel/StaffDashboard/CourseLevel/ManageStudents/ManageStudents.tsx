@@ -1,11 +1,28 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Container from '@mui/material/Container';
 import TextField from '@mui/material/TextField';
 import { IconButton, InputAdornment, Paper, Button, Grid } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import Table from './Table';
+import { useRouteMatch } from 'react-router-dom';
+import { routes } from 'Components/Routes';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectAllStudentsByCourseId } from 'Store/Selector/admin';
+import { getAllStudentRegistrations } from 'Store/Actions/admin';
 
 export default function ManageStudents() {
+  const dispatch = useDispatch();
+  const match: any = useRouteMatch(routes.STAFF_COURSES.BASE) || {};
+  if (match?.params?.courseId === ':courseId')
+    match.params = { courseId: null };
+
+  const allData = useSelector(selectAllStudentsByCourseId) || {};
+  const data = allData[match?.params?.courseId] || [];
+
+  useEffect(() => {
+    dispatch(getAllStudentRegistrations(match?.params?.courseId));
+  }, []);
+
   return (
     <Container maxWidth="lg" sx={{ margin: 0, mt: 4, mb: 8, ml: 0, mr: 1 }}>
       <Paper sx={{ p: 2, minHeight: '80vh' }}>
@@ -34,7 +51,7 @@ export default function ManageStudents() {
           </Grid>
         </Grid>
 
-        <Table />
+        <Table data={data} />
       </Paper>
     </Container>
   );

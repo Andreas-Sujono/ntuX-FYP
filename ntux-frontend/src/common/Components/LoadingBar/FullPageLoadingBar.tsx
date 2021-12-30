@@ -20,7 +20,7 @@ export const LoadingBar = ({ height }: any) => {
         alignItems: 'center',
       }}
     >
-      <ReactLoading color="#C63044" type="spin" />
+      <ReactLoading color="rgb(53, 126, 221)" type="spin" />
     </div>
   );
 };

@@ -16,6 +16,7 @@ const Input = ({ formId, id, type, label, required, value, setValue }) => {
         required={required}
         value={value}
         onChange={(e) => setValue(e.target.value)}
+        disabled
       />
     </div>
   );

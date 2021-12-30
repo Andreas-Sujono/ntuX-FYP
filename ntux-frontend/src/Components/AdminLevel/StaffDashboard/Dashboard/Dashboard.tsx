@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import { Typography } from '@mui/material';
@@ -14,7 +14,8 @@ import {
   selectSummary,
   selectWebsiteActivitiesByInterval,
 } from 'Store/Selector/admin';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { getWebsiteActivity } from 'Store/Actions/admin';
 
 function DashboardContent() {
   const [interval, setInterval] = useState<'d' | 'w' | 'm'>('d');
@@ -24,6 +25,25 @@ function DashboardContent() {
   const websiteActivity = useSelector(selectWebsiteActivitiesByInterval)(
     interval,
   );
+  const ref = useRef<any>(null);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    getActivityEveryInterval();
+
+    return () => {
+      if (ref.current) clearTimeout(ref.current);
+    };
+  }, []);
+
+  const getActivityEveryInterval = () => {
+    console.log('get activity');
+    dispatch(getWebsiteActivity());
+    ref.current = setTimeout(() => {
+      getActivityEveryInterval();
+    }, 2500);
+  };
 
   return (
     <Container maxWidth="xl" sx={{ margin: 0, mt: 4, mb: 8, ml: 1, pr: 1 }}>

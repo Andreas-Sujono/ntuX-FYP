@@ -5,13 +5,16 @@ import StudentMainContainer from './Container/MainContainer';
 import CourseContainer from './Container/CourseContainer';
 import { routeData } from './data';
 import { routes } from '../../Routes';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getMyCourses } from 'Store/Actions/courses';
 import { getMyAccount } from 'Store/Actions/auth';
 import { getGoalTask } from 'Store/Actions/pointsRewards';
+import { selectUserId } from 'Store/Selector/auth';
 
 const MainDashboardRoutes = () => {
   const location = useLocation();
+  const isAuthenticated = !!useSelector(selectUserId);
+
   const [isCourseLevel, setIsCourseLevel] = useState(false);
   const MainContainer = isCourseLevel ? CourseContainer : StudentMainContainer;
   const dispatch = useDispatch();
@@ -32,6 +35,10 @@ const MainDashboardRoutes = () => {
     dispatch(getMyCourses());
     dispatch(getGoalTask());
   }, []);
+
+  if (!isAuthenticated) {
+    return <Redirect to={routes.LOGIN_PAGE} />;
+  }
 
   return (
     <MainContainer>

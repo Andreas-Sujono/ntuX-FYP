@@ -2,7 +2,7 @@ import MuiDrawer from '@mui/material/Drawer';
 import Box from '@mui/material/Box';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import { styled } from '@mui/material/styles';
-import { Container, List, ListItemButton } from '@mui/material';
+import { Container, List, ListItemButton, ListItemText } from '@mui/material';
 
 const drawerWidth = 250;
 
@@ -100,4 +100,19 @@ export const ProfileButton = styled(ListItemButton)(({ theme }) => ({
       display: 'none',
     },
   },
+}));
+
+export const ListButtonAddPage = styled(ListItemText)(({ theme }) => ({
+  fontSize: '0.8rem',
+  color: '#b5b5b5',
+  '&:hover': {
+    background: 'none',
+  },
+  cursor: 'pointer',
+  display: 'flex',
+}));
+
+export const ListAddPage = styled(ListItemText)(({ theme }) => ({
+  fontSize: '0.8rem',
+  color: '#b5b5b5',
 }));

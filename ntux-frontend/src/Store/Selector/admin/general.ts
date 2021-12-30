@@ -22,6 +22,10 @@ export const selectStudentSummaryByUserId = (state: RootState) =>
   selectGeneralState(state).studentSummaryByUserId;
 export const selectWebsiteActivities = (state: RootState) =>
   selectGeneralState(state).websiteActivities;
+export const selectAllCourseContentsByCourseId = (state: RootState) =>
+  selectGeneralState(state).allCourseContentsByCourseId;
+export const selectAllCourseDetailByCourseId = (state: RootState) =>
+  selectGeneralState(state).allCourseDetailByCourseId;
 
 export const selectWebsiteActivitiesByInterval = (state: RootState) => {
   const all = selectGeneralState(state).websiteActivities;
@@ -37,4 +41,8 @@ export const selectWebsiteActivitiesByInterval = (state: RootState) => {
 
     return all.slice(0, 12);
   };
+};
+
+export const selectAllLecturers = (state: RootState) => {
+  return selectGeneralState(state).allLecturers;
 };

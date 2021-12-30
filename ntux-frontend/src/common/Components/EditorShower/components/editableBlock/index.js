@@ -59,7 +59,7 @@ class EditableBlock extends React.Component {
       <div className={styles.draggable}>
         {this.state.tag !== 'img' && (
           <ContentEditable
-            innerRef={this.contentEditable}
+            // innerRef={this.contentEditable}
             data-position={this.props.position}
             data-tag={this.state.tag}
             html={this.state.html}
@@ -79,6 +79,7 @@ class EditableBlock extends React.Component {
                 : null,
               this.state.placeholder ? styles.placeholder : null,
             ].join(' ')}
+            disabled
           />
         )}
       </div>

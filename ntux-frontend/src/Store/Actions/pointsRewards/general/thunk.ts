@@ -133,6 +133,7 @@ export const addWebsiteVisitActivity =
       if (prev && !bypass) return { result: true };
 
       const res = await service.addWebsiteActivity({
+        date: new Date().toLocaleString(),
         visitWithoutLogin: !userId ? 1 : 0,
         visitWithLogin: userId ? 1 : 0,
       });

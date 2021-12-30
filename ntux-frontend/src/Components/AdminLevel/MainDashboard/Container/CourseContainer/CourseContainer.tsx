@@ -52,10 +52,6 @@ const defaultContents = [
     id: 101,
     name: 'Lesson 1',
   },
-  {
-    id: 102,
-    name: 'Lesson 2',
-  },
 ];
 
 function MainContainer({ children }: { children: React.ReactNode }) {

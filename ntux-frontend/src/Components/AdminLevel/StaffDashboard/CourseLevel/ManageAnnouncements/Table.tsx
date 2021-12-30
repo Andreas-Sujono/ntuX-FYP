@@ -8,40 +8,40 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Button } from '@mui/material';
 
-const rows = [
-  {
-    title: 'Test 1',
-    description: 'lorem ipsum dolor sit amet',
-    status: 'DRAFT',
-    createdAt: new Date(),
-    releasedAt: new Date(),
-    batch: {
-      name: 'batch1',
-    },
-  },
-  {
-    title: 'Test 1',
-    description: 'lorem ipsum dolor sit amet',
-    status: 'DRAFT',
-    createdAt: new Date(),
-    releasedAt: new Date(),
-    batch: {
-      name: 'batch1',
-    },
-  },
-  {
-    title: 'Test 1',
-    description: 'lorem ipsum dolor sit amet',
-    status: 'DRAFT',
-    createdAt: new Date(),
-    releasedAt: new Date(),
-    batch: {
-      name: 'batch1',
-    },
-  },
-];
+// const rows = [
+//   {
+//     title: 'Test 1',
+//     description: 'lorem ipsum dolor sit amet',
+//     status: 'DRAFT',
+//     createdAt: new Date(),
+//     releasedAt: new Date(),
+//     batch: {
+//       name: 'batch1',
+//     },
+//   },
+//   {
+//     title: 'Test 1',
+//     description: 'lorem ipsum dolor sit amet',
+//     status: 'DRAFT',
+//     createdAt: new Date(),
+//     releasedAt: new Date(),
+//     batch: {
+//       name: 'batch1',
+//     },
+//   },
+//   {
+//     title: 'Test 1',
+//     description: 'lorem ipsum dolor sit amet',
+//     status: 'DRAFT',
+//     createdAt: new Date(),
+//     releasedAt: new Date(),
+//     batch: {
+//       name: 'batch1',
+//     },
+//   },
+// ];
 
-export default function TableComponent() {
+export default function TableComponent({ data }: any) {
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -55,9 +55,9 @@ export default function TableComponent() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {data.map((row) => (
             <TableRow
-              key={row.title}
+              key={row.id}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               <TableCell component="th" scope="row" sx={{ fontSize: '1rem' }}>
@@ -66,7 +66,7 @@ export default function TableComponent() {
               <TableCell align="left">{row.batch.name}</TableCell>
               <TableCell align="left">{row.status}</TableCell>
               <TableCell align="left">
-                {row.releasedAt.toLocaleString()}
+                {new Date(row.createdAt).toLocaleString()}
               </TableCell>
               <TableCell align="left">
                 <Button>Edit</Button>

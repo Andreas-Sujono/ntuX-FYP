@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, memo } from 'react';
 import { merge } from 'lodash';
 import ReactApexChart from 'react-apexcharts';
 import moment from 'moment';
@@ -7,7 +7,7 @@ import { BaseOptionChart } from './baseOptionChart';
 
 // ----------------------------------------------------------------------
 
-export default function AppWebsiteVisits({ data, interval }: any) {
+function AppWebsiteVisits({ data, interval }: any) {
   const CHART_DATA = useMemo(
     () => [
       {
@@ -77,3 +77,5 @@ export default function AppWebsiteVisits({ data, interval }: any) {
     </Card>
   );
 }
+
+export default memo(AppWebsiteVisits);

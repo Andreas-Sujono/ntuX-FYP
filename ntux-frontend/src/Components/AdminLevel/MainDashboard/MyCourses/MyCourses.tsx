@@ -129,7 +129,6 @@ export default function MyCourses() {
         value,
       );
       setSearchResult(result);
-      console.log(value, result);
       ref.current = null;
     }, 100);
   };

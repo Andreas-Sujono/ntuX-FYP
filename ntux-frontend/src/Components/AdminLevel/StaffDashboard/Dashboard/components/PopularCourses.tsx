@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Typography, Paper, Box, Button } from '@mui/material';
 import { CourseCard } from '../../ManageCourses/ManageCourses';
 
@@ -26,4 +26,4 @@ function PopularCourses({ data }: any) {
   );
 }
 
-export default PopularCourses;
+export default memo(PopularCourses);

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import {
@@ -6,65 +6,29 @@ import {
   Paper,
   Divider,
   TextField,
-  Box,
   AppBar,
   Toolbar,
   Button,
 } from '@mui/material';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import Chip from '@mui/material/Chip';
-import { useTheme } from '@mui/material/styles';
-
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
-    },
-  },
-};
-
-const names = [
-  'Oliver Hansen',
-  'Van Henry',
-  'April Tucker',
-  'Ralph Hubbard',
-  'Omar Alexander',
-  'Carlos Abbott',
-  'Miriam Wagner',
-  'Bradley Wilkerson',
-  'Virginia Andrews',
-  'Kelly Snyder',
-];
-
-function getStyles(name, personName, theme) {
-  return {
-    fontWeight:
-      personName.indexOf(name) === -1
-        ? theme.typography.fontWeightRegular
-        : theme.typography.fontWeightMedium,
-  };
-}
+import { useSelector } from 'react-redux';
+import { useRouteMatch } from 'react-router-dom';
+import { routes } from 'Components/Routes';
+import { selectAllCourseDetailByCourseId } from 'Store/Selector/admin';
+import { SelectLecturers } from '../../ManageCourses/ManageCourses';
+import { FileInput } from 'common/Components/Input';
 
 export default function ManageOverview() {
-  const [personName, setPersonName] = React.useState([]);
-  const theme = useTheme();
+  const [personName, setPersonName] = useState([]);
+  const [lecturers, setLecturers] = useState([]);
+  const [fileData, setFileData] = useState<any>(null);
 
-  const handleChange = (event: any) => {
-    const {
-      target: { value },
-    } = event;
-    setPersonName(
-      // On autofill we get a stringified value.
-      typeof value === 'string' ? value.split(',') : value,
-    );
-  };
+  const match: any = useRouteMatch(routes.STAFF_COURSES.BASE) || {};
+  if (match?.params?.courseId === ':courseId')
+    match.params = { courseId: null };
+
+  const allCourseDetailById =
+    useSelector(selectAllCourseDetailByCourseId) || {};
+  const course = allCourseDetailById[match?.params?.courseId] || {};
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -75,6 +39,15 @@ export default function ManageOverview() {
       password: data.get('password'),
     });
   };
+
+  useEffect(() => {
+    setLecturers(
+      course.lecturers.map((item) => ({
+        id: item.id,
+        fullName: item.fullName,
+      })) || [],
+    );
+  }, [course.lecturers]);
 
   return (
     <Container
@@ -90,7 +63,12 @@ export default function ManageOverview() {
             <Divider sx={{ mb: 2, mt: 0.5 }} />
           </Grid>
           <Grid item xs={12} sm={12}>
-            <TextField
+            <FileInput
+              label=""
+              onChange={setFileData}
+              value={fileData?.url || course.imageUrl}
+            />
+            {/* <TextField
               fullWidth
               id="file"
               type="file"
@@ -101,7 +79,7 @@ export default function ManageOverview() {
               InputLabelProps={{
                 shrink: true,
               }}
-            />
+            /> */}
           </Grid>
           <Grid item xs={12} sm={6}>
             <TextField
@@ -110,6 +88,7 @@ export default function ManageOverview() {
               fullWidth
               id="CourseCode"
               label="Course Code"
+              defaultValue={course.code}
             />
           </Grid>
           <Grid item xs={12} sm={6}>
@@ -119,40 +98,11 @@ export default function ManageOverview() {
               fullWidth
               id="courseName"
               label="Course Name"
+              defaultValue={course.name}
             />
           </Grid>
           <Grid item xs={12} sm={12}>
-            <FormControl sx={{ width: '100%' }}>
-              <InputLabel id="demo-multiple-chip-label">Lecturers</InputLabel>
-              <Select
-                labelId="demo-multiple-chip-label"
-                id="demo-multiple-chip"
-                multiple
-                value={personName}
-                onChange={handleChange}
-                input={
-                  <OutlinedInput id="select-multiple-chip" label="Lecturers" />
-                }
-                renderValue={(selected) => (
-                  <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                    {selected.map((value) => (
-                      <Chip key={value} label={value} />
-                    ))}
-                  </Box>
-                )}
-                MenuProps={MenuProps}
-              >
-                {names.map((name) => (
-                  <MenuItem
-                    key={name}
-                    value={name}
-                    style={getStyles(name, personName, theme)}
-                  >
-                    {name}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+            <SelectLecturers data={lecturers} setData={setLecturers} />
           </Grid>
           <Grid item xs={12} sm={12}>
             <TextField
@@ -164,6 +114,7 @@ export default function ManageOverview() {
               name="aboutCourse"
               rows={6}
               multiline
+              defaultValue={course.description}
             />
           </Grid>
           <Grid item xs={12} sm={12}>
@@ -176,6 +127,7 @@ export default function ManageOverview() {
               name="courseObjectives"
               rows={6}
               multiline
+              defaultValue={course.objectives}
             />
           </Grid>
           <Grid item xs={12} sm={12}>
@@ -188,6 +140,7 @@ export default function ManageOverview() {
               name="courseOutlines"
               rows={6}
               multiline
+              defaultValue={course.outline}
             />
           </Grid>
         </Grid>

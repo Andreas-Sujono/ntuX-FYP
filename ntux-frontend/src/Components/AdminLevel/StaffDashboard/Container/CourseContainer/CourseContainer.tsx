@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import {
   matchPath,
@@ -13,10 +14,12 @@ import IconButton from '@mui/material/IconButton';
 import Container from '@mui/material/Container';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import { red } from '@mui/material/colors';
 import { Avatar, CardHeader, ListItemButton } from '@mui/material';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import {
   AppBar,
   Drawer,
@@ -24,44 +27,80 @@ import {
   DrawerList,
   LogoContainer,
   ProfileButton,
+  ListAddPage,
+  ListButtonAddPage,
 } from './Styles';
 import data from './sidebarData';
 import ArrowIcon from '@mui/icons-material/ArrowBack';
 import { routeData } from '../../CourseLevel/data';
 import { routes } from 'Components/Routes';
 import { makePath } from 'common/utils';
+import { useThunkDispatch } from 'common/hooks';
+import { adminGetOneCourse } from 'Store/Actions/admin';
+import { LoadingBar } from 'common/Components/LoadingBar/FullPageLoadingBar';
+import { useSelector } from 'react-redux';
+import { selectUser } from 'Store/Selector/auth';
+import {
+  selectAllCourseContentsByCourseId,
+  selectAllCourseDetailByCourseId,
+} from 'Store/Selector/admin';
+import { CourseContent } from 'Models/Courses';
 
 const logoImagePath = `${process.env.PUBLIC_URL}/assets/logos/full-colored-logo.svg`;
 
-const courseContentData = [
+const defaultContents = [
   {
     id: 101,
     name: 'Lesson 1',
   },
-  {
-    id: 102,
-    name: 'Lesson 2',
-  },
 ];
 
-function MainContainer({ children }: { children: React.ReactNode }) {
+function CourseContainer({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState(window.innerWidth < 550 ? false : true);
+  const [loading, setLoading] = useState(true);
+  const [pageNames, setPageNames] = useState<any>([]);
+  const [editPageId, setEditPageId] = useState(null);
+
   const toggleDrawer = () => {
     setOpen(!open);
   };
-
-  const firstCourseContentPageId = courseContentData[0].id || null;
+  const dispatch = useThunkDispatch();
 
   const location = useLocation();
   const history = useHistory();
   const match: any = useRouteMatch(routes.STAFF_COURSES.BASE) || {};
   if (match?.params?.courseId === ':courseId')
     match.params = { courseId: null };
+  const user = useSelector(selectUser);
+  const allCourseDetailById =
+    useSelector(selectAllCourseDetailByCourseId) || {};
+  const allCourseContentsById =
+    useSelector(selectAllCourseContentsByCourseId) || {};
+  const course = allCourseDetailById[match?.params?.courseId] || {};
+  const courseContents: CourseContent[] =
+    allCourseContentsById[match?.params?.courseId] || [];
+
+  const firstCourseContentPageId =
+    courseContents[0]?.pageId || defaultContents[0].id;
 
   const [routeDetails, setRouteDetails] = useState<typeof routeData[0]>(
     routeData[0],
   );
   const { pageId: courseContentPageId } = queryString.parse(location.search);
+
+  useEffect(() => {
+    getAllData();
+  }, []);
+
+  useEffect(() => {
+    setPageNames(courseContents);
+  }, [courseContents]);
+
+  const getAllData = async () => {
+    setLoading(true);
+    await Promise.all([dispatch(adminGetOneCourse(match.params.courseId))]);
+    setLoading(false);
+  };
 
   useEffect(() => {
     const pathname = location.pathname;
@@ -78,6 +117,25 @@ function MainContainer({ children }: { children: React.ReactNode }) {
 
     setRouteDetails(currentRoute.length ? currentRoute[0] : routeData[0]);
   }, [location.pathname]);
+
+  const updatePageName = (pageId, name) => {
+    const updated = pageNames.map((item) => {
+      if (item !== pageId) return item;
+      return {
+        ...item,
+        pageName: name,
+      };
+    });
+    setPageNames(updated);
+  };
+
+  const onClickPageName = (pageId) => {
+    setEditPageId(pageId);
+  };
+
+  const onClickAddPageName = () => {
+    console.log('');
+  };
 
   return (
     <BoxContainer>
@@ -108,16 +166,16 @@ function MainContainer({ children }: { children: React.ReactNode }) {
             noWrap
             sx={{ flexGrow: 1, minWidth: '120px' }}
           >
-            {routeDetails.details.title} - EE4013: Computer Networking I
+            {routeDetails.details.title} - {course.code}: {course.name}
           </Typography>
           <ProfileButton>
             <CardHeader
               avatar={
                 <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                  A
+                  {user.fullName.charAt(0).toUpperCase()}
                 </Avatar>
               }
-              title="Andreas Sujono"
+              title={user.fullName}
               className="profile-card"
               sx={{
                 width: 'auto',
@@ -195,11 +253,12 @@ function MainContainer({ children }: { children: React.ReactNode }) {
             </DrawerList>
 
             {item.id === '2' &&
-              courseContentData.map((item2) => (
+              pageNames.map((item2: any) => (
                 //course content
                 <ListItemButton
                   key={item2.id}
-                  selected={String(item2.id) === courseContentPageId}
+                  selected={String(item2.pageId) === courseContentPageId}
+                  sx={{ flexGrow: 0, pl: 12 }}
                   onClick={() => {
                     history.push(
                       makePath(
@@ -208,7 +267,7 @@ function MainContainer({ children }: { children: React.ReactNode }) {
                         undefined,
                         item.id === '2'
                           ? {
-                              pageId: item2.id,
+                              pageId: item2.pageId,
                             }
                           : {},
                       ),
@@ -217,11 +276,29 @@ function MainContainer({ children }: { children: React.ReactNode }) {
                       setOpen(false);
                     }
                   }}
-                  sx={{ flexGrow: 0, pl: 12 }}
                 >
-                  <ListItemText primary={item2.name} />
+                  <ListItemText primary={item2.pageName} />
+                  {/* <DeleteOutlinedIcon sx={{ color: '#bf414c' }} /> */}
                 </ListItemButton>
               ))}
+            {item.id === '2' && (
+              <ListButtonAddPage
+                sx={{
+                  flexGrow: 0,
+                  pl: 11,
+                  pt: 1,
+                  fontSize: '0.8rem',
+                  display: 'flex',
+                }}
+                disableTypography
+              >
+                <AddOutlinedIcon sx={{ display: 'inline' }} />
+                <ListAddPage
+                  primary={'Add Page'}
+                  disableTypography={true}
+                ></ListAddPage>
+              </ListButtonAddPage>
+            )}
           </React.Fragment>
         ))}
       </Drawer>
@@ -243,7 +320,8 @@ function MainContainer({ children }: { children: React.ReactNode }) {
             sx={{ m: 0, p: 0, padding: 0, paddingLeft: 0 }}
             style={{ padding: 0, maxWidth: '100%' }}
           >
-            {children}
+            {loading && <LoadingBar height="70vh" />}
+            {!loading && children}
           </Container>
         </div>
       </Box>
@@ -251,4 +329,4 @@ function MainContainer({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default MainContainer;
+export default React.memo(CourseContainer);

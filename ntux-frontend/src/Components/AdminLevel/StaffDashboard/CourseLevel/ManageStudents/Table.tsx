@@ -12,40 +12,7 @@ import { makePath } from 'common/utils';
 import { routes } from 'Components/Routes';
 import { useHistory } from 'react-router-dom';
 
-const rows = [
-  {
-    name: 'Andreas Sujono',
-    email: 'andreassujono@gmail.com',
-    role: 'student',
-    status: 'ADMITTED',
-    createdAt: new Date(),
-    batch: {
-      name: 'batch 1',
-    },
-  },
-  {
-    name: 'Andreas Sujono',
-    email: 'andreassujono@gmail.com',
-    role: 'student',
-    status: 'ADMITTED',
-    createdAt: new Date(),
-    batch: {
-      name: 'batch 1',
-    },
-  },
-  {
-    name: 'Andreas Sujono',
-    email: 'andreassujono@gmail.com',
-    role: 'student',
-    status: 'ADMITTED',
-    createdAt: new Date(),
-    batch: {
-      name: 'batch 1',
-    },
-  },
-];
-
-export default function TableComponent() {
+export default function TableComponent({ data }: any) {
   const history = useHistory();
   return (
     <TableContainer component={Paper}>
@@ -60,9 +27,9 @@ export default function TableComponent() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {data.map((row) => (
             <TableRow
-              key={row.name}
+              key={row.id}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               <TableCell
@@ -73,16 +40,16 @@ export default function TableComponent() {
                   console.log('push');
                   history.push(
                     makePath(routes.STAFF_COURSES.STUDENT_DETAIL, {
-                      courseId: 1,
-                      studentId: 1,
+                      courseId: data.course.id,
+                      studentId: data.user?.id || 1,
                     }),
                   );
                 }}
               >
-                <LinkText>{row.name}</LinkText>
+                <LinkText>{row.user?.fullName}</LinkText>
               </TableCell>
-              <TableCell align="left">{row.email}</TableCell>
-              <TableCell align="left">{row.batch.name}</TableCell>
+              <TableCell align="left">{row.user?.email}</TableCell>
+              <TableCell align="left">{row.courseBatch.name}</TableCell>
               <TableCell align="left">{row.status}</TableCell>
               <TableCell align="left">
                 <Button>Edit</Button>
