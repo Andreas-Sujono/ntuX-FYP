@@ -45,6 +45,10 @@ export default class AdminService extends BaseService {
     const res = await this.getRequest('/user/all/lecturers');
     return res.data;
   };
+  getAllStudents = async () => {
+    const res = await this.getRequest('/user/all/students');
+    return res.data;
+  };
   getAllStudentRegistrations = async (courseId: string) => {
     const res = await this.getRequest(
       `/student-registration?sort=createdAt,DESC&join=course&join=user&filter=course.id||eq||${courseId}`,
@@ -149,6 +153,14 @@ export default class AdminService extends BaseService {
 
   getStudentSummary = async (userId: Id) => {
     const res = await this.getRequest(`/admin/user/summary?userId=${userId}`);
+    return res.data;
+  };
+  getAllRewardsRedeemed = async () => {
+    const res = await this.getRequest(`/reward-redeemed`);
+    return res.data;
+  };
+  updateRewardRedeemed = async (data: any) => {
+    const res = await this.patchRequest(`/reward-redeemed/${data.id}`, data);
     return res.data;
   };
 }

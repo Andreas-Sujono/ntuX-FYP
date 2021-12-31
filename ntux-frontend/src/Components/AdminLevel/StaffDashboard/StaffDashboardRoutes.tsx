@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   getAllCourses,
   getAllLecturers,
+  getAllStudents,
   getAllUsers,
   getSummary,
   getWebsiteActivity,
@@ -40,6 +41,7 @@ const StaffDashboardRoutes = () => {
     dispatch(getAllUsers());
     dispatch(getMyAccount());
     dispatch(getAllLecturers());
+    dispatch(getAllStudents());
     dispatch(getWebsiteActivity());
   }, []);
 

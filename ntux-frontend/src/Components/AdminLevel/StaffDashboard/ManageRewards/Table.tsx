@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -6,6 +6,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import SearchIcon from '@mui/icons-material/Search';
 import {
   Box,
   Button,
@@ -18,15 +19,41 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  Container,
+  InputAdornment,
+  IconButton,
 } from '@mui/material';
 import { useThunkDispatch } from 'common/hooks';
 import { toast } from 'react-toastify';
-import { createReward, uploadFile } from 'Store/Actions/admin';
+import { createReward, updateReward, uploadFile } from 'Store/Actions/admin';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectAllRewardsRedeemed } from 'Store/Selector/admin';
+import { searchFromListOfObject } from 'common/utils';
+import {
+  changeStudentRegistrationStatus,
+  getAllRewardsRedeemed,
+  updateRewardRedeemed,
+} from 'Store/Actions/admin/general/courseLevel.thunk';
+import { LinkText } from 'common/Components/shared/shared';
+import moment from 'moment';
+import { FileInput } from 'common/Components/Input';
 
-export default function RewardTable({ data }: any) {
+export default function RewardTable({ data, onClickEdit, onClickDelete }: any) {
   return (
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650, width: '100%' }} aria-label="simple table">
+    <TableContainer
+      component={Paper}
+      sx={{
+        maxHeight: '50vh',
+        overflow: 'auto',
+      }}
+    >
+      <Table
+        sx={{
+          minWidth: 650,
+          width: '100%',
+        }}
+        aria-label="simple table"
+      >
         <TableHead>
           <TableRow>
             <TableCell>Reward Name</TableCell>
@@ -42,11 +69,7 @@ export default function RewardTable({ data }: any) {
               key={row.id}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
-              <TableCell
-                component="th"
-                scope="row"
-                sx={{ fontSize: '1rem', width: '20%' }}
-              >
+              <TableCell component="th" scope="row" sx={{ width: '20%' }}>
                 {row.name}
               </TableCell>
               <TableCell align="left" sx={{ maxHeight: '100px', width: '40%' }}>
@@ -61,8 +84,18 @@ export default function RewardTable({ data }: any) {
                 10
               </TableCell>
               <TableCell align="left" sx={{ width: '20%' }}>
-                <Button disabled={row.isDefault}>Edit</Button>
-                <Button disabled={row.isDefault}>Delete</Button>
+                <Button
+                  onClick={() => onClickEdit(row)}
+                  disabled={row.isDefault}
+                >
+                  Edit
+                </Button>
+                <Button
+                  onClick={() => onClickDelete(row.id)}
+                  disabled={row.isDefault}
+                >
+                  Delete
+                </Button>
               </TableCell>
             </TableRow>
           ))}
@@ -72,28 +105,32 @@ export default function RewardTable({ data }: any) {
   );
 }
 
-export const CreateModal = ({ open, setOpen, data }: any) => {
+export const CreateModal = ({ open, setOpen, data, setData }: any) => {
   const [loading, setLoading] = useState(false);
-  const [status, setStatus] = useState('DRAFT');
-  const [file, setFile] = useState<any>(null);
+  const [fileData, setFileData] = useState<any>(null);
+  const [finalData, setFinalData] = useState(data || {});
 
   const dispatch = useThunkDispatch();
+  const isEditMode = !!data && Object.keys(data || {}).length > 0;
 
-  const handleClose = () => setOpen(false);
+  useEffect(() => {
+    setFinalData(data || {});
+  }, [data]);
+
+  const handleClose = () => {
+    setOpen(false);
+    setData(null);
+  };
+
+  const handleChange = (event: any) => {
+    setFinalData({
+      ...finalData,
+      [event.target.name]: event.target.value,
+    });
+  };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    const finalData: any = {
-      name: formData.get('name') as string,
-      description: formData.get('description') as string,
-      totalLimit: Number(formData.get('totalLimit') as string),
-      totalPointsRequired: Number(
-        formData.get('totalPointsRequired') as string,
-      ),
-      isPublished: status === 'PUBLISHED',
-    };
-
     if (
       !finalData.name ||
       !finalData.description ||
@@ -104,15 +141,28 @@ export const CreateModal = ({ open, setOpen, data }: any) => {
       return;
     }
 
-    setLoading(true);
-    if (file) {
-      const { url } = await dispatch(uploadFile(file));
-      finalData.imageUrl = url;
-      console.log(finalData);
-    }
+    finalData.totalLimit = Number(finalData.totalLimit);
+    finalData.totalPointsRequired = Number(finalData.totalPointsRequired);
+    finalData.role = finalData.role || 'STUDENT';
+    finalData.id = data?.id || undefined;
 
-    await dispatch(createReward(finalData));
-    toast.success('Reward is created succesfully');
+    setLoading(true);
+    if (fileData?.file) {
+      const { url } = await dispatch(uploadFile(fileData?.file));
+      finalData.imageUrl = url;
+    }
+    let res;
+    if (!isEditMode) {
+      res = await dispatch(createReward(finalData));
+    } else {
+      res = await dispatch(updateReward(finalData));
+    }
+    setData(null);
+    if (res.result) {
+      toast.success(
+        `Reward is ${isEditMode ? 'updated' : 'created'} succesfully`,
+      );
+    }
     setLoading(false);
     handleClose();
   };
@@ -152,19 +202,10 @@ export const CreateModal = ({ open, setOpen, data }: any) => {
               <Divider sx={{ mb: 2, mt: 0.5 }} />
             </Grid>
             <Grid item xs={12} sm={12}>
-              <TextField
-                fullWidth
-                id="file"
-                type="file"
-                name="file"
+              <FileInput
                 label="Reward Banner Image"
-                // variant="filled"
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                onChange={(e: any) =>
-                  e.target.files[0] && setFile(e.target.files[0])
-                }
+                onChange={setFileData}
+                value={fileData?.url || finalData.imageUrl}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -174,6 +215,8 @@ export const CreateModal = ({ open, setOpen, data }: any) => {
                 fullWidth
                 id="name"
                 label="Reward Name"
+                value={finalData.name}
+                onChange={handleChange}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -183,6 +226,8 @@ export const CreateModal = ({ open, setOpen, data }: any) => {
                 fullWidth
                 id="description"
                 label="Description"
+                value={finalData.description}
+                onChange={handleChange}
               />
             </Grid>
             {/* <Grid item xs={12} sm={6}>
@@ -202,6 +247,8 @@ export const CreateModal = ({ open, setOpen, data }: any) => {
                 id="totalLimit"
                 label="Total limit"
                 type="number"
+                value={finalData.totalLimit}
+                onChange={handleChange}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -212,6 +259,8 @@ export const CreateModal = ({ open, setOpen, data }: any) => {
                 id="totalPointsRequired"
                 label="Points Required"
                 type="number"
+                value={finalData.totalPointsRequired}
+                onChange={handleChange}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -220,9 +269,9 @@ export const CreateModal = ({ open, setOpen, data }: any) => {
                 <Select
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
-                  value={status}
+                  value={finalData.status || 'DRAFT'}
                   label="Status"
-                  onChange={(e: any) => setStatus(e.target.value)}
+                  onChange={handleChange}
                 >
                   <MenuItem value={'DRAFT'}>DRAFT</MenuItem>
                   <MenuItem value={'PUBLISHED'}>PUBLISHED</MenuItem>
@@ -244,3 +293,159 @@ export const CreateModal = ({ open, setOpen, data }: any) => {
     </Modal>
   );
 };
+
+export function ManageRewardsRedeemed() {
+  const dispatch = useDispatch();
+  const allRewardsRedeemed = useSelector(selectAllRewardsRedeemed);
+
+  const [searchInput, setSearchInput] = useState('');
+  const [searchResult, setSearchResult] = useState<any>([]);
+
+  const ref = useRef<any>(null);
+
+  const onChange = (e: any) => {
+    const value = e.target.value;
+    setSearchInput(value);
+
+    if (ref.current) clearTimeout(ref.current);
+
+    ref.current = setTimeout(() => {
+      const result = searchFromListOfObject(
+        allRewardsRedeemed,
+        ['name', 'user.email', 'user.name', 'reward.name', 'status'],
+        value,
+      );
+      setSearchResult(result);
+      ref.current = null;
+    }, 100);
+  };
+
+  const final = searchInput ? searchResult : allRewardsRedeemed;
+
+  useEffect(() => {
+    dispatch(getAllRewardsRedeemed());
+  }, []);
+
+  return (
+    <Container maxWidth="lg" sx={{ margin: 0, mt: 0, mb: 8, ml: 0, mr: 1 }}>
+      <Paper sx={{ p: 2 }}>
+        <Typography component="h3" variant="h6">
+          Rewards Redeemed by Student
+        </Typography>
+        <Grid container spacing={3} sx={{ mb: 4, mt: 1 }}>
+          <Grid item xs={12} md={9}>
+            <TextField
+              fullWidth
+              label="Search Rewards Redeemed"
+              id="fullWidth"
+              sx={{ backgroundColor: 'white' }}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <IconButton aria-label="Search" edge="end">
+                      <SearchIcon />
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+              value={searchInput}
+              onChange={onChange}
+            />
+          </Grid>
+        </Grid>
+
+        <RewardsRedeemedTable data={final} />
+      </Paper>
+    </Container>
+  );
+}
+
+export const StatusSelector = ({ id, value, onChange }: any) => {
+  const [status, setStatus] = React.useState(value);
+
+  const handleChange = (_value: any) => {
+    setStatus(_value);
+    onChange(id, _value);
+  };
+
+  React.useEffect(() => {
+    setStatus(value);
+  }, [value]);
+
+  return (
+    <FormControl fullWidth>
+      <InputLabel id="demo-simple-select-label">Status</InputLabel>
+      <Select
+        labelId="demo-simple-select-label"
+        id="demo-simple-select"
+        value={status || 'PENDING'}
+        label="Status"
+        onChange={(e: any) => handleChange(e.target.value)}
+        size="small"
+      >
+        <MenuItem value={'PENDING'}>PENDING</MenuItem>
+        <MenuItem value={'REDEEMED'}>REDEEMED</MenuItem>
+        <MenuItem value={'CANCELLED'}>CANCELLED</MenuItem>
+      </Select>
+    </FormControl>
+  );
+};
+
+export function RewardsRedeemedTable({ data }: any) {
+  const dispatch = useThunkDispatch();
+
+  const handleUpdateStatus = async (id: string, value: string) => {
+    dispatch(
+      updateRewardRedeemed({
+        id,
+        status: value,
+      }),
+    );
+  };
+
+  return (
+    <TableContainer
+      component={Paper}
+      sx={{
+        maxHeight: '70vh',
+        overflow: 'auto',
+      }}
+    >
+      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <TableHead>
+          <TableRow>
+            <TableCell>Student Name</TableCell>
+            <TableCell align="left">Student Email</TableCell>
+            <TableCell align="left">Reward Name</TableCell>
+            <TableCell align="left">Redeemed date</TableCell>
+            <TableCell align="left">Status</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {data.map((row) => (
+            <TableRow
+              key={row.id}
+              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+            >
+              <TableCell component="th" scope="row" sx={{ fontSize: '1rem' }}>
+                <LinkText>{row.user?.fullName}</LinkText>
+              </TableCell>
+              <TableCell align="left">{row.user?.email}</TableCell>
+              <TableCell align="left">{row.reward?.name}</TableCell>
+              <TableCell align="left">
+                {moment(row.createdAt).format('DD/MM/YYYY, hh:mm:ss a')}
+              </TableCell>
+              <TableCell align="left">
+                <StatusSelector
+                  id={row.id}
+                  value={row.status}
+                  onChange={handleUpdateStatus}
+                />
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  );
+}

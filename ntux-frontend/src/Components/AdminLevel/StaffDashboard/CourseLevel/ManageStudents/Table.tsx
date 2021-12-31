@@ -65,7 +65,13 @@ export default function TableComponent({ data, courseId, onClickDelete }: any) {
   };
 
   return (
-    <TableContainer component={Paper}>
+    <TableContainer
+      component={Paper}
+      sx={{
+        maxHeight: '70vh',
+        overflow: 'auto',
+      }}
+    >
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>

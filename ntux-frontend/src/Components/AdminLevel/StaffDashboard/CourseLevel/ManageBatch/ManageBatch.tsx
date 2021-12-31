@@ -40,7 +40,7 @@ export default function ManageBatch() {
     const res = await dispatch(
       deleteCourseBatch({ id, courseId: match?.params?.courseId }),
     );
-    if (!res.result) toast.success('Course batch is deleted successfully');
+    if (res.result) toast.success('Course batch is deleted successfully');
   };
 
   const onChange = (e: any) => {

@@ -223,6 +223,30 @@ export const getAllLecturers =
       return { result: false };
     }
   };
+export const getAllStudents =
+  (bypass = false) =>
+  async (dispatch: AppDispatch, getState: () => RootState) => {
+    try {
+      const res = await service.getAllStudents();
+      if (res.errorCode) {
+        dispatch(loadFailed());
+        sendErrorNotification(res.message);
+        return {
+          result: false,
+          errorMessage: res.message,
+        };
+      }
+      dispatch(
+        loadSuccess({
+          allStudents: res,
+        }),
+      );
+      return { result: true };
+    } catch (err) {
+      dispatch(loadFailed());
+      return { result: false };
+    }
+  };
 
 export const getAllStudentRegistrations =
   (courseId: string, bypass = false) =>
@@ -417,7 +441,7 @@ export const createReward =
       return { result: false };
     }
   };
-export const updateRewards =
+export const updateReward =
   (data: any, bypass = false) =>
   async (dispatch: AppDispatch, getState: () => RootState) => {
     try {
@@ -442,7 +466,7 @@ export const deleteRewards =
   (data: any, bypass = false) =>
   async (dispatch: AppDispatch, getState: () => RootState) => {
     try {
-      const res = await service.deleteReward(data);
+      const res = await service.deleteReward(data.id);
       if (res.errorCode) {
         dispatch(loadFailed());
         sendErrorNotification(res.message);

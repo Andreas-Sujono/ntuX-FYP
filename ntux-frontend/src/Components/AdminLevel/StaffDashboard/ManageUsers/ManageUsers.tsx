@@ -48,7 +48,7 @@ export default function ManageUsers() {
     const confirm = window.confirm('Are you sure you want to delete this?');
     if (!confirm) return;
     const res = await dispatch(deleteUser({ id }));
-    if (!res.result) toast.success('Course batch is deleted successfully');
+    if (res.result) toast.success('User is deleted successfully');
   };
 
   const final = searchInput ? searchResult : allUsers;

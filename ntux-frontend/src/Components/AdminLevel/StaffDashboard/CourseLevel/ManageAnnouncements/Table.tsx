@@ -8,42 +8,15 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Button } from '@mui/material';
 
-// const rows = [
-//   {
-//     title: 'Test 1',
-//     description: 'lorem ipsum dolor sit amet',
-//     status: 'DRAFT',
-//     createdAt: new Date(),
-//     releasedAt: new Date(),
-//     batch: {
-//       name: 'batch1',
-//     },
-//   },
-//   {
-//     title: 'Test 1',
-//     description: 'lorem ipsum dolor sit amet',
-//     status: 'DRAFT',
-//     createdAt: new Date(),
-//     releasedAt: new Date(),
-//     batch: {
-//       name: 'batch1',
-//     },
-//   },
-//   {
-//     title: 'Test 1',
-//     description: 'lorem ipsum dolor sit amet',
-//     status: 'DRAFT',
-//     createdAt: new Date(),
-//     releasedAt: new Date(),
-//     batch: {
-//       name: 'batch1',
-//     },
-//   },
-// ];
-
 export default function TableComponent({ data }: any) {
   return (
-    <TableContainer component={Paper}>
+    <TableContainer
+      component={Paper}
+      sx={{
+        maxHeight: '70vh',
+        overflow: 'auto',
+      }}
+    >
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>

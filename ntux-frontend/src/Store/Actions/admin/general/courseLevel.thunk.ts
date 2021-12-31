@@ -271,3 +271,48 @@ export const getStudentSummary =
       return { result: false };
     }
   };
+export const getAllRewardsRedeemed =
+  (bypass = false) =>
+  async (dispatch: AppDispatch, getState: () => RootState) => {
+    try {
+      const res = await service.getAllRewardsRedeemed();
+      if (res.errorCode) {
+        dispatch(loadFailed());
+        sendErrorNotification(res.message, res.errorCode);
+        return {
+          result: false,
+          errorMessage: res.message,
+        };
+      }
+      dispatch(
+        loadSuccess({
+          allRewardsRedeemed: res,
+        }),
+      );
+      return { result: true, res };
+    } catch (err) {
+      dispatch(loadFailed());
+      return { result: false };
+    }
+  };
+export const updateRewardRedeemed =
+  (data: any, bypass = false) =>
+  async (dispatch: AppDispatch, getState: () => RootState) => {
+    try {
+      const res = await service.updateRewardRedeemed(data);
+      if (res.errorCode) {
+        dispatch(loadFailed());
+        sendErrorNotification(res.message, res.errorCode);
+        return {
+          result: false,
+          errorMessage: res.message,
+        };
+      }
+      dispatch(loadSuccess({}));
+      getAllRewardsRedeemed()(dispatch, getState);
+      return { result: true, res };
+    } catch (err) {
+      dispatch(loadFailed());
+      return { result: false };
+    }
+  };

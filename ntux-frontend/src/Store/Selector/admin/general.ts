@@ -46,3 +46,9 @@ export const selectWebsiteActivitiesByInterval = (state: RootState) => {
 export const selectAllLecturers = (state: RootState) => {
   return selectGeneralState(state).allLecturers;
 };
+export const selectAllRewardsRedeemed = (state: RootState) => {
+  return selectGeneralState(state).allRewardsRedeemed;
+};
+export const selectAllStudents = (state: RootState) => {
+  return selectGeneralState(state).allStudents;
+};
