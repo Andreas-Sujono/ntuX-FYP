@@ -18,10 +18,12 @@ export class CourseAnnouncementService extends TypeOrmCrudService<CourseAnnounce
           {
             course: courseId,
             batch: batchId,
+            status: 'PUBLISHED',
           },
           {
             course: courseId,
             batch: IsNull(),
+            status: 'PUBLISHED',
           },
         ],
         relations: ['course', 'courseBatch'],

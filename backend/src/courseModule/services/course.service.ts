@@ -6,7 +6,7 @@ import { User } from 'src/authModule/entities/user.entity';
 import { Repository } from 'typeorm';
 import { v4 as uuid } from 'uuid';
 import { Course, CourseStatus } from '../entities/course.entity';
-import { CourseBatch } from '../entities/courseBatch.entity';
+import { CourseBatch, CourseBatchStatus } from '../entities/courseBatch.entity';
 import { CourseUser } from '../entities/courseUser.entity';
 
 @Injectable()
@@ -26,7 +26,7 @@ export class CourseService extends TypeOrmCrudService<Course> {
   }
 
   async getPublicAllCourses(): Promise<Course[]> {
-    return await this.repo.find({
+    const res = await this.repo.find({
       where: {
         status: CourseStatus.PUBLISHED,
       },
@@ -35,6 +35,13 @@ export class CourseService extends TypeOrmCrudService<Course> {
         createdAt: 'DESC',
       },
     });
+    res.forEach((item) => {
+      item.courseBatches = item.courseBatches || [];
+      item.courseBatches = item.courseBatches.filter(
+        (batch) => batch.status === CourseBatchStatus.PUBLISHED,
+      );
+    });
+    return res;
   }
 
   async getStudentCourses(userId: string): Promise<CourseUser[]> {
@@ -86,7 +93,7 @@ export class CourseService extends TypeOrmCrudService<Course> {
     const coursesNotRegistered = await this.repo.query(`
       select * from course where id not in (${coursesRegistered
         .map((course) => course.course.id)
-        .join(',')})
+        .join(',')}) and course.status = 'PUBLISHED'
     `);
     return coursesNotRegistered;
   }
@@ -108,6 +115,7 @@ export class CourseService extends TypeOrmCrudService<Course> {
     });
     const courseBatches = await this.courseBatchRepo.find({
       course: { id: courseId },
+      status: CourseBatchStatus.PUBLISHED,
     });
     return {
       ...(courseDetail[0] || {}),

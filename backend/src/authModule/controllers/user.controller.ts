@@ -124,9 +124,9 @@ export class UserController implements CrudController<User> {
       relations: ['avatars', 'currentAvatar', 'courses', 'premiumSetting'],
     });
 
+    delete res.confirmationCode;
+    delete res.hashedPassword;
     if (userId !== id) {
-      delete res.confirmationCode;
-      delete res.hashedPassword;
       delete res.NRIC;
       delete res.dateOfBirth;
     }
@@ -138,6 +138,23 @@ export class UserController implements CrudController<User> {
   @Public()
   async getTopUsers() {
     return this.service.getTopUsers();
+  }
+
+  @Get('me')
+  async getMyAccount(@UserData('userId') userId: string) {
+    const res = await this.service.findOne({
+      where: {
+        id: userId,
+      },
+      relations: ['avatars', 'currentAvatar', 'courses', 'premiumSetting'],
+    });
+
+    delete res.confirmationCode;
+    delete res.hashedPassword;
+    delete res.NRIC;
+    delete res.dateOfBirth;
+
+    return res;
   }
 
   @Override()
