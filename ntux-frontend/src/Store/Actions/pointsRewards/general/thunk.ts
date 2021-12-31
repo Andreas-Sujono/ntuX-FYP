@@ -1,3 +1,4 @@
+import { getMyAccount } from 'Store/Actions/auth';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import axios from 'axios';
 import GeneralService from '../../../Services/pointsRewards/general';
@@ -145,6 +146,43 @@ export const addWebsiteVisitActivity =
           isActivityAdded: true,
         }),
       );
+      return { result: true };
+    } catch (err) {
+      return { result: false };
+    }
+  };
+
+export const buyAvatar =
+  (data: any, bypass = false) =>
+  async (dispatch: AppDispatch, getState: () => RootState) => {
+    try {
+      const res = await service.buyAvatar(data);
+      dispatch(loadSuccess({}));
+      getMyAccount()(dispatch, getState);
+      return { result: true };
+    } catch (err) {
+      return { result: false };
+    }
+  };
+export const useAvatar =
+  (data: any, bypass = false) =>
+  async (dispatch: AppDispatch, getState: () => RootState) => {
+    try {
+      const res = await service.useAvatar(data);
+      dispatch(loadSuccess({}));
+      getMyAccount()(dispatch, getState);
+      return { result: true };
+    } catch (err) {
+      return { result: false };
+    }
+  };
+export const redeemReward =
+  (data: any, bypass = false) =>
+  async (dispatch: AppDispatch, getState: () => RootState) => {
+    try {
+      const res = await service.redeemReward(data);
+      dispatch(loadSuccess({}));
+      getRewardsRedeemed()(dispatch, getState);
       return { result: true };
     } catch (err) {
       return { result: false };

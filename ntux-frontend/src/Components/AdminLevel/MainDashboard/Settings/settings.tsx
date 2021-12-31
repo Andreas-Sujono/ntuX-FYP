@@ -63,7 +63,7 @@ function SettingsContent() {
               <CardContent>
                 <Avatar
                   alt={user.fullName.toUpperCase()}
-                  src="/static/images/avatar/1.jpg"
+                  src={user.currentAvatar?.imageUrl || '#'}
                   sx={{
                     width: 80,
                     height: 80,

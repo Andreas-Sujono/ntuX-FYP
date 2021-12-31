@@ -27,6 +27,9 @@ export interface User {
   level: number;
   emailVerifiesAt?: Date;
   premiumSetting?: PremiumSetting;
+  avatars: [];
+  avatarColor: string;
+  currentAvatar: any;
 }
 export interface LoginRequest {
   email: string;

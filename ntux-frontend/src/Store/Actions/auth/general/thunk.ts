@@ -32,9 +32,7 @@ export const getMyAccount =
   (id?: Id, bypass = false) =>
   async (dispatch: AppDispatch, getState: () => RootState) => {
     try {
-      const userId = id || selectUserId(getState());
-      if (!userId) return logout()(dispatch, getState);
-      const res = await service.getAccount(userId);
+      const res = await service.getMyAccount();
       if (res.errorCode) {
         dispatch(loadFailed());
         if (res.errorCode === 401) return logout()(dispatch, getState);

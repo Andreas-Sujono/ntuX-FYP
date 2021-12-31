@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 // import Link from '@mui/material/Link';
@@ -11,12 +11,14 @@ import { useSelector } from 'react-redux';
 import { selectUser } from 'Store/Selector/auth';
 import { useThunkDispatch } from 'common/hooks';
 import { updateAccount } from 'Store/Actions/auth';
+import ChooseAvatarModal from './ChooseAvatar';
 // import { StyledBox, StyledForm, BackgroundContainer } from './Styles';
 
 export default function ProfileTab() {
   const user = useSelector(selectUser);
   const dispatch = useThunkDispatch();
-  const [loading, setLoading] = React.useState(false);
+  const [loading, setLoading] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -36,13 +38,28 @@ export default function ProfileTab() {
 
   return (
     <Container component="main" maxWidth="md" style={{ padding: 0 }}>
+      <ChooseAvatarModal open={openModal} setOpen={setOpenModal} />
       <Box component="form" noValidate onSubmit={handleSubmit}>
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <Typography component="h3" variant="h6">
               Profile Details
             </Typography>
-            <Divider sx={{ mb: 2, mt: 0.5 }} />
+            <Divider sx={{ mb: 0, mt: 0.5 }} />
+          </Grid>
+          <Grid item xs={12} sm={12}>
+            <Typography
+              component="h4"
+              variant="body1"
+              sx={{
+                cursor: 'pointer',
+                fontWeight: '500',
+              }}
+              color="primary"
+              onClick={() => setOpenModal(true)}
+            >
+              Choose Your Avatar
+            </Typography>
           </Grid>
           {/* <Grid item xs={12} sm={12}>
             <TextField

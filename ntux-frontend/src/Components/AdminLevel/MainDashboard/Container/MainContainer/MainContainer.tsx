@@ -90,7 +90,11 @@ function MainContainer({ children }: { children: React.ReactNode }) {
           <ProfileButton>
             <CardHeader
               avatar={
-                <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
+                <Avatar
+                  sx={{ bgcolor: red[500] }}
+                  aria-label="recipe"
+                  src={user.currentAvatar?.imageUrl || '#'}
+                >
                   {user.fullName.slice(0, 1).toUpperCase()}
                 </Avatar>
               }

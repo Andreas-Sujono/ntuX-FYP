@@ -21,6 +21,10 @@ export default class AuthService extends BaseService {
     const res = await this.getRequest(`/user/${userId}`);
     return res.data;
   };
+  getMyAccount = async () => {
+    const res = await this.getRequest(`/user/me`);
+    return res.data;
+  };
 
   confirmEmail = async (data: ConfirmEmailRequest) => {
     const res = await this.getRequest(

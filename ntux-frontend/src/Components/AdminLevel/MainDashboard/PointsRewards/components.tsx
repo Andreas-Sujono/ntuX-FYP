@@ -6,6 +6,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import DoneIcon from '@mui/icons-material/Done';
 import {
   List,
   ListItem,
@@ -34,6 +35,10 @@ import {
   selectRewardsRedeemed,
 } from 'Store/Selector/pointsRewards';
 import { Reward } from 'Models/pointsRewards';
+import { selectUser } from 'Store/Selector/auth';
+import { useThunkDispatch } from 'common/hooks';
+import { toast } from 'react-toastify';
+import { buyAvatar } from 'Store/Actions/pointsRewards';
 
 // const HowToGetPointsData = [
 //   'Finish online course',
@@ -376,6 +381,19 @@ export const RewardDetailsModal = ({ open, setOpen, data }: any) => {
 
 export const AvatarShop = () => {
   const avatars = useSelector(selectAvatars);
+  const user = useSelector(selectUser);
+  const dispatch = useThunkDispatch();
+  const myAvatars: any = user.avatars || [];
+  const myAvatarSet = new Set<any>(myAvatars.map((item) => item.id));
+
+  const onBuyAvatar = async (avatar: any) => {
+    const confirm = window.confirm('Are you sure you want to buy this avatar?');
+    if (!confirm) return;
+    const result = await dispatch(buyAvatar(avatar));
+    if (result.result) {
+      toast.success('You have successfully bought this avatar');
+    }
+  };
 
   return (
     <Paper sx={{ p: 3 }}>
@@ -412,7 +430,16 @@ export const AvatarShop = () => {
               >
                 Cost: {item.pointsRequired} pts
               </div>
-              <Button>Buy</Button>
+              {myAvatarSet.has(item.id) ? (
+                <DoneIcon sx={{ color: 'green' }} />
+              ) : (
+                <Button
+                  onClick={() => onBuyAvatar(item)}
+                  sx={{ marginLeft: '-16px' }}
+                >
+                  Buy
+                </Button>
+              )}
             </div>
           </Grid>
         ))}

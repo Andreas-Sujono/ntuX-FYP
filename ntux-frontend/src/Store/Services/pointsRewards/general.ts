@@ -61,4 +61,16 @@ export default class PointsRewardsService extends BaseService {
     const res = await this.postRequest(`/website-activity`, data);
     return res.data;
   };
+  buyAvatar = async (data: any) => {
+    const res = await this.postRequest(`/avatar/buy/${data.id}`, data);
+    return res.data;
+  };
+  useAvatar = async (data: any) => {
+    const res = await this.postRequest(`/avatar/use/${data.id}`, data);
+    return res.data;
+  };
+  redeemReward = async (data: any) => {
+    const res = await this.postRequest(`/reward-redeemed`, data);
+    return res.data;
+  };
 }
