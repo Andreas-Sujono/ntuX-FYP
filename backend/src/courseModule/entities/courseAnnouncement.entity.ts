@@ -20,8 +20,11 @@ export class CourseAnnouncement {
   @ManyToOne(() => CourseBatch)
   courseBatch: CourseBatch;
 
-  @Column()
-  metadata: string;
+  @Column({ type: 'json' })
+  metadata: any;
+
+  @Column({ nullable: true, default: 'DRAFT' })
+  status: string; //DRAFT | PUBLISHED
 
   @Column({ nullable: true, default: true })
   isSendingEmail: boolean;
