@@ -67,10 +67,7 @@ export class StudentRegistrationService extends TypeOrmCrudService<StudentRegist
       );
 
     //authenticate user
-    await this.authService.login(
-      existingUser.email,
-      existingUser.hashedPassword,
-    );
+    await this.authService.login(user.email, user.hashedPassword);
 
     await this.repo.save(
       this.repo.create({
