@@ -114,6 +114,43 @@ export class UserController implements CrudController<User> {
     return res;
   }
 
+  @Get('me')
+  async getMyAccount(@UserData('userId') userId: number) {
+    const res = await this.service.findOne({
+      where: {
+        id: Number(userId),
+      },
+      relations: ['avatars', 'currentAvatar', 'courses', 'premiumSetting'],
+    });
+
+    delete res.confirmationCode;
+    delete res.hashedPassword;
+    delete res.NRIC;
+    delete res.dateOfBirth;
+
+    return res;
+  }
+
+  @Get('top')
+  @Public()
+  async getTopUsers() {
+    return this.service.getTopUsers();
+  }
+
+  @Override()
+  async updateOne(
+    @ParsedRequest() req: CrudRequest,
+    @ParsedBody() dto: User,
+    @UserData('userId') userId: string,
+    @UserData('role') role: string,
+    @Param('id') id: string,
+  ) {
+    if (role === UserRole.STUDENT && String(id) !== String(userId)) {
+      throw new BadRequestException('You can only update your own account');
+    }
+    return this.service.updateOne(req, dto);
+  }
+
   @Override()
   @Public()
   async getOne(@UserData('userId') userId: string, @Param('id') id: string) {
@@ -132,42 +169,5 @@ export class UserController implements CrudController<User> {
     }
 
     return res;
-  }
-
-  @Get('top')
-  @Public()
-  async getTopUsers() {
-    return this.service.getTopUsers();
-  }
-
-  @Get('me')
-  async getMyAccount(@UserData('userId') userId: string) {
-    const res = await this.service.findOne({
-      where: {
-        id: userId,
-      },
-      relations: ['avatars', 'currentAvatar', 'courses', 'premiumSetting'],
-    });
-
-    delete res.confirmationCode;
-    delete res.hashedPassword;
-    delete res.NRIC;
-    delete res.dateOfBirth;
-
-    return res;
-  }
-
-  @Override()
-  async updateOne(
-    @ParsedRequest() req: CrudRequest,
-    @ParsedBody() dto: User,
-    @UserData('userId') userId: string,
-    @UserData('role') role: string,
-    @Param('id') id: string,
-  ) {
-    if (role === UserRole.STUDENT && String(id) !== String(userId)) {
-      throw new BadRequestException('You can only update your own account');
-    }
-    return this.service.updateOne(req, dto);
   }
 }
