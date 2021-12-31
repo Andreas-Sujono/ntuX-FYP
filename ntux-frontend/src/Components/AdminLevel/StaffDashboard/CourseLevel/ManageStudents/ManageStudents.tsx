@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Container from '@mui/material/Container';
 import TextField from '@mui/material/TextField';
 import { IconButton, InputAdornment, Paper, Button, Grid } from '@mui/material';
@@ -14,9 +14,14 @@ import {
 } from 'Store/Actions/admin';
 import { useThunkDispatch } from 'common/hooks';
 import { toast } from 'react-toastify';
+import { searchFromListOfObject } from 'common/utils';
 
 export default function ManageStudents() {
   const dispatch = useThunkDispatch();
+  const [searchInput, setSearchInput] = useState('');
+  const [searchResult, setSearchResult] = useState<any>([]);
+  const ref = useRef<any>(null);
+
   const match: any = useRouteMatch(routes.STAFF_COURSES.BASE) || {};
   if (match?.params?.courseId === ':courseId')
     match.params = { courseId: null };
@@ -34,9 +39,28 @@ export default function ManageStudents() {
     const res = await dispatch(
       deleteStudentRegistration({ id, courseId: match?.params?.courseId }),
     );
-    if (!res.result)
+    if (res.result)
       toast.success('Student Registration is deleted successfully');
   };
+
+  const onChange = (e: any) => {
+    const value = e.target.value;
+    setSearchInput(value);
+
+    if (ref.current) clearTimeout(ref.current);
+
+    ref.current = setTimeout(() => {
+      const result = searchFromListOfObject(
+        data,
+        ['user.fullName', 'user.email', 'courseBatch.name', 'status'],
+        value,
+      );
+      setSearchResult(result);
+      ref.current = null;
+    }, 100);
+  };
+
+  const final = searchInput ? searchResult : data;
 
   return (
     <Container maxWidth="lg" sx={{ margin: 0, mt: 4, mb: 8, ml: 0, mr: 1 }}>
@@ -57,17 +81,19 @@ export default function ManageStudents() {
                   </InputAdornment>
                 ),
               }}
+              value={searchInput}
+              onChange={onChange}
             />
           </Grid>
           {/* <Grid item xs={12} md={3}>
             <Button variant="contained" sx={{ mt: 1 }} fullWidth>
-              Create New Student
+              Create New Registration
             </Button>
           </Grid> */}
         </Grid>
 
         <Table
-          data={data}
+          data={final}
           courseId={match?.params?.courseId}
           onClickDelete={onClickDelete}
         />

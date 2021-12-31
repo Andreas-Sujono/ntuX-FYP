@@ -58,8 +58,8 @@ export default function RewardTable({ data, onClickEdit, onClickDelete }: any) {
           <TableRow>
             <TableCell>Reward Name</TableCell>
             <TableCell align="left">Description</TableCell>
-            <TableCell align="left">Status</TableCell>
             <TableCell align="left">Redeemed Count</TableCell>
+            <TableCell align="left">Status</TableCell>
             <TableCell align="left">Actions</TableCell>
           </TableRow>
         </TableHead>
@@ -78,11 +78,18 @@ export default function RewardTable({ data, onClickEdit, onClickDelete }: any) {
                 </div>
               </TableCell>
               <TableCell align="left" sx={{ width: '10%' }}>
-                {row.isPublished ? 'Active' : 'Inactive'}
-              </TableCell>
-              <TableCell align="left" sx={{ width: '10%' }}>
                 10
               </TableCell>
+              <TableCell
+                align="left"
+                sx={{
+                  width: '10%',
+                  color: row.isPublished ? 'green' : 'lightgrey',
+                }}
+              >
+                {row.isPublished ? 'Active' : 'Inactive'}
+              </TableCell>
+
               <TableCell align="left" sx={{ width: '20%' }}>
                 <Button
                   onClick={() => onClickEdit(row)}
@@ -123,8 +130,15 @@ export const CreateModal = ({ open, setOpen, data, setData }: any) => {
   };
 
   const handleChange = (event: any) => {
+    let isPublished = !!finalData.isPublished;
+    if (event.target.name === 'status') {
+      if (event.target.value === 'ACTIVE') {
+        isPublished = true;
+      } else isPublished = false;
+    }
     setFinalData({
       ...finalData,
+      isPublished,
       [event.target.name]: event.target.value,
     });
   };
@@ -145,6 +159,7 @@ export const CreateModal = ({ open, setOpen, data, setData }: any) => {
     finalData.totalPointsRequired = Number(finalData.totalPointsRequired);
     finalData.role = finalData.role || 'STUDENT';
     finalData.id = data?.id || undefined;
+    // finalData.isPublished = finalData.status === 'ACTIVE';
 
     setLoading(true);
     if (fileData?.file) {
@@ -197,7 +212,7 @@ export const CreateModal = ({ open, setOpen, data, setData }: any) => {
           >
             <Grid item xs={12}>
               <Typography component="h3" variant="h6">
-                Create New Reward
+                {isEditMode ? 'Edit' : 'Create'} New Reward
               </Typography>
               <Divider sx={{ mb: 2, mt: 0.5 }} />
             </Grid>
@@ -269,12 +284,13 @@ export const CreateModal = ({ open, setOpen, data, setData }: any) => {
                 <Select
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
-                  value={finalData.status || 'DRAFT'}
+                  value={finalData.isPublished ? 'ACTIVE' : 'INACTIVE'}
                   label="Status"
                   onChange={handleChange}
+                  name="status"
                 >
-                  <MenuItem value={'DRAFT'}>DRAFT</MenuItem>
-                  <MenuItem value={'PUBLISHED'}>PUBLISHED</MenuItem>
+                  <MenuItem value={'ACTIVE'}>ACTIVE</MenuItem>
+                  <MenuItem value={'INACTIVE'}>INACTIVE</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
@@ -286,7 +302,7 @@ export const CreateModal = ({ open, setOpen, data, setData }: any) => {
             sx={{ mt: 3, mb: 2 }}
             disabled={loading}
           >
-            Create new reward
+            {isEditMode ? 'Edit' : 'Create'} New Reward
           </Button>
         </Box>
       </Box>

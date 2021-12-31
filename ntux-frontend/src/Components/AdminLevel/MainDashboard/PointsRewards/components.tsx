@@ -88,13 +88,14 @@ export function RewardHistoryTable() {
   const rewardsRedeemed = useSelector(selectRewardsRedeemed);
 
   return (
-    <TableContainer component={Paper}>
+    <TableContainer component={Paper} sx={{ minHeight: '320px' }}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
             <TableCell>Reward Redeemed</TableCell>
             <TableCell align="left">Description</TableCell>
             <TableCell align="left">Date Redeemed</TableCell>
+            <TableCell align="left">Status</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -129,6 +130,19 @@ export function RewardHistoryTable() {
               <TableCell align="left">{item.reward.description}</TableCell>
               <TableCell align="left">
                 {moment(item.createdAt).format('DD MMMM YYYY')}
+              </TableCell>
+              <TableCell
+                align="left"
+                sx={{
+                  color:
+                    item.status === 'PENDING'
+                      ? 'orange'
+                      : item.status === 'REDEEMED'
+                      ? 'green'
+                      : 'lightgrey',
+                }}
+              >
+                {item.status}
               </TableCell>
             </TableRow>
           ))}

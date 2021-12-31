@@ -66,6 +66,7 @@ export function BasicDetails({ data }: any) {
             InputLabelProps={{
               shrink: true,
             }}
+            disabled
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -80,6 +81,7 @@ export function BasicDetails({ data }: any) {
             InputLabelProps={{
               shrink: true,
             }}
+            disabled
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -94,6 +96,7 @@ export function BasicDetails({ data }: any) {
             InputLabelProps={{
               shrink: true,
             }}
+            disabled
           />
         </Grid>
         {/* <Grid item xs={12} sm={6}>
@@ -117,6 +120,7 @@ export function BasicDetails({ data }: any) {
             InputLabelProps={{
               shrink: true,
             }}
+            disabled
           />
         </Grid>
         <Grid item xs={12} sm={12}>
@@ -134,10 +138,10 @@ export function BasicDetails({ data }: any) {
             }}
           />
         </Grid>
-        <Grid item xs={12} sm={6}>
+        {/* <Grid item xs={12} sm={6}>
           <Button variant="contained">Update</Button>
           <Button>Cancel</Button>
-        </Grid>
+        </Grid> */}
       </Grid>
     </Paper>
   );

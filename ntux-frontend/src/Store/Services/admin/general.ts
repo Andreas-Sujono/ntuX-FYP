@@ -135,6 +135,12 @@ export default class AdminService extends BaseService {
     return res.data;
   };
 
+  getCourseAnnouncements = async (courseId: string) => {
+    const res = await this.getRequest(
+      `/course-announcement/?courseId=${courseId}`,
+    );
+    return res.data;
+  };
   createCourseAnnouncement = async (data: any) => {
     const res = await this.postRequest(`/course-announcement/`, data);
     return res.data;

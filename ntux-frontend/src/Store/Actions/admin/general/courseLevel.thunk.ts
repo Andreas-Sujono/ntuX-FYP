@@ -124,6 +124,35 @@ export const deleteCourseBatch =
     }
   };
 
+export const getCourseAnnouncements =
+  (data: any, bypass = false) =>
+  async (dispatch: AppDispatch, getState: () => RootState) => {
+    try {
+      const prevData = selectAllCourseAnnouncementsByCourseId(getState());
+      const res = await service.getCourseAnnouncements(data.course);
+      if (res.errorCode) {
+        dispatch(loadFailed());
+        sendErrorNotification(res.message, res.errorCode);
+        return {
+          result: false,
+          errorMessage: res.message,
+        };
+      }
+      dispatch(
+        loadSuccess({
+          allCourseAnnouncementsByCourseId: {
+            ...prevData,
+            [data.course]: res,
+          },
+        }),
+      );
+      return { result: true, res };
+    } catch (err) {
+      dispatch(loadFailed());
+      return { result: false };
+    }
+  };
+
 export const createCourseAnnouncement =
   (data: any, bypass = false) =>
   async (dispatch: AppDispatch, getState: () => RootState) => {
@@ -158,7 +187,7 @@ export const updateCourseAnnouncement =
   async (dispatch: AppDispatch, getState: () => RootState) => {
     try {
       const prevData = selectAllCourseAnnouncementsByCourseId(getState());
-      const res = await service.updateBatch(data);
+      const res = await service.updateCourseAnnouncement(data);
       if (res.errorCode) {
         dispatch(loadFailed());
         sendErrorNotification(res.message, res.errorCode);
@@ -192,7 +221,7 @@ export const deleteCourseAnnouncement =
   async (dispatch: AppDispatch, getState: () => RootState) => {
     try {
       const prevData = selectAllCourseAnnouncementsByCourseId(getState());
-      const res = await service.deleteBatch(data);
+      const res = await service.deleteCourseAnnouncement(data.id);
       if (res.errorCode) {
         dispatch(loadFailed());
         sendErrorNotification("Can't delete announcement", res.errorCode);

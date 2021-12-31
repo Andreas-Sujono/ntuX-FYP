@@ -9,7 +9,7 @@ export default class PointsRewardsService extends BaseService {
   };
 
   getAllRewards = async () => {
-    const res = await this.getRequest('/reward');
+    const res = await this.getRequest('/reward?filter=isPublished||eq||true');
     return res.data;
   };
 

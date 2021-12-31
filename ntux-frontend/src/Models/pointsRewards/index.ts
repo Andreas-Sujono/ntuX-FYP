@@ -39,6 +39,7 @@ export interface RewardRedeemed {
   user: User;
   reward: Reward;
   description: string;
+  status: string;
   createdAt: Date;
   updatedAt: Date;
 }

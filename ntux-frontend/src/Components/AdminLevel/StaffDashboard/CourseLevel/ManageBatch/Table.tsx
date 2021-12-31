@@ -22,7 +22,6 @@ import {
 } from '@mui/material';
 import { useThunkDispatch } from 'common/hooks';
 import { toast } from 'react-toastify';
-import { createReward } from 'Store/Actions/admin';
 import {
   createCourseBatch,
   updateCourseBatch,
