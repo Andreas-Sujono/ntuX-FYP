@@ -11,7 +11,7 @@ export class UserService extends TypeOrmCrudService<User> {
   }
 
   async createUser(body: User) {
-    return this.authService.signUp(body, body.role);
+    return this.authService.signUp(body, body.role, !!body.emailVerifiesAt);
   }
 
   async getTopUsers() {

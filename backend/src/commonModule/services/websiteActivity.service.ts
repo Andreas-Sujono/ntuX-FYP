@@ -99,24 +99,28 @@ export class WebsiteActivityService extends TypeOrmCrudService<WebsiteActivity> 
   async updateWebsiteActivity(dto: WebsiteActivity, userId?: number) {
     const userDate = moment(dto.date || new Date())
       .tz('Asia/Singapore')
-      .format('YYYY-MM-DD');
+      .toDate();
+    // .format('YYYY-MM-DD');
     //change to SG time
     const existing = await this.repo.findOne({
       date: userDate,
     });
     if (existing)
-      await this.repo.update(existing, {
-        visitWithLogin: existing.visitWithLogin + (dto.visitWithLogin || 0),
-        visitWithoutLogin:
-          existing.visitWithoutLogin + (dto.visitWithoutLogin || 0),
-        totalQuestion: existing.totalQuestion + (dto.totalQuestion || 0),
-        totalAnswer: existing.totalAnswer + (dto.totalAnswer || 0),
-        totalTutorRequest:
-          existing.totalTutorRequest + (dto.totalTutorRequest || 0),
-        totalTutorRequestAccepted:
-          existing.totalTutorRequestAccepted +
-          (dto.totalTutorRequestAccepted || 0),
-      });
+      await this.repo.update(
+        { id: existing.id },
+        {
+          visitWithLogin: existing.visitWithLogin + (dto.visitWithLogin || 0),
+          visitWithoutLogin:
+            existing.visitWithoutLogin + (dto.visitWithoutLogin || 0),
+          totalQuestion: existing.totalQuestion + (dto.totalQuestion || 0),
+          totalAnswer: existing.totalAnswer + (dto.totalAnswer || 0),
+          totalTutorRequest:
+            existing.totalTutorRequest + (dto.totalTutorRequest || 0),
+          totalTutorRequestAccepted:
+            existing.totalTutorRequestAccepted +
+            (dto.totalTutorRequestAccepted || 0),
+        },
+      );
     else
       await this.repo.save(
         this.repo.create({
@@ -131,18 +135,22 @@ export class WebsiteActivityService extends TypeOrmCrudService<WebsiteActivity> 
         user: userId as any,
       });
       if (existing2)
-        await this.studentWebsiteActivityRepo.update(existing2, {
-          visitWithLogin: existing2.visitWithLogin + (dto.visitWithLogin || 0),
-          visitWithoutLogin:
-            existing2.visitWithoutLogin + (dto.visitWithoutLogin || 0),
-          totalQuestion: existing2.totalQuestion + (dto.totalQuestion || 0),
-          totalAnswer: existing2.totalAnswer + (dto.totalAnswer || 0),
-          totalTutorRequest:
-            existing2.totalTutorRequest + (dto.totalTutorRequest || 0),
-          totalTutorRequestAccepted:
-            existing2.totalTutorRequestAccepted +
-            (dto.totalTutorRequestAccepted || 0),
-        });
+        await this.studentWebsiteActivityRepo.update(
+          { id: existing2.id },
+          {
+            visitWithLogin:
+              existing2.visitWithLogin + (dto.visitWithLogin || 0),
+            visitWithoutLogin:
+              existing2.visitWithoutLogin + (dto.visitWithoutLogin || 0),
+            totalQuestion: existing2.totalQuestion + (dto.totalQuestion || 0),
+            totalAnswer: existing2.totalAnswer + (dto.totalAnswer || 0),
+            totalTutorRequest:
+              existing2.totalTutorRequest + (dto.totalTutorRequest || 0),
+            totalTutorRequestAccepted:
+              existing2.totalTutorRequestAccepted +
+              (dto.totalTutorRequestAccepted || 0),
+          },
+        );
       else
         await this.studentWebsiteActivityRepo.save(
           this.studentWebsiteActivityRepo.create({

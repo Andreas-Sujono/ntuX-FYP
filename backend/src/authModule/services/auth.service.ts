@@ -91,7 +91,7 @@ export class AuthService {
     return Math.floor(100000 + Math.random() * 900000);
   }
 
-  async signUp(body: SignUpDto, role?: UserRole) {
+  async signUp(body: SignUpDto, role?: UserRole, isVerified?: boolean) {
     try {
       let tempPassword = body.hashedPassword;
       tempPassword = await this.encryptionService.hash(tempPassword);
@@ -105,26 +105,32 @@ export class AuthService {
           confirmationCode: longCode,
           codeExpiresAt: new Date(new Date().getTime() + 3600000), //1hour
           role: role || UserRole.STUDENT,
-          emailVerifiesAt: null,
+          emailVerifiesAt: isVerified ? new Date() : null,
           deletedAt: null,
           isActive: true,
         }),
       );
 
-      //send email confirmation with code
-      this.emailService.sendEmail(
-        body.email,
-        'NTUX: Confirm your email',
-        `Please go to this link to confirm your email: ${FE_URL}/confirm-email/?email=${body.email}&token=${longCode}`,
-        'confirmEmail',
-        {
-          LINK: `${FE_URL}/confirm-email/?email=${body.email}&token=${longCode}`,
-          link: `${FE_URL}/confirm-email/?email=${body.email}&token=${longCode}`,
-        },
-      );
+      if (!isVerified) {
+        //send email confirmation with code
+        this.emailService.sendEmail(
+          body.email,
+          'NTUX: Confirm your email',
+          `Please go to this link to confirm your email: ${FE_URL}/confirm-email/?email=${body.email}&token=${longCode}`,
+          'confirmEmail',
+          {
+            LINK: `${FE_URL}/confirm-email/?email=${body.email}&token=${longCode}`,
+            link: `${FE_URL}/confirm-email/?email=${body.email}&token=${longCode}`,
+          },
+        );
+        return {
+          user,
+          status: 'NOT_CONFIRMED',
+        };
+      }
       return {
         user,
-        status: 'NOT_CONFIRMED',
+        status: 'CONFIRMED',
       };
     } catch (err) {
       console.log(err);

@@ -42,7 +42,17 @@ export class RewardRedeemedController
   constructor(public service: RewardRedeemedService) {}
 
   @Override()
-  async getMany(@UserData('userId') userId: number) {
+  async getMany(
+    @UserData('userId') userId: number,
+    @UserData('role') role: UserRole,
+  ) {
+    if (role === UserRole.ADMIN || role === UserRole.LECTURER) {
+      return this.service.find({
+        where: {},
+        relations: ['reward'],
+      });
+    }
+
     return this.service.find({
       where: {
         user: userId,

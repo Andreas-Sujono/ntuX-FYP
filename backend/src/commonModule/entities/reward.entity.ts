@@ -38,6 +38,9 @@ export class Reward {
   @Column({ nullable: true })
   totalLimit: number;
 
+  @Column({ nullable: true, default: 0 })
+  redeemedCount: number;
+
   @CreateDateColumn({ type: 'timestamp with time zone' })
   createdAt: Date;
 

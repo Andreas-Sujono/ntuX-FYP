@@ -5,7 +5,7 @@ export class WebsiteActivity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column('date')
+  @Column({ type: 'date' })
   date: Date;
 
   @Column({ nullable: true, default: 0 })

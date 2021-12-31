@@ -54,7 +54,7 @@ import { UserData } from '../user.decorator';
       decorators: [Roles(UserRole.ADMIN, UserRole.LECTURER, UserRole.STUDENT)],
     },
     deleteOneBase: {
-      decorators: [Roles(UserRole.ADMIN)],
+      decorators: [Roles(UserRole.ADMIN, UserRole.LECTURER)],
     },
   },
 })

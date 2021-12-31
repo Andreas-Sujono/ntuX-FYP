@@ -115,6 +115,10 @@ export class RewardRedeemedService extends TypeOrmCrudService<RewardRedeemed> {
     //deduct points
     user.totalPoints -= reward.totalExpsRequired;
     await this.userRepo.save(user);
+    await this.rewardRepo.save({
+      ...reward,
+      redeemedCount: (reward.redeemedCount || 0) + 1,
+    });
 
     return this.repo.save(
       this.repo.create({
