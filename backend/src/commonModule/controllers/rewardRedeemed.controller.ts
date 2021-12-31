@@ -49,7 +49,7 @@ export class RewardRedeemedController
     if (role === UserRole.ADMIN || role === UserRole.LECTURER) {
       return this.service.find({
         where: {},
-        relations: ['reward'],
+        relations: ['reward', 'user'],
       });
     }
 
@@ -57,7 +57,7 @@ export class RewardRedeemedController
       where: {
         user: userId,
       },
-      relations: ['reward'],
+      relations: ['reward', 'user'],
     });
   }
 

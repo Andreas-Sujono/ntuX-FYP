@@ -77,6 +77,21 @@ export class UserController implements CrudController<User> {
     return res;
   }
 
+  @Get('all/students')
+  @Public()
+  async getAllStudents() {
+    const res = await this.service.find({
+      role: UserRole.STUDENT,
+    });
+    res.forEach((item) => {
+      delete item.NRIC;
+      delete item.dateOfBirth;
+      delete item.confirmationCode;
+      delete item.hashedPassword;
+    });
+    return res;
+  }
+
   @Override()
   async createOne(@ParsedBody() dto: User) {
     return this.service.createUser(dto);

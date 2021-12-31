@@ -27,7 +27,16 @@ export class StudentRegistrationService extends TypeOrmCrudService<StudentRegist
     courseId: string | number,
     courseBatchId: string | number,
   ) {
-    const existingUser = await this.userRepo.findOne({ email: user.email });
+    const existingUser = await this.userRepo.findOne({
+      where: [
+        {
+          email: user.email,
+        },
+        {
+          id: user?.id,
+        },
+      ],
+    });
     user.role = UserRole.STUDENT;
 
     if (!existingUser) {
