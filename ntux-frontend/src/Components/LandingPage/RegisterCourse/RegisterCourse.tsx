@@ -15,6 +15,8 @@ import { useHistory, useParams } from 'react-router-dom';
 import { getOnePublicCourse, registerCourse } from 'Store/Actions/courses';
 import { useThunkDispatch } from 'common/hooks';
 import { toast } from 'react-toastify';
+import { useSelector } from 'react-redux';
+import { selectUser } from 'Store/Selector/auth';
 
 export default function RegisterCoursePage() {
   const dispatch = useThunkDispatch();
@@ -23,9 +25,12 @@ export default function RegisterCoursePage() {
   const [courseData, setCourseData] = useState<Course | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
-  courseData?.courseBatches?.sort((a, b) => {
-    return a.startDate.getTime() - b.endDate.getTime();
-  });
+  const user = useSelector(selectUser);
+
+  if (courseData?.courseBatches)
+    courseData?.courseBatches?.sort((a, b) => {
+      return new Date(a.startDate).getTime() - new Date(b.endDate).getTime();
+    });
   const chosenCourseBatch = courseData?.courseBatches?.[0];
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -34,7 +39,7 @@ export default function RegisterCoursePage() {
     const checked = data.get('checked');
     const confirmEmail = data.get('confirmEmail') as string;
 
-    const formData = {
+    const formData: any = {
       user: {
         fullName: data.get('fullName') as string,
         familyName: data.get('familyName') as string,
@@ -47,20 +52,25 @@ export default function RegisterCoursePage() {
       courseId: courseData?.id,
       coursebatchId: chosenCourseBatch?.id,
     };
+    if (user) {
+      formData.user = user;
+      formData.user.hashedPassword = data.get('password') as string;
+    }
+    console.log(formData, confirmEmail);
 
     if (
       !formData.user.familyName ||
       !formData.user.givenName ||
       !formData.user.fullName ||
       !formData.user.email ||
-      !confirmEmail
+      (!confirmEmail && !user)
     )
       return toast.error('Please fill all the required field');
 
-    if (formData.user.email !== confirmEmail)
+    if (!user && formData.user.email !== confirmEmail)
       return toast.error('Email and confirm email are not the same');
 
-    if (data.get('password') !== data.get('confirmPassword'))
+    if (!user && data.get('password') !== data.get('confirmPassword'))
       return toast.error('Password and confirm password are not the same');
 
     if (!checked)
@@ -69,7 +79,7 @@ export default function RegisterCoursePage() {
       );
 
     setLoading(true);
-    const res: any = dispatch(registerCourse(formData));
+    const res: any = await dispatch(registerCourse(formData));
     setLoading(false);
     if (res.result) {
       toast.success('Successfully registered');
@@ -127,6 +137,8 @@ export default function RegisterCoursePage() {
                 id="fullName"
                 label="Full Name (as shown in NRIC/ FIN/ Passport)"
                 autoFocus
+                defaultValue={user?.fullName}
+                disabled={!!user}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -136,6 +148,8 @@ export default function RegisterCoursePage() {
                 id="familyName"
                 label="Family Name"
                 name="familyName"
+                defaultValue={user?.familyName}
+                disabled={!!user}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -145,6 +159,8 @@ export default function RegisterCoursePage() {
                 id="givenName"
                 label="Given Name"
                 name="givenName"
+                defaultValue={user?.givenName}
+                disabled={!!user}
               />
             </Grid>
             {/* <Grid item xs={12} sm={6}>
@@ -163,6 +179,8 @@ export default function RegisterCoursePage() {
                 id="nationality"
                 label="Nationality"
                 name="nationality"
+                defaultValue={user?.nationality}
+                disabled={!!user}
               />
             </Grid>
 
@@ -180,18 +198,23 @@ export default function RegisterCoursePage() {
                 type="email"
                 label="Email Address"
                 name="email"
+                defaultValue={user?.email}
+                disabled={!!user}
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                required
-                fullWidth
-                id="confirmEmail"
-                type="email"
-                label="Confirm Email Address"
-                name="confirmEmail"
-              />
-            </Grid>
+            {!user && (
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  required
+                  fullWidth
+                  id="confirmEmail"
+                  type="email"
+                  label="Confirm Email Address"
+                  name="confirmEmail"
+                />
+              </Grid>
+            )}
+
             <Grid item xs={12} sm={6}>
               <TextField
                 required
@@ -200,18 +223,23 @@ export default function RegisterCoursePage() {
                 type="password"
                 label="Password"
                 name="password"
+                // disabled={!!user}
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                required
-                fullWidth
-                id="confirmPassword"
-                type="password"
-                label="Confirm Password"
-                name="confirmPassword"
-              />
-            </Grid>
+            {!user && (
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  required
+                  fullWidth
+                  id="confirmPassword"
+                  type="password"
+                  label="Confirm Password"
+                  name="confirmPassword"
+                  // disabled={!!user}
+                />
+              </Grid>
+            )}
+
             <Grid item xs={12}>
               <Typography
                 component="h5"

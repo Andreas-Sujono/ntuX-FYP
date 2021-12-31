@@ -87,15 +87,19 @@ export const getCourseStatus = (batches: CourseBatch[]) => {
   const status = 'Closed'; // OPEN REGISTRATION, CLOSED REGISTRATION, ONGOING
   const now = new Date();
   let isFuture = false;
-  batches.forEach((batch) => {
-    if (now > batch.registrationStartsAt && now < batch.registrationEndsAt) {
+
+  for (const batch of batches) {
+    if (
+      now >= new Date(batch.registrationStartsAt) &&
+      now <= new Date(batch.registrationEndsAt)
+    ) {
       return 'Open Registration';
     }
-    if (now > batch.startDate && now < batch.endDate) {
+    if (now > new Date(batch.startDate) && now < new Date(batch.endDate)) {
       return 'Ongoing';
     }
     if (batch.startDate > now) isFuture = true;
-  });
+  }
 
   if (isFuture) return 'Close Registration';
 

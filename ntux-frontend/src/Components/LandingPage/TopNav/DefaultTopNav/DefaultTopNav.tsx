@@ -15,6 +15,9 @@ import {
 } from './Styles';
 import { useThemeContext } from '../../../../App/ThemeProvider';
 import { Button } from '@mui/material';
+import { useSelector } from 'react-redux';
+import { selectIsAuthenticated, selectUserRole } from 'Store/Selector/auth';
+import { Role } from 'Models/Auth';
 
 // const dropdownList: any = [];
 
@@ -28,6 +31,11 @@ const DefaultTopNav: React.FC = () => {
   const logoImagePath = `${process.env.PUBLIC_URL}/assets/logos/${
     darkTheme ? 'full-white-logo' : 'full-colored-logo'
   }.svg`;
+
+  const isLoggedIn = useSelector(selectIsAuthenticated);
+  const role = useSelector(selectUserRole);
+  const dashboardPath =
+    role === Role.STUDENT ? routes.ADMIN.BASE : routes.STAFF.DASHBOARD;
 
   const showInlineUl = window.innerWidth > 768;
 
@@ -75,11 +83,19 @@ const DefaultTopNav: React.FC = () => {
           <Link to={routes.ADMIN.STUDENT_TUTORING}>Student Tutoring</Link>
         </li>
         <li className="highlighted">
-          <Link to={routes.LOGIN_PAGE}>
-            <Button variant="contained" color="primary">
-              Login
-            </Button>
-          </Link>
+          {isLoggedIn ? (
+            <Link to={dashboardPath}>
+              <Button variant="contained" color="primary">
+                Dashboard
+              </Button>
+            </Link>
+          ) : (
+            <Link to={routes.LOGIN_PAGE}>
+              <Button variant="contained" color="primary">
+                Login
+              </Button>
+            </Link>
+          )}
         </li>
       </>
     );

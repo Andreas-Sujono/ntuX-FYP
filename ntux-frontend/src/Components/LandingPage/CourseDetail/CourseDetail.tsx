@@ -49,6 +49,14 @@ function CourseDetail(): React.ReactElement {
     ).format('DD MMMM YYYY')}`;
   };
 
+  if (courseData?.courseBatches)
+    courseData.courseBatches =
+      courseData?.courseBatches?.filter(
+        (item) => new Date(item.endDate) > new Date(),
+      ) || [];
+  const courseStatus = getCourseStatus(courseData?.courseBatches || []);
+  const isOpenRegistration = courseStatus === 'Open Registration';
+
   if (loading) {
     return (
       <FullWidthContainer>
@@ -70,7 +78,16 @@ function CourseDetail(): React.ReactElement {
           </div>
           <div className="right-content">
             <h1>{courseData?.name}</h1>
-            <Status>{getCourseStatus(courseData?.courseBatches || [])}</Status>
+            <Status
+              style={{
+                color:
+                  courseStatus !== 'Open Registration'
+                    ? 'lightgrey'
+                    : '#46b712',
+              }}
+            >
+              {courseStatus}
+            </Status>
             <AvailabilityBox>
               Course Availability:
               <ul>
@@ -101,6 +118,7 @@ function CourseDetail(): React.ReactElement {
                     makePath(routes.REGISTER_COURSE, { courseId: '1' }),
                   );
                 }}
+                disabled={!isOpenRegistration}
               >
                 Register
               </Button>
