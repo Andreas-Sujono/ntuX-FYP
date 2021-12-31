@@ -47,6 +47,18 @@ export class AvatarService extends TypeOrmCrudService<Avatar> {
   }
 
   async useAvatar(avatarId: number, userId: number) {
+    if (avatarId === -1) {
+      //default
+      await this.userRepo.update(
+        { id: userId as any },
+        {
+          currentAvatar: null,
+        },
+      );
+      return {
+        success: true,
+      };
+    }
     const existing = await this.repo.query(
       'SELECT * FROM avatar_users_user WHERE "avatarId" = $1 and "userId" = $2',
       [avatarId, userId],
