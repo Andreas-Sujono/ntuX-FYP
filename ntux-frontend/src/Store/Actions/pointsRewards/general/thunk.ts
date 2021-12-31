@@ -30,7 +30,7 @@ export const getGoalTask =
       const res = await service.getGoalTask();
       if (res.errorCode) {
         dispatch(loadFailed());
-        sendErrorNotification(res.message);
+        sendErrorNotification(res.message, res.errorCode);
         return {
           result: false,
           errorMessage: res.message,
@@ -55,7 +55,7 @@ export const getRewards =
       const res = await service.getAllRewards();
       if (res.errorCode) {
         dispatch(loadFailed());
-        sendErrorNotification(res.message);
+        sendErrorNotification(res.message, res.errorCode);
         return {
           result: false,
           errorMessage: res.message,
@@ -81,7 +81,7 @@ export const getRewardsRedeemed =
       const res = await service.getRewardsRedeemed(userId);
       if (res.errorCode) {
         dispatch(loadFailed());
-        sendErrorNotification(res.message);
+        sendErrorNotification(res.message, res.errorCode);
         return {
           result: false,
           errorMessage: res.message,
@@ -107,7 +107,7 @@ export const getAvatars =
       const res = await service.getAvatars();
       if (res.errorCode) {
         dispatch(loadFailed());
-        sendErrorNotification(res.message);
+        sendErrorNotification(res.message, res.errorCode);
         return {
           result: false,
           errorMessage: res.message,

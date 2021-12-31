@@ -253,6 +253,29 @@ export const getAllStudentRegistrations =
     }
   };
 
+export const deleteStudentRegistration =
+  (data: any, bypass = false) =>
+  async (dispatch: AppDispatch, getState: () => RootState) => {
+    try {
+      const prevStudents = selectAllStudentsByCourseId(getState());
+      const res = await service.deleteStudentRegistration(data);
+      if (res.errorCode) {
+        dispatch(loadFailed());
+        sendErrorNotification(res.message);
+        return {
+          result: false,
+          errorMessage: res.message,
+        };
+      }
+      dispatch(loadSuccess({}));
+      getAllStudentRegistrations(data.courseId)(dispatch, getState);
+      return { result: true };
+    } catch (err) {
+      dispatch(loadFailed());
+      return { result: false };
+    }
+  };
+
 export const createCourse =
   (data: any, bypass = false) =>
   async (dispatch: AppDispatch, getState: () => RootState) => {
@@ -483,7 +506,7 @@ export const deleteUser =
   (data: any, bypass = false) =>
   async (dispatch: AppDispatch, getState: () => RootState) => {
     try {
-      const res = await service.deleteUser(data);
+      const res = await service.deleteUser(data.id);
       if (res.errorCode) {
         dispatch(loadFailed());
         sendErrorNotification(res.message);

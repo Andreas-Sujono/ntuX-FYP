@@ -70,7 +70,7 @@ export const getOnePublicCourse =
       const res = await service.getOnePublicCourses(id);
       if (res.errorCode) {
         dispatch(loadFailed());
-        sendErrorNotification(res.message);
+        sendErrorNotification(res.message, res.errorCode);
         return {
           result: false,
           errorMessage: res.message,
@@ -92,7 +92,7 @@ export const getOneCourseRegistered =
       const res = await service.getOneCourseRegistered(id);
       if (res.errorCode) {
         dispatch(loadFailed());
-        sendErrorNotification(res.message);
+        sendErrorNotification(res.message, res.errorCode);
         return {
           result: false,
           errorMessage: res.message,
@@ -123,7 +123,7 @@ export const registerCourse =
       const res = await service.registerCourse(data);
       if (res.errorCode) {
         dispatch(loadFailed());
-        sendErrorNotification(res.message);
+        sendErrorNotification(res.message, res.errorCode);
         return {
           result: false,
           errorMessage: res.message,
@@ -180,6 +180,7 @@ export const getCourseContents =
           errorMessage: res.message,
         };
       }
+      res.sort((a, b) => a.pageOrder - b.pageOrder);
       dispatch(
         loadSuccess({
           courseContentById: {

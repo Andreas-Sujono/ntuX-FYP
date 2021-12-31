@@ -35,7 +35,7 @@ export const createCourseBatch =
       const res = await service.createBatch(data);
       if (res.errorCode) {
         dispatch(loadFailed());
-        sendErrorNotification(res.message);
+        sendErrorNotification(res.message, res.errorCode);
         return {
           result: false,
           errorMessage: res.message,
@@ -64,7 +64,7 @@ export const updateCourseBatch =
       const res = await service.updateBatch(data);
       if (res.errorCode) {
         dispatch(loadFailed());
-        sendErrorNotification(res.message);
+        sendErrorNotification(res.message, res.errorCode);
         return {
           result: false,
           errorMessage: res.message,
@@ -98,7 +98,7 @@ export const deleteCourseBatch =
       const res = await service.deleteBatch(data);
       if (res.errorCode) {
         dispatch(loadFailed());
-        sendErrorNotification("Can't delete batch");
+        sendErrorNotification("Can't delete batch", res.errorCode);
         return {
           result: false,
           errorMessage: res.message,
@@ -132,7 +132,7 @@ export const createCourseAnnouncement =
       const res = await service.createCourseAnnouncement(data);
       if (res.errorCode) {
         dispatch(loadFailed());
-        sendErrorNotification(res.message);
+        sendErrorNotification(res.message, res.errorCode);
         return {
           result: false,
           errorMessage: res.message,
@@ -161,7 +161,7 @@ export const updateCourseAnnouncement =
       const res = await service.updateBatch(data);
       if (res.errorCode) {
         dispatch(loadFailed());
-        sendErrorNotification(res.message);
+        sendErrorNotification(res.message, res.errorCode);
         return {
           result: false,
           errorMessage: res.message,
@@ -195,7 +195,7 @@ export const deleteCourseAnnouncement =
       const res = await service.deleteBatch(data);
       if (res.errorCode) {
         dispatch(loadFailed());
-        sendErrorNotification("Can't delete announcement");
+        sendErrorNotification("Can't delete announcement", res.errorCode);
         return {
           result: false,
           errorMessage: res.message,
@@ -236,7 +236,6 @@ export const changeStudentRegistrationStatus =
         };
       }
       dispatch(loadSuccess({}));
-      getAllStudentRegistrations(data.course)(dispatch, getState);
       return { result: true, res };
     } catch (err) {
       dispatch(loadFailed());
@@ -252,7 +251,7 @@ export const getStudentSummary =
       const res = await service.getStudentSummary(userId);
       if (res.errorCode) {
         dispatch(loadFailed());
-        sendErrorNotification("Can't change status");
+        sendErrorNotification(res.message, res.errorCode);
         return {
           result: false,
           errorMessage: res.message,

@@ -8,10 +8,15 @@ import { useRouteMatch } from 'react-router-dom';
 import { routes } from 'Components/Routes';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectAllStudentsByCourseId } from 'Store/Selector/admin';
-import { getAllStudentRegistrations } from 'Store/Actions/admin';
+import {
+  deleteStudentRegistration,
+  getAllStudentRegistrations,
+} from 'Store/Actions/admin';
+import { useThunkDispatch } from 'common/hooks';
+import { toast } from 'react-toastify';
 
 export default function ManageStudents() {
-  const dispatch = useDispatch();
+  const dispatch = useThunkDispatch();
   const match: any = useRouteMatch(routes.STAFF_COURSES.BASE) || {};
   if (match?.params?.courseId === ':courseId')
     match.params = { courseId: null };
@@ -23,7 +28,15 @@ export default function ManageStudents() {
     dispatch(getAllStudentRegistrations(match?.params?.courseId));
   }, []);
 
-  console.log(data);
+  const onClickDelete = async (id: any) => {
+    const confirm = window.confirm('Are you sure you want to delete this?');
+    if (!confirm) return;
+    const res = await dispatch(
+      deleteStudentRegistration({ id, courseId: match?.params?.courseId }),
+    );
+    if (!res.result)
+      toast.success('Student Registration is deleted successfully');
+  };
 
   return (
     <Container maxWidth="lg" sx={{ margin: 0, mt: 4, mb: 8, ml: 0, mr: 1 }}>
@@ -46,14 +59,18 @@ export default function ManageStudents() {
               }}
             />
           </Grid>
-          <Grid item xs={12} md={3}>
+          {/* <Grid item xs={12} md={3}>
             <Button variant="contained" sx={{ mt: 1 }} fullWidth>
               Create New Student
             </Button>
-          </Grid>
+          </Grid> */}
         </Grid>
 
-        <Table data={data} courseId={match?.params?.courseId} />
+        <Table
+          data={data}
+          courseId={match?.params?.courseId}
+          onClickDelete={onClickDelete}
+        />
       </Paper>
     </Container>
   );

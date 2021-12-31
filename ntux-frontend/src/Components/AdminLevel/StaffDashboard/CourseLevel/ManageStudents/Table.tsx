@@ -6,14 +6,64 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { Button } from '@mui/material';
+import {
+  Button,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+} from '@mui/material';
 import { LinkText } from 'common/Components/shared/shared';
 import { makePath } from 'common/utils';
 import { routes } from 'Components/Routes';
 import { useHistory } from 'react-router-dom';
+import { useThunkDispatch } from 'common/hooks';
+import { changeStudentRegistrationStatus } from 'Store/Actions/admin/general/courseLevel.thunk';
 
-export default function TableComponent({ data, courseId }: any) {
+export const StatusSelector = ({ id, value, onChange }: any) => {
+  const [status, setStatus] = React.useState(value);
+
+  const handleChange = (_value: any) => {
+    setStatus(_value);
+    onChange(id, _value);
+  };
+
+  React.useEffect(() => {
+    setStatus(value);
+  }, [value]);
+
+  return (
+    <FormControl fullWidth>
+      <InputLabel id="demo-simple-select-label">Status</InputLabel>
+      <Select
+        labelId="demo-simple-select-label"
+        id="demo-simple-select"
+        value={status}
+        label="Status"
+        onChange={(e: any) => handleChange(e.target.value)}
+        size="small"
+      >
+        <MenuItem value={'PENDING'}>PENDING</MenuItem>
+        <MenuItem value={'ADMITTED'}>ADMITTED</MenuItem>
+        <MenuItem value={'REJECTED'}>REJECTED</MenuItem>
+      </Select>
+    </FormControl>
+  );
+};
+
+export default function TableComponent({ data, courseId, onClickDelete }: any) {
   const history = useHistory();
+  const dispatch = useThunkDispatch();
+
+  const handleUpdateStatus = async (id: string, value: string) => {
+    dispatch(
+      changeStudentRegistrationStatus({
+        id,
+        status: value,
+      }),
+    );
+  };
+
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -50,10 +100,16 @@ export default function TableComponent({ data, courseId }: any) {
               </TableCell>
               <TableCell align="left">{row.user?.email}</TableCell>
               <TableCell align="left">{row.courseBatch.name}</TableCell>
-              <TableCell align="left">{row.status}</TableCell>
               <TableCell align="left">
-                <Button>Edit</Button>
-                <Button>Delete</Button>
+                <StatusSelector
+                  id={row.id}
+                  value={row.status}
+                  onChange={handleUpdateStatus}
+                />
+              </TableCell>
+              <TableCell align="left">
+                {/* <Button>Edit</Button> */}
+                <Button onClick={onClickDelete}>Delete</Button>
               </TableCell>
             </TableRow>
           ))}

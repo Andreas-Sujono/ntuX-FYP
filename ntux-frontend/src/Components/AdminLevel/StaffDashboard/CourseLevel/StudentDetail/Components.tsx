@@ -13,8 +13,19 @@ export default function CourseEnrolled({ data }: any) {
       <Divider sx={{ mb: 2, mt: 1.2 }} />
       <Grid container spacing={3}>
         {data.map((item: any) => (
-          <Grid item xs={12} md={6} sx={{ marginLeft: 0 }} key={item.id}>
-            <CourseCard course={item.course} courseBatch={item.courseBatch} />
+          <Grid
+            item
+            xs={12}
+            md={6}
+            sx={{ marginLeft: 0 }}
+            key={item.id}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <CourseCard
+              course={item.course}
+              courseBatch={item.courseBatch}
+              notGo
+            />
           </Grid>
         ))}
       </Grid>

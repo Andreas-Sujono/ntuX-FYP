@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
+import moment from 'moment';
 import Paper from '@mui/material/Paper';
 import {
   Box,
@@ -18,18 +19,25 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  FormControlLabel,
+  Checkbox,
 } from '@mui/material';
 import { useThunkDispatch } from 'common/hooks';
 import { toast } from 'react-toastify';
-import { createUser } from 'Store/Actions/admin';
+import { createUser, updateUser } from 'Store/Actions/admin';
 
-export default function TableComponent({ data }: any) {
+export default function TableComponent({
+  data,
+  onClickEdit,
+  onClickDelete,
+}: any) {
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
             <TableCell>User Name</TableCell>
+            <TableCell>User email</TableCell>
             <TableCell align="left">Role</TableCell>
             <TableCell align="left">Status</TableCell>
             <TableCell align="left">Join Date</TableCell>
@@ -45,16 +53,24 @@ export default function TableComponent({ data }: any) {
               <TableCell component="th" scope="row" sx={{ fontSize: '1rem' }}>
                 {row.fullName}
               </TableCell>
+              <TableCell component="th" scope="row">
+                {row.email}
+              </TableCell>
               <TableCell align="left">{row.role}</TableCell>
-              <TableCell align="left">
+              <TableCell
+                align="left"
+                sx={{
+                  color: row.emailVerifiesAt ? 'green' : 'lightgrey',
+                }}
+              >
                 {row.emailVerifiesAt ? 'Verified' : 'Not Verified'}
               </TableCell>
               <TableCell align="left">
-                {new Date(row.createdAt).toLocaleDateString()}
+                {moment(row.createdAt).format('DD/MM/YYYY')}
               </TableCell>
               <TableCell align="left">
-                <Button>Edit</Button>
-                <Button>Delete</Button>
+                <Button onClick={() => onClickEdit(row)}>Edit</Button>
+                <Button onClick={() => onClickDelete(row.id)}>Delete</Button>
               </TableCell>
             </TableRow>
           ))}
@@ -64,42 +80,67 @@ export default function TableComponent({ data }: any) {
   );
 }
 
-export const CreateModal = ({ open, setOpen, data }: any) => {
+export const CreateModal = ({ open, setOpen, data, setData }: any) => {
   const [loading, setLoading] = useState(false);
-  const [role, setRole] = useState('STUDENT');
+  const [finalData, setFinalData] = useState(data || {});
 
   const dispatch = useThunkDispatch();
+  const isEditMode = !!data && Object.keys(data || {}).length > 0;
 
-  const handleClose = () => setOpen(false);
+  useEffect(() => {
+    setFinalData(data || {});
+  }, [data]);
+
+  const handleClose = () => {
+    setOpen(false);
+    setData(null);
+  };
+
+  const handleChange = (event: any) => {
+    setFinalData({
+      ...finalData,
+      [event.target.name]: event.target.value,
+    });
+  };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    const finalData: any = {
-      fullName: formData.get('fullName') as string,
-      givenName: formData.get('givenName') as string,
-      familyName: formData.get('familyName') as string,
-      nationality: formData.get('nationality') as string,
-      email: formData.get('email') as string,
-      hashedPassword: formData.get('password') as string,
-      role,
-    };
-
     if (
       !finalData.fullName ||
       !finalData.givenName ||
       !finalData.familyName ||
       !finalData.nationality ||
       !finalData.email ||
-      !finalData.hashedPassword
+      (!finalData.hashedPassword && !isEditMode)
     ) {
       toast.error('Please fill all the fields');
       return;
     }
 
+    finalData.emailVerifiesAt =
+      isEditMode && data.emailVerifiesAt
+        ? data.emailVerifiesAt
+        : !isEditMode && finalData.emailVerifiesAt
+        ? new Date()
+        : false;
+
+    finalData.emailVerifiesAt;
+    finalData.role = finalData.role || 'STUDENT';
+    finalData.id = data?.id || undefined;
+
     setLoading(true);
-    await dispatch(createUser(finalData));
-    toast.success('User is created succesfully');
+    let res;
+    if (!isEditMode) {
+      res = await dispatch(createUser(finalData));
+    } else {
+      res = await dispatch(updateUser(finalData));
+    }
+    setData(null);
+    if (res.result) {
+      toast.success(
+        `User is ${isEditMode ? 'updated' : 'created'} succesfully`,
+      );
+    }
     setLoading(false);
     handleClose();
   };
@@ -134,7 +175,7 @@ export const CreateModal = ({ open, setOpen, data }: any) => {
           >
             <Grid item xs={12}>
               <Typography component="h3" variant="h6">
-                Create New User
+                {isEditMode ? 'Edit' : 'Create'} New User
               </Typography>
               <Divider sx={{ mb: 2, mt: 0.5 }} />
             </Grid>
@@ -145,6 +186,8 @@ export const CreateModal = ({ open, setOpen, data }: any) => {
                 fullWidth
                 id="fullName"
                 label="Full Name"
+                value={finalData.fullName}
+                onChange={handleChange}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -154,6 +197,8 @@ export const CreateModal = ({ open, setOpen, data }: any) => {
                 fullWidth
                 id="givenName"
                 label="Given Name"
+                value={finalData.givenName}
+                onChange={handleChange}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -163,6 +208,8 @@ export const CreateModal = ({ open, setOpen, data }: any) => {
                 fullWidth
                 id="familyName"
                 label="Family Name"
+                value={finalData.familyName}
+                onChange={handleChange}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -172,17 +219,20 @@ export const CreateModal = ({ open, setOpen, data }: any) => {
                 fullWidth
                 id="nationality"
                 label="Nationality"
+                value={finalData.nationality}
+                onChange={handleChange}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
               <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">Status</InputLabel>
+                <InputLabel id="demo-simple-select-label">Role</InputLabel>
                 <Select
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
-                  value={role}
-                  label="Status"
-                  onChange={(e: any) => setRole(e.target.value)}
+                  name="role"
+                  label="role"
+                  value={finalData.role || 'STUDENT'}
+                  onChange={handleChange}
                 >
                   <MenuItem value={'STUDENT'}>STUDENT</MenuItem>
                   <MenuItem value={'LECTURER'}>LECTURER</MenuItem>
@@ -197,19 +247,36 @@ export const CreateModal = ({ open, setOpen, data }: any) => {
                 fullWidth
                 id="email"
                 label="Email"
+                value={finalData.email}
+                onChange={handleChange}
               />
             </Grid>
+            {!isEditMode && (
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  name="hashedPassword"
+                  required
+                  fullWidth
+                  id="password"
+                  label="Password"
+                  type="password"
+                  value={finalData.hashedPassword}
+                  onChange={handleChange}
+                />
+              </Grid>
+            )}
             <Grid item xs={12} sm={6}>
-              <TextField
-                name="password"
-                required
-                fullWidth
-                id="password"
-                label="Password"
-                type="password"
+              <FormControlLabel
+                control={<Checkbox checked={!!finalData.emailVerifiesAt} />}
+                label="Email verified"
+                value={!!finalData.emailVerifiesAt}
+                name="emailVerifiesAt"
+                onChange={handleChange}
+                disabled={isEditMode && !!finalData.emailVerifiesAt}
               />
             </Grid>
           </Grid>
+
           <Button
             type="submit"
             fullWidth
@@ -217,7 +284,7 @@ export const CreateModal = ({ open, setOpen, data }: any) => {
             sx={{ mt: 3, mb: 2 }}
             disabled={loading}
           >
-            Create new User
+            {isEditMode ? 'Edit' : 'Create'} New User
           </Button>
         </Box>
       </Box>

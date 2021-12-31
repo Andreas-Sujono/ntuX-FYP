@@ -29,7 +29,7 @@ export const createCourseContent =
       const res = await service.createCourseContent(data);
       if (res.errorCode) {
         dispatch(loadFailed());
-        sendErrorNotification(res.message);
+        sendErrorNotification(res.message, res.errorCode);
         return {
           result: false,
           errorMessage: res.message,
@@ -58,7 +58,7 @@ export const updateCourseContent =
       const res = await service.updateCourseContent(data);
       if (res.errorCode) {
         dispatch(loadFailed());
-        sendErrorNotification(res.message);
+        sendErrorNotification(res.message, res.errorCode);
         return {
           result: false,
           errorMessage: res.message,
@@ -93,7 +93,7 @@ export const deleteCourseContent =
       const res = await service.deleteCourseContent(data.id);
       if (res.errorCode) {
         dispatch(loadFailed());
-        sendErrorNotification(res.message);
+        sendErrorNotification(res.message, res.errorCode);
         return {
           result: false,
           errorMessage: res.message,

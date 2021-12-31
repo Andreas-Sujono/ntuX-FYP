@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -6,6 +6,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import moment from 'moment';
 import {
   Box,
   Button,
@@ -22,8 +23,16 @@ import {
 import { useThunkDispatch } from 'common/hooks';
 import { toast } from 'react-toastify';
 import { createReward } from 'Store/Actions/admin';
+import {
+  createCourseBatch,
+  updateCourseBatch,
+} from 'Store/Actions/admin/general/courseLevel.thunk';
 
-export default function TableComponent({ data }: any) {
+export default function TableComponent({
+  data,
+  onClickEdit,
+  onClickDelete,
+}: any) {
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -42,21 +51,32 @@ export default function TableComponent({ data }: any) {
               key={row.id}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
-              <TableCell component="th" scope="row" sx={{ fontSize: '1rem' }}>
+              <TableCell
+                component="th"
+                scope="row"
+                sx={{ fontSize: '1rem', fontWeight: '500' }}
+              >
                 {row.name}
               </TableCell>
               <TableCell align="left">
-                {new Date(row.startDate).toLocaleDateString()} -{' '}
-                {new Date(row.endDate).toLocaleDateString()}
+                {moment(row.startDate).format('DD/MM/YYYY')} -{' '}
+                {moment(row.endDate).format('DD/MM/YYYY')}
               </TableCell>
               <TableCell align="left">
-                {new Date(row.registrationStartsAt).toLocaleDateString()} -{' '}
-                {new Date(row.registrationEndsAt).toLocaleDateString()}
+                {moment(row.registrationStartsAt).format('DD/MM/YYYY')} -{' '}
+                {moment(row.registrationEndsAt).format('DD/MM/YYYY')}
               </TableCell>
-              <TableCell align="left">{row.status}</TableCell>
+              <TableCell
+                align="left"
+                sx={{
+                  color: row.status === 'DRAFT' ? 'lightgrey' : 'green',
+                }}
+              >
+                {row.status}
+              </TableCell>
               <TableCell align="left">
-                <Button>Edit</Button>
-                <Button>Delete</Button>
+                <Button onClick={() => onClickEdit(row)}>Edit</Button>
+                <Button onClick={() => onClickDelete(row.id)}>Delete</Button>
               </TableCell>
             </TableRow>
           ))}
@@ -66,41 +86,76 @@ export default function TableComponent({ data }: any) {
   );
 }
 
-export const CreateModal = ({ open, setOpen, data }: any) => {
+export const CreateModal = ({
+  open,
+  setOpen,
+  data,
+  setData,
+  courseId,
+}: any) => {
   const [loading, setLoading] = useState(false);
-  const [status, setStatus] = useState('DRAFT');
-  const [file, setFile] = useState<any>(null);
+  const [finalData, setFinalData] = useState(data || {});
 
   const dispatch = useThunkDispatch();
+  const isEditMode = !!data && Object.keys(data || {}).length > 0;
 
-  const handleClose = () => setOpen(false);
+  useEffect(() => {
+    if (data) {
+      data.registrationStartsAt = moment(data.registrationStartsAt).format(
+        'YYYY-MM-DD',
+      );
+      data.registrationEndsAt = moment(data.registrationEndsAt).format(
+        'YYYY-MM-DD',
+      );
+      data.startDate = moment(data.startDate).format('YYYY-MM-DD');
+      data.endDate = moment(data.endDate).format('YYYY-MM-DD');
+    }
+
+    setFinalData(data || {});
+  }, [data]);
+
+  const handleClose = () => {
+    setOpen(false);
+    setData(null);
+  };
+
+  const handleChange = (event: any) => {
+    setFinalData({
+      ...finalData,
+      [event.target.name]: event.target.value,
+    });
+  };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    const finalData: any = {
-      name: formData.get('name') as string,
-      description: formData.get('description') as string,
-      totalLimit: Number(formData.get('totalLimit') as string),
-      totalPointsRequired: Number(
-        formData.get('totalPointsRequired') as string,
-      ),
-      isPublished: status === 'PUBLISHED',
-    };
 
     if (
-      !finalData.name ||
-      !finalData.description ||
-      !finalData.totalLimit ||
-      !finalData.totalPointsRequired
+      !finalData.registrationStartsAt ||
+      !finalData.registrationEndsAt ||
+      !finalData.startDate ||
+      !finalData.endDate
     ) {
       toast.error('Please fill all the fields');
       return;
     }
 
+    finalData.status = finalData.status || 'DRAFT';
+    finalData.course = courseId;
+    finalData.id = data?.id || undefined;
+
     setLoading(true);
-    await dispatch(createReward(finalData));
-    toast.success('Reward is created succesfully');
+    let res;
+    if (!isEditMode) {
+      res = await dispatch(createCourseBatch(finalData));
+    } else {
+      res = await dispatch(updateCourseBatch(finalData));
+    }
+    setData(null);
+    if (res.result) {
+      toast.success(
+        `batch is ${isEditMode ? 'updated' : 'created'} succesfully`,
+      );
+    }
     setLoading(false);
     handleClose();
   };
@@ -135,25 +190,9 @@ export const CreateModal = ({ open, setOpen, data }: any) => {
           >
             <Grid item xs={12}>
               <Typography component="h3" variant="h6">
-                Create New Reward
+                {isEditMode ? 'Edit' : 'Create'} New Batch
               </Typography>
               <Divider sx={{ mb: 2, mt: 0.5 }} />
-            </Grid>
-            <Grid item xs={12} sm={12}>
-              <TextField
-                fullWidth
-                id="file"
-                type="file"
-                name="file"
-                label="Reward Banner Image"
-                // variant="filled"
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                onChange={(e: any) =>
-                  e.target.files[0] && setFile(e.target.files[0])
-                }
-              />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -161,45 +200,69 @@ export const CreateModal = ({ open, setOpen, data }: any) => {
                 required
                 fullWidth
                 id="name"
-                label="Reward Name"
+                label="batch Name"
+                value={finalData.name}
+                onChange={handleChange}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
-                name="description"
+                name="registrationStartsAt"
                 required
                 fullWidth
-                id="description"
-                label="Description"
-              />
-            </Grid>
-            {/* <Grid item xs={12} sm={6}>
-              <TextField
-                required
-                fullWidth
-                id="islimitedOnePerStudent"
-                label="Limited to one per student"
-                name="islimitedOnePerStudent"
-              />
-            </Grid> */}
-            <Grid item xs={12} sm={6}>
-              <TextField
-                name="totalLimit"
-                required
-                fullWidth
-                id="totalLimit"
-                label="Total limit"
-                type="number"
+                id="registrationStartsAt"
+                label="Registration Start Date"
+                type="date"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                onChange={handleChange}
+                value={finalData.registrationStartsAt}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
-                name="totalPointsRequired"
+                name="registrationEndsAt"
                 required
                 fullWidth
-                id="totalPointsRequired"
-                label="Points Required"
-                type="number"
+                id="registrationEndsAt"
+                label="Registration End Date"
+                type="date"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                onChange={handleChange}
+                value={finalData.registrationEndsAt}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                name="startDate"
+                required
+                fullWidth
+                id="startDate"
+                label="Course Start Date"
+                type="date"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                onChange={handleChange}
+                value={finalData.startDate}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                name="endDate"
+                required
+                fullWidth
+                id="endDate"
+                label="Course End Date"
+                type="date"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                onChange={handleChange}
+                value={finalData.endDate}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -208,9 +271,10 @@ export const CreateModal = ({ open, setOpen, data }: any) => {
                 <Select
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
-                  value={status}
+                  value={finalData.status || 'DRAFT'}
                   label="Status"
-                  onChange={(e: any) => setStatus(e.target.value)}
+                  name="status"
+                  onChange={handleChange}
                 >
                   <MenuItem value={'DRAFT'}>DRAFT</MenuItem>
                   <MenuItem value={'PUBLISHED'}>PUBLISHED</MenuItem>
@@ -225,7 +289,7 @@ export const CreateModal = ({ open, setOpen, data }: any) => {
             sx={{ mt: 3, mb: 2 }}
             disabled={loading}
           >
-            Create new reward
+            {isEditMode ? 'Edit' : 'Create'} new batch
           </Button>
         </Box>
       </Box>

@@ -43,11 +43,21 @@ export const CourseCard = ({ data }: any) => {
     >
       <img src={data.imageUrl} />
       <div className="details" style={{ padding: '1.1rem' }}>
-        <div className="name">
+        <div
+          className="name"
+          style={{
+            height: '54px',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+          }}
+        >
           {data.code}: {data.name}
         </div>
         <div className="hours">{data.totalHours} Hours</div>
-        <div className="batch" style={{ color: 'green' }}>
+        <div
+          className="batch"
+          style={{ color: data.status === 'DRAFT' ? 'lightgrey' : 'green' }}
+        >
           {data.status}
         </div>
       </div>

@@ -36,7 +36,10 @@ import { routeData } from '../../CourseLevel/data';
 import { routes } from 'Components/Routes';
 import { createId, makePath } from 'common/utils';
 import { useThunkDispatch } from 'common/hooks';
-import { adminGetOneCourse } from 'Store/Actions/admin';
+import {
+  adminGetOneCourse,
+  getAllStudentRegistrations,
+} from 'Store/Actions/admin';
 import { LoadingBar } from 'common/Components/LoadingBar/FullPageLoadingBar';
 import { useSelector } from 'react-redux';
 import { selectUser } from 'Store/Selector/auth';
@@ -101,7 +104,10 @@ function CourseContainer({ children }: { children: React.ReactNode }) {
 
   const getAllData = async () => {
     setLoading(true);
-    await Promise.all([dispatch(adminGetOneCourse(match.params.courseId))]);
+    await Promise.all([
+      dispatch(adminGetOneCourse(match.params.courseId)),
+      dispatch(getAllStudentRegistrations(match.params.courseId)),
+    ]);
     setLoading(false);
   };
 

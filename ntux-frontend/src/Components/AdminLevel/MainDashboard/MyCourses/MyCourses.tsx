@@ -23,9 +23,11 @@ import { getRecommendationCourses } from 'Store/Actions/courses';
 export const CourseCard = ({
   course,
   courseBatch,
+  notGo,
 }: {
   course: Course;
   courseBatch: CourseBatch;
+  notGo?: boolean;
 }) => {
   course = course || {};
   courseBatch = courseBatch || {};
@@ -62,7 +64,7 @@ export const CourseCard = ({
         marginLeft: 0,
         cursor: 'pointer',
       }}
-      onClick={() => history.push(cousePath)}
+      onClick={() => !notGo && history.push(cousePath)}
     >
       <Grid item xs={12} md={4} lg={4} sx={{ maxHeight: '150px' }}>
         <img

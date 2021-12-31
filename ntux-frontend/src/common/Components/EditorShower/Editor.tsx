@@ -1,5 +1,11 @@
 import React from 'react';
-import EditablePage from './components/editablePage/index';
+import Loadable from 'react-loadable';
+// import EditablePage from './components/editablePage/index';
+
+const EditablePage = Loadable({
+  loader: () => import('./components/editablePage/index'),
+  loading: () => null,
+});
 
 const defaultBlocks = [
   {
@@ -29,4 +35,4 @@ const Editor = ({
   );
 };
 
-export default Editor;
+export default React.memo(Editor);

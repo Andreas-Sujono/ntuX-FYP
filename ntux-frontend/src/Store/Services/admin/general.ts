@@ -51,6 +51,13 @@ export default class AdminService extends BaseService {
     );
     return res.data;
   };
+  deleteStudentRegistration = async (data: any) => {
+    const res = await this.deleteRequest(
+      `/student-registration/${data.id}`,
+      {},
+    );
+    return res.data;
+  };
 
   createCourse = async (data: any) => {
     const res = await this.postRequest(`/courses/`, data);
@@ -119,8 +126,8 @@ export default class AdminService extends BaseService {
     const res = await this.patchRequest(`/course-batch/${data.id}`, data);
     return res.data;
   };
-  deleteBatch = async (id: Id) => {
-    const res = await this.deleteRequest(`/course-batch/${id}`, {});
+  deleteBatch = async (data: any) => {
+    const res = await this.deleteRequest(`/course-batch/${data.id}`, {});
     return res.data;
   };
 

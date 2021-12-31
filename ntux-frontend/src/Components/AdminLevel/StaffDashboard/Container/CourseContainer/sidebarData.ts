@@ -40,7 +40,7 @@ const data: SidebarItem[] = [
   },
   {
     id: '4',
-    name: 'Manage Students',
+    name: 'Manage Registration',
     path: routes.STAFF_COURSES.MANAGE_STUDENTS,
     Icon: PeopleIcon,
   },
