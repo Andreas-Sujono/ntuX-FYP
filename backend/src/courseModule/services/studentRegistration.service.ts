@@ -66,6 +66,12 @@ export class StudentRegistrationService extends TypeOrmCrudService<StudentRegist
         'You have already registered for this course',
       );
 
+    //authenticate user
+    await this.authService.login(
+      existingUser.email,
+      existingUser.hashedPassword,
+    );
+
     await this.repo.save(
       this.repo.create({
         course: courseId as any,

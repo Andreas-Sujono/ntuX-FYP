@@ -29,6 +29,12 @@ export class RewardRedeemedService extends TypeOrmCrudService<RewardRedeemed> {
     if (user.totalPoints < reward.totalExpsRequired)
       throw new BadRequestException('Not enough points');
 
+    if (reward.totalLimit !== null) {
+      if (reward.totalLimit <= reward.redeemedCount) {
+        throw new BadRequestException('Reward limit reached');
+      }
+    }
+
     //if buy default reward
     if (reward.isDefault) {
       const premiumSetting = await this.premiumSettingRepo.findOne({
@@ -124,6 +130,7 @@ export class RewardRedeemedService extends TypeOrmCrudService<RewardRedeemed> {
       this.repo.create({
         ...dto,
         user: userId as any,
+        status: reward.isDefault ? 'REDEEMED' : 'PENDING',
       }),
     );
   }

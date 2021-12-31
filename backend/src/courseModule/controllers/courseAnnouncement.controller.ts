@@ -1,5 +1,5 @@
 import { Roles } from './../../authModule/roles/roles.decorator';
-import { Controller } from '@nestjs/common';
+import { Controller, Query } from '@nestjs/common';
 import {
   Crud,
   CrudController,
@@ -11,6 +11,7 @@ import {
 import { CourseAnnouncement } from '../entities/courseAnnouncement.entity';
 import { CourseAnnouncementService } from '../services/courseAnnouncement.service';
 import { UserRole } from 'src/authModule/entities/user.entity';
+import { UserData } from 'src/authModule/user.decorator';
 
 @Crud({
   model: {
@@ -34,6 +35,12 @@ import { UserRole } from 'src/authModule/entities/user.entity';
       'getManyBase',
       'deleteOneBase',
     ],
+    getManyBase: {
+      decorators: [Roles(UserRole.LECTURER, UserRole.ADMIN, UserRole.STUDENT)],
+    },
+    getOneBase: {
+      decorators: [Roles(UserRole.LECTURER, UserRole.ADMIN, UserRole.STUDENT)],
+    },
     createOneBase: {
       decorators: [Roles(UserRole.LECTURER, UserRole.ADMIN)],
     },
@@ -50,6 +57,14 @@ export class CourseAnnouncementController
   implements CrudController<CourseAnnouncement>
 {
   constructor(public service: CourseAnnouncementService) {}
+
+  @Override()
+  async getMany(
+    @Query('courseId') courseId: string,
+    @Query('batchId') batchId: string,
+  ) {
+    return this.service.getCourseAnnouncements(courseId, batchId);
+  }
 
   @Override()
   async createOne(@ParsedRequest() req: CrudRequest, @ParsedBody() dto: any) {
