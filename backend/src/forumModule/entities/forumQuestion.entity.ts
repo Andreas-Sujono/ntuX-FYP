@@ -41,8 +41,11 @@ export class ForumQuestion {
   @Column()
   name: string;
 
-  @Column()
+  @Column({ nullable: true, default: '' })
   description: string;
+
+  @Column({ type: 'json' })
+  metadata: any;
 
   @Column({ nullable: true, default: 0 })
   upvote: number;

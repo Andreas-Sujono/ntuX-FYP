@@ -48,6 +48,9 @@ export class User {
   @Column()
   fullName: string;
 
+  @Column({ nullable: true })
+  jobRole: string;
+
   @Column()
   givenName: string;
 

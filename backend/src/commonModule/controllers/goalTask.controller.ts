@@ -1,10 +1,11 @@
 import { Roles } from '../../authModule/roles/roles.decorator';
-import { Controller } from '@nestjs/common';
+import { Controller, Get, Query } from '@nestjs/common';
 import { Crud, CrudController } from '@nestjsx/crud';
 import { UserRole } from 'src/authModule/entities/user.entity';
 import { GoalTask } from '../entities/goalTask.entity';
-import { GoalTaskService } from '../services/goalTask.entity';
+import { GoalTaskService, GoalTaskType } from '../services/goalTask.entity';
 import { Public } from 'src/authModule/public.decorator';
+import { UserData } from 'src/authModule/user.decorator';
 
 @Crud({
   model: {
@@ -38,4 +39,12 @@ import { Public } from 'src/authModule/public.decorator';
 @Controller('goal-task')
 export class GoalTaskController implements CrudController<GoalTask> {
   constructor(public service: GoalTaskService) {}
+
+  @Get('check')
+  async checkGetPoint(
+    @Query('type') type: GoalTaskType,
+    @UserData('userId') userId: number,
+  ) {
+    return await this.service.checkGetPoint(type, userId);
+  }
 }

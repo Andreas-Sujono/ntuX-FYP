@@ -1,5 +1,11 @@
 import { Roles } from '../roles/roles.decorator';
-import { Controller, Get, Param, BadRequestException } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  BadRequestException,
+  Query,
+} from '@nestjs/common';
 import {
   Crud,
   CrudController,
@@ -135,6 +141,18 @@ export class UserController implements CrudController<User> {
   @Public()
   async getTopUsers() {
     return this.service.getTopUsers();
+  }
+
+  @Get('active')
+  @Public()
+  async getMostActiveUsers() {
+    return this.service.getMostActiveUsers();
+  }
+
+  @Get('search')
+  @Public()
+  async searchUser(@Query('query') query: string) {
+    return this.service.searchUser(query);
   }
 
   @Override()

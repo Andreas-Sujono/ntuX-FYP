@@ -2,7 +2,14 @@ import { ForumAnswerService } from './../services/forumAnswer.service';
 import { ForumAnswer } from './../entities/forumAnswer.entity';
 import { Roles } from '../../authModule/roles/roles.decorator';
 import { Controller } from '@nestjs/common';
-import { Crud, CrudController } from '@nestjsx/crud';
+import {
+  Crud,
+  CrudController,
+  CrudRequest,
+  Override,
+  ParsedBody,
+  ParsedRequest,
+} from '@nestjsx/crud';
 import { UserRole } from 'src/authModule/entities/user.entity';
 
 @Crud({
@@ -31,4 +38,10 @@ import { UserRole } from 'src/authModule/entities/user.entity';
 @Controller('forum-answer')
 export class ForumAnswerController implements CrudController<ForumAnswer> {
   constructor(public service: ForumAnswerService) {}
+
+  @Override()
+  async createOne(@ParsedRequest() req: CrudRequest, @ParsedBody() dto: any) {
+    delete dto.id;
+    return this.service.createOne(req, dto);
+  }
 }
