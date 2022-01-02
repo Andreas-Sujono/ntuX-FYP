@@ -76,7 +76,16 @@ export class ForumQuestionService extends TypeOrmCrudService<ForumQuestion> {
       where: {
         id,
       },
-      relations: ['user', 'tags', 'childrenQuestions', 'answers'],
+      relations: [
+        'user',
+        'tags',
+        'childrenQuestions',
+        'answers',
+        'childrenQuestions.user',
+        'answers.user',
+        'answers.childrenAnswers',
+        'answers.childrenAnswers.user',
+      ],
     });
   }
 }

@@ -42,8 +42,13 @@ export class ForumQuestionController implements CrudController<ForumQuestion> {
   constructor(public service: ForumQuestionService) {}
 
   @Override()
-  async createOne(@ParsedRequest() req: CrudRequest, @ParsedBody() dto: any) {
+  async createOne(
+    @ParsedRequest() req: CrudRequest,
+    @ParsedBody() dto: any,
+    @UserData('userId') userId: number,
+  ) {
     delete dto.id;
+    dto.user = userId as any;
     return this.service.createOne(req, dto);
   }
 
