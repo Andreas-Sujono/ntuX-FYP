@@ -1,3 +1,4 @@
+import { UserRole } from './../entities/user.entity';
 import { AuthService } from 'src/authModule/services/auth.service';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -16,17 +17,31 @@ export class UserService extends TypeOrmCrudService<User> {
   }
 
   async getTopUsers() {
-    return this.repo.find({
+    const res = await this.repo.find({
+      where: {
+        role: UserRole.STUDENT,
+      },
       order: {
         totalExps: 'DESC',
       },
+      relations: ['currentAvatar'],
       take: 10,
     });
+    res.forEach((item) => {
+      delete item.confirmationCode;
+      delete item.hashedPassword;
+      delete item.NRIC;
+      delete item.dateOfBirth;
+    });
+    return res;
   }
 
   async getMostActiveUsers() {
     const res = await this.repo.query(`
-      select user.* from user left join student_website_activity on user.id = student_website_activity."userId" group by user.id and student_website_activity.date
+      select "user".*, avatar."imageUrl" as "avatarImageUrl" from "user" left join student_website_activity on "user".id = student_website_activity."userId" 
+      left join avatar on "user"."currentAvatarId" = avatar.id
+      where "user".role = '${UserRole.STUDENT}'
+      group by "user".id, student_website_activity.date, avatar."imageUrl"
       order by sum(student_website_activity."visitWithLogin") desc limit 10
     `);
     res.forEach((item) => {
@@ -40,7 +55,11 @@ export class UserService extends TypeOrmCrudService<User> {
 
   async searchUser(query: string) {
     if (!query) {
-      const res = await this.repo.find({});
+      const res = await this.repo.find({
+        where: {
+          role: UserRole.STUDENT,
+        },
+      });
       res.forEach((item) => {
         delete item.confirmationCode;
         delete item.hashedPassword;
@@ -54,9 +73,11 @@ export class UserService extends TypeOrmCrudService<User> {
       where: [
         {
           name: ILike(`%${query}%`),
+          role: UserRole.STUDENT,
         },
         {
           email: ILike(`%${query}%`),
+          role: UserRole.STUDENT,
         },
       ],
     });
