@@ -38,10 +38,11 @@ export class UserService extends TypeOrmCrudService<User> {
 
   async getMostActiveUsers() {
     const res = await this.repo.query(`
-      select "user".*, avatar."imageUrl" as "avatarImageUrl" from "user" left join student_website_activity on "user".id = student_website_activity."userId" 
+      select "user".*, avatar."imageUrl" as "avatarImageUrl" from "user" 
+      left join student_website_activity on "user".id = student_website_activity."userId" 
       left join avatar on "user"."currentAvatarId" = avatar.id
       where "user".role = '${UserRole.STUDENT}'
-      group by "user".id, student_website_activity.date, avatar."imageUrl"
+      group by "user".id, avatar."imageUrl"
       order by sum(student_website_activity."visitWithLogin") desc limit 10
     `);
     res.forEach((item) => {

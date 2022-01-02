@@ -47,7 +47,7 @@ export class AvatarService extends TypeOrmCrudService<Avatar> {
   }
 
   async useAvatar(avatarId: number, userId: number) {
-    if (avatarId === -1) {
+    if (Number(avatarId) === -1) {
       //default
       await this.userRepo.update(
         { id: userId as any },
