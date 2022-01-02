@@ -1,5 +1,7 @@
+import { useThunkDispatch } from 'common/hooks';
 import React from 'react';
 import Loadable from 'react-loadable';
+import { uploadFile } from 'Store/Actions/admin';
 // import EditablePage from './components/editablePage/index';
 
 const EditablePage = Loadable({
@@ -22,7 +24,13 @@ const Editor = ({
   courseId,
   handleUpdate,
   isDisabled,
+  useTags2,
 }: any) => {
+  const dispatch = useThunkDispatch();
+
+  const handleUploadFile = async (data) => {
+    return dispatch(uploadFile(data));
+  };
   return (
     <EditablePage
       id={pid || '101'}
@@ -31,6 +39,8 @@ const Editor = ({
       courseId={courseId}
       handleUpdate={handleUpdate}
       isDisabled={isDisabled}
+      useTags2={useTags2}
+      uploadFile={handleUploadFile}
     />
   );
 };

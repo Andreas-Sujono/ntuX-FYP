@@ -24,7 +24,7 @@ class EditableBlock extends React.Component {
     this.handleBlur = this.handleBlur.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.handleKeyUp = this.handleKeyUp.bind(this);
-    this.handleMouseUp = this.handleMouseUp.bind(this);
+    // this.handleMouseUp = this.handleMouseUp.bind(this);
     this.handleDragHandleClick = this.handleDragHandleClick.bind(this);
     this.openActionMenu = this.openActionMenu.bind(this);
     this.closeActionMenu = this.closeActionMenu.bind(this);
@@ -115,6 +115,8 @@ class EditableBlock extends React.Component {
     const tagChanged = this.props.tag !== this.state.tag;
     const imageChanged = this.props.imageUrl !== this.state.imageUrl;
     const videoChanged = this.props.videoUrl !== this.state.videoUrl;
+
+    console.log('updated: ', imageChanged);
     if (
       ((stoppedTyping && htmlChanged) || tagChanged || imageChanged) &&
       hasNoPlaceholder
@@ -201,13 +203,13 @@ class EditableBlock extends React.Component {
     }
   }
 
-  handleMouseUp() {
-    const block = this.contentEditable.current;
-    const { selectionStart, selectionEnd } = getSelection(block);
-    if (selectionStart !== selectionEnd) {
-      this.openActionMenu(block, 'TEXT_SELECTION');
-    }
-  }
+  // handleMouseUp() {
+  //   const block = this.contentEditable.current;
+  //   const { selectionStart, selectionEnd } = getSelection(block);
+  //   if (selectionStart !== selectionEnd) {
+  //     this.openActionMenu(block, 'TEXT_SELECTION');
+  //   }
+  // }
 
   handleDragHandleClick(e) {
     const dragHandle = e.target;
@@ -319,10 +321,10 @@ class EditableBlock extends React.Component {
     if (this.fileInput && this.fileInput.files[0]) {
       const imageFile = this.fileInput.files[0];
       const formData = new FormData();
-      formData.append('image', imageFile);
+      // formData.append('image', imageFile);
       try {
         // const response = await fetch(
-        //   `${process.env.NEXT_PUBLIC_API}/pages/images`,
+        //   `https://kotakode.com/api/v1/files/images`,
         //   {
         //     method: 'POST',
         //     credentials: 'include',
@@ -331,11 +333,14 @@ class EditableBlock extends React.Component {
         // );
         // const data = await response.json();
         //upload image here
-        const imageUrl =
-          'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1200px-Image_created_with_a_mobile_phone.png';
+        // const imageUrl = data?.data?.attributes?.url || '';
+        // 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1200px-Image_created_with_a_mobile_phone.png';
+        const res = await this.props.uploadFile(imageFile);
+        const imageUrl = res.url;
         this.setState({ ...this.state, imageUrl: imageUrl });
       } catch (err) {
         console.log(err);
+        // this.setState({ ...this.state, imageUrl: '' });
       }
     }
   }
@@ -373,6 +378,7 @@ class EditableBlock extends React.Component {
       case 'DRAG_HANDLE_CLICK': {
         const x = rect.x + 74;
         const y = rect.y + 70;
+        // console.log('DRAG_HANDLE_CLICK', parent, rect);
         return { x: x, y: y };
       }
       default:
@@ -412,6 +418,7 @@ class EditableBlock extends React.Component {
             position={this.state.tagSelectorMenuPosition}
             closeMenu={this.closeTagSelectorMenu}
             handleSelection={this.handleTagSelection}
+            useTags2={this.props.useTags2}
           />
         )}
         {this.state.actionMenuOpen && (
@@ -456,7 +463,7 @@ class EditableBlock extends React.Component {
                   onBlur={this.handleBlur}
                   onKeyDown={this.handleKeyDown}
                   onKeyUp={this.handleKeyUp}
-                  onMouseUp={this.handleMouseUp}
+                  // onMouseUp={this.handleMouseUp}
                   tagName={this.state.tag}
                   className={[
                     styles.block,

@@ -39,6 +39,8 @@ const EditablePage = ({
   courseId,
   handleUpdate,
   isDisabled,
+  useTags2,
+  uploadFile,
 }) => {
   if (err) {
     return (
@@ -203,6 +205,8 @@ const EditablePage = ({
                     deleteBlock={deleteBlockHandler}
                     updateBlock={updateBlockHandler}
                     isDisabled={isDisabled}
+                    useTags2={useTags2}
+                    uploadFile={uploadFile}
                   />
                 );
               })}

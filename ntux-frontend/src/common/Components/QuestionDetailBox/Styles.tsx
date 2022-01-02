@@ -21,6 +21,10 @@ export const Row = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  > div {
+    width: 100%;
+    flex: 1 1 0;
+  }
 `;
 
 export const VoteContainer = styled.div`

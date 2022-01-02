@@ -35,4 +35,14 @@ export const routeData = [
     component: lazy(() => import('./UsersSection')),
     exact: true,
   },
+  {
+    path: routes.FORUM.CREATE_QUESTION,
+    component: lazy(() => import('./CreateQuestion')),
+    exact: true,
+  },
+  {
+    path: routes.FORUM.UPDATE_QUESTION,
+    component: lazy(() => import('./CreateQuestion')),
+    exact: true,
+  },
 ];

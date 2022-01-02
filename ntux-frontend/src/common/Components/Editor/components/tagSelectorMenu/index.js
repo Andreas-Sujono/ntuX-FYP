@@ -5,41 +5,62 @@ import { matchSorter } from 'match-sorter';
 
 import styles from './styles.module.scss';
 
-const MENU_HEIGHT = 180;
-const allowedTags = [
-  // {
-  //   id: 'page-title',
-  //   tag: 'h1',
-  //   label: 'Page Title',
-  // },
-  {
-    id: 'heading',
-    tag: 'h2',
-    label: 'Heading',
-  },
-  {
-    id: 'subheading',
-    tag: 'h3',
-    label: 'Subheading',
-  },
-  {
-    id: 'paragraph',
-    tag: 'p',
-    label: 'Paragraph',
-  },
-  {
-    id: 'image',
-    tag: 'img',
-    label: 'Image',
-  },
-  {
-    id: 'video',
-    tag: 'iframe',
-    label: 'Embed youtube',
-  },
-];
-
-const TagSelectorMenu = ({ position, closeMenu, handleSelection }) => {
+const TagSelectorMenu = ({
+  position,
+  closeMenu,
+  handleSelection,
+  useTags2,
+}) => {
+  const MENU_HEIGHT = useTags2 ? 100 : 180;
+  const allowedTags = React.useMemo(
+    () =>
+      useTags2
+        ? [
+            {
+              id: 'paragraph',
+              tag: 'p',
+              label: 'Paragraph',
+            },
+            {
+              id: 'image',
+              tag: 'img',
+              label: 'Image',
+            },
+            {
+              id: 'video',
+              tag: 'iframe',
+              label: 'Embed youtube',
+            },
+          ]
+        : [
+            {
+              id: 'heading',
+              tag: 'h2',
+              label: 'Heading',
+            },
+            {
+              id: 'subheading',
+              tag: 'h3',
+              label: 'Subheading',
+            },
+            {
+              id: 'paragraph',
+              tag: 'p',
+              label: 'Paragraph',
+            },
+            {
+              id: 'image',
+              tag: 'img',
+              label: 'Image',
+            },
+            {
+              id: 'video',
+              tag: 'iframe',
+              label: 'Embed youtube',
+            },
+          ],
+    [useTags2],
+  );
   const [tagList, setTagList] = useState(allowedTags);
   const [selectedTag, setSelectedTag] = useState(0);
   // const [command, setCommand] = useState('');

@@ -43,8 +43,24 @@ export default class PointsRewardsService extends BaseService {
     const res = await this.postRequest(`/forum-question`, data);
     return res.data;
   };
+  updateQuestion = async (data: any) => {
+    const res = await this.patchRequest(`/forum-question/${data.id}`, data);
+    return res.data;
+  };
+  deleteQuestion = async (data: any) => {
+    const res = await this.deleteRequest(`/forum-question/${data.id}`, {});
+    return res.data;
+  };
   createAnswer = async (data: any) => {
     const res = await this.postRequest(`/forum-answer`, data);
+    return res.data;
+  };
+  updateAnswer = async (data: any) => {
+    const res = await this.patchRequest(`/forum-answer/${data.id}`, data);
+    return res.data;
+  };
+  deleteAnswer = async (data: any) => {
+    const res = await this.deleteRequest(`/forum-answer/${data.id}`, {});
     return res.data;
   };
 }

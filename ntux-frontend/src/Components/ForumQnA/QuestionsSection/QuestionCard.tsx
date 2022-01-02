@@ -46,8 +46,8 @@ function QuestionCard({ summary }: { summary: any }): React.ReactElement {
         <div className="right-section">
           {summary.arrayAgg
             ?.filter((item) => !!item)
-            ?.map((item) => (
-              <Tag key={item}>{item}</Tag>
+            ?.map((item, idx) => (
+              <Tag key={idx}>{item}</Tag>
             ))}
         </div>
       </CardBottomRow>

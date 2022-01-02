@@ -11,6 +11,8 @@ export const routes = {
   FORUM: {
     BASE: '/forum',
     QUESTIONS: '/forum/questions',
+    CREATE_QUESTION: '/forum/create/question',
+    UPDATE_QUESTION: '/forum/update/question/:questionId',
     TAGS: '/forum/tags',
     USERS: '/forum/users',
     QUESTION_DETAIL: '/forum/questions/:questionId',

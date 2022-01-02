@@ -5,7 +5,7 @@ export const Container = styled.div``;
 
 export const Title = styled.h1`
   margin: 0;
-  font-size: 2rem;
+  font-size: 32px;
 
   ${media.lessThan('md')`
     font-size: 1rem;

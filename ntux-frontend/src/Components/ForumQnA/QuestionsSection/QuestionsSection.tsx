@@ -1,7 +1,9 @@
 import { Button } from '@mui/material';
+import { routes } from 'Components/Routes';
 import React, { memo } from 'react';
 import { SearchBar } from 'react-dre/lib/SearchBar';
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import {
   selectAllQuestions,
   selectMyQuestions,
@@ -31,7 +33,9 @@ function QuestionsSection(): React.ReactElement {
     <Container>
       <TitleRow>
         <Title>Questions</Title>
-        <Button variant="contained">Ask New Question</Button>
+        <Link to={routes.FORUM.CREATE_QUESTION}>
+          <Button variant="contained">Ask New Question</Button>
+        </Link>
       </TitleRow>
       <SearchBarContainer>
         <SearchBar
@@ -66,7 +70,7 @@ function QuestionsSection(): React.ReactElement {
           <span style={{ color: 'lightgrey' }}>No Data</span>
         )}
         {selectedData.map((item) => (
-          <QuestionCard key={item.question + item.description} summary={item} />
+          <QuestionCard key={item.id} summary={item} />
         ))}
       </CardsContainer>
     </Container>

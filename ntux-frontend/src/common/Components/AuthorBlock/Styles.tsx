@@ -7,7 +7,7 @@ export const Container = styled.div`
   .author-image {
     width: 26px;
     height: 26px;
-    background: #6298e9;
+    background: #4caf50;
     border-radius: 50%;
     margin-right: 6px;
     color: white;

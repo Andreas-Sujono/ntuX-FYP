@@ -1,6 +1,6 @@
 import React, { memo, useState } from 'react';
 import { DownChevronIcon, UpChevronIcon } from 'react-dre/lib/Icon';
-import { shortenDateFormat } from '../../utils';
+import { makePath, shortenDateFormat } from '../../utils';
 import AuthorBlock from '../AuthorBlock';
 import { TextInput } from '../Input';
 import {
@@ -13,14 +13,26 @@ import {
   ReplyContainer,
 } from './Styles';
 import { Button, Divider } from '@mui/material';
+import EditorShower from '../EditorShower';
+import { selectUser } from 'Store/Selector/auth';
+import { useSelector } from 'react-redux';
+import { Role } from 'Models/Auth';
+import { useThunkDispatch } from 'common/hooks';
+import { toast } from 'react-toastify';
+import { routes } from 'Components/Routes';
+import { useHistory } from 'react-router-dom';
+import { deleteQuestion } from 'Store/Actions/forum';
 
 interface Props {
   data: any;
 }
 
-function AnswerDetailBox({ data }: Props): React.ReactElement {
+function QuestionDetailBox({ data }: Props): React.ReactElement {
   const [commentInput, setCommentInput] = useState('');
   const [isAddingComment, setIsAddingComment] = useState(false);
+  const user = useSelector(selectUser);
+  const dispatch = useThunkDispatch();
+  const history = useHistory();
 
   const renderReplyBox = (item: any) => {
     return (
@@ -33,6 +45,29 @@ function AnswerDetailBox({ data }: Props): React.ReactElement {
         </span>
       </ReplyContainer>
     );
+  };
+
+  const handleEdit = () => {
+    history.push(
+      makePath(routes.FORUM.UPDATE_QUESTION, { questionId: data.id }),
+    );
+  };
+
+  const handleDelete = async () => {
+    const confirm = window.confirm(
+      'Are you sure you want to delete this question?',
+    );
+    if (!confirm) return;
+
+    const res = await dispatch(
+      deleteQuestion({
+        id: data.id,
+      }),
+    );
+    if (res.result) {
+      toast.success('Question deleted successfully');
+      return history.push(routes.FORUM.QUESTIONS);
+    }
   };
 
   return (
@@ -51,7 +86,14 @@ function AnswerDetailBox({ data }: Props): React.ReactElement {
             </VoteContainer>
           )}
 
-          <TextContainer>{data.description}</TextContainer>
+          <EditorShower
+            pid={data?.id}
+            blocks={data?.metadata?.length ? data.metadata : []}
+            handleUpdate={() => null}
+            isDisabled
+          />
+
+          {/* <TextContainer>{data.description}</TextContainer> */}
         </Row>
         <BottomRow>
           <div>
@@ -59,13 +101,29 @@ function AnswerDetailBox({ data }: Props): React.ReactElement {
               Posted{' '}
               {shortenDateFormat(new Date(data.createdAt).getTime() / 1000)} ago
             </span>
-
             <span
               style={{ cursor: 'pointer', color: '#ae1b1b' }}
               onClick={() => setIsAddingComment(!isAddingComment)}
             >
-              Reply comment
+              Reply Question
             </span>
+            {user?.id === data.user?.id && (
+              <span
+                style={{ cursor: 'pointer', color: '#ae1b1b' }}
+                onClick={handleEdit}
+              >
+                Edit
+              </span>
+            )}
+            {((user?.id && user?.id === data.user?.id) ||
+              user?.role === Role.ADMIN) && (
+              <span
+                style={{ cursor: 'pointer', color: '#ae1b1b' }}
+                onClick={handleDelete}
+              >
+                Delete
+              </span>
+            )}
           </div>
           <AuthorBlock
             author={{
@@ -75,7 +133,7 @@ function AnswerDetailBox({ data }: Props): React.ReactElement {
           />
         </BottomRow>
       </MainBox>
-      {(data.childrenAnswers || []).map((item) => (
+      {(data.childrenQuestions || []).map((item) => (
         <div key={item.id}>
           {renderReplyBox(item)}
           <Divider />
@@ -101,4 +159,4 @@ function AnswerDetailBox({ data }: Props): React.ReactElement {
   );
 }
 
-export default memo(AnswerDetailBox);
+export default memo(QuestionDetailBox);

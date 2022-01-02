@@ -263,11 +263,100 @@ export const createQuestion =
     }
   };
 
+export const updateQuestion =
+  (data: any, bypass = false) =>
+  async (dispatch: AppDispatch, getState: () => RootState) => {
+    try {
+      const res = await service.updateQuestion(data);
+      if (res.errorCode) {
+        dispatch(loadFailed());
+        sendErrorNotification(res.message, res.errorCode);
+        return {
+          result: false,
+          errorMessage: res.message,
+        };
+      }
+      dispatch(loadSuccess({}));
+      getAllQuestions()(dispatch, getState);
+      getOneQuestion(data.id)(dispatch, getState);
+      return { result: true };
+    } catch (err) {
+      dispatch(loadFailed());
+      return { result: false };
+    }
+  };
+
+export const deleteQuestion =
+  (data: any, bypass = false) =>
+  async (dispatch: AppDispatch, getState: () => RootState) => {
+    try {
+      const res = await service.deleteQuestion(data);
+      if (res.errorCode) {
+        dispatch(loadFailed());
+        sendErrorNotification(res.message, res.errorCode);
+        return {
+          result: false,
+          errorMessage: res.message,
+        };
+      }
+      dispatch(loadSuccess({}));
+      getAllQuestions()(dispatch, getState);
+      return { result: true };
+    } catch (err) {
+      dispatch(loadFailed());
+      return { result: false };
+    }
+  };
+
 export const createAnswer =
   (data: any, bypass = false) =>
   async (dispatch: AppDispatch, getState: () => RootState) => {
     try {
       const res = await service.createAnswer(data);
+      if (res.errorCode) {
+        dispatch(loadFailed());
+        sendErrorNotification(res.message, res.errorCode);
+        return {
+          result: false,
+          errorMessage: res.message,
+        };
+      }
+      dispatch(loadSuccess({}));
+      getOneQuestion(data.question)(dispatch, getState);
+      return { result: true };
+    } catch (err) {
+      dispatch(loadFailed());
+      return { result: false };
+    }
+  };
+
+export const updateAnswer =
+  (data: any, bypass = false) =>
+  async (dispatch: AppDispatch, getState: () => RootState) => {
+    try {
+      const res = await service.updateAnswer(data);
+      if (res.errorCode) {
+        dispatch(loadFailed());
+        sendErrorNotification(res.message, res.errorCode);
+        return {
+          result: false,
+          errorMessage: res.message,
+        };
+      }
+      dispatch(loadSuccess({}));
+      getOneQuestion(data.question)(dispatch, getState);
+      return { result: true };
+    } catch (err) {
+      dispatch(loadFailed());
+      return { result: false };
+    }
+  };
+
+export const deleteAnswer =
+  (data: any, bypass = false) =>
+  async (dispatch: AppDispatch, getState: () => RootState) => {
+    try {
+      const res = await service.deleteAnswer(data);
       if (res.errorCode) {
         dispatch(loadFailed());
         sendErrorNotification(res.message, res.errorCode);
