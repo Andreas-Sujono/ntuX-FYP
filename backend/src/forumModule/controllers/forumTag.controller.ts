@@ -41,7 +41,7 @@ export class ForumTagController implements CrudController<ForumTag> {
 
   @Override()
   @Public()
-  async getManyBase() {
+  async getMany() {
     return await this.service.getAllTags();
   }
 }
