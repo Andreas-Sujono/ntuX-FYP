@@ -9,6 +9,7 @@ export const Container = styled.div`
 
 export const Title = styled.h1`
   margin: 0;
+  font-size: 32px;
 
   ${media.lessThan('md')`
     font-size: 24px;
@@ -94,9 +95,9 @@ export const UserCard = styled.div`
   cursor: pointer;
 
   .left-section {
-    width: 36px;
-    height: 36px;
-    background: #6298e9;
+    width: 42px;
+    height: 42px;
+    background: #4caf50;
     border-radius: 50%;
     margin-right: 12px;
     color: white;
@@ -107,6 +108,11 @@ export const UserCard = styled.div`
     font-size: 20px;
     padding-bottom: 1px;
     text-transform: uppercase;
+    img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+    }
   }
   .right-section {
     width: calc(100% - 50px);
@@ -118,16 +124,18 @@ export const UserCard = styled.div`
       white-space: nowrap;
     }
     .role {
-      font-size: 0.8rem;
+      font-size: 0.9rem;
       color: #888686;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
       margin-top: -3px;
+      color: grey;
     }
     .level {
-      font-size: 0.8rem;
-      color: #000000;
+      font-size: 0.9rem;
+      color: #c63044;
+      margin-top: -3px;
     }
   }
 `;

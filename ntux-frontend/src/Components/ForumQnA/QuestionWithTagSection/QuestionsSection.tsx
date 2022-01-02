@@ -1,6 +1,9 @@
-import React, { memo } from 'react';
+import React, { memo, useEffect } from 'react';
 import { LeftChevronIcon } from 'react-dre/lib/Icon';
-import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useParams } from 'react-router-dom';
+import { getAllQuestions } from 'Store/Actions/forum';
+import { selectQuestionsByTagId, selectTagById } from 'Store/Selector/forum';
 import { mockQuestions } from '../../../Models/mockData';
 import { routes } from '../../Routes';
 import QuestionCard from '../QuestionsSection/QuestionCard';
@@ -13,9 +16,15 @@ import {
 } from './Styles';
 
 function QuestionsSection(): React.ReactElement {
-  const tagName = 'HTML';
-  const tagDesc =
-    'lI’m trying to deploy a server written in NodeJs, I want to host it online and found out that Heroku is the best option for it. How to deploy it by using command line only. I want to host it online and found out that Heroku is the best option for it. I want to host it online and found out that Heroku is the best option for it';
+  const dispatch = useDispatch();
+  const { tagId } = useParams<any>();
+  const tagDetail: any = useSelector(selectTagById)(tagId);
+  const allQuestions = useSelector(selectQuestionsByTagId)[tagId] || [];
+
+  useEffect(() => {
+    dispatch(getAllQuestions(tagId));
+  }, []);
+
   return (
     <Container>
       <BackButton>
@@ -24,11 +33,11 @@ function QuestionsSection(): React.ReactElement {
           Back to Tags
         </Link>
       </BackButton>
-      <Title>Questions with tag {tagName}</Title>
-      <Subtitle>{tagDesc}</Subtitle>
+      <Title>Questions with tag {tagDetail.name}</Title>
+      <Subtitle>{tagDetail.description}</Subtitle>
 
       <CardsContainer>
-        {mockQuestions.map((item) => (
+        {allQuestions.map((item) => (
           <QuestionCard key={item.question + item.description} summary={item} />
         ))}
       </CardsContainer>

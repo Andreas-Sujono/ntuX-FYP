@@ -20,6 +20,7 @@ export const BackButton = styled.button`
 export const Title = styled.h1`
   margin: 0;
   margin-top: 0.7em;
+  font-size: 32px;
 
   ${media.lessThan('md')`
     font-size: 24px;

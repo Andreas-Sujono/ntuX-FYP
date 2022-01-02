@@ -1,7 +1,12 @@
+import { Button } from '@mui/material';
 import React, { memo } from 'react';
 import { SearchBar } from 'react-dre/lib/SearchBar';
-import { PrimaryButton } from '../../../common/Components/Button';
-import { mockQuestions } from '../../../Models/mockData';
+import { useSelector } from 'react-redux';
+import {
+  selectAllQuestions,
+  selectMyQuestions,
+  selectUnansweredQuestions,
+} from 'Store/Selector/forum';
 import QuestionCard from './QuestionCard';
 import {
   Container,
@@ -13,11 +18,20 @@ import {
 } from './Styles';
 
 function QuestionsSection(): React.ReactElement {
+  const [type, setType] = React.useState('all');
+  const allQuestions = useSelector(selectAllQuestions);
+  const unasweredQuestions = useSelector(selectUnansweredQuestions);
+  const myQuestions = useSelector(selectMyQuestions);
+
+  let selectedData = allQuestions;
+  if (type === 'unanswered') selectedData = unasweredQuestions;
+  else if (type === 'me') selectedData = myQuestions;
+
   return (
     <Container>
       <TitleRow>
         <Title>Questions</Title>
-        <PrimaryButton>Ask New Question</PrimaryButton>
+        <Button variant="contained">Ask New Question</Button>
       </TitleRow>
       <SearchBarContainer>
         <SearchBar
@@ -28,12 +42,30 @@ function QuestionsSection(): React.ReactElement {
         />
       </SearchBarContainer>
       <FilterContainer>
-        <span>Recent</span>
-        <span>Unanswered</span>
-        <span>My Question</span>
+        <span
+          className={type === 'all' ? 'active' : ''}
+          onClick={() => setType('all')}
+        >
+          Recent
+        </span>
+        <span
+          className={type === 'unanswered' ? 'active' : ''}
+          onClick={() => setType('unanswered')}
+        >
+          Unanswered
+        </span>
+        <span
+          className={type === 'me' ? 'active' : ''}
+          onClick={() => setType('me')}
+        >
+          My Question
+        </span>
       </FilterContainer>
       <CardsContainer>
-        {mockQuestions.map((item) => (
+        {selectedData.length === 0 && (
+          <span style={{ color: 'lightgrey' }}>No Data</span>
+        )}
+        {selectedData.map((item) => (
           <QuestionCard key={item.question + item.description} summary={item} />
         ))}
       </CardsContainer>

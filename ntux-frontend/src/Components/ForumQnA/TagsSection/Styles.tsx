@@ -9,6 +9,7 @@ export const Container = styled.div`
 
 export const Title = styled.h1`
   margin: 0;
+  font-size: 32px;
 
   ${media.lessThan('md')`
     font-size: 24px;
@@ -59,9 +60,9 @@ export const TagCard = styled.div`
     margin-top: 10px;
     font-size: 14px;
     color: #676565;
-    height: 72px;
+    height: 65px;
     display: -webkit-box;
-    -webkit-line-clamp: 4;
+    -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }

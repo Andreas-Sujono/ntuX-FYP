@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const colors = ['rgb(236, 221, 83)', 'rgb(119, 236, 83)', 'rgb(245, 191, 90)'];
+const colors = ['rgb(236, 221, 83)', 'rgb(119, 236, 83)', 'rgb(245, 126, 90)'];
 
 export const Container = styled.span<{ color: string }>`
   padding: 0.3em 1em;

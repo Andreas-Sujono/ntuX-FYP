@@ -1,6 +1,8 @@
 import React, { memo } from 'react';
 import { SearchBar } from 'react-dre/lib/SearchBar';
+import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { selectAllTags } from 'Store/Selector/forum';
 import Tag from '../../../common/Components/Tag';
 import { mockTags } from '../../../Models/mockData';
 import { routes, makePath } from '../../Routes';
@@ -17,6 +19,7 @@ function TagsSection(): React.ReactElement {
   const history = useHistory();
   const tagPath = (id: string) =>
     makePath(routes.FORUM.QUESTION_TAG, { tagId: id });
+  const allTags = useSelector(selectAllTags);
 
   return (
     <Container>
@@ -31,20 +34,13 @@ function TagsSection(): React.ReactElement {
         />
       </SearchBarContainer>
       <CardsContainer>
-        {[...mockTags, ...mockTags, ...mockTags, ...mockTags, ...mockTags].map(
-          (item) => (
-            <TagCard
-              key={item.id}
-              onClick={() => history.push(tagPath(item.id))}
-            >
-              <Tag>{item.tag}</Tag>
-              <div className="desc">{item.description}</div>
-              <div className="question">
-                {item.questionCount || 0} Questions
-              </div>
-            </TagCard>
-          ),
-        )}
+        {allTags.map((item) => (
+          <TagCard key={item.id} onClick={() => history.push(tagPath(item.id))}>
+            <Tag>{item.name}</Tag>
+            <div className="desc">{item.description}</div>
+            <div className="question">{item.count || 0} Questions</div>
+          </TagCard>
+        ))}
       </CardsContainer>
     </Container>
   );

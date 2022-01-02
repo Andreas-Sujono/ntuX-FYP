@@ -30,6 +30,7 @@ export interface User {
   avatars: [];
   avatarColor: string;
   currentAvatar: any;
+  jobRole?: string;
 }
 export interface LoginRequest {
   email: string;

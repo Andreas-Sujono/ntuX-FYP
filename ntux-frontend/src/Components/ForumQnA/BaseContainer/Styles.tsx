@@ -3,7 +3,7 @@ import { media } from '../../../common/styling';
 import { PageContentContainer } from '../../shared/Shared.styles';
 
 export const Container = styled(PageContentContainer)`
-  min-height: 60vh;
+  min-height: 72vh;
   display: flex;
   justify-content: space-between;
   padding-top: 100px;

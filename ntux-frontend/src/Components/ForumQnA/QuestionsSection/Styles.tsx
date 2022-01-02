@@ -11,6 +11,7 @@ export const TitleRow = styled.div`
 
 export const Title = styled.h1`
   margin: 0;
+  font-size: 32px;
 
   ${media.lessThan('md')`
     font-size: 24px;
@@ -36,7 +37,13 @@ export const FilterContainer = styled.div`
   font-size: 14px;
   color: #888686;
 
+  .active {
+    font-weight: bold;
+    color: red;
+  }
+
   span {
+    cursor: pointer;
     &:not(:first-child)::before {
       content: '|';
       margin: 0 0.5em;
@@ -72,6 +79,12 @@ export const CardTopRow = styled.div`
       color: #888686;
       font-size: 0.9rem;
       margin-top: 0.8em;
+      max-height: 60px;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
   }
 

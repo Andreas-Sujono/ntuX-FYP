@@ -18,6 +18,12 @@ export const Container = styled.div`
     font-size: 16px;
     padding-bottom: 1px;
     text-transform: uppercase;
+
+    img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+    }
   }
   .author-name {
     color: #ae1b1b;

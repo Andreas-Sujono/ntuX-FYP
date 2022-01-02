@@ -29,6 +29,7 @@ export default function ProfileTab() {
       familyName: data.get('familyName') as string,
       givenName: data.get('givenName') as string,
       nationality: data.get('nationality') as string,
+      jobRole: data.get('jobRole') as string,
     };
 
     setLoading(true);
@@ -135,6 +136,16 @@ export default function ProfileTab() {
               label="Nationality"
               name="nationality"
               defaultValue={user.nationality}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              name="jobRole"
+              required
+              fullWidth
+              id="jobRole"
+              label="Current Job Role"
+              defaultValue={user.jobRole}
             />
           </Grid>
         </Grid>

@@ -1,6 +1,10 @@
+import { getLevelAndBadges } from 'common/utils';
 import React, { memo } from 'react';
 import { SearchBar } from 'react-dre/lib/SearchBar';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { selectAllUsers } from 'Store/Selector/admin';
+import { selectActiveUsers, selectTopUsers } from 'Store/Selector/forum';
 import { mockForumUsers } from '../../../Models/mockData';
 import { makePath, routes } from '../../Routes';
 import {
@@ -16,9 +20,13 @@ import {
 
 const Card = ({ user }: { user: any }) => {
   const getProfileImage = (_user: any) => {
-    if (_user.profileImage) return <img src={_user.profileImage} />;
+    if (_user.currentAvatar?.imageUrl || _user.avatarImageUrl)
+      return (
+        <img src={_user.currentAvatar?.imageUrl || _user.avatarImageUrl} />
+      );
     return _user.fullName.slice(0, 1);
   };
+  const pointData = getLevelAndBadges(user.totalExps);
 
   return (
     <Link to={makePath(routes.PORTFOLIO.BASE, { userId: user.id })}>
@@ -26,8 +34,8 @@ const Card = ({ user }: { user: any }) => {
         <div className="left-section">{getProfileImage(user)}</div>
         <div className="right-section">
           <div className="name">{user.fullName}</div>
-          <div className="role">{user.role}</div>
-          <div className="level">Level {user.level}</div>
+          <div className="role">{user.jobRole || 'Student'}</div>
+          <div className="level">Level {pointData.level}</div>
         </div>
       </UserCard>
     </Link>
@@ -35,8 +43,9 @@ const Card = ({ user }: { user: any }) => {
 };
 
 function UsersSection(): React.ReactElement {
-  const topUsersWeekly = mockForumUsers.slice(0, 3);
-  const topUsersAllTime = mockForumUsers.slice(0, 3);
+  const topUsers = useSelector(selectTopUsers).slice(0, 5);
+  const activeUsers = useSelector(selectActiveUsers).slice(0, 5);
+  const allUsers = useSelector(selectAllUsers).slice(0, 5);
 
   return (
     <Container>
@@ -44,14 +53,14 @@ function UsersSection(): React.ReactElement {
       <Subtitle>Find user to see their credibility and history</Subtitle>
       <Row>
         <TopTable>
-          <div className="title">Top Users This Week</div>
-          {topUsersWeekly.map((item) => (
+          <div className="title">Most Active Users This Week</div>
+          {activeUsers.map((item) => (
             <Card key={item.id} user={item} />
           ))}
         </TopTable>
         <TopTable>
           <div className="title">Top Users All Time</div>
-          {topUsersAllTime.map((item) => (
+          {topUsers.map((item) => (
             <Card key={item.id} user={item} />
           ))}
         </TopTable>
@@ -65,7 +74,7 @@ function UsersSection(): React.ReactElement {
         />
       </SearchBarContainer>
       <CardsContainer>
-        {mockForumUsers.map((item) => (
+        {allUsers.map((item) => (
           <Card key={item.id} user={item} />
         ))}
       </CardsContainer>

@@ -16,15 +16,22 @@ function QuestionCard({ summary }: { summary: any }): React.ReactElement {
     <Card onClick={() => history.push(questionPath)}>
       <CardTopRow>
         <div className="left-section">
-          <div className="title">{summary.question}</div>
+          <div className="title">{summary.name}</div>
           <div className="subtitle">{summary.description}</div>
         </div>
         <div className="right-section">
           <div className="posted-on">
-            Posted {shortenDateFormat(summary.postedDate.getTime() / 1000)} ago
+            Posted{' '}
+            {shortenDateFormat(new Date(summary.createdAt).getTime() / 1000)}{' '}
+            ago
           </div>
           <br />
-          <AuthorBlock author={summary.author} />
+          <AuthorBlock
+            author={{
+              name: summary.fullName,
+              profileImage: summary.avatarImageUrl,
+            }}
+          />
         </div>
       </CardTopRow>
       <CardBottomRow>
@@ -33,13 +40,15 @@ function QuestionCard({ summary }: { summary: any }): React.ReactElement {
             <span>{summary.numberOfVotes || 0}</span> Votes
           </div> */}
           <div className="solutions">
-            <span>{summary.numberOfSolutions || 0}</span> Solutions
+            <span>{summary.answerCount || 0}</span> Solutions
           </div>
         </div>
         <div className="right-section">
-          {summary.tags.map((item) => (
-            <Tag key={item.id}>{item.tag}</Tag>
-          ))}
+          {summary.arrayAgg
+            ?.filter((item) => !!item)
+            ?.map((item) => (
+              <Tag key={item}>{item}</Tag>
+            ))}
         </div>
       </CardBottomRow>
     </Card>

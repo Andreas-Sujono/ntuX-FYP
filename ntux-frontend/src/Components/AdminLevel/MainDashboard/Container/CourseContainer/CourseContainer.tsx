@@ -13,7 +13,7 @@ import IconButton from '@mui/material/IconButton';
 import Container from '@mui/material/Container';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import { red } from '@mui/material/colors';
+import { green, red } from '@mui/material/colors';
 import { Avatar, CardHeader, ListItemButton } from '@mui/material';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
@@ -148,8 +148,12 @@ function MainContainer({ children }: { children: React.ReactNode }) {
           <ProfileButton>
             <CardHeader
               avatar={
-                <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                  {user?.fullName?.charAt(0)?.toUpperCase()}
+                <Avatar
+                  sx={{ bgcolor: green[500] }}
+                  aria-label="recipe"
+                  src={user.currentAvatar?.imageUrl || '#'}
+                >
+                  {user.fullName.slice(0, 1).toUpperCase()}
                 </Avatar>
               }
               title={user?.fullName}
