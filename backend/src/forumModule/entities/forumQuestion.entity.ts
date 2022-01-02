@@ -20,7 +20,7 @@ export class ForumQuestion {
   @ManyToOne(() => User)
   user: User;
 
-  @ManyToMany(() => ForumTag)
+  @ManyToMany(() => ForumTag, (forumTag) => forumTag.questions)
   tags: ForumTag[];
 
   @ManyToOne(

@@ -14,7 +14,7 @@ export class ForumTag {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToMany(() => ForumQuestion)
+  @ManyToMany(() => ForumQuestion, (forumQuestion) => forumQuestion.tags)
   @JoinTable()
   questions: ForumQuestion[];
 

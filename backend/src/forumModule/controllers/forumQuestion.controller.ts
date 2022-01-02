@@ -54,7 +54,7 @@ export class ForumQuestionController implements CrudController<ForumQuestion> {
     @Query('page') page = 1,
     @Query('limit') limit = 25,
   ) {
-    return this.service.getManyQuestion(tagId, page, limit);
+    return this.service.getManyQuestion(page, limit, tagId);
   }
 
   @Get('unanswered')
