@@ -14,6 +14,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { Avatar } from 'src/commonModule/entities/avatar.entity';
+import { GoalTask } from 'src/commonModule/entities/goalTask.entity';
 
 export enum UserRole {
   STUDENT = 'STUDENT',
@@ -40,6 +41,9 @@ export class User {
 
   @ManyToMany(() => Course, (course) => course.lecturers)
   courses: Course[]; //for lecturers only
+
+  @ManyToMany(() => GoalTask, (goalTask) => goalTask.users)
+  achievements: GoalTask[];
 
   @OneToOne(() => PremiumSetting, (premiumSetting) => premiumSetting.user)
   @JoinColumn()
@@ -107,6 +111,9 @@ export class User {
   // @Exclude()
   @Column({ nullable: true, type: 'timestamp with time zone' })
   emailVerifiesAt: Date;
+
+  @Column({ nullable: true })
+  lastLoginAt: Date;
 
   // @Exclude()
   @CreateDateColumn({ type: 'timestamp with time zone' })
