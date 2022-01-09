@@ -215,6 +215,7 @@ export const getActiveUsers =
 export const getOneQuestion =
   (id: Id, bypass = false) =>
   async (dispatch: AppDispatch, getState: () => RootState) => {
+    if (!id) return;
     try {
       const prev = selectQuestionDetailById(getState());
       const res = await service.getOneQuestion(id);
@@ -293,7 +294,7 @@ export const deleteQuestion =
       const res = await service.deleteQuestion(data);
       if (res.errorCode) {
         dispatch(loadFailed());
-        sendErrorNotification(res.message, res.errorCode);
+        sendErrorNotification('Failed delete question', res.errorCode);
         return {
           result: false,
           errorMessage: res.message,
@@ -359,7 +360,7 @@ export const deleteAnswer =
       const res = await service.deleteAnswer(data);
       if (res.errorCode) {
         dispatch(loadFailed());
-        sendErrorNotification(res.message, res.errorCode);
+        sendErrorNotification('Failed delete answer', res.errorCode);
         return {
           result: false,
           errorMessage: res.message,

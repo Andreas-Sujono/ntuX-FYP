@@ -59,7 +59,7 @@ function QuestionsSection(): React.ReactElement {
           Answers ({questionDetail.answers?.length || 0})
         </div>
         {questionDetail.answers?.map((item) => (
-          <CommentBox key={item.id} data={item} />
+          <CommentBox key={item.id} data={item} questionData={questionDetail} />
         ))}
         <Typography variant="h6" gutterBottom sx={{ mt: 4, mb: 2 }}>
           Give Your Answer

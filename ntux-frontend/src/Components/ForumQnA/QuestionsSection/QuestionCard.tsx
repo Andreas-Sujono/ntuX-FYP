@@ -12,6 +12,9 @@ function QuestionCard({ summary }: { summary: any }): React.ReactElement {
     questionId: summary.id,
   });
 
+  let tags = summary.arrayAgg?.filter((item) => !!item) || [];
+  tags = [...new Set(tags)];
+
   return (
     <Card onClick={() => history.push(questionPath)}>
       <CardTopRow>
@@ -44,7 +47,7 @@ function QuestionCard({ summary }: { summary: any }): React.ReactElement {
           </div>
         </div>
         <div className="right-section">
-          {summary.arrayAgg
+          {tags
             ?.filter((item) => !!item)
             ?.map((item, idx) => (
               <Tag key={idx}>{item}</Tag>

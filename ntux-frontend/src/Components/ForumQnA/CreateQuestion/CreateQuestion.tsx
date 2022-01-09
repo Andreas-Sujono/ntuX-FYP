@@ -246,7 +246,9 @@ function CreateQuestion(): React.ReactElement {
           <Grid item xs={12} sm={12}>
             <Editor
               pid={'12345'}
-              blocks={finalData.metadata || defaultBlocks}
+              blocks={
+                finalData?.metadata?.length ? finalData.metadata : defaultBlocks
+              }
               handleUpdate={handleUpdate}
               useTags2
             />

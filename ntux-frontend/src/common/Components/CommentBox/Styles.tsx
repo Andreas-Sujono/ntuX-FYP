@@ -82,4 +82,9 @@ export const ReplyContainer = styled.div`
     color: #888686;
     font-size: 0.9rem;
   }
+
+  .action {
+    cursor: pointer;
+    color: #888686;
+  }
 `;
