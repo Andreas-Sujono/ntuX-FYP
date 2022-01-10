@@ -16,6 +16,7 @@ import {
   Modal,
   Grid,
   Avatar,
+  TablePagination,
 } from '@mui/material';
 import Slider from 'react-slick';
 import Card from '@mui/material/Card';
@@ -92,68 +93,95 @@ export default function PointHistoryTable() {
 export function RewardHistoryTable() {
   const rewardsRedeemed = useSelector(selectRewardsRedeemed);
 
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
   return (
-    <TableContainer component={Paper} sx={{ minHeight: '320px' }}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell>Reward Redeemed</TableCell>
-            <TableCell align="left">Description</TableCell>
-            <TableCell align="left">Date Redeemed</TableCell>
-            <TableCell align="left">Status</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {!rewardsRedeemed.length && (
+    <>
+      <TableContainer component={Paper} sx={{ minHeight: '320px' }}>
+        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <TableHead>
             <TableRow>
-              <TableCell colSpan={3}>
-                <Typography
-                  variant="body1"
-                  component="h5"
-                  color="text.tertiary"
-                  sx={{
-                    width: '100%',
-                    height: '150px',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}
+              <TableCell>Reward Redeemed</TableCell>
+              <TableCell align="left">Description</TableCell>
+              <TableCell align="left">Date Redeemed</TableCell>
+              <TableCell align="left">Status</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {!rewardsRedeemed.length && (
+              <TableRow>
+                <TableCell colSpan={3}>
+                  <Typography
+                    variant="body1"
+                    component="h5"
+                    color="text.tertiary"
+                    sx={{
+                      width: '100%',
+                      height: '150px',
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}
+                  >
+                    No Data
+                  </Typography>
+                </TableCell>
+              </TableRow>
+            )}
+            {rewardsRedeemed
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((item) => (
+                <TableRow
+                  key={item.id}
+                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                 >
-                  No Data
-                </Typography>
-              </TableCell>
-            </TableRow>
-          )}
-          {rewardsRedeemed.map((item) => (
-            <TableRow
-              key={item.id}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                {item.reward.name}
-              </TableCell>
-              <TableCell align="left">{item.reward.description}</TableCell>
-              <TableCell align="left">
-                {moment(item.createdAt).format('DD MMMM YYYY')}
-              </TableCell>
-              <TableCell
-                align="left"
-                sx={{
-                  color:
-                    item.status === 'PENDING'
-                      ? 'orange'
-                      : item.status === 'REDEEMED'
-                      ? 'green'
-                      : 'lightgrey',
-                }}
-              >
-                {item.status}
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+                  <TableCell component="th" scope="row">
+                    {item.reward.name}
+                  </TableCell>
+                  <TableCell align="left">{item.reward.description}</TableCell>
+                  <TableCell align="left">
+                    {moment(item.createdAt).format('DD MMMM YYYY')}
+                  </TableCell>
+                  <TableCell
+                    align="left"
+                    sx={{
+                      color:
+                        item.status === 'PENDING'
+                          ? 'orange'
+                          : item.status === 'REDEEMED'
+                          ? 'green'
+                          : 'lightgrey',
+                    }}
+                  >
+                    {item.status}
+                  </TableCell>
+                </TableRow>
+              ))}
+          </TableBody>
+        </Table>
+        {rewardsRedeemed.length > 5 && (
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25, 50]}
+            component="div"
+            count={rewardsRedeemed.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        )}
+      </TableContainer>
+    </>
   );
 }
 
@@ -386,6 +414,18 @@ export const AvatarShop = () => {
   const myAvatars: any = user.avatars || [];
   const myAvatarSet = new Set<any>(myAvatars.map((item) => item.id));
 
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
   const onBuyAvatar = async (avatar: any) => {
     const confirm = window.confirm('Are you sure you want to buy this avatar?');
     if (!confirm) return;
@@ -406,44 +446,56 @@ export const AvatarShop = () => {
       </Typography>
 
       <Grid container spacing={3} sx={{ mt: 1 }}>
-        {avatars.map((item) => (
-          <Grid
-            item
-            xs={12}
-            sm={6}
-            md={3}
-            lg={3}
-            key={item.id}
-            sx={{ display: 'flex', columnGap: '1rem', alignItems: 'center' }}
-          >
-            <Avatar
-              alt={item.name}
-              src={item.imageUrl}
-              sx={{ width: 80, height: 80 }}
-            />
-            <div>
-              <Typography component="div" variant="h6" color="text.secondary">
-                {item.name}
-              </Typography>
-              <div
-                style={{ fontSize: '1rem', color: 'red', marginTop: '-4px' }}
-              >
-                Cost: {item.pointsRequired} pts
-              </div>
-              {myAvatarSet.has(item.id) ? (
-                <DoneIcon sx={{ color: 'green' }} />
-              ) : (
-                <Button
-                  onClick={() => onBuyAvatar(item)}
-                  sx={{ marginLeft: '-16px' }}
+        {avatars
+          .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+          .map((item) => (
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={3}
+              lg={3}
+              key={item.id}
+              sx={{ display: 'flex', columnGap: '1rem', alignItems: 'center' }}
+            >
+              <Avatar
+                alt={item.name}
+                src={item.imageUrl}
+                sx={{ width: 80, height: 80 }}
+              />
+              <div>
+                <Typography component="div" variant="h6" color="text.secondary">
+                  {item.name}
+                </Typography>
+                <div
+                  style={{ fontSize: '1rem', color: 'red', marginTop: '-4px' }}
                 >
-                  Buy
-                </Button>
-              )}
-            </div>
-          </Grid>
-        ))}
+                  Cost: {item.pointsRequired} pts
+                </div>
+                {myAvatarSet.has(item.id) ? (
+                  <DoneIcon sx={{ color: 'green' }} />
+                ) : (
+                  <Button
+                    onClick={() => onBuyAvatar(item)}
+                    sx={{ marginLeft: '-16px' }}
+                  >
+                    Buy
+                  </Button>
+                )}
+              </div>
+            </Grid>
+          ))}
       </Grid>
+
+      <TablePagination
+        rowsPerPageOptions={[10, 25, 50]}
+        component="div"
+        count={avatars.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      />
     </Paper>
   );
 };

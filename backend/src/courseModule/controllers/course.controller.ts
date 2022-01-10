@@ -61,7 +61,19 @@ export class CourseController implements CrudController<Course> {
   }
 
   @Get('me')
-  async getMyCourse(@UserData('userId') userId: string) {
+  async getMyCourse(
+    @UserData('userId') userId: string,
+    @UserData('role') role: UserRole,
+  ) {
+    if (role === UserRole.LECTURER)
+      return this.service.getLecturerCourses(userId);
+    if (role === UserRole.ADMIN)
+      return this.service.find({
+        order: {
+          createdAt: 'DESC',
+        },
+        relations: ['courseBatches'],
+      });
     return this.service.getStudentCourses(userId);
   }
 
