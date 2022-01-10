@@ -47,6 +47,16 @@ export class WebsiteActivityController
     return this.service.getSummary(interval);
   }
 
+  @Get('summary/student')
+  @Public()
+  async getStudentSummary(
+    @Query('interval') interval: 'd' | 'w' | 'm',
+    @Query('userId') userId: string,
+  ) {
+    if (userId) return this.service.getStudentSummary(interval, userId);
+    return this.service.getSummary(interval);
+  }
+
   @Override()
   @Public()
   async createOne(
@@ -55,7 +65,7 @@ export class WebsiteActivityController
   ) {
     return this.service.updateWebsiteActivity(
       dto,
-      userId || (dto as any)?.user || null,
+      userId || (dto as any)?.user || (dto as any).userId || null,
     );
   }
 }

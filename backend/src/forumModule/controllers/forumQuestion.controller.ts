@@ -58,8 +58,9 @@ export class ForumQuestionController implements CrudController<ForumQuestion> {
     @Query('tagId') tagId: number,
     @Query('page') page = 1,
     @Query('limit') limit = 25,
+    @Query('query') query: string,
   ) {
-    return this.service.getManyQuestion(page, limit, tagId);
+    return this.service.getManyQuestion(page, limit, tagId, query);
   }
 
   @Get('unanswered')
@@ -67,8 +68,9 @@ export class ForumQuestionController implements CrudController<ForumQuestion> {
   async getUnansweredQuestions(
     @Query('page') page = 1,
     @Query('limit') limit = 25,
+    @Query('query') query: string,
   ) {
-    return this.service.getUnansweredQuestions(page, limit);
+    return this.service.getUnansweredQuestions(page, limit, query);
   }
 
   @Get('me')

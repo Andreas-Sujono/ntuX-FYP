@@ -1,5 +1,5 @@
 import { Roles } from '../../authModule/roles/roles.decorator';
-import { Controller } from '@nestjs/common';
+import { Controller, Param } from '@nestjs/common';
 import {
   Crud,
   CrudController,
@@ -12,22 +12,17 @@ import { Portfolio } from '../entities/portfolio.entity';
 import { PortfolioService } from '../services/Portfolio.service';
 import { UserRole } from 'src/authModule/entities/user.entity';
 import { Public } from 'src/authModule/public.decorator';
+import { UserData } from 'src/authModule/user.decorator';
 
 @Crud({
   model: {
     type: Portfolio,
   },
   routes: {
-    only: [
-      'getOneBase',
-      'updateOneBase',
-      'createOneBase',
-      'getManyBase',
-      'deleteOneBase',
-    ],
-    getManyBase: {
-      decorators: [Public()],
-    },
+    only: ['getOneBase', 'updateOneBase', 'createOneBase', 'deleteOneBase'],
+    // getManyBase: {
+    //   decorators: [Public()],
+    // },
     getOneBase: {
       decorators: [Public()],
     },
@@ -47,8 +42,32 @@ export class PortfolioController implements CrudController<Portfolio> {
   constructor(public service: PortfolioService) {}
 
   @Override()
-  async createOne(@ParsedRequest() req: CrudRequest, @ParsedBody() dto: any) {
+  async createOne(
+    @ParsedRequest() req: CrudRequest,
+    @ParsedBody() dto: Portfolio,
+    @UserData('userId') userId: number,
+  ) {
     delete dto.id;
+    dto.user = userId as any;
+    const exist = await this.service.findOne({
+      where: {
+        user: userId,
+      },
+    });
+
+    if (exist) return this.service.updatePortfolio(exist.id, dto);
+
     return this.service.createOne(req, dto);
+  }
+
+  @Override()
+  async getMany(req: CrudRequest, @UserData('userId') userId: number) {
+    return this.service.getPorfolio(userId);
+  }
+
+  @Override()
+  @Public()
+  async getOne(req: CrudRequest, @Param('id') id: number) {
+    return this.service.getPorfolio(id);
   }
 }

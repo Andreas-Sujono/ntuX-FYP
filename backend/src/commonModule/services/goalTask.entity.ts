@@ -133,18 +133,38 @@ export class GoalTaskService extends TypeOrmCrudService<GoalTask> {
   }
 
   async getUserAchievements(userId: number) {
-    const res = await this.repo.query(`
+    const achievementOwned = await this.repo.query(`
       SELECT goal_task.*
       from goal_task_users_user left join "goal_task" on "goal_task_users_user"."goalTaskId" = goal_task."id"
       where "goal_task_users_user"."userId" = ${userId}    
     `);
+    const achievementOwnedIds = new Set(
+      achievementOwned.map((item) => item.id),
+    );
+    const allAchievements = await this.getAllAchievements();
+    const nextAchievements: any = [];
 
-    return res;
+    allAchievements.forEach((item) => {
+      const types = item.types;
+      let isIncluded = false;
+      types.forEach((type) => {
+        if (!achievementOwnedIds.has(type.id) && !isIncluded) {
+          nextAchievements.push(type);
+          isIncluded = true;
+        }
+      });
+    });
+
+    return {
+      achievementOwned,
+      nextAchievements,
+    };
   }
 
   async getAllAchievements() {
     const res = await this.repo.query(`
       SELECT "taskType", json_agg(json_build_object(
+        'id', id,
         'level',level, 'quantity', quantity, 'name', name,
         'points', points, 'exps', exps, 'image', image
       )) as types

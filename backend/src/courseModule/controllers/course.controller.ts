@@ -92,6 +92,14 @@ export class CourseController implements CrudController<Course> {
   }
 
   @Override()
+  async updateOne(
+    @ParsedRequest() req: CrudRequest,
+    @ParsedBody() dto: Course,
+  ) {
+    return this.service.updateCourse(req, dto);
+  }
+
+  @Override()
   async deleteOne(@ParsedRequest() req: CrudRequest, @Param('id') id: string) {
     return this.service.deleteCourse(req, id);
   }

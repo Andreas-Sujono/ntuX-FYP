@@ -18,6 +18,7 @@ import { User, UserRole } from 'src/authModule/entities/user.entity';
 import { UserService } from '../services/user.service';
 import { Public } from '../public.decorator';
 import { UserData } from '../user.decorator';
+import { ILike } from 'typeorm';
 
 @Crud({
   model: {
@@ -85,9 +86,19 @@ export class UserController implements CrudController<User> {
 
   @Get('all/students')
   @Public()
-  async getAllStudents() {
+  async getAllStudents(@Query('query') query: string) {
+    query = query || '';
     const res = await this.service.find({
-      role: UserRole.STUDENT,
+      where: [
+        {
+          role: UserRole.STUDENT,
+          fullName: ILike(`%${query}%`),
+        },
+        {
+          role: UserRole.STUDENT,
+          email: ILike(`%${query}%`),
+        },
+      ],
     });
     res.forEach((item) => {
       delete item.NRIC;

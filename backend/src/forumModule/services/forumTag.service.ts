@@ -16,4 +16,8 @@ export class ForumTagService extends TypeOrmCrudService<ForumTag> {
       GROUP BY forum_tag.id
     `);
   }
+
+  async createTag(dto: Partial<ForumTag>) {
+    return this.repo.save(this.repo.create(dto));
+  }
 }

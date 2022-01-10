@@ -1,3 +1,4 @@
+import { ForumTag } from './../forumModule/entities/forumTag.entity';
 import { ForumAnswer } from './../forumModule/entities/forumAnswer.entity';
 import { AdminController } from './controllers/admin.controller';
 import { RewardController } from './controllers/reward.controller';
@@ -38,6 +39,7 @@ import { Course } from 'src/courseModule/entities/course.entity';
 import { CourseUser } from 'src/courseModule/entities/courseUser.entity';
 import { CourseBatch } from 'src/courseModule/entities/courseBatch.entity';
 import { CourseContent } from 'src/courseModule/entities/courseContent.entity';
+import { ForumModule } from 'src/forumModule/forum.module';
 
 @Module({
   imports: [
@@ -59,6 +61,7 @@ import { CourseContent } from 'src/courseModule/entities/courseContent.entity';
       CourseUser,
       CourseBatch,
       CourseContent,
+      ForumTag,
     ]),
   ],
   providers: [

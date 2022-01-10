@@ -1,3 +1,4 @@
+import { Portfolio } from './../../commonModule/entities/portfolio.entity';
 import { PremiumSetting } from './../../commonModule/entities/premiumSetting.entity';
 import { Course } from 'src/courseModule/entities/course.entity';
 import { Exclude } from 'class-transformer';
@@ -48,6 +49,10 @@ export class User {
   @OneToOne(() => PremiumSetting, (premiumSetting) => premiumSetting.user)
   @JoinColumn()
   premiumSetting: PremiumSetting;
+
+  @OneToOne(() => Portfolio, (portfolio) => portfolio.user)
+  @JoinColumn()
+  portfolio: Portfolio;
 
   @Column()
   fullName: string;

@@ -1,9 +1,11 @@
+import { User } from 'src/authModule/entities/user.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToOne,
 } from 'typeorm';
 
 @Entity()
@@ -14,8 +16,17 @@ export class Portfolio {
   @Column({ nullable: true, default: false })
   isPublished: boolean;
 
+  @OneToOne(() => User, (user) => user.portfolio)
+  user: User;
+
   @Column()
   jobRole: string;
+
+  @Column({ nullable: true, default: 'DEFAULT' })
+  theme: string;
+
+  @Column({ nullable: true, default: false })
+  hideNav: boolean;
 
   @Column({ nullable: true })
   profileImageUrl: string;

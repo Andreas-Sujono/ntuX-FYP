@@ -25,6 +25,6 @@ import { User } from 'src/authModule/entities/user.entity';
     ForumTagController,
   ],
   providers: [ForumQuestionService, ForumAnswerService, ForumTagService],
-  exports: [],
+  exports: [ForumTagService, ForumQuestionService, ForumAnswerService],
 })
 export class ForumModule {}

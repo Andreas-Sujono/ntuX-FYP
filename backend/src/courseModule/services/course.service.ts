@@ -3,11 +3,13 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TypeOrmCrudService } from '@nestjsx/crud-typeorm';
 import { User } from 'src/authModule/entities/user.entity';
-import { Repository } from 'typeorm';
+import { LessThan, Repository } from 'typeorm';
 import { v4 as uuid } from 'uuid';
 import { Course, CourseStatus } from '../entities/course.entity';
 import { CourseBatch, CourseBatchStatus } from '../entities/courseBatch.entity';
 import { CourseUser } from '../entities/courseUser.entity';
+import { ForumTag } from 'src/forumModule/entities/forumTag.entity';
+import { ForumTagService } from 'src/forumModule/services/forumTag.service';
 
 @Injectable()
 export class CourseService extends TypeOrmCrudService<Course> {
@@ -21,6 +23,7 @@ export class CourseService extends TypeOrmCrudService<Course> {
     private userRepo: Repository<User>,
     @InjectRepository(CourseContent)
     private courseContentRepo: Repository<CourseContent>,
+    @InjectRepository(ForumTag) private forumTagRepo: Repository<ForumTag>, // private forumTagService: ForumTagService,
   ) {
     super(repo);
   }
@@ -172,6 +175,7 @@ export class CourseService extends TypeOrmCrudService<Course> {
   async createCourse(req: any, dto: Course) {
     const created = await this.createOne(req, dto);
 
+    //create default course content
     await this.courseContentRepo.save(
       this.courseContentRepo.create({
         course: created.id as any,
@@ -190,6 +194,31 @@ export class CourseService extends TypeOrmCrudService<Course> {
         createdAt: new Date(),
       }),
     );
+
+    //create default tag
+    this.forumTagRepo.save(
+      this.forumTagRepo.create({
+        name: dto.code,
+        description: dto.description,
+      }),
+    );
+
+    return created;
+  }
+
+  async updateCourse(req: any, dto: Course) {
+    const created = await this.updateOne(req, dto);
+    //update default tag
+
+    if (dto.code && dto.description)
+      this.forumTagRepo.update(
+        { name: dto.code },
+        {
+          name: dto.code,
+          description: dto.description,
+        },
+      );
+
     return created;
   }
 
@@ -203,5 +232,16 @@ export class CourseService extends TypeOrmCrudService<Course> {
       delete from course_lecturers_user where "courseId" = ${id};
     `);
     return await this.deleteOne(req);
+  }
+
+  async getCompletedCourse(userId: number) {
+    const res = await this.courseUserRepo.find({
+      where: {
+        user: userId as any,
+        'courseBatch.endDate': LessThan(new Date()),
+      },
+      relations: ['course', 'courseBatch'],
+    });
+    return res;
   }
 }
