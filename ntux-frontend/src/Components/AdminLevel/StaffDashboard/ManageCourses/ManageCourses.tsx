@@ -32,6 +32,8 @@ import { selectAllCourses, selectAllLecturers } from 'Store/Selector/admin';
 import { toast } from 'react-toastify';
 import { useThunkDispatch } from 'common/hooks';
 import { createCourse, uploadFile } from 'Store/Actions/admin';
+import { selectUser } from 'Store/Selector/auth';
+import { Role } from 'Models/Auth';
 
 export const CourseCard = ({ data }: any) => {
   const history = useHistory();
@@ -70,6 +72,8 @@ export default function ManageCourses() {
   const [searchInput, setSearchInput] = useState('');
   const [searchResult, setSearchResult] = useState<any>([]);
   const [openModal, setOpenModal] = useState(false);
+
+  const user = useSelector(selectUser);
 
   const ref = useRef<any>(null);
 
@@ -121,6 +125,7 @@ export default function ManageCourses() {
             sx={{ mt: 1 }}
             fullWidth
             onClick={() => setOpenModal(true)}
+            disabled={user?.role !== Role.ADMIN}
           >
             Create New Course
           </Button>

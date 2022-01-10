@@ -25,64 +25,111 @@ import {
 import { useThunkDispatch } from 'common/hooks';
 import { toast } from 'react-toastify';
 import { createUser, updateUser } from 'Store/Actions/admin';
+import { Role } from 'Models/Auth';
+import TablePagination from '@mui/material/TablePagination';
 
 export default function TableComponent({
   data,
   onClickEdit,
   onClickDelete,
+  user,
 }: any) {
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
   return (
-    <TableContainer
-      component={Paper}
-      sx={{
-        maxHeight: '70vh',
-        overflow: 'auto',
-      }}
-    >
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell>User Name</TableCell>
-            <TableCell>User email</TableCell>
-            <TableCell align="left">Role</TableCell>
-            <TableCell align="left">Status</TableCell>
-            <TableCell align="left">Join Date</TableCell>
-            <TableCell align="left">Actions</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {data.map((row) => (
-            <TableRow
-              key={row.id}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            >
-              <TableCell component="th" scope="row" sx={{ fontSize: '1rem' }}>
-                {row.fullName}
-              </TableCell>
-              <TableCell component="th" scope="row">
-                {row.email}
-              </TableCell>
-              <TableCell align="left">{row.role}</TableCell>
-              <TableCell
-                align="left"
-                sx={{
-                  color: row.emailVerifiesAt ? 'green' : 'lightgrey',
-                }}
-              >
-                {row.emailVerifiesAt ? 'Verified' : 'Not Verified'}
-              </TableCell>
-              <TableCell align="left">
-                {moment(row.createdAt).format('DD/MM/YYYY')}
-              </TableCell>
-              <TableCell align="left">
-                <Button onClick={() => onClickEdit(row)}>Edit</Button>
-                <Button onClick={() => onClickDelete(row.id)}>Delete</Button>
-              </TableCell>
+    <Box>
+      <TableContainer
+        component={Paper}
+        sx={{
+          maxHeight: '70vh',
+          overflow: 'auto',
+        }}
+      >
+        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell>User Name</TableCell>
+              <TableCell>User email</TableCell>
+              <TableCell align="left">Role</TableCell>
+              <TableCell align="left">Status</TableCell>
+              <TableCell align="left">Join Date</TableCell>
+              <TableCell align="left">Actions</TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+          </TableHead>
+          <TableBody>
+            {data
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((row) => (
+                <TableRow
+                  key={row.id}
+                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                >
+                  <TableCell
+                    component="th"
+                    scope="row"
+                    sx={{ fontSize: '1rem' }}
+                  >
+                    {row.fullName}
+                  </TableCell>
+                  <TableCell component="th" scope="row">
+                    {row.email}
+                  </TableCell>
+                  <TableCell align="left">{row.role}</TableCell>
+                  <TableCell
+                    align="left"
+                    sx={{
+                      color: row.emailVerifiesAt ? 'green' : 'lightgrey',
+                    }}
+                  >
+                    {row.emailVerifiesAt ? 'Verified' : 'Not Verified'}
+                  </TableCell>
+                  <TableCell align="left">
+                    {moment(row.createdAt).format('DD/MM/YYYY')}
+                  </TableCell>
+                  <TableCell align="left">
+                    <Button
+                      onClick={() => onClickEdit(row)}
+                      disabled={user?.role !== Role.ADMIN}
+                      title={
+                        user?.role !== Role.ADMIN
+                          ? 'You are not authorized'
+                          : ''
+                      }
+                    >
+                      Edit
+                    </Button>
+                    <Button
+                      onClick={() => onClickDelete(row.id)}
+                      disabled={user?.role !== Role.ADMIN}
+                    >
+                      Delete
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <TablePagination
+        rowsPerPageOptions={[5, 10, 25, 50]}
+        component="div"
+        count={data.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      />
+    </Box>
   );
 }
 

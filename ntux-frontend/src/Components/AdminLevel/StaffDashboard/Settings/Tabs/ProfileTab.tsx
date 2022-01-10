@@ -11,23 +11,41 @@ import { useSelector } from 'react-redux';
 import { selectUser } from 'Store/Selector/auth';
 import { useThunkDispatch } from 'common/hooks';
 import { updateAccount } from 'Store/Actions/auth';
+import { toast } from 'react-toastify';
+import { uploadFile } from 'Store/Actions/admin';
 // import { StyledBox, StyledForm, BackgroundContainer } from './Styles';
 
 export default function ProfileTab() {
   const user = useSelector(selectUser);
   const dispatch = useThunkDispatch();
   const [loading, setLoading] = React.useState(false);
+  const [file, setFile] = React.useState(null);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    const formData = {
+    const formData: any = {
       // profileImage: data.get('profileImage') as string,
       fullName: data.get('fullName') as string,
       familyName: data.get('familyName') as string,
       givenName: data.get('givenName') as string,
       nationality: data.get('nationality') as string,
     };
+
+    //basic validation
+    if (
+      !formData.fullName ||
+      !formData.familyName ||
+      !formData.givenName ||
+      !formData.nationality
+    ) {
+      return toast.error('Please fill all the field');
+    }
+
+    if (file) {
+      const { url } = await dispatch(uploadFile(file));
+      formData.profileImageUrl = url;
+    }
 
     setLoading(true);
     await dispatch(updateAccount(formData));
@@ -57,6 +75,21 @@ export default function ProfileTab() {
               }}
             />
           </Grid> */}
+          <Grid item xs={12} sm={12}>
+            <TextField
+              fullWidth
+              id="imageUrl"
+              type="file"
+              name="imageUrl"
+              label="Change Profile Image"
+              InputLabelProps={{
+                shrink: true,
+              }}
+              onChange={(e: any) =>
+                e.target.files[0] && setFile(e.target.files[0])
+              }
+            />
+          </Grid>
           <Grid item xs={12} sm={6}>
             <TextField
               fullWidth

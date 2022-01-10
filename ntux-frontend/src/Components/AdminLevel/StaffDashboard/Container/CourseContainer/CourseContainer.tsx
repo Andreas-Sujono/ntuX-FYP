@@ -49,6 +49,7 @@ import {
 } from 'Store/Selector/admin';
 import { CourseContent } from 'Models/Courses';
 import { createCourseContent } from 'Store/Actions/admin/general/courseContent.thunk';
+import { Role } from 'Models/Auth';
 
 const logoImagePath = `${process.env.PUBLIC_URL}/assets/logos/full-colored-logo.svg`;
 
@@ -191,7 +192,12 @@ function CourseContainer({ children }: { children: React.ReactNode }) {
           <ProfileButton>
             <CardHeader
               avatar={
-                <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
+                <Avatar
+                  sx={{ bgcolor: red[500] }}
+                  aria-label="recipe"
+                  alt={user.fullName}
+                  src={user.profileImageUrl || ''}
+                >
                   {user.fullName.charAt(0).toUpperCase()}
                 </Avatar>
               }
@@ -242,52 +248,22 @@ function CourseContainer({ children }: { children: React.ReactNode }) {
             />
           </ListItemButton>
         </DrawerList>
-        {data.map((item) => (
-          <React.Fragment key={item.id}>
-            <DrawerList key={item.id}>
-              <ListItemButton
-                selected={routeDetails.id === item.id && item.id !== '2'}
-                onClick={() => {
-                  history.push(
-                    makePath(
-                      item.path,
-                      match?.params || {},
-                      undefined,
-                      String(item.id) === '2'
-                        ? {
-                            pageId: firstCourseContentPageId,
-                          }
-                        : {},
-                    ),
-                  );
-                  if (window.innerWidth < 550) {
-                    setOpen(false);
-                  }
-                }}
-              >
-                <ListItemIcon>
-                  <item.Icon />
-                </ListItemIcon>
-                <ListItemText primary={item.name} />
-              </ListItemButton>
-            </DrawerList>
-
-            {item.id === '2' &&
-              courseContents.map((item2: any) => (
-                //course content
+        {data.map((item) => {
+          if (user.role === Role.ADMIN && item.id === '2') return null;
+          return (
+            <React.Fragment key={item.id}>
+              <DrawerList key={item.id}>
                 <ListItemButton
-                  key={item2.id}
-                  selected={String(item2.id) == chosenContentId}
-                  sx={{ flexGrow: 0, pl: 12 }}
+                  selected={routeDetails.id === item.id && item.id !== '2'}
                   onClick={() => {
                     history.push(
                       makePath(
                         item.path,
                         match?.params || {},
                         undefined,
-                        item.id === '2'
+                        String(item.id) === '2'
                           ? {
-                              pageId: item2.id,
+                              pageId: firstCourseContentPageId,
                             }
                           : {},
                       ),
@@ -297,31 +273,64 @@ function CourseContainer({ children }: { children: React.ReactNode }) {
                     }
                   }}
                 >
-                  <ListItemText primary={item2.pageName} />
-                  {/* <DeleteOutlinedIcon sx={{ color: '#bf414c' }} /> */}
+                  <ListItemIcon>
+                    <item.Icon />
+                  </ListItemIcon>
+                  <ListItemText primary={item.name} />
                 </ListItemButton>
-              ))}
-            {item.id === '2' && (
-              <ListButtonAddPage
-                sx={{
-                  flexGrow: 0,
-                  pl: 11,
-                  pt: 1,
-                  fontSize: '0.8rem',
-                  display: 'flex',
-                }}
-                disableTypography
-                onClick={onClickAddPageName}
-              >
-                <AddOutlinedIcon sx={{ display: 'inline' }} />
-                <ListAddPage
-                  primary={'Add Page'}
-                  disableTypography={true}
-                ></ListAddPage>
-              </ListButtonAddPage>
-            )}
-          </React.Fragment>
-        ))}
+              </DrawerList>
+
+              {item.id === '2' &&
+                courseContents.map((item2: any) => (
+                  //course content
+                  <ListItemButton
+                    key={item2.id}
+                    selected={String(item2.id) == chosenContentId}
+                    sx={{ flexGrow: 0, pl: 12 }}
+                    onClick={() => {
+                      history.push(
+                        makePath(
+                          item.path,
+                          match?.params || {},
+                          undefined,
+                          item.id === '2'
+                            ? {
+                                pageId: item2.id,
+                              }
+                            : {},
+                        ),
+                      );
+                      if (window.innerWidth < 550) {
+                        setOpen(false);
+                      }
+                    }}
+                  >
+                    <ListItemText primary={item2.pageName} />
+                    {/* <DeleteOutlinedIcon sx={{ color: '#bf414c' }} /> */}
+                  </ListItemButton>
+                ))}
+              {item.id === '2' && (
+                <ListButtonAddPage
+                  sx={{
+                    flexGrow: 0,
+                    pl: 11,
+                    pt: 1,
+                    fontSize: '0.8rem',
+                    display: 'flex',
+                  }}
+                  disableTypography
+                  onClick={onClickAddPageName}
+                >
+                  <AddOutlinedIcon sx={{ display: 'inline' }} />
+                  <ListAddPage
+                    primary={'Add Page'}
+                    disableTypography={true}
+                  ></ListAddPage>
+                </ListButtonAddPage>
+              )}
+            </React.Fragment>
+          );
+        })}
       </Drawer>
       <Box
         component="main"

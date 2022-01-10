@@ -22,6 +22,7 @@ import {
   Container,
   InputAdornment,
   IconButton,
+  TablePagination,
 } from '@mui/material';
 import { useThunkDispatch } from 'common/hooks';
 import { toast } from 'react-toastify';
@@ -37,78 +38,113 @@ import {
 import { LinkText } from 'common/Components/shared/shared';
 import moment from 'moment';
 import { FileInput } from 'common/Components/Input';
+import { Role } from 'Models/Auth';
+import { selectUser } from 'Store/Selector/auth';
 
-export default function RewardTable({ data, onClickEdit, onClickDelete }: any) {
+export default function RewardTable({
+  data,
+  onClickEdit,
+  onClickDelete,
+  user,
+}: any) {
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
   return (
-    <TableContainer
-      component={Paper}
-      sx={{
-        maxHeight: '50vh',
-        overflow: 'auto',
-      }}
-    >
-      <Table
+    <>
+      <TableContainer
+        component={Paper}
         sx={{
-          minWidth: 650,
-          width: '100%',
+          maxHeight: '50vh',
+          overflow: 'auto',
         }}
-        aria-label="simple table"
       >
-        <TableHead>
-          <TableRow>
-            <TableCell>Reward Name</TableCell>
-            <TableCell align="left">Description</TableCell>
-            <TableCell align="left">Redeemed Count</TableCell>
-            <TableCell align="left">Status</TableCell>
-            <TableCell align="left">Actions</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {data.map((row) => (
-            <TableRow
-              key={row.id}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            >
-              <TableCell component="th" scope="row" sx={{ width: '20%' }}>
-                {row.name}
-              </TableCell>
-              <TableCell align="left" sx={{ maxHeight: '100px', width: '40%' }}>
-                <div style={{ maxHeight: '100px', overflow: 'hidden' }}>
-                  {row.description}
-                </div>
-              </TableCell>
-              <TableCell align="left" sx={{ width: '10%' }}>
-                10
-              </TableCell>
-              <TableCell
-                align="left"
-                sx={{
-                  width: '10%',
-                  color: row.isPublished ? 'green' : 'lightgrey',
-                }}
-              >
-                {row.isPublished ? 'Active' : 'Inactive'}
-              </TableCell>
-
-              <TableCell align="left" sx={{ width: '20%' }}>
-                <Button
-                  onClick={() => onClickEdit(row)}
-                  disabled={row.isDefault}
-                >
-                  Edit
-                </Button>
-                <Button
-                  onClick={() => onClickDelete(row.id)}
-                  disabled={row.isDefault}
-                >
-                  Delete
-                </Button>
-              </TableCell>
+        <Table
+          sx={{
+            minWidth: 650,
+            width: '100%',
+          }}
+          aria-label="simple table"
+        >
+          <TableHead>
+            <TableRow>
+              <TableCell>Reward Name</TableCell>
+              <TableCell align="left">Description</TableCell>
+              <TableCell align="left">Redeemed Count</TableCell>
+              <TableCell align="left">Status</TableCell>
+              <TableCell align="left">Actions</TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+          </TableHead>
+          <TableBody>
+            {data
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((row) => (
+                <TableRow
+                  key={row.id}
+                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                >
+                  <TableCell component="th" scope="row" sx={{ width: '20%' }}>
+                    {row.name}
+                  </TableCell>
+                  <TableCell
+                    align="left"
+                    sx={{ maxHeight: '100px', width: '40%' }}
+                  >
+                    <div style={{ maxHeight: '100px', overflow: 'hidden' }}>
+                      {row.description}
+                    </div>
+                  </TableCell>
+                  <TableCell align="left" sx={{ width: '10%' }}>
+                    10
+                  </TableCell>
+                  <TableCell
+                    align="left"
+                    sx={{
+                      width: '10%',
+                      color: row.isPublished ? 'green' : 'lightgrey',
+                    }}
+                  >
+                    {row.isPublished ? 'Active' : 'Inactive'}
+                  </TableCell>
+
+                  <TableCell align="left" sx={{ width: '20%' }}>
+                    <Button
+                      onClick={() => onClickEdit(row)}
+                      disabled={row.isDefault || user?.role !== Role.ADMIN}
+                    >
+                      Edit
+                    </Button>
+                    <Button
+                      onClick={() => onClickDelete(row.id)}
+                      disabled={row.isDefault || user?.role !== Role.ADMIN}
+                    >
+                      Delete
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <TablePagination
+        rowsPerPageOptions={[5, 10, 25]}
+        component="div"
+        count={data.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      />
+    </>
   );
 }
 
@@ -317,6 +353,8 @@ export function ManageRewardsRedeemed() {
   const [searchInput, setSearchInput] = useState('');
   const [searchResult, setSearchResult] = useState<any>([]);
 
+  const user = useSelector(selectUser);
+
   const ref = useRef<any>(null);
 
   const onChange = (e: any) => {
@@ -370,13 +408,13 @@ export function ManageRewardsRedeemed() {
           </Grid>
         </Grid>
 
-        <RewardsRedeemedTable data={final} />
+        <RewardsRedeemedTable data={final} user={user} />
       </Paper>
     </Container>
   );
 }
 
-export const StatusSelector = ({ id, value, onChange }: any) => {
+export const StatusSelector = ({ id, value, onChange, user }: any) => {
   const [status, setStatus] = React.useState(value);
 
   const handleChange = (_value: any) => {
@@ -398,6 +436,7 @@ export const StatusSelector = ({ id, value, onChange }: any) => {
         label="Status"
         onChange={(e: any) => handleChange(e.target.value)}
         size="small"
+        disabled={user.role !== 'ADMIN'}
       >
         <MenuItem value={'PENDING'}>PENDING</MenuItem>
         <MenuItem value={'REDEEMED'}>REDEEMED</MenuItem>
@@ -407,7 +446,9 @@ export const StatusSelector = ({ id, value, onChange }: any) => {
   );
 };
 
-export function RewardsRedeemedTable({ data }: any) {
+export function RewardsRedeemedTable({ data, user }: any) {
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const dispatch = useThunkDispatch();
 
   const handleUpdateStatus = async (id: string, value: string) => {
@@ -419,49 +460,77 @@ export function RewardsRedeemedTable({ data }: any) {
     );
   };
 
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
   return (
-    <TableContainer
-      component={Paper}
-      sx={{
-        maxHeight: '70vh',
-        overflow: 'auto',
-      }}
-    >
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell>Student Name</TableCell>
-            <TableCell align="left">Student Email</TableCell>
-            <TableCell align="left">Reward Name</TableCell>
-            <TableCell align="left">Redeemed date</TableCell>
-            <TableCell align="left">Status</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {data.map((row) => (
-            <TableRow
-              key={row.id}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            >
-              <TableCell component="th" scope="row" sx={{ fontSize: '1rem' }}>
-                <LinkText>{row.user?.fullName}</LinkText>
-              </TableCell>
-              <TableCell align="left">{row.user?.email}</TableCell>
-              <TableCell align="left">{row.reward?.name}</TableCell>
-              <TableCell align="left">
-                {moment(row.createdAt).format('DD/MM/YYYY, hh:mm:ss a')}
-              </TableCell>
-              <TableCell align="left">
-                <StatusSelector
-                  id={row.id}
-                  value={row.status}
-                  onChange={handleUpdateStatus}
-                />
-              </TableCell>
+    <>
+      <TableContainer
+        component={Paper}
+        sx={{
+          maxHeight: '70vh',
+          overflow: 'auto',
+        }}
+      >
+        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell>Student Name</TableCell>
+              <TableCell align="left">Student Email</TableCell>
+              <TableCell align="left">Reward Name</TableCell>
+              <TableCell align="left">Redeemed date</TableCell>
+              <TableCell align="left">Status</TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+          </TableHead>
+          <TableBody>
+            {data
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((row) => (
+                <TableRow
+                  key={row.id}
+                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                >
+                  <TableCell
+                    component="th"
+                    scope="row"
+                    sx={{ fontSize: '1rem' }}
+                  >
+                    <LinkText>{row.user?.fullName}</LinkText>
+                  </TableCell>
+                  <TableCell align="left">{row.user?.email}</TableCell>
+                  <TableCell align="left">{row.reward?.name}</TableCell>
+                  <TableCell align="left">
+                    {moment(row.createdAt).format('DD/MM/YYYY, hh:mm:ss a')}
+                  </TableCell>
+                  <TableCell align="left">
+                    <StatusSelector
+                      id={row.id}
+                      value={row.status}
+                      onChange={handleUpdateStatus}
+                      user={user}
+                    />
+                  </TableCell>
+                </TableRow>
+              ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+
+      <TablePagination
+        rowsPerPageOptions={[5, 10, 25]}
+        component="div"
+        count={data.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      />
+    </>
   );
 }

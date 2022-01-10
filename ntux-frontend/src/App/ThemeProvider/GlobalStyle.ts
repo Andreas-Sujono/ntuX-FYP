@@ -97,6 +97,11 @@ const GlobalStyle = createGlobalStyle<ThemeProps>`
     .slick-prev::before, .slick-next::before{
         color: black !important;
     }
+
+    p{
+        margin-bottom: 0;
+    }
+
     
     ${media.lessThan('sm')`
         html, body{

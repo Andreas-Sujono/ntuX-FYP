@@ -10,6 +10,8 @@ import { searchFromListOfObject } from 'common/utils';
 import { useThunkDispatch } from 'common/hooks';
 import { deleteUser } from 'Store/Actions/admin';
 import { toast } from 'react-toastify';
+import { selectUser } from 'Store/Selector/auth';
+import { Role } from 'Models/Auth';
 
 export default function ManageUsers() {
   const allUsers = useSelector(selectAllUsers);
@@ -18,6 +20,7 @@ export default function ManageUsers() {
   const [searchResult, setSearchResult] = useState<any>([]);
   const [openModal, setOpenModal] = useState(false);
   const [chosenData, setChosenData] = useState(false);
+  const user = useSelector(selectUser);
 
   const ref = useRef<any>(null);
   const dispatch = useThunkDispatch();
@@ -88,6 +91,7 @@ export default function ManageUsers() {
               sx={{ mt: 1 }}
               fullWidth
               onClick={() => setOpenModal(true)}
+              disabled={user.role !== Role.ADMIN}
             >
               Create New User
             </Button>
@@ -98,6 +102,7 @@ export default function ManageUsers() {
           data={final}
           onClickEdit={onClickEdit}
           onClickDelete={onClickDelete}
+          user={user}
         />
       </Paper>
     </Container>

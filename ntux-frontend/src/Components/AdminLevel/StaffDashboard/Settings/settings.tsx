@@ -8,7 +8,7 @@ import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
-import { green } from '@mui/material/colors';
+import { green, red } from '@mui/material/colors';
 import TabsContainer from './Tabs/TabsContainer';
 import styled from 'styled-components';
 import { media } from 'common/styling';
@@ -62,15 +62,19 @@ function SettingsContent() {
             <Card sx={{ minWidth: 275 }}>
               <CardContent>
                 <Avatar
-                  alt={user.fullName}
-                  src={user.profileImageUrl || ''}
                   sx={{
+                    bgcolor: red[500],
                     width: 80,
                     height: 80,
                     fontSize: '2.5rem',
-                    bgcolor: green[500],
                   }}
-                />
+                  aria-label="recipe"
+                  alt={user.fullName}
+                  src={user.profileImageUrl || ''}
+                >
+                  {user.fullName.charAt(0).toUpperCase()}
+                </Avatar>
+
                 <Typography variant="h6" component="div" sx={{ mt: 1 }}>
                   {user.fullName}
                 </Typography>

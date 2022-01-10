@@ -17,6 +17,8 @@ import { selectAllRewards } from 'Store/Selector/admin';
 import { searchFromListOfObject } from 'common/utils';
 import { toast } from 'react-toastify';
 import { useThunkDispatch } from 'common/hooks';
+import { selectUser } from 'Store/Selector/auth';
+import { Role } from 'Models/Auth';
 
 export default function ManageRewards() {
   const allRewards = useSelector(selectAllRewards);
@@ -28,6 +30,8 @@ export default function ManageRewards() {
 
   const ref = useRef<any>(null);
   const dispatch = useThunkDispatch();
+
+  const user = useSelector(selectUser);
 
   const onChange = (e: any) => {
     const value = e.target.value;
@@ -99,6 +103,7 @@ export default function ManageRewards() {
                 sx={{ mt: 1 }}
                 fullWidth
                 onClick={() => setOpenModal(true)}
+                disabled={user?.role !== Role.ADMIN}
               >
                 Create New Reward
               </Button>
@@ -109,6 +114,7 @@ export default function ManageRewards() {
             data={final}
             onClickEdit={onClickEdit}
             onClickDelete={onClickDelete}
+            user={user}
           />
         </Paper>
       </Container>
