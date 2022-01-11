@@ -87,7 +87,7 @@ function MainContainer({ children }: { children: React.ReactNode }) {
           >
             {routeDetails.details?.title}
           </Typography>
-          <ProfileButton>
+          <ProfileButton onClick={() => history.push(routes.SETTINGS.BASE)}>
             <CardHeader
               avatar={
                 <Avatar

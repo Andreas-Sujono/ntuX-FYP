@@ -1,3 +1,4 @@
+import { Box, Pagination } from '@mui/material';
 import { getLevelAndBadges } from 'common/utils';
 import React, { memo } from 'react';
 import { SearchBar } from 'react-dre/lib/SearchBar';
@@ -47,6 +48,13 @@ function UsersSection(): React.ReactElement {
   const activeUsers = useSelector(selectActiveUsers).slice(0, 5);
   const allUsers = useSelector(selectAllUsers).slice(0, 5);
 
+  const [page, setPage] = React.useState(1);
+  const [rowsPerPage, setRowsPerPage] = React.useState(15);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
   return (
     <Container>
       <Title>Users</Title>
@@ -74,10 +82,24 @@ function UsersSection(): React.ReactElement {
         />
       </SearchBarContainer>
       <CardsContainer>
-        {allUsers.map((item) => (
-          <Card key={item.id} user={item} />
-        ))}
+        {allUsers
+          .slice(
+            (page - 1) * rowsPerPage,
+            (page - 1) * rowsPerPage + rowsPerPage,
+          )
+          .map((item) => (
+            <Card key={item.id} user={item} />
+          ))}
       </CardsContainer>
+
+      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+        <Pagination
+          count={Math.floor(allUsers.length / rowsPerPage) + 1}
+          color="primary"
+          onChange={handleChangePage}
+          page={page}
+        />
+      </Box>
     </Container>
   );
 }

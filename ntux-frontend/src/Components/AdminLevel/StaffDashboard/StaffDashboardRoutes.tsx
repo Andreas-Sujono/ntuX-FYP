@@ -16,6 +16,7 @@ import {
 } from 'Store/Actions/admin';
 import { getMyAccount } from 'Store/Actions/auth';
 import { selectUserId } from 'Store/Selector/auth';
+import { getMyCourses } from 'Store/Actions/courses';
 
 const StaffDashboardRoutes = () => {
   const location = useLocation();
@@ -43,6 +44,7 @@ const StaffDashboardRoutes = () => {
     dispatch(getAllLecturers());
     dispatch(getAllStudents());
     dispatch(getWebsiteActivity());
+    dispatch(getMyCourses());
   }, []);
 
   // useEffect(() => {

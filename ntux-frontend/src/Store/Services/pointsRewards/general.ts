@@ -8,6 +8,11 @@ export default class PointsRewardsService extends BaseService {
     return res.data;
   };
 
+  getMyAchievements = async () => {
+    const res = await this.getRequest('/goal-task/user');
+    return res.data;
+  };
+
   getAllRewards = async () => {
     const res = await this.getRequest('/reward?filter=isPublished||eq||true');
     return res.data;

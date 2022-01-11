@@ -189,7 +189,7 @@ function CourseContainer({ children }: { children: React.ReactNode }) {
           >
             {routeDetails.details.title} - {course.code}: {course.name}
           </Typography>
-          <ProfileButton>
+          <ProfileButton onClick={() => history.push(routes.STAFF.SETTINGS)}>
             <CardHeader
               avatar={
                 <Avatar

@@ -41,9 +41,9 @@ export const CourseCard = ({ data }: any) => {
   return (
     <LPCourseCard
       onClick={() => history.push(cousePath)}
-      style={{ maxWidth: '350px' }}
+      style={{ maxWidth: '320px' }}
     >
-      <img src={data.imageUrl} />
+      <img src={data.imageUrl} style={{ maxHeight: '140px' }} />
       <div className="details" style={{ padding: '1.1rem' }}>
         <div
           className="name"
@@ -51,6 +51,7 @@ export const CourseCard = ({ data }: any) => {
             height: '54px',
             overflow: 'hidden',
             textOverflow: 'ellipsis',
+            fontSize: '1.3rem',
           }}
         >
           {data.code}: {data.name}
@@ -58,7 +59,10 @@ export const CourseCard = ({ data }: any) => {
         <div className="hours">{data.totalHours} Hours</div>
         <div
           className="batch"
-          style={{ color: data.status === 'DRAFT' ? 'lightgrey' : 'green' }}
+          style={{
+            color: data.status === 'DRAFT' ? 'lightgrey' : 'green',
+            fontSize: '1rem',
+          }}
         >
           {data.status}
         </div>

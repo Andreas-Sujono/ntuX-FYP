@@ -186,7 +186,7 @@ export default function RegisterCoursePage() {
 
             <Grid item xs={12} sx={{ mt: 2 }}>
               <Typography component="h3" variant="h6">
-                Account Details
+                {!user ? 'New Account Details' : 'Please Login Again!'}
               </Typography>
               <Divider sx={{ mb: 2, mt: 0.5 }} />
             </Grid>
@@ -246,7 +246,8 @@ export default function RegisterCoursePage() {
                 variant="body2"
                 sx={{ color: 'text.tertiary' }}
               >
-                *You will get notification if admin approves your registration
+                *Admin need to approve your course registration before you can
+                access it
               </Typography>
             </Grid>
 

@@ -104,12 +104,18 @@ function MainContainer({ children }: { children: React.ReactNode }) {
     getAllData();
   }, []);
 
+  useEffect(() => {
+    if (course.courseBatch)
+      dispatch(
+        getCourseAnnouncements(match.params.courseId, course.courseBatch.id),
+      );
+  }, [course]);
+
   const getAllData = async () => {
     setLoading(true);
     await Promise.all([
       dispatch(getOneCourseRegistered(match.params.courseId)),
       dispatch(getCourseContents(match.params.courseId)),
-      dispatch(getCourseAnnouncements(match.params.courseId)),
     ]);
     setLoading(false);
   };
@@ -145,7 +151,7 @@ function MainContainer({ children }: { children: React.ReactNode }) {
           >
             {course.code}: {course.name}
           </Typography>
-          <ProfileButton>
+          <ProfileButton onClick={() => history.push(routes.SETTINGS.BASE)}>
             <CardHeader
               avatar={
                 <Avatar

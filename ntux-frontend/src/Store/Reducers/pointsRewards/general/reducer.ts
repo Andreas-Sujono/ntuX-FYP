@@ -15,6 +15,10 @@ const initialState = initEntityState({
   avatars: [],
   myAvatars: [],
   isActivityAdded: false, //user with login
+  myAchievements: {
+    nextAchievements: [],
+    achievementOwned: [],
+  },
 });
 
 function reducer(state = initialState, action: AnyAction) {

@@ -14,6 +14,7 @@ import FullPageLoadingBar from '../../../common/Components/LoadingBar/FullPageLo
 import { useDispatch } from 'react-redux';
 import { addWebsiteVisitActivity } from 'Store/Actions/pointsRewards';
 import { getMyAccount } from 'Store/Actions/auth';
+import { getMyCourses } from 'Store/Actions/courses';
 
 const Routes = () => {
   const location = useLocation();
@@ -49,6 +50,7 @@ const Routes = () => {
   useEffect(() => {
     dispatch(addWebsiteVisitActivity());
     dispatch(getMyAccount());
+    dispatch(getMyCourses());
   }, []);
 
   return (

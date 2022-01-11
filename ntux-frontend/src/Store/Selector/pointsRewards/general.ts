@@ -8,6 +8,8 @@ export const selectRewards = (state: RootState) =>
   selectGeneralState(state).rewards;
 export const selectGoalTask = (state: RootState) =>
   selectGeneralState(state).goalTask;
+export const selectMyAchievements = (state: RootState) =>
+  selectGeneralState(state).myAchievements;
 export const selectGoalFinished = (state: RootState) =>
   selectGeneralState(state).goalFinished;
 

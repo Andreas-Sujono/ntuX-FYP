@@ -21,6 +21,10 @@ import { useThunkDispatch } from 'common/hooks';
 import { getOnePublicCourse } from 'Store/Actions/courses';
 import { LoadingBar } from 'common/Components/LoadingBar/FullPageLoadingBar';
 import { Course } from 'Models/Courses';
+import { useSelector } from 'react-redux';
+import { selectMyCourses } from 'Store/Selector/courses';
+import { Toast } from 'react-toastify/dist/components';
+import { toast } from 'react-toastify';
 
 function CourseDetail(): React.ReactElement {
   const history = useHistory();
@@ -28,6 +32,7 @@ function CourseDetail(): React.ReactElement {
   const param: any = useParams();
   const [courseData, setCourseData] = React.useState<Course | null>(null);
   const [loading, setLoading] = React.useState<any>(true);
+  const myCourses = useSelector(selectMyCourses);
 
   useEffect(() => {
     getData();
@@ -47,6 +52,14 @@ function CourseDetail(): React.ReactElement {
     return `${moment(startDate).format('DD MMMM YYYY')} - ${moment(
       endDate,
     ).format('DD MMMM YYYY')}`;
+  };
+
+  const onClickRegister = (id) => {
+    id = Number(id);
+    const myCourseIds = new Set(myCourses.map((item) => item.course.id));
+    if (myCourseIds.has(id))
+      return toast.error('You already register this course');
+    history.push(makePath(routes.REGISTER_COURSE, { courseId: '1' }));
   };
 
   if (courseData?.courseBatches)
@@ -114,9 +127,7 @@ function CourseDetail(): React.ReactElement {
                 sx={{ mt: 3, mb: 2 }}
                 color="primary"
                 onClick={() => {
-                  history.push(
-                    makePath(routes.REGISTER_COURSE, { courseId: '1' }),
-                  );
+                  onClickRegister(courseData?.id);
                 }}
                 disabled={!isOpenRegistration}
               >

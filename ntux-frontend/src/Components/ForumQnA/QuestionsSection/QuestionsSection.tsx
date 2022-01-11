@@ -1,4 +1,4 @@
-import { Button } from '@mui/material';
+import { Box, Button, Pagination } from '@mui/material';
 import { routes } from 'Components/Routes';
 import React, { memo } from 'react';
 import { SearchBar } from 'react-dre/lib/SearchBar';
@@ -21,6 +21,9 @@ import {
 
 function QuestionsSection(): React.ReactElement {
   const [type, setType] = React.useState('all');
+  const [page, setPage] = React.useState(1);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+
   const allQuestions = useSelector(selectAllQuestions);
   const unasweredQuestions = useSelector(selectUnansweredQuestions);
   const myQuestions = useSelector(selectMyQuestions);
@@ -28,6 +31,10 @@ function QuestionsSection(): React.ReactElement {
   let selectedData = allQuestions;
   if (type === 'unanswered') selectedData = unasweredQuestions;
   else if (type === 'me') selectedData = myQuestions;
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
 
   return (
     <Container>
@@ -69,10 +76,24 @@ function QuestionsSection(): React.ReactElement {
         {selectedData.length === 0 && (
           <span style={{ color: 'lightgrey' }}>No Data</span>
         )}
-        {selectedData.map((item) => (
-          <QuestionCard key={item.id} summary={item} />
-        ))}
+        {selectedData
+          .slice(
+            (page - 1) * rowsPerPage,
+            (page - 1) * rowsPerPage + rowsPerPage,
+          )
+          .map((item) => (
+            <QuestionCard key={item.id} summary={item} />
+          ))}
       </CardsContainer>
+
+      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+        <Pagination
+          count={Math.floor(selectedData.length / rowsPerPage) + 1}
+          color="primary"
+          onChange={handleChangePage}
+          page={page}
+        />
+      </Box>
     </Container>
   );
 }

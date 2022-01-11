@@ -32,6 +32,9 @@ export const getMyAccount =
   (id?: Id, bypass = false) =>
   async (dispatch: AppDispatch, getState: () => RootState) => {
     try {
+      const userId = selectUserId(getState());
+      if (!userId) return;
+
       const res = await service.getMyAccount();
       if (res.errorCode) {
         dispatch(loadFailed());

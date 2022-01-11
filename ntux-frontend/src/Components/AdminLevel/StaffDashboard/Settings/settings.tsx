@@ -57,7 +57,7 @@ function SettingsContent() {
         maxWidth={'lg'}
         sx={{ marginLeft: 'auto', marginRight: 'auto' }}
       >
-        <Grid item xs={12} md={3}>
+        <Grid item xs={12} md={3} sx={{ mr: 1 }}>
           <Paper style={{ width: '100%', height: '200px', maxWidth: '100%' }}>
             <Card sx={{ minWidth: 275 }}>
               <CardContent>
@@ -88,7 +88,7 @@ function SettingsContent() {
             </Card>
           </Paper>
         </Grid>
-        <Grid item xs={12} md={9}>
+        <Grid item xs={12} md={8}>
           <TabsContainer />
         </Grid>
       </StyledContainer>

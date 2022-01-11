@@ -30,9 +30,9 @@ export default class CoursesService extends BaseService {
     );
     return res.data;
   };
-  getCourseAnnonucement = async (courseId: string) => {
+  getCourseAnnonuncement = async (courseId: string, batchId: string) => {
     const res = await this.getRequest(
-      `/course-announcement?filter=course.id||eq||${courseId}`,
+      `/course-announcement?courseId=${courseId}&batchId=${batchId}`,
     );
     return res.data;
   };

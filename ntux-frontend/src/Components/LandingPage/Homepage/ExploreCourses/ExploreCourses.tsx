@@ -38,9 +38,9 @@ const ExploreCourses: React.FC = () => {
       <CoursesContainer>
         {courses.map((item: Course) => (
           <CourseCard
-            onClick={() =>
-              history.push(makePath(routes.LP_COURSE, { courseId: item.id }))
-            }
+            onClick={() => {
+              history.push(makePath(routes.LP_COURSE, { courseId: item.id }));
+            }}
             key={item.id}
           >
             <img src={item.imageUrl || '#'} />

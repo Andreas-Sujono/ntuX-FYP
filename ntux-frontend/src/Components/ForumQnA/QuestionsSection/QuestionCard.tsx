@@ -12,7 +12,7 @@ function QuestionCard({ summary }: { summary: any }): React.ReactElement {
     questionId: summary.id,
   });
 
-  let tags = summary.arrayAgg?.filter((item) => !!item) || [];
+  let tags = summary.tags?.filter((item) => !!item) || [];
   tags = [...new Set(tags)];
 
   return (

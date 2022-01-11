@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -32,6 +32,7 @@ import { useSelector } from 'react-redux';
 import {
   selectAvatars,
   selectGoalTask,
+  selectMyAchievements,
   selectRewards,
   selectRewardsRedeemed,
 } from 'Store/Selector/pointsRewards';
@@ -39,7 +40,7 @@ import { Reward } from 'Models/pointsRewards';
 import { selectUser } from 'Store/Selector/auth';
 import { useThunkDispatch } from 'common/hooks';
 import { toast } from 'react-toastify';
-import { buyAvatar } from 'Store/Actions/pointsRewards';
+import { buyAvatar, redeemReward } from 'Store/Actions/pointsRewards';
 
 // const HowToGetPointsData = [
 //   'Finish online course',
@@ -187,6 +188,8 @@ export function RewardHistoryTable() {
 
 export const HowToGetPoints = ({ limit = null }: any) => {
   let goalTask = useSelector(selectGoalTask);
+  const myAchievements = useSelector(selectMyAchievements);
+
   if (limit) goalTask = goalTask.slice(0, limit);
   return (
     <FeatureBox sx={{ padding: '1rem' }}>
@@ -195,10 +198,10 @@ export const HowToGetPoints = ({ limit = null }: any) => {
       </Typography>
 
       <List dense={false}>
-        {goalTask.map((item) => (
+        {myAchievements.nextAchievements.map((item) => (
           <ListItem key={item.id} divider sx={{ p: 0.5 }}>
             <ListItemText
-              primary={item.taskName}
+              primary={item.name}
               sx={{ fontSize: '18px' }}
               color="text.secondary"
             />
@@ -347,7 +350,7 @@ export const RewardsGallery = ({ onClickRewardDetails }: any) => {
                 </Typography>
               </CardContent>
               <CardActions sx={{ mt: -2 }}>
-                <Button size="small">Reedem</Button>
+                {/* <Button size="small">Reedem</Button> */}
                 <Button size="small" onClick={() => onClickRewardDetails(item)}>
                   See details
                 </Button>
@@ -362,8 +365,28 @@ export const RewardsGallery = ({ onClickRewardDetails }: any) => {
 
 export const RewardDetailsModal = ({ open, setOpen, data }: any) => {
   data = data || {};
+
+  const [loading, setLoading] = useState(false);
+
+  const dispatch = useThunkDispatch();
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const onRedeem = async () => {
+    const confirm = window.confirm(
+      'Are you sure you want to redeem this reward?',
+    );
+    if (!confirm) return;
+    setLoading(true);
+    const res = await dispatch(
+      redeemReward({
+        reward: data.id,
+      }),
+    );
+    setLoading(false);
+    handleClose();
+  };
+
   return (
     <Modal
       open={open}
@@ -394,12 +417,22 @@ export const RewardDetailsModal = ({ open, setOpen, data }: any) => {
             <Typography gutterBottom variant="h6" component="div">
               {data.name}
             </Typography>
+            <Typography
+              gutterBottom
+              variant="body2"
+              component="div"
+              color="primary"
+            >
+              Cost: {data.totalPointsRequired} pts
+            </Typography>
             <Typography variant="body2" color="text.secondary">
               {data.description}
             </Typography>
           </CardContent>
           <CardActions>
-            <Button size="small">Reedem</Button>
+            <Button size="small" onClick={onRedeem} disabled={loading}>
+              Reedem
+            </Button>
           </CardActions>
         </Card>
       </Box>

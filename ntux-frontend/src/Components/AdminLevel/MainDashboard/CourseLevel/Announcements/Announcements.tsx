@@ -34,7 +34,10 @@ export default function AnnouncementsContent() {
             >
               <Typography variant="h6">{item.metadata.title}</Typography>
               <Divider />
-              <Typography variant="body1" sx={{ mt: 2 }}>
+              <Typography
+                variant="body1"
+                sx={{ mt: 2, whiteSpace: 'pre-line' }}
+              >
                 {item.metadata.description}
               </Typography>
             </Paper>

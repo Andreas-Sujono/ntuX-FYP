@@ -142,6 +142,8 @@ export const getMyCourses =
   async (dispatch: AppDispatch, getState: () => RootState) => {
     try {
       const userId = selectUserId(getState());
+      if (!userId) return;
+
       const res = await service.getMyCourses();
       console.log(res);
       if (res.errorCode) {
@@ -197,11 +199,11 @@ export const getCourseContents =
   };
 
 export const getCourseAnnouncements =
-  (courseId: string, bypass = false) =>
+  (courseId: string, batchId?: string, bypass = false) =>
   async (dispatch: AppDispatch, getState: () => RootState) => {
     try {
       const prevData = selectCourseAnnouncementsById(getState());
-      const res = await service.getCourseAnnonucement(courseId);
+      const res = await service.getCourseAnnonuncement(courseId, batchId || '');
       if (res.errorCode) {
         dispatch(loadFailed());
         return {
