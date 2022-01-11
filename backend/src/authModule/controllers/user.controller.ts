@@ -99,6 +99,7 @@ export class UserController implements CrudController<User> {
           email: ILike(`%${query}%`),
         },
       ],
+      relations: ['currentAvatar'],
     });
     res.forEach((item) => {
       delete item.NRIC;
