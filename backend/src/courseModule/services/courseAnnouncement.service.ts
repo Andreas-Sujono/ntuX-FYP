@@ -17,16 +17,19 @@ export class CourseAnnouncementService extends TypeOrmCrudService<CourseAnnounce
         where: [
           {
             course: courseId,
-            batch: batchId,
+            courseBatch: batchId,
             status: 'PUBLISHED',
           },
           {
             course: courseId,
-            batch: IsNull(),
+            courseBatch: IsNull(),
             status: 'PUBLISHED',
           },
         ],
         relations: ['course', 'courseBatch'],
+        order: {
+          createdAt: 'DESC',
+        },
       });
 
     return await this.repo.find({
@@ -36,6 +39,9 @@ export class CourseAnnouncementService extends TypeOrmCrudService<CourseAnnounce
         },
       ],
       relations: ['course', 'courseBatch'],
+      order: {
+        createdAt: 'DESC',
+      },
     });
   }
 }

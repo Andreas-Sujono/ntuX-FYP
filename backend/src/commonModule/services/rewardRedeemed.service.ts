@@ -20,6 +20,7 @@ export class RewardRedeemedService extends TypeOrmCrudService<RewardRedeemed> {
   }
 
   async createRewardRedeemed(dto: RewardRedeemed, userId: number) {
+    dto.user = userId as any;
     const [user, reward] = await Promise.all([
       this.userRepo.findOne({ id: userId as any }),
       this.rewardRepo.findOne({ id: dto.reward as any }),
@@ -119,7 +120,7 @@ export class RewardRedeemedService extends TypeOrmCrudService<RewardRedeemed> {
     }
 
     //deduct points
-    user.totalPoints -= reward.totalExpsRequired;
+    user.totalPoints -= reward.totalPointsRequired;
     await this.userRepo.save(user);
     await this.rewardRepo.save({
       ...reward,
