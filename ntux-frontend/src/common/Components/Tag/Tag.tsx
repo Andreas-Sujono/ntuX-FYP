@@ -19,11 +19,15 @@ export const Container = styled.span<{ color: string }>`
 
 interface ITagProps {
   children: any;
+  color?: string;
 }
 
-const Tag: React.FunctionComponent<ITagProps> = ({ children }: ITagProps) => {
-  const color = colors[Math.floor(Math.random() * colors.length)];
-  return <Container color={color}>{children}</Container>;
+const Tag: React.FunctionComponent<ITagProps> = ({
+  children,
+  color,
+}: ITagProps) => {
+  const randomColor = colors[Math.floor(Math.random() * colors.length)];
+  return <Container color={color || randomColor}>{children}</Container>;
 };
 
 export default Tag;

@@ -1,11 +1,16 @@
 import { Box, Pagination } from '@mui/material';
+import { useThunkDispatch } from 'common/hooks';
 import { getLevelAndBadges } from 'common/utils';
-import React, { memo } from 'react';
+import React, { memo, useRef } from 'react';
 import { SearchBar } from 'react-dre/lib/SearchBar';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { selectAllUsers } from 'Store/Selector/admin';
-import { selectActiveUsers, selectTopUsers } from 'Store/Selector/forum';
+import { getAllUsers } from 'Store/Actions/forum';
+import {
+  selectActiveUsers,
+  selectAllUsers,
+  selectTopUsers,
+} from 'Store/Selector/forum';
 import { mockForumUsers } from '../../../Models/mockData';
 import { makePath, routes } from '../../Routes';
 import {
@@ -50,9 +55,24 @@ function UsersSection(): React.ReactElement {
 
   const [page, setPage] = React.useState(1);
   const [rowsPerPage, setRowsPerPage] = React.useState(15);
+  const [searchInput, setSearchInput] = React.useState('');
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
+  };
+
+  const ref = useRef<any>(null);
+  const dispatch = useThunkDispatch();
+
+  const onSearch = (value) => {
+    setSearchInput(value);
+
+    if (ref.current) clearTimeout(ref.current);
+
+    ref.current = setTimeout(async () => {
+      await dispatch(getAllUsers(value));
+      ref.current = null;
+    }, 200);
   };
 
   return (
@@ -75,8 +95,8 @@ function UsersSection(): React.ReactElement {
       </Row>
       <SearchBarContainer>
         <SearchBar
-          value=""
-          onChange={() => null}
+          value={searchInput}
+          onChange={onSearch}
           width="100%"
           placeholder="Search for Users"
         />

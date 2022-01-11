@@ -1,9 +1,12 @@
 import { Box, Button, Pagination } from '@mui/material';
+import { useThunkDispatch } from 'common/hooks';
+import { searchFromListOfObject } from 'common/utils';
 import { routes } from 'Components/Routes';
-import React, { memo } from 'react';
+import React, { memo, useRef } from 'react';
 import { SearchBar } from 'react-dre/lib/SearchBar';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { getAllQuestions, getUnansweredQuestions } from 'Store/Actions/forum';
 import {
   selectAllQuestions,
   selectMyQuestions,
@@ -23,10 +26,16 @@ function QuestionsSection(): React.ReactElement {
   const [type, setType] = React.useState('all');
   const [page, setPage] = React.useState(1);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [searchInput, setSearchInput] = React.useState('');
+  const [searchResult, setSearchResult] = React.useState<any>([]);
 
   const allQuestions = useSelector(selectAllQuestions);
   const unasweredQuestions = useSelector(selectUnansweredQuestions);
-  const myQuestions = useSelector(selectMyQuestions);
+  const myQuestionsReceived = useSelector(selectMyQuestions);
+  const myQuestions =
+    type === 'me' && searchInput ? searchResult : myQuestionsReceived;
+
+  const dispatch = useThunkDispatch();
 
   let selectedData = allQuestions;
   if (type === 'unanswered') selectedData = unasweredQuestions;
@@ -34,6 +43,28 @@ function QuestionsSection(): React.ReactElement {
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
+  };
+
+  const ref = useRef<any>(null);
+
+  const onSearch = (value) => {
+    setSearchInput(value);
+
+    if (ref.current) clearTimeout(ref.current);
+
+    ref.current = setTimeout(async () => {
+      if (type === 'all') await dispatch(getAllQuestions(undefined, value));
+      if (type === 'unanswered') await dispatch(getUnansweredQuestions(value));
+      if (type === 'me') {
+        const result = searchFromListOfObject(
+          myQuestionsReceived,
+          ['name'],
+          value,
+        );
+        setSearchResult(result);
+      }
+      ref.current = null;
+    }, 200);
   };
 
   return (
@@ -46,8 +77,8 @@ function QuestionsSection(): React.ReactElement {
       </TitleRow>
       <SearchBarContainer>
         <SearchBar
-          value=""
-          onChange={() => null}
+          value={searchInput}
+          onChange={onSearch}
           width="100%"
           placeholder="Search for any question or topic"
         />

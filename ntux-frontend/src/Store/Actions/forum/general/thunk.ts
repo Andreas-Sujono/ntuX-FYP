@@ -26,11 +26,11 @@ const sendErrorNotification = (errorMessage = '', errorCode = 1) => {
 };
 
 export const getAllQuestions =
-  (tagId?: Id, bypass = false) =>
+  (tagId?: Id, search?: string, bypass = false) =>
   async (dispatch: AppDispatch, getState: () => RootState) => {
     try {
       const prev = selectQuestionsByTagId(getState());
-      const res = await service.getAllQuestions(tagId);
+      const res = await service.getAllQuestions(tagId, search || '');
       if (res.errorCode) {
         dispatch(loadFailed());
         sendErrorNotification(res.message, res.errorCode);
@@ -88,10 +88,10 @@ export const getMyQuestions =
   };
 
 export const getUnansweredQuestions =
-  (bypass = false) =>
+  (query?: string, bypass = false) =>
   async (dispatch: AppDispatch, getState: () => RootState) => {
     try {
-      const res = await service.getUnansweredQuestions();
+      const res = await service.getUnansweredQuestions(query || '');
       if (res.errorCode) {
         dispatch(loadFailed());
         sendErrorNotification(res.message, res.errorCode);
@@ -138,10 +138,10 @@ export const getAllTags =
   };
 
 export const getAllUsers =
-  (bypass = false) =>
+  (search?: string, bypass = false) =>
   async (dispatch: AppDispatch, getState: () => RootState) => {
     try {
-      const res = await service.getAllUsers();
+      const res = await service.getAllUsers(search || '');
       if (res.errorCode) {
         dispatch(loadFailed());
         sendErrorNotification(res.message, res.errorCode);

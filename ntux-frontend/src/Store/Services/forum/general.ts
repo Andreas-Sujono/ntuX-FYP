@@ -3,9 +3,13 @@ import { Id } from '../../../Models/Auth';
 import BaseService from '../base';
 
 export default class PointsRewardsService extends BaseService {
-  getAllQuestions = async (tagId?: any) => {
+  getAllQuestions = async (tagId?: any, search?: string) => {
+    search = search || '';
+    search = encodeURIComponent(search);
     const res = await this.getRequest(
-      `/forum-question/${tagId ? `?tagId=${tagId}` : ''}`,
+      `/forum-question/${tagId ? `?tagId=${tagId}` : ''}${
+        search ? `?query=${search}` : ''
+      }`,
     );
     return res.data;
   };
@@ -17,13 +21,18 @@ export default class PointsRewardsService extends BaseService {
     const res = await this.getRequest(`/forum-question/${id}`);
     return res.data;
   };
-  getUnansweredQuestions = async () => {
-    const res = await this.getRequest('/forum-question/unanswered');
+  getUnansweredQuestions = async (query?: string) => {
+    query = encodeURIComponent(query || '');
+    const res = await this.getRequest(
+      `/forum-question/unanswered?query=${query}`,
+    );
     return res.data;
   };
 
-  getAllUsers = async () => {
-    const res = await this.getRequest(`/user/student`);
+  getAllUsers = async (search?: string) => {
+    const res = await this.getRequest(
+      `/user/all/students${search ? `?query=${search}` : ''}`,
+    );
     return res.data;
   };
   getTopUsers = async () => {

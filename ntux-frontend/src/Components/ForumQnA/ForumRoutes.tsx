@@ -9,11 +9,11 @@ import {
   getActiveUsers,
   getAllQuestions,
   getAllTags,
+  getAllUsers,
   getMyQuestions,
   getTopUsers,
   getUnansweredQuestions,
 } from 'Store/Actions/forum';
-import { getAllUsers } from 'Store/Actions/admin';
 
 const ForumRoutes = () => {
   const dispatch = useDispatch();
