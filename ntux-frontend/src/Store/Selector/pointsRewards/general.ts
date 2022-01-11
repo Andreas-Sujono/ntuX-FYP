@@ -20,3 +20,5 @@ export const selectAvatars = (state: RootState) =>
 
 export const selectIsActivityAdded = (state: RootState) =>
   selectGeneralState(state).isActivityAdded;
+export const selectNotifications = (state: RootState) =>
+  selectGeneralState(state).notifications;

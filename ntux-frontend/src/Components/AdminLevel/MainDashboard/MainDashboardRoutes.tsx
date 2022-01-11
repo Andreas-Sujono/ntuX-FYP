@@ -8,7 +8,11 @@ import { routes } from '../../Routes';
 import { useDispatch, useSelector } from 'react-redux';
 import { getMyCourses } from 'Store/Actions/courses';
 import { getMyAccount } from 'Store/Actions/auth';
-import { getGoalTask, getMyAchievements } from 'Store/Actions/pointsRewards';
+import {
+  getGoalTask,
+  getMyAchievements,
+  getNotifications,
+} from 'Store/Actions/pointsRewards';
 import { selectUserId } from 'Store/Selector/auth';
 
 const MainDashboardRoutes = () => {
@@ -35,6 +39,7 @@ const MainDashboardRoutes = () => {
     dispatch(getMyCourses());
     dispatch(getGoalTask());
     dispatch(getMyAchievements());
+    dispatch(getNotifications());
   }, []);
 
   if (!isAuthenticated) {

@@ -19,6 +19,7 @@ const initialState = initEntityState({
     nextAchievements: [],
     achievementOwned: [],
   },
+  notifications: [],
 });
 
 function reducer(state = initialState, action: AnyAction) {

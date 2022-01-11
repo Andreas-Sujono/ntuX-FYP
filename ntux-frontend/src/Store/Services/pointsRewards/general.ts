@@ -13,6 +13,11 @@ export default class PointsRewardsService extends BaseService {
     return res.data;
   };
 
+  getMyNotifications = async () => {
+    const res = await this.getRequest('/notifications');
+    return res.data;
+  };
+
   getAllRewards = async () => {
     const res = await this.getRequest('/reward?filter=isPublished||eq||true');
     return res.data;

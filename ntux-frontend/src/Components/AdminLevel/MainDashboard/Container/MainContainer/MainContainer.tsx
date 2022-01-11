@@ -7,10 +7,21 @@ import IconButton from '@mui/material/IconButton';
 import Container from '@mui/material/Container';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import Stack from '@mui/material/Stack';
+import Badge from '@mui/material/Badge';
+import MailIcon from '@mui/icons-material/Mail';
 import { green, red } from '@mui/material/colors';
-import { Avatar, CardHeader, ListItemButton } from '@mui/material';
+import {
+  Avatar,
+  CardHeader,
+  List,
+  ListItem,
+  ListItemButton,
+  Popover,
+} from '@mui/material';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+import InboxIcon from '@mui/icons-material/Inbox';
 import {
   AppBar,
   Drawer,
@@ -24,11 +35,26 @@ import { routeData } from '../../data';
 import { routes } from 'Components/Routes';
 import { useSelector } from 'react-redux';
 import { selectUser } from 'Store/Selector/auth';
+import { selectNotifications } from 'Store/Selector/pointsRewards';
 
 const logoImagePath = `${process.env.PUBLIC_URL}/assets/logos/full-colored-logo.svg`;
 
 function MainContainer({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState(window.innerWidth < 550 ? false : true);
+  const [anchorEl, setAnchorEl] = React.useState<any>(null);
+
+  const notifications = useSelector(selectNotifications);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const id = anchorEl ? 'simple-popover' : undefined;
+
   const toggleDrawer = () => {
     setOpen(!open);
   };
@@ -87,6 +113,48 @@ function MainContainer({ children }: { children: React.ReactNode }) {
           >
             {routeDetails.details?.title}
           </Typography>
+          <div>
+            <IconButton
+              sx={{ mr: 2 }}
+              onClick={handleClick}
+              aria-describedby={id}
+            >
+              <Badge
+                color="primary"
+                badgeContent={
+                  notifications.filter((item) => !item.isViewed).length
+                }
+                max={49}
+              >
+                <MailIcon />
+              </Badge>
+            </IconButton>
+          </div>
+          <Popover
+            id={id}
+            open={!!anchorEl}
+            anchorEl={anchorEl}
+            onClose={handleClose}
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'right',
+            }}
+          >
+            <List
+              sx={{ maxWidth: '250px', maxHeight: '450px', overflow: 'auto' }}
+            >
+              {notifications.map((item) => (
+                <ListItem disablePadding key={item.id}>
+                  <ListItemButton>
+                    {/* <ListItemIcon>
+                      <InboxIcon />
+                    </ListItemIcon> */}
+                    <ListItemText primary={item.name} />
+                  </ListItemButton>
+                </ListItem>
+              ))}
+            </List>
+          </Popover>
           <ProfileButton onClick={() => history.push(routes.SETTINGS.BASE)}>
             <CardHeader
               avatar={

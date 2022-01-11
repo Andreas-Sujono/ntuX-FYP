@@ -74,6 +74,31 @@ export const getMyAchievements =
     }
   };
 
+export const getNotifications =
+  (bypass = false) =>
+  async (dispatch: AppDispatch, getState: () => RootState) => {
+    try {
+      const res = await service.getMyNotifications();
+      if (res.errorCode) {
+        dispatch(loadFailed());
+        sendErrorNotification(res.message, res.errorCode);
+        return {
+          result: false,
+          errorMessage: res.message,
+        };
+      }
+      dispatch(
+        loadSuccess({
+          notifications: res,
+        }),
+      );
+      return { result: true };
+    } catch (err) {
+      dispatch(loadFailed());
+      return { result: false };
+    }
+  };
+
 export const getRewards =
   (bypass = false) =>
   async (dispatch: AppDispatch, getState: () => RootState) => {
