@@ -12,6 +12,7 @@ import {
 } from '@nestjsx/crud';
 import { UserRole } from 'src/authModule/entities/user.entity';
 import { UserData } from 'src/authModule/user.decorator';
+import { WebsiteActivityService } from 'src/commonModule/services/websiteActivity.service';
 
 @Crud({
   model: {
@@ -38,7 +39,10 @@ import { UserData } from 'src/authModule/user.decorator';
 })
 @Controller('forum-answer')
 export class ForumAnswerController implements CrudController<ForumAnswer> {
-  constructor(public service: ForumAnswerService) {}
+  constructor(
+    public service: ForumAnswerService,
+    public websiteActivityService: WebsiteActivityService,
+  ) {}
 
   @Override()
   async createOne(
@@ -50,6 +54,14 @@ export class ForumAnswerController implements CrudController<ForumAnswer> {
     dto.user = userId as any;
     if (dto.parentAnswer) {
       dto.question = null;
+    } else {
+      //create activity
+      this.websiteActivityService.updateWebsiteActivity(
+        {
+          totalAnswer: 1,
+        },
+        userId,
+      );
     }
     return this.service.createOne(req, dto);
   }

@@ -6,11 +6,14 @@ import {
   CrudRequest,
   Override,
   ParsedBody,
+  ParsedRequest,
 } from '@nestjsx/crud';
 import { UserRole } from 'src/authModule/entities/user.entity';
 import { RewardRedeemed } from '../entities/rewardRedeemed.entity';
 import { RewardRedeemedService } from '../services/rewardRedeemed.service';
 import { UserData } from 'src/authModule/user.decorator';
+import { NotificationService } from '../services/notification.service';
+import { EVENT_TYPE } from '../entities/notification.entity';
 
 @Crud({
   model: {
@@ -39,7 +42,10 @@ import { UserData } from 'src/authModule/user.decorator';
 export class RewardRedeemedController
   implements CrudController<RewardRedeemed>
 {
-  constructor(public service: RewardRedeemedService) {}
+  constructor(
+    public service: RewardRedeemedService,
+    public notificationService: NotificationService,
+  ) {}
 
   @Override()
   async getMany(
@@ -68,5 +74,29 @@ export class RewardRedeemedController
   ) {
     delete dto.id;
     return this.service.createRewardRedeemed(dto, userId);
+  }
+
+  @Override()
+  async updateOne(
+    @ParsedRequest() req: CrudRequest,
+    @ParsedBody() dto: RewardRedeemed,
+    @UserData('userId') userId: number,
+  ) {
+    //create notif
+    const res = await this.service.updateOne(req, dto);
+
+    if (dto.status)
+      this.notificationService.createNotification(
+        {
+          eventType: EVENT_TYPE.REWARD_CHANGE_STATUS,
+          name: 'Your reward has been ' + dto.status,
+          metadata: res,
+          itemId: res.id,
+          user: dto.user,
+        },
+        dto.user as any,
+      );
+
+    return res;
   }
 }

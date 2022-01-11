@@ -96,7 +96,7 @@ export class WebsiteActivityService extends TypeOrmCrudService<WebsiteActivity> 
     return res;
   }
 
-  async updateWebsiteActivity(dto: WebsiteActivity, userId?: number) {
+  async updateWebsiteActivity(dto: Partial<WebsiteActivity>, userId?: number) {
     const userDate = moment(dto.date || new Date())
       .tz('Asia/Singapore')
       .toDate();

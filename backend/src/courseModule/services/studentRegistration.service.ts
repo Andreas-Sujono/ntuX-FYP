@@ -9,15 +9,20 @@ import {
   StudentRegistration,
   StudentRegistrationStatus,
 } from '../entities/studentRegistration.entity';
+import { EVENT_TYPE } from 'src/commonModule/entities/notification.entity';
+import { Course } from '../entities/course.entity';
+import { NotificationService } from 'src/commonModule/services/notification.service';
 
 @Injectable()
 export class StudentRegistrationService extends TypeOrmCrudService<StudentRegistration> {
   constructor(
     @InjectRepository(StudentRegistration) repo,
     @InjectRepository(User) private userRepo: Repository<User>,
+    @InjectRepository(Course) private courseRepo: Repository<Course>,
     @InjectRepository(CourseUser)
     private courseUserRepo: Repository<CourseUser>,
     private authService: AuthService,
+    private notificationService: NotificationService,
   ) {
     super(repo);
   }
@@ -41,7 +46,7 @@ export class StudentRegistrationService extends TypeOrmCrudService<StudentRegist
 
     if (!existingUser) {
       const { user: createdUser } = await this.authService.signUp(user);
-      await this.repo.save(
+      const res = await this.repo.save(
         this.repo.create({
           course: courseId as any,
           user: createdUser,
@@ -49,6 +54,18 @@ export class StudentRegistrationService extends TypeOrmCrudService<StudentRegist
           registeredAt: new Date(),
           status: StudentRegistrationStatus.PENDING,
         }),
+      );
+      //create notif
+      const course = await this.courseRepo.findOne({ id: courseId as any });
+      this.notificationService.createNotification(
+        {
+          eventType: EVENT_TYPE.ADMIN_GOT_REGISTRATION,
+          name: 'New student Registration for course ' + course.name,
+          metadata: res,
+          itemId: course.id,
+          toAllAdmin: true,
+        },
+        null,
       );
       return {
         success: true,
@@ -69,7 +86,7 @@ export class StudentRegistrationService extends TypeOrmCrudService<StudentRegist
     //authenticate user
     await this.authService.login(user.email, user.hashedPassword);
 
-    await this.repo.save(
+    const res = await this.repo.save(
       this.repo.create({
         course: courseId as any,
         user: user.id as any,
@@ -77,6 +94,19 @@ export class StudentRegistrationService extends TypeOrmCrudService<StudentRegist
         registeredAt: new Date(),
         status: StudentRegistrationStatus.PENDING,
       }),
+    );
+
+    //create notif
+    const course = await this.courseRepo.findOne({ id: courseId as any });
+    this.notificationService.createNotification(
+      {
+        eventType: EVENT_TYPE.ADMIN_GOT_REGISTRATION,
+        name: 'New student Registration for course ' + course.name,
+        metadata: res,
+        itemId: course.id,
+        toAllAdmin: true,
+      },
+      existingUser?.id || null,
     );
     return {
       success: true,

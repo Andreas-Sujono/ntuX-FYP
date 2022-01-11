@@ -13,6 +13,7 @@ import { UserRole } from 'src/authModule/entities/user.entity';
 import { ForumQuestionService } from '../services/forumQuestion.service';
 import { Public } from 'src/authModule/public.decorator';
 import { UserData } from 'src/authModule/user.decorator';
+import { WebsiteActivityService } from 'src/commonModule/services/websiteActivity.service';
 
 @Crud({
   model: {
@@ -39,16 +40,28 @@ import { UserData } from 'src/authModule/user.decorator';
 })
 @Controller('forum-question')
 export class ForumQuestionController implements CrudController<ForumQuestion> {
-  constructor(public service: ForumQuestionService) {}
+  constructor(
+    public service: ForumQuestionService,
+    public websiteActivityService: WebsiteActivityService,
+  ) {}
 
   @Override()
   async createOne(
     @ParsedRequest() req: CrudRequest,
-    @ParsedBody() dto: any,
+    @ParsedBody() dto: ForumQuestion,
     @UserData('userId') userId: number,
   ) {
     delete dto.id;
     dto.user = userId as any;
+    if (!dto.parentQuestion) {
+      //create activity
+      this.websiteActivityService.updateWebsiteActivity(
+        {
+          totalQuestion: 1,
+        },
+        userId,
+      );
+    }
     return this.service.createOne(req, dto);
   }
 

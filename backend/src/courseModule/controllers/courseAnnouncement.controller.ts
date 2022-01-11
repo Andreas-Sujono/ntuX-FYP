@@ -12,6 +12,8 @@ import { CourseAnnouncement } from '../entities/courseAnnouncement.entity';
 import { CourseAnnouncementService } from '../services/courseAnnouncement.service';
 import { UserRole } from 'src/authModule/entities/user.entity';
 import { UserData } from 'src/authModule/user.decorator';
+import { NotificationService } from 'src/commonModule/services/notification.service';
+import { EVENT_TYPE } from 'src/commonModule/entities/notification.entity';
 
 @Crud({
   model: {
@@ -56,7 +58,10 @@ import { UserData } from 'src/authModule/user.decorator';
 export class CourseAnnouncementController
   implements CrudController<CourseAnnouncement>
 {
-  constructor(public service: CourseAnnouncementService) {}
+  constructor(
+    public service: CourseAnnouncementService,
+    public notificationService: NotificationService,
+  ) {}
 
   @Override()
   async getMany(
@@ -67,8 +72,26 @@ export class CourseAnnouncementController
   }
 
   @Override()
-  async createOne(@ParsedRequest() req: CrudRequest, @ParsedBody() dto: any) {
+  async createOne(
+    @ParsedRequest() req: CrudRequest,
+    @ParsedBody() dto: CourseAnnouncement,
+    @UserData('userId') userId: number,
+  ) {
     delete dto.id;
-    return this.service.createOne(req, dto);
+
+    const res = await this.service.createOne(req, dto);
+    //create notif
+    this.notificationService.createNotification(
+      {
+        eventType: EVENT_TYPE.COURSE_GOT_ANNOUNCEMENT,
+        name: 'New Announcement: ' + dto.metadata?.title,
+        metadata: res,
+        itemId: res.id,
+        courseBatch: dto.courseBatch || null,
+        course: dto.course || null,
+      },
+      userId,
+    );
+    return res;
   }
 }

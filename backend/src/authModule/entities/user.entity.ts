@@ -13,9 +13,11 @@ import {
   ManyToOne,
   JoinTable,
   JoinColumn,
+  OneToMany,
 } from 'typeorm';
 import { Avatar } from 'src/commonModule/entities/avatar.entity';
 import { GoalTask } from 'src/commonModule/entities/goalTask.entity';
+import { Notification } from 'src/commonModule/entities/notification.entity';
 
 export enum UserRole {
   STUDENT = 'STUDENT',
@@ -45,6 +47,9 @@ export class User {
 
   @ManyToMany(() => GoalTask, (goalTask) => goalTask.users)
   achievements: GoalTask[];
+
+  @OneToMany(() => Notification, (notification) => notification.user)
+  notifications: Notification[];
 
   @OneToOne(() => PremiumSetting, (premiumSetting) => premiumSetting.user)
   @JoinColumn()

@@ -40,6 +40,9 @@ import { CourseUser } from 'src/courseModule/entities/courseUser.entity';
 import { CourseBatch } from 'src/courseModule/entities/courseBatch.entity';
 import { CourseContent } from 'src/courseModule/entities/courseContent.entity';
 import { ForumModule } from 'src/forumModule/forum.module';
+import { Notification } from './entities/notification.entity';
+import { NotificationService } from './services/notification.service';
+import { NotificationController } from './controllers/notification.controller';
 
 @Module({
   imports: [
@@ -62,6 +65,7 @@ import { ForumModule } from 'src/forumModule/forum.module';
       CourseBatch,
       CourseContent,
       ForumTag,
+      Notification,
     ]),
   ],
   providers: [
@@ -78,8 +82,16 @@ import { ForumModule } from 'src/forumModule/forum.module';
     CommonService,
     StorageService,
     CourseService,
+    NotificationService,
   ],
-  exports: [EmailService, LoggerService, EncryptionService, StorageService],
+  exports: [
+    EmailService,
+    LoggerService,
+    EncryptionService,
+    StorageService,
+    NotificationService,
+    WebsiteActivityService,
+  ],
   controllers: [
     GoalTaskController,
     PortfolioController,
@@ -89,6 +101,7 @@ import { ForumModule } from 'src/forumModule/forum.module';
     AdminController,
     AvatarController,
     CommonController,
+    NotificationController,
   ],
 })
 export class CommonModule {}

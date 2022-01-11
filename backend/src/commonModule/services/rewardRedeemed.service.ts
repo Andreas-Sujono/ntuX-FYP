@@ -3,9 +3,11 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { TypeOrmCrudService } from '@nestjsx/crud-typeorm';
 import { User } from 'src/authModule/entities/user.entity';
 import { Repository } from 'typeorm';
+import { EVENT_TYPE } from '../entities/notification.entity';
 import { PremiumSetting } from '../entities/premiumSetting.entity';
 import { Reward } from '../entities/reward.entity';
 import { RewardRedeemed } from '../entities/rewardRedeemed.entity';
+import { NotificationService } from './notification.service';
 
 @Injectable()
 export class RewardRedeemedService extends TypeOrmCrudService<RewardRedeemed> {
@@ -15,6 +17,7 @@ export class RewardRedeemedService extends TypeOrmCrudService<RewardRedeemed> {
     @InjectRepository(Reward) private rewardRepo: Repository<Reward>,
     @InjectRepository(PremiumSetting)
     private premiumSettingRepo: Repository<PremiumSetting>,
+    private notificationService: NotificationService,
   ) {
     super(repo);
   }
@@ -127,12 +130,28 @@ export class RewardRedeemedService extends TypeOrmCrudService<RewardRedeemed> {
       redeemedCount: (reward.redeemedCount || 0) + 1,
     });
 
-    return this.repo.save(
+    const res = await this.repo.save(
       this.repo.create({
         ...dto,
         user: userId as any,
         status: reward.isDefault ? 'REDEEMED' : 'PENDING',
       }),
     );
+
+    if (!reward.isDefault) {
+      //create notif
+      this.notificationService.createNotification(
+        {
+          eventType: EVENT_TYPE.ADMIN_GOT_REWARD,
+          name: 'New Reward Redeemed by student: ' + reward.name,
+          metadata: res,
+          itemId: res.id,
+          toAllAdmin: true,
+        },
+        userId,
+      );
+    }
+
+    return res;
   }
 }
