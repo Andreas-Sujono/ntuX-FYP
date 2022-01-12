@@ -2,4 +2,4 @@
 # yarn
 npm run build
 cp $(pwd)/build/200.html $(pwd)/build/index.html
-scp  -i "C:\Users\Andreas Sujono\Desktop\andreas-server/id_rsa" -r $(pwd)/build   root@165.22.0.89:/var/www/live/ntux-frontend
+scp  -i "/Users/andreassujono/Desktop/FOLDER/job/andreas-server/id_rsa" -r $(pwd)/build   root@165.22.0.89:/var/www/live/ntux-frontend

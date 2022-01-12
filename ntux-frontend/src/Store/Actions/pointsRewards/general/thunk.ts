@@ -99,6 +99,28 @@ export const getNotifications =
     }
   };
 
+export const viewNotifications =
+  (bypass = false) =>
+  async (dispatch: AppDispatch, getState: () => RootState) => {
+    try {
+      const res = await service.viewNotifications();
+      if (res.errorCode) {
+        dispatch(loadFailed());
+        sendErrorNotification(res.message, res.errorCode);
+        return {
+          result: false,
+          errorMessage: res.message,
+        };
+      }
+      dispatch(loadSuccess({}));
+      getNotifications()(dispatch, getState);
+      return { result: true };
+    } catch (err) {
+      dispatch(loadFailed());
+      return { result: false };
+    }
+  };
+
 export const getRewards =
   (bypass = false) =>
   async (dispatch: AppDispatch, getState: () => RootState) => {

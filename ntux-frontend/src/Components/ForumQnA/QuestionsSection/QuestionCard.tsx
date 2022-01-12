@@ -32,7 +32,7 @@ function QuestionCard({ summary }: { summary: any }): React.ReactElement {
           <AuthorBlock
             author={{
               name: summary.fullName,
-              profileImage: summary.avatarImageUrl,
+              profileImage: summary.avatarImageUrl || summary.profileImageUrl,
             }}
           />
         </div>

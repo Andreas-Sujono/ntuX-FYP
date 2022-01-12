@@ -64,6 +64,9 @@ export class RewardRedeemedController
         user: userId,
       },
       relations: ['reward', 'user'],
+      order: {
+        createdAt: 'DESC',
+      },
     });
   }
 

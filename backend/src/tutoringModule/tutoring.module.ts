@@ -10,12 +10,14 @@ import { Tutor } from './entities/tutor.entity';
 import { TutorRequest } from './entities/tutorRequest.entity';
 import { Course } from 'src/courseModule/entities/course.entity';
 import { User } from 'src/authModule/entities/user.entity';
+import { CourseModule } from 'src/courseModule/course.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Tutor, TutorRequest, Course, User]),
     CommonModule,
     AuthModule,
+    CourseModule,
   ],
   controllers: [TutorController, TutorRequestController],
   providers: [TutorService, TutorRequestService],

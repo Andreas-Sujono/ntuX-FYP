@@ -36,17 +36,23 @@ import { routes } from 'Components/Routes';
 import { useSelector } from 'react-redux';
 import { selectUser } from 'Store/Selector/auth';
 import { selectNotifications } from 'Store/Selector/pointsRewards';
+import { useThunkDispatch } from 'common/hooks';
+import { viewNotifications } from 'Store/Actions/pointsRewards';
 
 const logoImagePath = `${process.env.PUBLIC_URL}/assets/logos/full-colored-logo.svg`;
 
 function MainContainer({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState(window.innerWidth < 550 ? false : true);
   const [anchorEl, setAnchorEl] = React.useState<any>(null);
+  const dispatch = useThunkDispatch();
 
   const notifications = useSelector(selectNotifications);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
+    if (event.currentTarget) {
+      dispatch(viewNotifications());
+    }
   };
 
   const handleClose = () => {
@@ -139,20 +145,31 @@ function MainContainer({ children }: { children: React.ReactNode }) {
               vertical: 'bottom',
               horizontal: 'right',
             }}
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
           >
             <List
-              sx={{ maxWidth: '250px', maxHeight: '450px', overflow: 'auto' }}
+              sx={{ maxWidth: '320px', maxHeight: '450px', overflow: 'auto' }}
             >
               {notifications.map((item) => (
                 <ListItem disablePadding key={item.id}>
                   <ListItemButton>
-                    {/* <ListItemIcon>
+                    <ListItemIcon>
                       <InboxIcon />
-                    </ListItemIcon> */}
+                    </ListItemIcon>
                     <ListItemText primary={item.name} />
                   </ListItemButton>
                 </ListItem>
               ))}
+              {notifications.length === 0 && (
+                <ListItem>
+                  <Typography variant="body1" color="text.secondary">
+                    No Notifications
+                  </Typography>
+                </ListItem>
+              )}
             </List>
           </Popover>
           <ProfileButton onClick={() => history.push(routes.SETTINGS.BASE)}>

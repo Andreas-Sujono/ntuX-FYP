@@ -12,7 +12,11 @@ const initialState = initEntityState({
   isAuthenticated: false,
   user: null,
   role: Role.STUDENT,
-  portfolio: {},
+  portfolio: {
+    user: {},
+    studentSummary: {},
+    registeredCourses: [],
+  },
 });
 
 function reducer(state = initialState, action: AnyAction) {

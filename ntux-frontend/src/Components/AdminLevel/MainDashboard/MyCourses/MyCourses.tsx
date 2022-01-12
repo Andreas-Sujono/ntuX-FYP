@@ -97,7 +97,7 @@ export const CourseCard = ({
             value={getProgressPercentage()}
             sx={{ mt: 2 }}
           />
-          <LinkText>See Content</LinkText>
+          {!notGo && <LinkText>See Content</LinkText>}
         </Paper>
       </Grid>
     </Grid>

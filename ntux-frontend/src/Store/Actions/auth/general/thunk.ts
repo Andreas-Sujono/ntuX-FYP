@@ -256,3 +256,29 @@ export const updateAccount =
       return { result: false };
     }
   };
+
+export const getUserPortfolio =
+  (userId: number, bypass = false) =>
+  async (dispatch: AppDispatch, getState: () => RootState) => {
+    try {
+      const res = await service.getPortfolio(userId);
+      dispatch(loadRequest({}));
+      if (res.errorCode) {
+        dispatch(loadFailed());
+        toast.error(res.message);
+        return {
+          result: false,
+          errorMessage: res.message,
+        };
+      }
+      dispatch(
+        loadSuccess({
+          portfolio: res,
+        }),
+      );
+      return { result: true, portfolio: res };
+    } catch (err) {
+      dispatch(loadFailed());
+      return { result: false };
+    }
+  };

@@ -28,7 +28,13 @@ const Card = ({ user }: { user: any }) => {
   const getProfileImage = (_user: any) => {
     if (_user.currentAvatar?.imageUrl || _user.avatarImageUrl)
       return (
-        <img src={_user.currentAvatar?.imageUrl || _user.avatarImageUrl} />
+        <img
+          src={
+            _user.currentAvatar?.imageUrl ||
+            _user.avatarImageUrl ||
+            _user.profileImageUrl
+          }
+        />
       );
     return _user.fullName.slice(0, 1);
   };

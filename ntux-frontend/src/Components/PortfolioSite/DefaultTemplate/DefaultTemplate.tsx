@@ -1,47 +1,27 @@
 import React, { memo } from 'react';
-import { useSelector } from 'react-redux';
-import { selectPortfolioAllData } from '../../../Store/Selector/PortfolioSite/general';
 import { PageContentContainer } from '../../shared/Shared.styles';
+import { PaddedContainer } from '../LinkedinTemplate/shared.styles';
 import UserSummarySection from './UserSummarySection';
-import WorkExperienceSection from './WorkExperienceSection';
-import EducationSection from './EducationSection';
-import CertificationSection from './CertificationSection';
-// import ContributionSection from './ContributionSection';
-import SkillsSection from './SkillsSection';
+import WebsiteTraffic from './WebsiteTraffic';
+import CourseEnrolled from './CourseEnrolled';
 
-const DefaultTemplate: React.FC = () => {
-  const allSiteData = useSelector(selectPortfolioAllData);
+const DefaultTemplate: React.FC<any> = ({ portfolio }: any) => {
   return (
-    // <div style={{ background: '#f3f2efba' }}>
     <PageContentContainer
       style={{ background: 'white', padding: 0, paddingBottom: '3em' }}
     >
-      {allSiteData.map((item) => {
-        const key = JSON.stringify(item);
+      <UserSummarySection data={portfolio.user} />
+      <PaddedContainer>
+        {!!portfolio.registeredCourses?.length && (
+          <CourseEnrolled
+            data={portfolio.registeredCourses || []}
+            sx={{ mb: 3 }}
+          />
+        )}
 
-        if (item.setting?.isHidden) return null;
-        if (item.sectionName === 'userSummary')
-          return <UserSummarySection data={item.data} key={key} />;
-
-        if (item.sectionName === 'WorkExperiences')
-          return <WorkExperienceSection data={item.data} key={key} />;
-
-        if (item.sectionName === 'educations')
-          return <EducationSection data={item.data} key={key} />;
-
-        if (item.sectionName === 'certifications')
-          return <CertificationSection data={item.data} key={key} />;
-
-        if (item.sectionName === 'skills')
-          return <SkillsSection data={item.data} key={key} />;
-
-        // if (item.sectionName === 'siteContribution')
-        //   return <ContributionSection data={item.data} key={key} />;
-
-        return null;
-      })}
+        <WebsiteTraffic data={portfolio.studentSummary || []} interval="w" />
+      </PaddedContainer>
     </PageContentContainer>
-    // </div>
   );
 };
 

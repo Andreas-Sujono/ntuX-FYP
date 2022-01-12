@@ -16,7 +16,17 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import { red } from '@mui/material/colors';
-import { Avatar, CardHeader, ListItemButton } from '@mui/material';
+import {
+  Avatar,
+  CardHeader,
+  ListItemButton,
+  Badge,
+  Popover,
+  List,
+  ListItem,
+} from '@mui/material';
+import InboxIcon from '@mui/icons-material/Inbox';
+import MailIcon from '@mui/icons-material/Mail';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
@@ -50,6 +60,8 @@ import {
 import { CourseContent } from 'Models/Courses';
 import { createCourseContent } from 'Store/Actions/admin/general/courseContent.thunk';
 import { Role } from 'Models/Auth';
+import { selectNotifications } from 'Store/Selector/pointsRewards';
+import { viewNotifications } from 'Store/Actions/pointsRewards';
 
 const logoImagePath = `${process.env.PUBLIC_URL}/assets/logos/full-colored-logo.svg`;
 
@@ -63,12 +75,27 @@ const defaultContents = [
 function CourseContainer({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState(window.innerWidth < 550 ? false : true);
   const [loading, setLoading] = useState(true);
-  const [pageNames, setPageNames] = useState<any>([]);
+  const [anchorEl, setAnchorEl] = React.useState<any>(null);
 
   const toggleDrawer = () => {
     setOpen(!open);
   };
   const dispatch = useThunkDispatch();
+
+  const notifications = useSelector(selectNotifications);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+    if (event.currentTarget) {
+      if (notifications.filter((item) => !item.isViewed).length)
+        dispatch(viewNotifications());
+    }
+  };
+  const id = anchorEl ? 'simple-popover' : undefined;
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   const location = useLocation();
   const history = useHistory();
@@ -189,6 +216,57 @@ function CourseContainer({ children }: { children: React.ReactNode }) {
           >
             {routeDetails.details.title} - {course.code}: {course.name}
           </Typography>
+          <div>
+            <IconButton
+              sx={{ mr: 2 }}
+              onClick={handleClick}
+              aria-describedby={id}
+            >
+              <Badge
+                color="primary"
+                badgeContent={
+                  notifications.filter((item) => !item.isViewed).length
+                }
+                max={49}
+              >
+                <MailIcon />
+              </Badge>
+            </IconButton>
+          </div>
+          <Popover
+            id={id}
+            open={!!anchorEl}
+            anchorEl={anchorEl}
+            onClose={handleClose}
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'right',
+            }}
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+          >
+            <List sx={{ width: '320px', maxHeight: '450px', overflow: 'auto' }}>
+              {notifications.map((item) => (
+                <ListItem disablePadding key={item.id}>
+                  <ListItemButton>
+                    <ListItemIcon>
+                      <InboxIcon />
+                    </ListItemIcon>
+                    <ListItemText primary={item.name} />
+                  </ListItemButton>
+                </ListItem>
+              ))}
+              {notifications.length === 0 && (
+                <ListItem>
+                  <Typography variant="body1" color="text.secondary">
+                    No Notifications
+                  </Typography>
+                </ListItem>
+              )}
+            </List>
+          </Popover>
           <ProfileButton onClick={() => history.push(routes.STAFF.SETTINGS)}>
             <CardHeader
               avatar={

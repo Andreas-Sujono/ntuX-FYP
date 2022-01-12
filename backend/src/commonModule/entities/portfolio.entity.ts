@@ -32,10 +32,10 @@ export class Portfolio {
   profileImageUrl: string;
 
   @Column({ nullable: true })
-  description: string;
+  bannerImageUrl: string;
 
   @Column({ nullable: true })
-  templateId: string;
+  description: string;
 
   @Column({ nullable: true })
   resumeLink: string;

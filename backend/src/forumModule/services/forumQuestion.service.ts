@@ -18,7 +18,7 @@ export class ForumQuestionService extends TypeOrmCrudService<ForumQuestion> {
     query = query || '';
     return this.repo.query(
       `SELECT fq.id, fq.name, fq.description, fq.upvote, fq."createdAt", fq."updatedAt", 
-       "user"."fullName", avatar."imageUrl" as "avatarImageUrl", count(forum_answer."id") as "answerCount",
+       "user"."fullName", "user"."profileImageUrl", avatar."imageUrl" as "avatarImageUrl", count(forum_answer."id") as "answerCount",
        (
           SELECT array_agg(forum_tag."name") 
           FROM forum_question as fq2
@@ -54,7 +54,7 @@ export class ForumQuestionService extends TypeOrmCrudService<ForumQuestion> {
     query = query || '';
     return this.repo.query(
       `SELECT fq.id, fq.name, fq.description, fq.upvote, fq."createdAt", fq."updatedAt", 
-       "user"."fullName", avatar."imageUrl" as "avatarImageUrl", count(forum_answer."id") as "answerCount",
+       "user"."fullName", "user"."profileImageUrl", avatar."imageUrl" as "avatarImageUrl", count(forum_answer."id") as "answerCount",
        (
           SELECT array_agg(forum_tag."name") 
           FROM forum_question as fq2
@@ -85,7 +85,7 @@ export class ForumQuestionService extends TypeOrmCrudService<ForumQuestion> {
     console.log('userId: ', userId);
     return this.repo.query(
       `SELECT fq.id, fq.name, fq.description, fq.upvote, fq."createdAt", fq."updatedAt", 
-       "user"."fullName", avatar."imageUrl" as "avatarImageUrl", count(forum_answer."id") as "answerCount",
+       "user"."fullName", "user"."profileImageUrl", avatar."imageUrl" as "avatarImageUrl", count(forum_answer."id") as "answerCount",
        (
           SELECT array_agg(forum_tag."name") 
           FROM forum_question as fq2

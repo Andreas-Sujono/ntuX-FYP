@@ -38,7 +38,6 @@ export const TopContentRow = styled.div`
 
 export const TopContentLeftSection = styled.div`
   width: 70%;
-  max-width: 650px;
 
   img.profile-image {
     width: 160px;
@@ -68,7 +67,6 @@ export const TopContentLeftSection = styled.div`
 `;
 
 export const TopContentRightSection = styled.div`
-  flex: 1 1 0;
   ${media.lessThan('md')`
     margin-top: 8px;
   `}

@@ -14,9 +14,19 @@ import Container from '@mui/material/Container';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import { green, red } from '@mui/material/colors';
-import { Avatar, CardHeader, ListItemButton } from '@mui/material';
+import InboxIcon from '@mui/icons-material/Inbox';
+import {
+  Avatar,
+  CardHeader,
+  List,
+  ListItem,
+  ListItemButton,
+  Popover,
+} from '@mui/material';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+import Badge from '@mui/material/Badge';
+import MailIcon from '@mui/icons-material/Mail';
 import {
   AppBar,
   Drawer,
@@ -44,6 +54,8 @@ import {
 import { CourseContent } from 'Models/Courses';
 import { useThunkDispatch } from 'common/hooks';
 import { LoadingBar } from 'common/Components/LoadingBar/FullPageLoadingBar';
+import { selectNotifications } from 'Store/Selector/pointsRewards';
+import { viewNotifications } from 'Store/Actions/pointsRewards';
 
 const logoImagePath = `${process.env.PUBLIC_URL}/assets/logos/full-colored-logo.svg`;
 
@@ -57,13 +69,31 @@ const defaultContents = [
 function MainContainer({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState(window.innerWidth < 550 ? false : true);
   const [loading, setLoading] = useState(true);
+  const [anchorEl, setAnchorEl] = React.useState<any>(null);
+
   const toggleDrawer = () => {
     setOpen(!open);
   };
+  const dispatch = useThunkDispatch();
+
+  const notifications = useSelector(selectNotifications);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+    if (event.currentTarget) {
+      if (notifications.filter((item) => !item.isViewed).length)
+        dispatch(viewNotifications());
+    }
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const id = anchorEl ? 'simple-popover' : undefined;
 
   const location = useLocation();
   const history = useHistory();
-  const dispatch = useThunkDispatch();
   const match: any = useRouteMatch(routes.COURSES.BASE) || {};
 
   if (match?.params?.courseId === ':courseId' || !match?.params?.courseId)
@@ -151,6 +181,59 @@ function MainContainer({ children }: { children: React.ReactNode }) {
           >
             {course.code}: {course.name}
           </Typography>
+          <div>
+            <IconButton
+              sx={{ mr: 2 }}
+              onClick={handleClick}
+              aria-describedby={id}
+            >
+              <Badge
+                color="primary"
+                badgeContent={
+                  notifications.filter((item) => !item.isViewed).length
+                }
+                max={49}
+              >
+                <MailIcon />
+              </Badge>
+            </IconButton>
+          </div>
+          <Popover
+            id={id}
+            open={!!anchorEl}
+            anchorEl={anchorEl}
+            onClose={handleClose}
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'right',
+            }}
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+          >
+            <List
+              sx={{ maxWidth: '320px', maxHeight: '450px', overflow: 'auto' }}
+            >
+              {notifications.map((item) => (
+                <ListItem disablePadding key={item.id}>
+                  <ListItemButton>
+                    <ListItemIcon>
+                      <InboxIcon />
+                    </ListItemIcon>
+                    <ListItemText primary={item.name} />
+                  </ListItemButton>
+                </ListItem>
+              ))}
+              {notifications.length === 0 && (
+                <ListItem>
+                  <Typography variant="body1" color="text.secondary">
+                    No Notifications
+                  </Typography>
+                </ListItem>
+              )}
+            </List>
+          </Popover>
           <ProfileButton onClick={() => history.push(routes.SETTINGS.BASE)}>
             <CardHeader
               avatar={

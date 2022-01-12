@@ -63,6 +63,11 @@ export default class AuthService extends BaseService {
     return res.data;
   };
 
+  getPortfolio = async (userId: number) => {
+    const res = await this.getRequest(`/portfolio/${userId}`);
+    return res.data;
+  };
+
   logout = async () => {
     return {
       errorCode: 0,
