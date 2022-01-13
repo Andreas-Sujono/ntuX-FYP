@@ -24,15 +24,15 @@ export class PremiumSetting {
   @Column({ nullable: true, default: 1 })
   expMultiplier: number;
 
-  @Column({ type: 'timestamp with time zone' })
+  @Column({ type: 'timestamp with time zone', nullable: true })
   expiredAt: Date;
 
-  @Column({ type: 'timestamp with time zone' })
+  @Column({ type: 'timestamp with time zone', nullable: true })
   premiumPortfolioExpiredAt: Date;
 
-  @Column({ type: 'timestamp with time zone' })
+  @Column({ type: 'timestamp with time zone', nullable: true })
   pointMultiplierExpiredAt: Date;
 
-  @Column({ type: 'timestamp with time zone' })
+  @Column({ type: 'timestamp with time zone', nullable: true })
   expMultiplierExpiredAt: Date;
 }

@@ -163,7 +163,17 @@ export class StudentRegistrationService extends TypeOrmCrudService<StudentRegist
     }
 
     studentRegistration.status = newStatus;
-    await this.repo.save(studentRegistration);
+    const res = await this.repo.save(studentRegistration);
+    this.notificationService.createNotification(
+      {
+        eventType: EVENT_TYPE.COURSE_REGISTRATION_CHANGE_STATUS,
+        name: 'Your registration is ' + newStatus,
+        metadata: res,
+        itemId: res.id,
+        user: studentRegistration.user,
+      },
+      studentRegistration.user.id,
+    );
     return {
       success: true,
     };

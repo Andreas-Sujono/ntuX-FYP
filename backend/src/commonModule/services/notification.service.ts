@@ -89,6 +89,8 @@ export class NotificationService extends TypeOrmCrudService<Notification> {
       dto.eventType === EVENT_TYPE.TUTOR_GOT_NEW_OFFER
     )
       pageRedirect = PAGE_REDIRECT.STUDENT_TUTOR;
+    if (dto.eventType === EVENT_TYPE.COURSE_REGISTRATION_CHANGE_STATUS)
+      pageRedirect = PAGE_REDIRECT.STUDENT_COURSE;
 
     if (dto.toAllAdmin) {
       const allAdmin = await this.userRepo.find({

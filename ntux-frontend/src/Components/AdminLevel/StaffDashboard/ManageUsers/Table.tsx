@@ -150,6 +150,12 @@ export const CreateModal = ({ open, setOpen, data, setData }: any) => {
   };
 
   const handleChange = (event: any) => {
+    if (event.target.name === 'emailVerifiesAt') {
+      return setFinalData({
+        ...finalData,
+        [event.target.name]: !finalData.emailVerifiesAt,
+      });
+    }
     setFinalData({
       ...finalData,
       [event.target.name]: event.target.value,
@@ -324,7 +330,7 @@ export const CreateModal = ({ open, setOpen, data, setData }: any) => {
                 value={!!finalData.emailVerifiesAt}
                 name="emailVerifiesAt"
                 onChange={handleChange}
-                disabled={isEditMode && !!finalData.emailVerifiesAt}
+                disabled={isEditMode && !!data.emailVerifiesAt}
               />
             </Grid>
           </Grid>

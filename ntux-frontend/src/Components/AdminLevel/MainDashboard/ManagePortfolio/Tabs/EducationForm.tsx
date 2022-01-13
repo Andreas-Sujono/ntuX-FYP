@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import TextField from '@mui/material/TextField';
 // import FormControlLabel from '@mui/material/FormControlLabel';
 // import Checkbox from '@mui/material/Checkbox';
@@ -6,9 +6,18 @@ import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
-import { Paper } from '@mui/material';
+import { Paper, Button } from '@mui/material';
+import { useSelector } from 'react-redux';
+import { selectPortfolio, selectUser } from 'Store/Selector/auth';
+import { FileInput } from 'common/Components/Input';
 
-export default function Form() {
+export default function BasicDetailsForm() {
+  const user = useSelector(selectUser);
+  const userPortfolio = useSelector(selectPortfolio);
+  const portfolio = userPortfolio?.user?.portfolio || {};
+  const [bannerFileData, setBannerFileData] = useState<any>(null);
+  const [profileFileData, setProfileFileData] = useState<any>(null);
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -29,39 +38,31 @@ export default function Form() {
         }}
       >
         <Grid item xs={12}>
-          <Typography component="h3" variant="h6">
-            Basic Details
+          <Typography
+            component="h3"
+            variant="h6"
+            sx={{ display: 'inline-block', width: 'calc(100% - 120px)' }}
+          >
+            Education
           </Typography>
-          <Divider sx={{ mb: 2, mt: 0.5 }} />
+          <Button variant="contained" type="submit">
+            Update
+          </Button>
+          {/* <Button>Cancel</Button> */}
+          <Divider sx={{ mb: 2, mt: 1.5 }} />
         </Grid>
         <Grid item xs={12} sm={6}>
-          <TextField
-            fullWidth
-            id="file"
-            type="file"
-            name="file"
-            value=""
+          <FileInput
             label="Banner Image"
-            // variant="filled"
-            InputLabelProps={{
-              shrink: true,
-            }}
-            size="medium"
+            onChange={setBannerFileData}
+            value={bannerFileData?.url || portfolio?.bannerImageUrl}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
-          <TextField
-            fullWidth
-            id="file"
-            type="file"
-            name="file"
-            value=""
+          <FileInput
             label="Profile Image"
-            // variant="filled"
-            InputLabelProps={{
-              shrink: true,
-            }}
-            size="medium"
+            onChange={setProfileFileData}
+            value={profileFileData?.url || user.profileImageUrl}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -71,8 +72,10 @@ export default function Form() {
             required
             fullWidth
             id="fullName"
-            label="Full Name (as shown in NRIC/ FIN/ Passport)"
+            label="Full Name"
             size="medium"
+            defaultValue={user.fullName}
+            disabled
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -80,9 +83,10 @@ export default function Form() {
             required
             fullWidth
             id="role"
-            label="Role"
+            label="Job Role"
             name="role"
             size="medium"
+            defaultValue={user.jobRole}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -93,6 +97,8 @@ export default function Form() {
             label="Email Address"
             name="email"
             size="medium"
+            defaultValue={user.email}
+            disabled
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -103,6 +109,7 @@ export default function Form() {
             label="Contact Number"
             name="Contact"
             size="medium"
+            defaultValue={user.phoneNumber}
           />
         </Grid>
         <Grid item xs={12} sm={12}>
@@ -115,28 +122,7 @@ export default function Form() {
             name="aboutMe"
             rows={10}
             multiline
-          />
-        </Grid>
-
-        <Grid item xs={12} sx={{ mt: 2 }}>
-          <Typography component="h3" variant="h6">
-            Resume
-          </Typography>
-          <Divider sx={{ mb: 2, mt: 0.5 }} />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextField
-            fullWidth
-            id="file"
-            type="file"
-            name="file"
-            value=""
-            label="Banner Image"
-            // variant="filled"
-            InputLabelProps={{
-              shrink: true,
-            }}
-            size="medium"
+            defaultValue={portfolio.description}
           />
         </Grid>
       </Grid>

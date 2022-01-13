@@ -16,11 +16,12 @@ import {
 } from 'Store/Selector/admin';
 import { useSelector, useDispatch } from 'react-redux';
 import { getWebsiteActivity } from 'Store/Actions/admin';
+import { selectMyCourses } from 'Store/Selector/courses';
 
 function DashboardContent() {
   const [interval, setInterval] = useState<'d' | 'w' | 'm'>('d');
   const summary = useSelector(selectSummary);
-  const allCourses = useSelector(selectAllCourses);
+  const allCourses = useSelector(selectMyCourses);
   const allUsers = useSelector(selectAllUsers);
   const websiteActivity = useSelector(selectWebsiteActivitiesByInterval)(
     interval,

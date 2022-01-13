@@ -7,7 +7,7 @@ import { routeData } from './data';
 import { routes } from '../../Routes';
 import { useDispatch, useSelector } from 'react-redux';
 import { getMyCourses } from 'Store/Actions/courses';
-import { getMyAccount } from 'Store/Actions/auth';
+import { getMyAccount, getUserPortfolio } from 'Store/Actions/auth';
 import {
   getGoalTask,
   getMyAchievements,
@@ -17,7 +17,8 @@ import { selectUserId } from 'Store/Selector/auth';
 
 const MainDashboardRoutes = () => {
   const location = useLocation();
-  const isAuthenticated = !!useSelector(selectUserId);
+  const userId = useSelector(selectUserId);
+  const isAuthenticated = !!userId;
 
   const [isCourseLevel, setIsCourseLevel] = useState(false);
   const MainContainer = isCourseLevel ? CourseContainer : StudentMainContainer;
@@ -40,6 +41,7 @@ const MainDashboardRoutes = () => {
     dispatch(getGoalTask());
     dispatch(getMyAchievements());
     dispatch(getNotifications());
+    dispatch(getUserPortfolio(userId));
   }, []);
 
   if (!isAuthenticated) {

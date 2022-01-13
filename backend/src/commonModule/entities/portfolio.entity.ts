@@ -19,8 +19,8 @@ export class Portfolio {
   @OneToOne(() => User, (user) => user.portfolio)
   user: User;
 
-  @Column()
-  jobRole: string;
+  // @Column()
+  // jobRole: string;
 
   @Column({ nullable: true, default: 'DEFAULT' })
   theme: string;

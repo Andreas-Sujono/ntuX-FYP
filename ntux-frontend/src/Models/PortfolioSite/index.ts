@@ -99,4 +99,5 @@ export type SectionItem = Section<any> & { sectionName: keyof AllSiteData };
 export enum TEMPLATE_TYPE {
   DEFAULT = 'DEFAULT',
   LINKEDIN = 'LINKEDIN',
+  PERSONAL = 'PERSONAL',
 }

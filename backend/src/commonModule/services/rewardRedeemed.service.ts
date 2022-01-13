@@ -1,10 +1,11 @@
+import { PremiumSetting } from './../entities/premiumSetting.entity';
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { CrudRequest } from '@nestjsx/crud';
 import { TypeOrmCrudService } from '@nestjsx/crud-typeorm';
 import { User } from 'src/authModule/entities/user.entity';
 import { Repository } from 'typeorm';
 import { EVENT_TYPE } from '../entities/notification.entity';
-import { PremiumSetting } from '../entities/premiumSetting.entity';
 import { Reward } from '../entities/reward.entity';
 import { RewardRedeemed } from '../entities/rewardRedeemed.entity';
 import { NotificationService } from './notification.service';
@@ -25,7 +26,12 @@ export class RewardRedeemedService extends TypeOrmCrudService<RewardRedeemed> {
   async createRewardRedeemed(dto: RewardRedeemed, userId: number) {
     dto.user = userId as any;
     const [user, reward] = await Promise.all([
-      this.userRepo.findOne({ id: userId as any }),
+      this.userRepo.findOne({
+        where: {
+          id: userId as any,
+        },
+        relations: ['premiumSetting'],
+      }),
       this.rewardRepo.findOne({ id: dto.reward as any }),
     ]);
 
@@ -41,10 +47,16 @@ export class RewardRedeemedService extends TypeOrmCrudService<RewardRedeemed> {
 
     //if buy default reward
     if (reward.isDefault) {
-      const premiumSetting = await this.premiumSettingRepo.findOne({
-        user: userId as any,
-      });
+      const premiumSetting = user.premiumSetting;
+      console.log('premiumSetting: ', premiumSetting);
       const monthTime = 30 * 24 * 60 * 60 * 1000;
+
+      if (premiumSetting) {
+        premiumSetting.expiredAt = new Date();
+        premiumSetting.premiumPortfolioExpiredAt = new Date();
+        premiumSetting.pointMultiplierExpiredAt = new Date();
+        premiumSetting.expMultiplierExpiredAt = new Date();
+      }
 
       //reward 1, 1 month premium
       if (reward.id === 1) {
@@ -152,6 +164,29 @@ export class RewardRedeemedService extends TypeOrmCrudService<RewardRedeemed> {
       );
     }
 
+    return res;
+  }
+
+  async updateRewardRedeemed(req: CrudRequest, dto: RewardRedeemed) {
+    const res = await this.updateOne(req, dto);
+
+    //create notif
+    if (dto.status) {
+      const rewardDetail = await this.repo.findOne({
+        where: { id: res.id },
+        relations: ['user'],
+      });
+      this.notificationService.createNotification(
+        {
+          eventType: EVENT_TYPE.REWARD_CHANGE_STATUS,
+          name: 'Your reward has been ' + dto.status,
+          metadata: res,
+          itemId: res.id,
+          user: rewardDetail.user,
+        },
+        dto.user as any,
+      );
+    }
     return res;
   }
 }

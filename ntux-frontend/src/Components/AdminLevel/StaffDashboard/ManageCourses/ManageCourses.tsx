@@ -34,6 +34,7 @@ import { useThunkDispatch } from 'common/hooks';
 import { createCourse, uploadFile } from 'Store/Actions/admin';
 import { selectUser } from 'Store/Selector/auth';
 import { Role } from 'Models/Auth';
+import { selectMyCourses } from 'Store/Selector/courses';
 
 export const CourseCard = ({ data }: any) => {
   const history = useHistory();
@@ -72,7 +73,7 @@ export const CourseCard = ({ data }: any) => {
 };
 
 export default function ManageCourses() {
-  const allCourses = useSelector(selectAllCourses);
+  const allCourses = useSelector(selectMyCourses);
   const [searchInput, setSearchInput] = useState('');
   const [searchResult, setSearchResult] = useState<any>([]);
   const [openModal, setOpenModal] = useState(false);

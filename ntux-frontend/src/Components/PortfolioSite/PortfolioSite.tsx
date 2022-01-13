@@ -10,6 +10,7 @@ import { getUserPortfolio } from 'Store/Actions/auth';
 import { selectAuthGeneralState, selectPortfolio } from 'Store/Selector/auth';
 import DefaultTemplate from './DefaultTemplate';
 import LinkedinTemplate from './LinkedinTemplate';
+import PersonalTemplate from './PersonalTemplate';
 
 const PortfolioSite: React.FC = () => {
   const dispatch = useThunkDispatch();
@@ -42,6 +43,8 @@ const PortfolioSite: React.FC = () => {
     return <DefaultTemplate {...props} />;
   if (chosenTemplate === TEMPLATE_TYPE.LINKEDIN)
     return <LinkedinTemplate {...props} />;
+  if (chosenTemplate === TEMPLATE_TYPE.PERSONAL)
+    return <PersonalTemplate {...props} />;
   return <DefaultTemplate {...props} />;
 };
 

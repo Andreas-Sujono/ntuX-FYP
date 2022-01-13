@@ -1,5 +1,5 @@
 import { Roles } from '../../authModule/roles/roles.decorator';
-import { Controller, Post } from '@nestjs/common';
+import { Controller, Param, Post } from '@nestjs/common';
 import {
   Crud,
   CrudController,
@@ -84,22 +84,8 @@ export class RewardRedeemedController
     @ParsedRequest() req: CrudRequest,
     @ParsedBody() dto: RewardRedeemed,
     @UserData('userId') userId: number,
+    @Param('id') id: number,
   ) {
-    //create notif
-    const res = await this.service.updateOne(req, dto);
-
-    if (dto.status)
-      this.notificationService.createNotification(
-        {
-          eventType: EVENT_TYPE.REWARD_CHANGE_STATUS,
-          name: 'Your reward has been ' + dto.status,
-          metadata: res,
-          itemId: res.id,
-          user: dto.user,
-        },
-        dto.user as any,
-      );
-
-    return res;
+    return this.service.updateRewardRedeemed(req, dto);
   }
 }

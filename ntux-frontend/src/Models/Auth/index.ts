@@ -31,6 +31,8 @@ export interface User {
   avatarColor: string;
   currentAvatar: any;
   jobRole?: string;
+  phoneNumber?: string;
+  description?: string;
 }
 export interface LoginRequest {
   email: string;
