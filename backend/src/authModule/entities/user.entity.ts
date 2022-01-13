@@ -52,7 +52,6 @@ export class User {
   notifications: Notification[];
 
   @OneToOne(() => PremiumSetting, (premiumSetting) => premiumSetting.user)
-  @JoinColumn()
   premiumSetting: PremiumSetting;
 
   @OneToOne(() => Portfolio, (portfolio) => portfolio.user)

@@ -34,6 +34,7 @@ export class RewardRedeemedService extends TypeOrmCrudService<RewardRedeemed> {
       }),
       this.rewardRepo.findOne({ id: dto.reward as any }),
     ]);
+    console.log(user, reward);
 
     //validate totalPoint
     if (user.totalPoints < reward.totalExpsRequired)
@@ -52,18 +53,23 @@ export class RewardRedeemedService extends TypeOrmCrudService<RewardRedeemed> {
       const monthTime = 30 * 24 * 60 * 60 * 1000;
 
       if (premiumSetting) {
-        premiumSetting.expiredAt = new Date();
-        premiumSetting.premiumPortfolioExpiredAt = new Date();
-        premiumSetting.pointMultiplierExpiredAt = new Date();
-        premiumSetting.expMultiplierExpiredAt = new Date();
+        premiumSetting.expiredAt = premiumSetting.expiredAt || new Date();
+        premiumSetting.premiumPortfolioExpiredAt =
+          premiumSetting.premiumPortfolioExpiredAt || new Date();
+        premiumSetting.pointMultiplierExpiredAt =
+          premiumSetting.pointMultiplierExpiredAt || new Date();
+        premiumSetting.expMultiplierExpiredAt =
+          premiumSetting.expMultiplierExpiredAt || new Date();
       }
 
       //reward 1, 1 month premium
       if (reward.id === 1) {
         if (premiumSetting) {
           const expiredAt = new Date(
-            Math.max(Date.now(), new Date(premiumSetting.expiredAt).getTime()) +
-              monthTime,
+            Math.max(
+              Date.now(),
+              new Date(premiumSetting.expiredAt).getTime() + monthTime,
+            ),
           );
 
           await this.premiumSettingRepo.update(
@@ -75,19 +81,23 @@ export class RewardRedeemedService extends TypeOrmCrudService<RewardRedeemed> {
             },
           );
         } else {
-          await this.premiumSettingRepo.save({
+          return await this.premiumSettingRepo.save({
             premiumPortfolioEnabled: true,
             expiredAt: new Date(Date.now() + monthTime),
             premiumPortfolioExpiredAt: new Date(Date.now() + monthTime),
+            user: user.id as any,
           });
         }
+        console.log('finish');
       }
       //reward 2, 3 month premium
       if (reward.id === 2) {
         if (premiumSetting) {
           const expiredAt = new Date(
-            Math.max(Date.now(), new Date(premiumSetting.expiredAt).getTime()) +
-              3 * monthTime,
+            Math.max(
+              Date.now(),
+              new Date(premiumSetting.expiredAt).getTime() + 3 * monthTime,
+            ),
           );
 
           await this.premiumSettingRepo.update(
@@ -103,6 +113,7 @@ export class RewardRedeemedService extends TypeOrmCrudService<RewardRedeemed> {
             premiumPortfolioEnabled: true,
             expiredAt: new Date(Date.now() + 3 * monthTime),
             premiumPortfolioExpiredAt: new Date(Date.now() + 3 * monthTime),
+            user: user.id as any,
           });
         }
       }
@@ -110,8 +121,10 @@ export class RewardRedeemedService extends TypeOrmCrudService<RewardRedeemed> {
       if (reward.id === 3) {
         if (premiumSetting) {
           const expiredAt = new Date(
-            Math.max(Date.now(), new Date(premiumSetting.expiredAt).getTime()) +
-              1 * monthTime,
+            Math.max(
+              Date.now(),
+              new Date(premiumSetting.expiredAt).getTime() + 1 * monthTime,
+            ),
           );
 
           await this.premiumSettingRepo.update(
@@ -129,6 +142,7 @@ export class RewardRedeemedService extends TypeOrmCrudService<RewardRedeemed> {
             expMultiplier: 1.5,
             pointMultiplierExpiredAt: new Date(Date.now() + 1 * monthTime),
             expMultiplierExpiredAt: new Date(Date.now() + 1 * monthTime),
+            user: user.id as any,
           });
         }
       }
@@ -136,19 +150,21 @@ export class RewardRedeemedService extends TypeOrmCrudService<RewardRedeemed> {
 
     //deduct points
     user.totalPoints -= reward.totalPointsRequired;
-    await this.userRepo.save(user);
-    await this.rewardRepo.save({
-      ...reward,
-      redeemedCount: (reward.redeemedCount || 0) + 1,
-    });
 
-    const res = await this.repo.save(
-      this.repo.create({
-        ...dto,
-        user: userId as any,
-        status: reward.isDefault ? 'REDEEMED' : 'PENDING',
+    const [res3, res2, res] = await Promise.all([
+      this.userRepo.save(user),
+      this.rewardRepo.save({
+        ...reward,
+        redeemedCount: (reward.redeemedCount || 0) + 1,
       }),
-    );
+      this.repo.save(
+        this.repo.create({
+          ...dto,
+          user: user.id as any,
+          status: reward.isDefault ? 'REDEEMED' : 'PENDING',
+        }),
+      ),
+    ]);
 
     if (!reward.isDefault) {
       //create notif
