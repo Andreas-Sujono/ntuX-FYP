@@ -282,3 +282,26 @@ export const getUserPortfolio =
       return { result: false };
     }
   };
+
+export const updatePortfolio =
+  (data: any, bypass = false) =>
+  async (dispatch: AppDispatch, getState: () => RootState) => {
+    try {
+      const res = await service.updatePortfolio(data);
+      dispatch(loadRequest({}));
+      if (res.errorCode) {
+        dispatch(loadFailed());
+        toast.error(res.message);
+        return {
+          result: false,
+          errorMessage: res.message,
+        };
+      }
+      dispatch(loadSuccess({}));
+      getUserPortfolio(selectUserId(getState()))(dispatch, getState);
+      return { result: true, portfolio: res };
+    } catch (err) {
+      dispatch(loadFailed());
+      return { result: false };
+    }
+  };

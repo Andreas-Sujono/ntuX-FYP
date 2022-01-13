@@ -1,7 +1,9 @@
+import { UserRole } from './../../authModule/entities/user.entity';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TypeOrmCrudService } from '@nestjsx/crud-typeorm';
 import { CourseService } from 'src/courseModule/services/course.service';
+import { ILike } from 'typeorm';
 import { Tutor } from '../entities/tutor.entity';
 
 @Injectable()
@@ -11,6 +13,28 @@ export class TutorService extends TypeOrmCrudService<Tutor> {
     private courseService: CourseService,
   ) {
     super(repo);
+  }
+
+  async searchTutor(query: any) {
+    const res = await this.repo.find({
+      where: {
+        'user.fullName': ILike(`%${query}%`),
+        'user.role': UserRole.STUDENT,
+        isActive: true,
+      },
+      relations: ['user', 'courses'],
+    });
+    res.forEach((item) => {
+      delete item.user.confirmationCode;
+      delete item.user.hashedPassword;
+      delete item.user.NRIC;
+      delete item.user.dateOfBirth;
+    });
+    return res;
+  }
+
+  async updateTutor(userId: number, dto: Partial<Tutor>) {
+    return this.repo.update({ id: userId }, dto);
   }
 
   async checkSelfTutor(userId: number) {

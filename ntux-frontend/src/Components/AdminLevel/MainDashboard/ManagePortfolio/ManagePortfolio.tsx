@@ -21,11 +21,14 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import copy from 'copy-to-clipboard';
 import { useSelector } from 'react-redux';
 import { selectPortfolio, selectUserId } from 'Store/Selector/auth';
+import { useThunkDispatch } from 'common/hooks';
+import { updatePortfolio } from 'Store/Actions/auth';
 
 function ManagePortfolio() {
   const [hideNav, setHideNav] = useState(false);
   const userId = useSelector(selectUserId);
   const userPortfolio = useSelector(selectPortfolio);
+  const dispatch = useThunkDispatch();
 
   const isPremium = !!userPortfolio?.user?.premiumSetting;
   const portfolioDetails = userPortfolio?.user?.portfolio || {};
@@ -36,7 +39,11 @@ function ManagePortfolio() {
 
   useEffect(() => {
     setHideNav(!!portfolioDetails.hideNav);
-  }, [portfolioDetails]);
+  }, [portfolioDetails.hideNav]);
+
+  const onUpdate = (data) => {
+    dispatch(updatePortfolio(data));
+  };
 
   return (
     <Container maxWidth="xl" sx={{ margin: 0, mt: 4, mb: 8, ml: 1, pr: 1 }}>
@@ -116,7 +123,12 @@ function ManagePortfolio() {
               label="Hide Navbar and Footer by default"
               sx={{ display: 'block', mb: 2 }}
               value={hideNav}
-              onChange={() => setHideNav(!hideNav)}
+              onChange={() => {
+                onUpdate({
+                  hideNav: !hideNav,
+                });
+                setHideNav(!hideNav);
+              }}
               disabled={!isPremium}
             />
             <FormControl component="fieldset">
@@ -127,6 +139,11 @@ function ManagePortfolio() {
                 aria-label="theme"
                 defaultValue={portfolioDetails.theme || 'DEFAULT'}
                 name="radio-buttons-group"
+                onChange={(e) => {
+                  onUpdate({
+                    theme: e.target.value,
+                  });
+                }}
               >
                 <FormControlLabel
                   value="DEFAULT"

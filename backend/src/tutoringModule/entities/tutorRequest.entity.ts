@@ -8,6 +8,7 @@ import {
   UpdateDateColumn,
   ManyToOne,
 } from 'typeorm';
+import { Course } from 'src/courseModule/entities/course.entity';
 
 export enum TutorRequestStatus {
   PENDING = 'PENDING',
@@ -26,6 +27,9 @@ export class TutorRequest {
 
   @ManyToOne(() => Tutor)
   tutor: Tutor; //who get the request
+
+  @ManyToOne(() => Tutor)
+  course: Course; //who get the request
 
   @Column({ nullable: true })
   description: string;

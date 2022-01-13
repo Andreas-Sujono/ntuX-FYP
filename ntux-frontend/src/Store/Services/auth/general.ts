@@ -68,6 +68,11 @@ export default class AuthService extends BaseService {
     return res.data;
   };
 
+  updatePortfolio = async (data: any) => {
+    const res = await this.postRequest(`/portfolio/`, data);
+    return res.data;
+  };
+
   logout = async () => {
     return {
       errorCode: 0,
