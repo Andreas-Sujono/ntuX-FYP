@@ -55,7 +55,6 @@ export class User {
   premiumSetting: PremiumSetting;
 
   @OneToOne(() => Portfolio, (portfolio) => portfolio.user)
-  @JoinColumn()
   portfolio: Portfolio;
 
   @Column()

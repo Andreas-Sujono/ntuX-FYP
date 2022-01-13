@@ -6,6 +6,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToOne,
+  JoinColumn,
 } from 'typeorm';
 
 @Entity()
@@ -17,6 +18,7 @@ export class Portfolio {
   isPublished: boolean;
 
   @OneToOne(() => User, (user) => user.portfolio)
+  @JoinColumn()
   user: User;
 
   // @Column()
