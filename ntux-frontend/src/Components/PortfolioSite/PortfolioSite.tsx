@@ -11,6 +11,7 @@ import { selectAuthGeneralState, selectPortfolio } from 'Store/Selector/auth';
 import DefaultTemplate from './DefaultTemplate';
 import LinkedinTemplate from './LinkedinTemplate';
 import PersonalTemplate from './PersonalTemplate';
+import FullPageTemplate from './FullPageTemplate';
 
 const PortfolioSite: React.FC = () => {
   const dispatch = useThunkDispatch();
@@ -19,7 +20,7 @@ const PortfolioSite: React.FC = () => {
 
   const portfolio = useSelector(selectPortfolio);
 
-  const chosenTemplate =
+  const chosenTemplate: any = //TEMPLATE_TYPE.FULL_PAGE;
     portfolio.user?.portfolio?.theme || TEMPLATE_TYPE.DEFAULT;
 
   const props = {
@@ -45,6 +46,8 @@ const PortfolioSite: React.FC = () => {
     return <LinkedinTemplate {...props} />;
   if (chosenTemplate === TEMPLATE_TYPE.PERSONAL)
     return <PersonalTemplate {...props} />;
+  if (chosenTemplate === TEMPLATE_TYPE.FULL_PAGE)
+    return <FullPageTemplate {...props} />;
   return <DefaultTemplate {...props} />;
 };
 

@@ -14,7 +14,7 @@ const Header = ({ data }: any) => {
   const defaultDesc = `Hi, I'm ${data.fullName}! I'm a ${data.jobRole}. Contact me at ${data.email}`;
   return (
     <>
-      <BackgroundImage src={data.bannerImageUrl || randomImage} />
+      <BackgroundImage src={data.portfolio?.bannerImageUrl || randomImage} />
 
       <Container>
         <div>
@@ -43,16 +43,18 @@ const Header = ({ data }: any) => {
           <div>
             <h1>About Me</h1>
           </div>
-          <p>
-            {data.description || defaultDesc} {defaultDesc}
+          <p style={{ whiteSpace: 'pre-line' }}>
+            {data.description || data.portfolio?.description || defaultDesc}
           </p>
         </div>
-        {/* <div className="image-wrapper">
+        <div className="image-wrapper">
           <img
-            src={data.profileImageUrl || data.currentAvatar?.imageUrl}
+            src={
+              data.portfolio?.profileImageUrl || data.currentAvatar?.imageUrl
+            }
             alt="about"
           ></img>
-        </div> */}
+        </div>
       </AboutContainer>
     </>
   );

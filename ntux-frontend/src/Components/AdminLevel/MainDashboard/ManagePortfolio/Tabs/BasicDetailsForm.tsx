@@ -10,6 +10,9 @@ import { Paper, Button } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { selectPortfolio, selectUser } from 'Store/Selector/auth';
 import { FileInput } from 'common/Components/Input';
+import { useThunkDispatch } from 'common/hooks';
+import { updateAccount, updatePortfolio } from 'Store/Actions/auth';
+import { uploadFile } from 'Store/Actions/admin';
 
 export default function BasicDetailsForm() {
   const user = useSelector(selectUser);
@@ -18,14 +21,39 @@ export default function BasicDetailsForm() {
   const [bannerFileData, setBannerFileData] = useState<any>(null);
   const [profileFileData, setProfileFileData] = useState<any>(null);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const dispatch = useThunkDispatch();
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    // eslint-disable-next-line no-console
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    const userData = {
+      phoneNumber: data.get('phoneNumber'),
+      jobRole: data.get('jobRole'),
+    };
+    const portfolioData: any = {
+      description: data.get('description'),
+    };
+
+    if (bannerFileData?.file) {
+      const { url } = await dispatch(uploadFile(bannerFileData?.file));
+      portfolioData.bannerImageUrl = url;
+    }
+    if (profileFileData?.file) {
+      const { url } = await dispatch(uploadFile(profileFileData?.file));
+      portfolioData.profileImageUrl = url;
+    }
+
+    dispatch(
+      updatePortfolio({
+        ...portfolioData,
+      }),
+    );
+
+    dispatch(
+      updateAccount({
+        ...userData,
+      } as any),
+    );
   };
 
   return (
@@ -62,7 +90,11 @@ export default function BasicDetailsForm() {
           <FileInput
             label="Profile Image"
             onChange={setProfileFileData}
-            value={profileFileData?.url || user.profileImageUrl}
+            value={
+              profileFileData?.url ||
+              user.profileImageUrl ||
+              portfolio?.profileImageUrl
+            }
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -82,9 +114,9 @@ export default function BasicDetailsForm() {
           <TextField
             required
             fullWidth
-            id="role"
+            id="jobRole"
             label="Job Role"
-            name="role"
+            name="jobRole"
             size="medium"
             defaultValue={user.jobRole}
           />
@@ -105,9 +137,9 @@ export default function BasicDetailsForm() {
           <TextField
             required
             fullWidth
-            id="Contact"
-            label="Contact Number"
-            name="Contact"
+            id="phoneNumber"
+            label="Phone Number"
+            name="phoneNumber"
             size="medium"
             defaultValue={user.phoneNumber}
           />
@@ -116,10 +148,10 @@ export default function BasicDetailsForm() {
           <TextField
             required
             fullWidth
-            id="aboutMe"
+            id="description"
             label="About Me"
             type="textarea"
-            name="aboutMe"
+            name="description"
             rows={10}
             multiline
             defaultValue={portfolio.description}

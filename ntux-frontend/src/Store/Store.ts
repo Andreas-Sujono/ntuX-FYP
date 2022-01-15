@@ -10,6 +10,7 @@ import courses from './Reducers/courses';
 import pointsRewards from './Reducers/pointsRewards';
 import admin from './Reducers/admin';
 import forum from './Reducers/forum';
+import tutoring from './Reducers/tutoring';
 
 const isDevelopment = process.env.NODE_ENV === 'development';
 const middlewares = [thunk];
@@ -30,6 +31,7 @@ const rootReducer = combineReducers({
   pointsRewards,
   admin,
   forum,
+  tutoring,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

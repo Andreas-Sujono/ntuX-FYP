@@ -1,31 +1,94 @@
 import React, { useState } from 'react';
 import TextField from '@mui/material/TextField';
-// import FormControlLabel from '@mui/material/FormControlLabel';
-// import Checkbox from '@mui/material/Checkbox';
-// import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import { Paper, Button } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { selectPortfolio, selectUser } from 'Store/Selector/auth';
-import { FileInput } from 'common/Components/Input';
+import { useThunkDispatch } from 'common/hooks';
+import { updatePortfolio } from 'Store/Actions/auth';
+import { toast } from 'react-toastify';
+
+export const initializeJSON = (json: any) => {
+  if (!json) return {};
+  try {
+    if (typeof json === 'string') {
+      return JSON.parse(json);
+    }
+    return json;
+  } catch (e) {
+    return {};
+  }
+};
 
 export default function BasicDetailsForm() {
   const user = useSelector(selectUser);
   const userPortfolio = useSelector(selectPortfolio);
   const portfolio = userPortfolio?.user?.portfolio || {};
-  const [bannerFileData, setBannerFileData] = useState<any>(null);
-  const [profileFileData, setProfileFileData] = useState<any>(null);
+  const [educations, setEducations] = useState<any>(
+    initializeJSON(portfolio.educationsJSON),
+  );
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const dispatch = useThunkDispatch();
+
+  const educationData = educations.data || [
+    {
+      school: '',
+      degree: '',
+      fieldOfStudy: '',
+      startDate: '',
+      endDate: '',
+      description: '',
+    },
+  ];
+
+  const addEducation = () => {
+    setEducations({
+      ...educations,
+      data: [
+        ...educationData,
+        {
+          school: '',
+          degree: '',
+          fieldOfStudy: '',
+          startDate: '',
+          endDate: '',
+          description: '',
+        },
+      ],
+    });
+  };
+
+  const removeEducation = (index: number) => {
+    setEducations({
+      ...educations,
+      data: educationData.filter((_, i) => i !== index),
+    });
+  };
+
+  const updateEducation = (index: number, data: any) => {
+    setEducations({
+      ...educations,
+      data: educationData.map((item, i) => {
+        if (i !== index) return item;
+        return {
+          ...item,
+          ...data,
+        };
+      }),
+    });
+  };
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    // eslint-disable-next-line no-console
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    await dispatch(
+      updatePortfolio({
+        educationsJSON: educations,
+      }),
+    );
+    toast.success('Portfolio is updated');
   };
 
   return (
@@ -49,83 +112,161 @@ export default function BasicDetailsForm() {
             Update
           </Button>
           {/* <Button>Cancel</Button> */}
-          <Divider sx={{ mb: 2, mt: 1.5 }} />
         </Grid>
-        <Grid item xs={12} sm={6}>
-          <FileInput
-            label="Banner Image"
-            onChange={setBannerFileData}
-            value={bannerFileData?.url || portfolio?.bannerImageUrl}
-          />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <FileInput
-            label="Profile Image"
-            onChange={setProfileFileData}
-            value={profileFileData?.url || user.profileImageUrl}
-          />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextField
-            autoComplete="given-name"
-            name="fullName"
-            required
-            fullWidth
-            id="fullName"
-            label="Full Name"
-            size="medium"
-            defaultValue={user.fullName}
-            disabled
-          />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextField
-            required
-            fullWidth
-            id="role"
-            label="Job Role"
-            name="role"
-            size="medium"
-            defaultValue={user.jobRole}
-          />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextField
-            required
-            fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            size="medium"
-            defaultValue={user.email}
-            disabled
-          />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextField
-            required
-            fullWidth
-            id="Contact"
-            label="Contact Number"
-            name="Contact"
-            size="medium"
-            defaultValue={user.phoneNumber}
-          />
-        </Grid>
-        <Grid item xs={12} sm={12}>
-          <TextField
-            required
-            fullWidth
-            id="aboutMe"
-            label="About Me"
-            type="textarea"
-            name="aboutMe"
-            rows={10}
-            multiline
-            defaultValue={portfolio.description}
-          />
-        </Grid>
+        {educationData.map((item, index) => (
+          <>
+            <Grid item xs={12} sm={12}>
+              <Divider sx={{ mb: 1, mt: 1 }} />
+              <Typography
+                component="h3"
+                variant="h6"
+                sx={{ display: 'inline-block', verticalAlign: 'middle' }}
+              >
+                Education {index + 1}
+              </Typography>
+              {educationData.length > 1 && (
+                <Button
+                  type="button"
+                  onClick={() => {
+                    removeEducation(index);
+                  }}
+                  sx={{ ml: 2, color: 'lightgrey', verticalAlign: 'middle' }}
+                >
+                  Remove Education
+                </Button>
+              )}
+            </Grid>
+            <Grid item xs={12} sm={12}>
+              <TextField
+                name="schoolName"
+                required
+                fullWidth
+                id="schoolName"
+                label="School Name"
+                size="medium"
+                defaultValue={item.school}
+                value={item.school}
+                onChange={(e) => {
+                  updateEducation(index, {
+                    ...item,
+                    school: e.target.value,
+                  });
+                }}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                name="degree"
+                required
+                fullWidth
+                id="degree"
+                label="Degree"
+                size="medium"
+                defaultValue={item.degree}
+                value={item.degree}
+                onChange={(e) => {
+                  updateEducation(index, {
+                    ...item,
+                    degree: e.target.value,
+                  });
+                }}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                name="fieldOfStudy"
+                required
+                fullWidth
+                id="fieldOfStudy"
+                label="Field of Study"
+                size="medium"
+                defaultValue={item.fieldOfStudy}
+                value={item.fieldOfStudy}
+                onChange={(e) => {
+                  updateEducation(index, {
+                    ...item,
+                    fieldOfStudy: e.target.value,
+                  });
+                }}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                name="startDate"
+                required
+                fullWidth
+                id="startDate"
+                label="Start Date"
+                size="medium"
+                type="date"
+                defaultValue={item.startDate}
+                value={item.startDate}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                onChange={(e) => {
+                  updateEducation(index, {
+                    ...item,
+                    startDate: e.target.value,
+                  });
+                }}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                name="endDate"
+                required
+                fullWidth
+                id="endDate"
+                label="End Date"
+                size="medium"
+                type="date"
+                defaultValue={item.endDate}
+                value={item.endDate}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                onChange={(e) => {
+                  updateEducation(index, {
+                    ...item,
+                    endDate: e.target.value,
+                  });
+                }}
+              />
+            </Grid>
+            <Grid item xs={12} sm={12}>
+              <TextField
+                name="description"
+                required
+                fullWidth
+                id="description"
+                label="Description"
+                size="medium"
+                defaultValue={item.description}
+                value={item.description}
+                rows={5}
+                multiline
+                onChange={(e) => {
+                  updateEducation(index, {
+                    ...item,
+                    description: e.target.value,
+                  });
+                }}
+              />
+            </Grid>
+          </>
+        ))}
       </Grid>
+      <Button
+        type="button"
+        onClick={() => {
+          if (educationData[educationData.length - 1].school === '') return;
+          addEducation();
+        }}
+        sx={{ mt: 2 }}
+      >
+        Add New Education
+      </Button>
     </Paper>
   );
 }

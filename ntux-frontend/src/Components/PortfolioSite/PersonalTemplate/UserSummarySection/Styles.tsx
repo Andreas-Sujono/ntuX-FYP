@@ -82,14 +82,24 @@ export const Container = styled.div`
 `;
 
 export const AboutContainer = styled(PaddedContainer)`
-  margin-top: 6vh;
+  margin-top: 8vh;
   display: flex;
   flex-direction: row;
   align-items: center;
   min-height: 20vh;
+  white-space: pre-line;
+  column-gap: 2rem;
+  row-gap: 2rem;
 
   > div {
+    flex: 3 1 0;
+  }
+  .image-wrapper {
     flex: 1 1 0;
+    img {
+      display: block;
+      margin: auto;
+    }
   }
 
   h2 {
@@ -137,5 +147,9 @@ export const AboutContainer = styled(PaddedContainer)`
       font-size: 14px;
       width: 100%;
     }
+  }
+  @media Screen and (max-width: 768px) {
+    flex-direction: column;
+    padding: 1rem;
   }
 `;

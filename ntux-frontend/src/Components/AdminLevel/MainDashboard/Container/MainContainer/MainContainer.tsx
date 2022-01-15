@@ -151,7 +151,7 @@ function MainContainer({ children }: { children: React.ReactNode }) {
             }}
           >
             <List
-              sx={{ maxWidth: '320px', maxHeight: '450px', overflow: 'auto' }}
+              sx={{ maxWidth: '320px', maxHeight: '350px', overflow: 'auto' }}
             >
               {notifications.map((item) => (
                 <ListItem disablePadding key={item.id}>
