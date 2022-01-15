@@ -38,7 +38,7 @@ export class ForumQuestionService extends TypeOrmCrudService<ForumQuestion> {
           `
           : 'WHERE fq."parentQuestionId" IS NULL AND fq.name ILIKE $1'
       }
-      group by fq.id, "user"."fullName", avatar."imageUrl"
+      group by fq.id, "user"."id", avatar."imageUrl"
       ORDER BY fq."createdAt" DESC
       LIMIT ${limit} OFFSET ${(page - 1) * limit}
     `,
@@ -69,7 +69,7 @@ export class ForumQuestionService extends TypeOrmCrudService<ForumQuestion> {
       WHERE fq."parentQuestionId" IS NULL AND fq.name ILIKE $1 AND  fq.id NOT IN (
         SELECT DISTINCT "questionId" FROM forum_answer WHERE "questionId" IS NOT NULL
       )
-      group by fq.id, "user"."fullName", avatar."imageUrl"
+      group by fq.id, "user"."id", avatar."imageUrl"
       ORDER BY fq."createdAt" DESC
       LIMIT ${limit} OFFSET ${(page - 1) * limit}
     `,
@@ -98,7 +98,7 @@ export class ForumQuestionService extends TypeOrmCrudService<ForumQuestion> {
       left join "avatar" on "user"."currentAvatarId" = "avatar".id
       left join "forum_answer" on "forum_answer"."questionId" = fq.id
       where fq."userId" = ${userId} AND fq."parentQuestionId" IS NULL
-      group by fq.id, "user"."fullName", avatar."imageUrl"
+      group by fq.id, "user"."id", avatar."imageUrl"
       ORDER BY fq."createdAt" DESC
       LIMIT ${limit} OFFSET ${(page - 1) * limit}
     `,
