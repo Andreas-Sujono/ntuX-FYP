@@ -8,63 +8,44 @@ export const BackgroundImage = styled.img`
   position: absolute;
   top: 0;
   left: 0;
+
+  @media Screen and (max-width: 680px) {
+    height: 20vh;
+  }
 `;
 
 export const Container = styled.div`
-  margin-top: 10vh;
+  margin-top: 6vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-end;
   min-height: 45vh;
-
-  h2 {
+  z-index: 2;
+  position: relative;
+  .h2 {
     font-size: 2rem;
     text-align: center;
-    @include media('>=phone', '<lgphone') {
-      font-size: 14px;
-    }
-    @include media('>=lgphone', '<tablet') {
-      font-size: 16px;
-    }
-    @include media('>=tablet', '<desktop') {
-      font-size: 16px;
+
+    @media Screen and (max-width: 680px) {
+      font-size: 1.5rem;
     }
   }
-  h1 {
+  .h1 {
     font-size: 3rem;
     text-align: center;
-    @include media('>=phone', '<lgphone') {
-      font-size: 1.5rem;
-      line-height: 10px;
-    }
-    @include media('>=lgphone', '<tablet') {
-      font-size: 1.5rem;
-      line-height: 10px;
-    }
-    @include media('>=tablet', '<desktop') {
-      font-size: 2.5rem;
+
+    @media Screen and (max-width: 680px) {
+      font-size: 2rem;
     }
   }
 
-  p {
+  .p {
     width: 50%;
     text-align: center;
     overflow: hidden;
-    @include media('>=phone', '<lgphone') {
-      font-size: 12px;
-      width: 100%;
-    }
-    @include media('>=lgphone', '<tablet') {
-      font-size: 12px;
-      width: 100%;
-    }
-    @include media('>=tablet', '<desktop') {
-      font-size: 14px;
-      width: 100%;
-    }
   }
-  .primary-btn {
+  .primary-btn1 {
     margin: 10px;
     padding: 10px;
     margin-top: 2rem;
@@ -78,6 +59,9 @@ export const Container = styled.div`
     &:hover {
       transform: scale(1.1);
     }
+    @media Screen and (max-width: 680px) {
+      margin-top: 1rem;
+    }
   }
 `;
 
@@ -90,6 +74,7 @@ export const AboutContainer = styled(PaddedContainer)`
   white-space: pre-line;
   column-gap: 2rem;
   row-gap: 2rem;
+  padding: 1em 16px;
 
   > div {
     flex: 3 1 0;
@@ -102,54 +87,24 @@ export const AboutContainer = styled(PaddedContainer)`
     }
   }
 
-  h2 {
+  .h2 {
     font-size: 1rem;
     text-align: center;
-    @include media('>=phone', '<lgphone') {
-      font-size: 14px;
-    }
-    @include media('>=lgphone', '<tablet') {
-      font-size: 16px;
-    }
-    @include media('>=tablet', '<desktop') {
-      font-size: 16px;
+    @media Screen and (max-width: 680px) {
+      font-size: 1rem;
     }
   }
-  .heading-wrapper {
-    h1 {
-      font-size: 4rem;
-      text-align: center;
-      line-height: 20px;
-      @include media('>=phone', '<lgphone') {
-        font-size: 1.5rem;
-        line-height: 10px;
-      }
-      @include media('>=lgphone', '<tablet') {
-        font-size: 1.5rem;
-        line-height: 10px;
-      }
-      @include media('>=tablet', '<desktop') {
-        font-size: 2.5rem;
-      }
+  .h1 {
+    font-size: 2.5rem;
+    @media Screen and (max-width: 680px) {
+      font-size: 2rem;
     }
   }
   p {
     overflow: hidden;
-    @include media('>=phone', '<lgphone') {
-      font-size: 12px;
-      width: 100%;
-    }
-    @include media('>=lgphone', '<tablet') {
-      font-size: 12px;
-      width: 100%;
-    }
-    @include media('>=tablet', '<desktop') {
-      font-size: 14px;
-      width: 100%;
-    }
   }
   @media Screen and (max-width: 768px) {
     flex-direction: column;
-    padding: 1rem;
+    margin-top: 5vh;
   }
 `;

@@ -132,7 +132,7 @@ export default function AppWebsiteVisits({ data, interval }: any) {
   return (
     <Card>
       <CardHeader
-        title="User Activities"
+        title="My Activities"
         subheader={`For the past ${
           INTERVAL === 'd'
             ? '12 Days'

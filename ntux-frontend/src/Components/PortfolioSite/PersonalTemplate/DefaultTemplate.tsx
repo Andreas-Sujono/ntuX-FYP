@@ -4,6 +4,8 @@ import { PaddedContainer } from '../LinkedinTemplate/shared.styles';
 import UserSummarySection from './UserSummarySection';
 import WebsiteTraffic from './WebsiteTraffic';
 import CourseEnrolled from './CourseEnrolled';
+import EducationSection from './EducationSection';
+import WorkExperienceSection from './WorkExperienceSection';
 
 const DefaultTemplate: React.FC<any> = ({ portfolio }: any) => {
   return (
@@ -11,6 +13,12 @@ const DefaultTemplate: React.FC<any> = ({ portfolio }: any) => {
       style={{ background: 'white', padding: 0, paddingBottom: '3em' }}
     >
       <UserSummarySection data={portfolio.user} />
+      <EducationSection
+        data={portfolio.user?.portfolio?.educationsJSON?.data || []}
+      />
+      <WorkExperienceSection
+        data={portfolio.user?.portfolio?.workExperiencesJSON?.data || []}
+      />
       <PaddedContainer>
         {!!portfolio.registeredCourses?.length && (
           <CourseEnrolled
