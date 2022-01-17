@@ -248,10 +248,11 @@ export class CourseService extends TypeOrmCrudService<Course> {
     const res = await this.courseUserRepo.find({
       where: {
         user: userId as any,
-        'courseBatch.endDate': LessThan(new Date()),
+        // 'courseBatch.endDate': LessThan(new Date()),
       },
       relations: ['course', 'courseBatch'],
     });
+    console.log('res: ', res);
     return res;
   }
 }
