@@ -67,6 +67,16 @@
   padding: 0.25rem;
 }
 
+.video {
+  display: inline-block;
+  width: calc(100% - 1rem);
+  padding: 0.25rem;
+}
+
+.file{
+  padding: 0.25rem;
+}
+
 
 
 .blockSelected.image {

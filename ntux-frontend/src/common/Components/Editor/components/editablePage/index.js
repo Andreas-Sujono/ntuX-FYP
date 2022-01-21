@@ -129,6 +129,8 @@ const EditablePage = ({
       tag: currentBlock.tag,
       html: currentBlock.html,
       imageUrl: currentBlock.imageUrl,
+      name: currentBlock.name,
+      type: currentBlock.type,
     };
     setBlocks(updatedBlocks);
     // If the image has been changed, we have to delete the
@@ -149,6 +151,8 @@ const EditablePage = ({
       tag: currentBlock.tag,
       html: currentBlock.html,
       imageUrl: currentBlock.imageUrl,
+      name: currentBlock.name,
+      type: currentBlock.type,
     };
     setBlocks(updatedBlocks);
   };
@@ -207,6 +211,8 @@ const EditablePage = ({
                     isDisabled={isDisabled}
                     useTags2={useTags2}
                     uploadFile={uploadFile}
+                    name={block.name}
+                    type={block.type}
                   />
                 );
               })}

@@ -46,6 +46,7 @@ const FileInput: React.FC<FileInputProps> = ({
 
   const onClickInputBox = () => {
     console.log(fileRef);
+    if (disabled) return;
     fileRef.current?.click();
   };
 

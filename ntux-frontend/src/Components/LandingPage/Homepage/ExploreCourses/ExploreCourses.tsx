@@ -8,6 +8,7 @@ import moment from 'moment';
 import { getPublicCourses } from 'Store/Actions/courses';
 import { selectPublicCourses } from 'Store/Selector/courses';
 import { Container, CoursesContainer, Title, CourseCard } from './Styles';
+import { Link } from 'react-router-dom';
 
 const ExploreCourses: React.FC = () => {
   const history = useHistory();
@@ -38,21 +39,23 @@ const ExploreCourses: React.FC = () => {
       <CoursesContainer>
         {courses.map((item: Course) => (
           <CourseCard
-            onClick={() => {
-              history.push(makePath(routes.LP_COURSE, { courseId: item.id }));
-            }}
+            // onClick={() => {
+            //   history.push(makePath(routes.LP_COURSE, { courseId: item.id }));
+            // }}
             key={item.id}
           >
-            <img src={item.imageUrl || '#'} />
-            <div className="details">
-              <div className="name">{item.name}</div>
-              {item.totalHours && (
-                <div className="hours">{item.totalHours} Hours</div>
-              )}
-              <div className="batch">
-                Next Batch: <strong>{getBatchString(item)}</strong>
+            <Link to={makePath(routes.LP_COURSE, { courseId: item.id })}>
+              <img src={item.imageUrl || '#'} />
+              <div className="details">
+                <div className="name">{item.name}</div>
+                {item.totalHours && (
+                  <div className="hours">{item.totalHours} Hours</div>
+                )}
+                <div className="batch">
+                  Next Batch: <strong>{getBatchString(item)}</strong>
+                </div>
               </div>
-            </div>
+            </Link>
           </CourseCard>
         ))}
       </CoursesContainer>

@@ -11,6 +11,10 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { Copyright } from '../LoginPage/LoginPage';
 
+const { PUBLIC_URL } = process.env;
+
+const bgImage = PUBLIC_URL + '/assets/LP/ntuBg.jpeg';
+
 export default function ResetPasswordSide() {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -31,7 +35,7 @@ export default function ResetPasswordSide() {
         sm={4}
         md={7}
         sx={{
-          backgroundImage: `url('https://c0.wallpaperflare.com/preview/669/547/646/building-architecture-dome-plant.jpg')`,
+          backgroundImage: `url('${bgImage}')`,
           backgroundRepeat: 'no-repeat',
           backgroundSize: 'cover',
           backgroundPosition: 'center',

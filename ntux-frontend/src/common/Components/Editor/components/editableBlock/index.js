@@ -5,13 +5,15 @@ import React from 'react';
 import ContentEditable from 'react-contenteditable';
 import { Draggable } from 'react-beautiful-dnd';
 import { v4 as uuidv4 } from 'uuid';
-
+import Chip from '@mui/material/Chip';
+import AttachFileIcon from '@mui/icons-material/AttachFile';
 import styles from './styles.module.scss';
 import TagSelectorMenu from '../tagSelectorMenu';
 import ActionMenu from '../actionMenu';
 import DragHandleIcon from '../../images/draggable.svg';
 import { setCaretToEnd, getCaretCoordinates, getSelection } from '../../utils';
-import { createId } from '../../../../utils';
+import { createId, download } from '../../../../utils';
+import { toast } from 'react-toastify';
 
 const CMD_KEY = '/';
 
@@ -39,6 +41,8 @@ class EditableBlock extends React.Component {
       this.calculateTagSelectorMenuPosition.bind(this);
     this.contentEditable = React.createRef();
     this.fileInput = null;
+    this.videoInput = null;
+    this.otherFileInput = null;
     this.state = {
       htmlBackup: null,
       html: '',
@@ -58,6 +62,8 @@ class EditableBlock extends React.Component {
         x: null,
         y: null,
       },
+      name: '',
+      type: '',
     };
   }
 
@@ -81,6 +87,8 @@ class EditableBlock extends React.Component {
         tag: this.props.tag,
         imageUrl: this.props.imageUrl,
         videoUrl: this.props.videoUrl,
+        name: this.props.name,
+        type: this.props.type,
       });
     }
     [].forEach.call(
@@ -127,6 +135,8 @@ class EditableBlock extends React.Component {
         tag: this.state.tag,
         imageUrl: this.state.imageUrl,
         videoUrl: this.state.videoUrl,
+        name: this.state.name,
+        type: this.state.type,
       });
     }
   }
@@ -302,6 +312,40 @@ class EditableBlock extends React.Component {
           },
         );
       });
+    } else if (tag === 'video') {
+      this.setState({ ...this.state, tag: tag }, () => {
+        this.closeTagSelectorMenu();
+        if (this.videoInput) {
+          // Open the native file picker
+          this.videoInput.click();
+        }
+        // Add new block so that the user can continue writing
+        // after adding an image
+        this.props.addBlock({
+          id: this.props.id,
+          html: '',
+          tag: 'p',
+          imageUrl: '',
+          ref: this.contentEditable.current,
+        });
+      });
+    } else if (tag === 'file') {
+      this.setState({ ...this.state, tag: tag }, () => {
+        this.closeTagSelectorMenu();
+        if (this.otherFileInput) {
+          // Open the native file picker
+          this.otherFileInput.click();
+        }
+        // Add new block so that the user can continue writing
+        // after adding an image
+        this.props.addBlock({
+          id: this.props.id,
+          html: '',
+          tag: 'p',
+          imageUrl: '',
+          ref: this.contentEditable.current,
+        });
+      });
     } else {
       if (this.state.isTyping) {
         // Update the tag and restore the html backup without the command
@@ -338,6 +382,65 @@ class EditableBlock extends React.Component {
         const res = await this.props.uploadFile(imageFile);
         const imageUrl = res.url;
         this.setState({ ...this.state, imageUrl: imageUrl });
+      } catch (err) {
+        console.log(err);
+        // this.setState({ ...this.state, imageUrl: '' });
+      }
+    } else if (this.otherFileInput && this.otherFileInput.files[0]) {
+      const imageFile = this.otherFileInput.files[0];
+      const formData = new FormData();
+      // formData.append('image', imageFile);
+      try {
+        // const response = await fetch(
+        //   `https://kotakode.com/api/v1/files/images`,
+        //   {
+        //     method: 'POST',
+        //     credentials: 'include',
+        //     body: formData,
+        //   },
+        // );
+        // const data = await response.json();
+        //upload image here
+        // const imageUrl = data?.data?.attributes?.url || '';
+        // 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1200px-Image_created_with_a_mobile_phone.png';
+        toast.warning('Wait for the file to be uploaded');
+        const res = await this.props.uploadFile(imageFile);
+        const imageUrl = res.url;
+        this.setState({
+          ...this.state,
+          imageUrl: imageUrl,
+          name: imageFile.name,
+          type: imageFile.type,
+        });
+      } catch (err) {
+        console.log(err);
+        // this.setState({ ...this.state, imageUrl: '' });
+      }
+    } else if (this.videoInput && this.videoInput.files[0]) {
+      const imageFile = this.videoInput.files[0];
+      const formData = new FormData();
+      // formData.append('image', imageFile);
+      try {
+        // const response = await fetch(
+        //   `https://kotakode.com/api/v1/files/images`,
+        //   {
+        //     method: 'POST',
+        //     credentials: 'include',
+        //     body: formData,
+        //   },
+        // );
+        // const data = await response.json();
+        //upload image here
+        // const imageUrl = data?.data?.attributes?.url || '';
+        // 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1200px-Image_created_with_a_mobile_phone.png';
+        toast.warning('Wait for the file to be uploaded');
+        const res = await this.props.uploadFile(imageFile);
+        const imageUrl = res.url;
+        this.setState({
+          ...this.state,
+          imageUrl: imageUrl,
+          name: imageFile.name,
+        });
       } catch (err) {
         console.log(err);
         // this.setState({ ...this.state, imageUrl: '' });
@@ -452,33 +555,36 @@ class EditableBlock extends React.Component {
                   onClick={this.handleDragHandleClick}
                 />
               </span>
-              {this.state.tag !== 'img' && this.state.tag !== 'iframe' && (
-                <ContentEditable
-                  innerRef={this.contentEditable}
-                  data-position={this.props.position}
-                  data-tag={this.state.tag}
-                  html={this.state.html}
-                  onChange={this.handleChange}
-                  onFocus={this.handleFocus}
-                  onBlur={this.handleBlur}
-                  onKeyDown={this.handleKeyDown}
-                  onKeyUp={this.handleKeyUp}
-                  // onMouseUp={this.handleMouseUp}
-                  tagName={this.state.tag}
-                  className={[
-                    styles.block,
-                    this.state.isTyping ||
-                    this.state.actionMenuOpen ||
-                    this.state.tagSelectorMenuOpen
-                      ? styles.blockSelected
-                      : null,
-                    this.state.placeholder ? styles.placeholder : null,
-                    snapshot.isDragging ? styles.isDragging : null,
-                    this.blockId,
-                  ].join(' ')}
-                  disabled={this.props.isDisabled}
-                />
-              )}
+              {this.state.tag !== 'img' &&
+                this.state.tag !== 'iframe' &&
+                this.state.tag !== 'video' &&
+                this.state.tag !== 'file' && (
+                  <ContentEditable
+                    innerRef={this.contentEditable}
+                    data-position={this.props.position}
+                    data-tag={this.state.tag}
+                    html={this.state.html}
+                    onChange={this.handleChange}
+                    onFocus={this.handleFocus}
+                    onBlur={this.handleBlur}
+                    onKeyDown={this.handleKeyDown}
+                    onKeyUp={this.handleKeyUp}
+                    // onMouseUp={this.handleMouseUp}
+                    tagName={this.state.tag}
+                    className={[
+                      styles.block,
+                      this.state.isTyping ||
+                      this.state.actionMenuOpen ||
+                      this.state.tagSelectorMenuOpen
+                        ? styles.blockSelected
+                        : null,
+                      this.state.placeholder ? styles.placeholder : null,
+                      snapshot.isDragging ? styles.isDragging : null,
+                      this.blockId,
+                    ].join(' ')}
+                    disabled={this.props.isDisabled}
+                  />
+                )}
               {this.state.tag === 'img' && (
                 <div
                   data-position={this.props.position}
@@ -557,6 +663,87 @@ class EditableBlock extends React.Component {
                         }}
                       ></iframe>
                     )}
+                </div>
+              )}
+
+              {this.state.tag === 'video' && (
+                <div
+                  data-position={this.props.position}
+                  data-tag={this.state.tag}
+                  ref={this.contentEditable}
+                  className={[
+                    styles.iframe,
+                    this.state.actionMenuOpen || this.state.tagSelectorMenuOpen
+                      ? styles.blockSelected
+                      : null,
+                  ].join(' ')}
+                >
+                  <input
+                    id={`${this.props.id}_fileInput`}
+                    name={this.state.tag}
+                    type="file"
+                    onChange={this.handleImageUpload}
+                    ref={(ref) => (this.videoInput = ref)}
+                    hidden
+                  />
+                  {!this.state.imageUrl && (
+                    <label
+                      htmlFor={`${this.props.id}_fileInput`}
+                      className={styles.fileInputLabel}
+                    >
+                      No video Selected.
+                    </label>
+                  )}
+                  {this.state.imageUrl && (
+                    <video controls>
+                      <source src={this.state.imageUrl} type="video/mp4" />
+                      Your browser does not support the video tag.
+                    </video>
+                  )}
+                </div>
+              )}
+
+              {this.state.tag === 'file' && (
+                <div
+                  data-position={this.props.position}
+                  data-tag={this.state.tag}
+                  ref={this.contentEditable}
+                  className={[
+                    styles.file,
+                    this.state.actionMenuOpen || this.state.tagSelectorMenuOpen
+                      ? styles.blockSelected
+                      : null,
+                  ].join(' ')}
+                  style={{
+                    display: 'inline-block',
+                  }}
+                >
+                  <input
+                    id={`${this.props.id}_fileInput`}
+                    name={this.state.tag}
+                    type="file"
+                    onChange={this.handleImageUpload}
+                    ref={(ref) => (this.otherFileInput = ref)}
+                    hidden
+                  />
+                  {!this.state.imageUrl && (
+                    <label
+                      htmlFor={`${this.props.id}_fileInput`}
+                      className={styles.fileInputLabel}
+                    >
+                      No file Selected.
+                    </label>
+                  )}
+                  {this.state.imageUrl && (
+                    <Chip
+                      icon={<AttachFileIcon />}
+                      label={this.state.name}
+                      onClick={() => {
+                        download(this.state.imageUrl, this.state.name);
+                      }}
+                      sx={{ ml: 1 }}
+                    />
+                  )}
                 </div>
               )}
             </div>

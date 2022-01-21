@@ -104,7 +104,7 @@ export default function RewardTable({
                     </div>
                   </TableCell>
                   <TableCell align="left" sx={{ width: '10%' }}>
-                    10
+                    {row.redeemedCount || 0}
                   </TableCell>
                   <TableCell
                     align="left"
@@ -119,7 +119,7 @@ export default function RewardTable({
                   <TableCell align="left" sx={{ width: '20%' }}>
                     <Button
                       onClick={() => onClickEdit(row)}
-                      disabled={row.isDefault || user?.role !== Role.ADMIN}
+                      disabled={user?.role !== Role.ADMIN}
                     >
                       Edit
                     </Button>
@@ -257,6 +257,7 @@ export const CreateModal = ({ open, setOpen, data, setData }: any) => {
                 label="Reward Banner Image"
                 onChange={setFileData}
                 value={fileData?.url || finalData.imageUrl}
+                disabled={data?.isDefault}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -268,6 +269,7 @@ export const CreateModal = ({ open, setOpen, data, setData }: any) => {
                 label="Reward Name"
                 value={finalData.name}
                 onChange={handleChange}
+                disabled={data?.isDefault}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -279,6 +281,7 @@ export const CreateModal = ({ open, setOpen, data, setData }: any) => {
                 label="Description"
                 value={finalData.description}
                 onChange={handleChange}
+                disabled={data?.isDefault}
               />
             </Grid>
             {/* <Grid item xs={12} sm={6}>
@@ -300,6 +303,7 @@ export const CreateModal = ({ open, setOpen, data, setData }: any) => {
                 type="number"
                 value={finalData.totalLimit}
                 onChange={handleChange}
+                disabled={data?.isDefault}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
