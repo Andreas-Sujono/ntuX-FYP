@@ -41,13 +41,13 @@ export class TutorService extends TypeOrmCrudService<Tutor> {
     const courseUsers = await this.courseService.getCompletedCourse(userId);
     const tutorNow = await this.repo.findOne({
       where: {
-        id: userId,
+        user: userId,
       },
       relations: ['courses'],
     });
 
     //not qualified as tutor
-    if (courseUsers.length)
+    if (!courseUsers.length)
       return {
         isTutor: false,
         courses: [],
@@ -58,7 +58,7 @@ export class TutorService extends TypeOrmCrudService<Tutor> {
         user: userId as any,
         isActive: false,
         courses: courseUsers
-          .filter((item) => item.course?.id)
+          .map((item) => item.course?.id)
           .map((item) => ({ id: item })) as any,
       });
       return {
@@ -71,7 +71,7 @@ export class TutorService extends TypeOrmCrudService<Tutor> {
     const res = await this.repo.save({
       ...tutorNow,
       courses: courseUsers
-        .filter((item) => item.course?.id)
+        .map((item) => item.course?.id)
         .map((item) => ({ id: item })) as any,
     });
 

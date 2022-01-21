@@ -18,6 +18,7 @@ import {
 import { Avatar } from 'src/commonModule/entities/avatar.entity';
 import { GoalTask } from 'src/commonModule/entities/goalTask.entity';
 import { Notification } from 'src/commonModule/entities/notification.entity';
+import { Tutor } from 'src/tutoringModule/entities/tutor.entity';
 
 export enum UserRole {
   STUDENT = 'STUDENT',
@@ -56,6 +57,9 @@ export class User {
 
   @OneToOne(() => Portfolio, (portfolio) => portfolio.user)
   portfolio: Portfolio;
+
+  @OneToOne(() => Tutor, (tutor) => tutor.user)
+  tutor: Tutor;
 
   @Column()
   fullName: string;

@@ -14,11 +14,11 @@ const Header = ({ data }: any) => {
   const defaultDesc = `Hi, I'm ${data.fullName}! I'm a ${data.jobRole}. Contact me at ${data.email}`;
   return (
     <>
-      <BackgroundImage src={data.bannerImageUrl || randomImage} />
+      <BackgroundImage src={data.portfolio?.bannerImageUrl || randomImage} />
 
       <Container>
         <div>
-          <h2>
+          <h2 className="h2">
             Hi, I&apos;m {data.fullName}&nbsp;
             <span role="img" aria-label="Emoji">
               👋
@@ -26,13 +26,13 @@ const Header = ({ data }: any) => {
           </h2>
         </div>
         <div>
-          <h1>{data.jobRole || 'Student'}</h1>
+          <h1 className="h1">{data.jobRole || 'Student'}</h1>
         </div>
         <div>
-          <p>{data.headerParagraph}</p>
+          <p className="p">{data.headerParagraph}</p>
         </div>
         <div>
-          <a href={`mailto:${data.email}`} className="primary-btn">
+          <a href={`mailto:${data.email}`} className="primary-btn1">
             CONNECT WITH ME
           </a>
         </div>
@@ -41,18 +41,20 @@ const Header = ({ data }: any) => {
       <AboutContainer>
         <div className="content">
           <div>
-            <h1>About Me</h1>
+            <h1 className="h1">About Me</h1>
           </div>
-          <p>
-            {data.description || defaultDesc} {defaultDesc}
+          <p style={{ whiteSpace: 'pre-line' }} className="p">
+            {data.description || data.portfolio?.description || defaultDesc}
           </p>
         </div>
-        {/* <div className="image-wrapper">
+        <div className="image-wrapper">
           <img
-            src={data.profileImageUrl || data.currentAvatar?.imageUrl}
+            src={
+              data.portfolio?.profileImageUrl || data.currentAvatar?.imageUrl
+            }
             alt="about"
           ></img>
-        </div> */}
+        </div>
       </AboutContainer>
     </>
   );

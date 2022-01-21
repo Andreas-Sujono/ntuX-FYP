@@ -82,4 +82,5 @@ export const BottomContent = styled.div`
   padding: 16px;
   font-size: 1.1rem;
   margin-top: 1em;
+  white-space: pre-line;
 `;

@@ -8,6 +8,7 @@ import {
   ManyToMany,
   JoinTable,
   OneToOne,
+  JoinColumn,
 } from 'typeorm';
 import { Course } from 'src/courseModule/entities/course.entity';
 
@@ -16,11 +17,12 @@ export class Tutor {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToOne(() => User)
-  @JoinTable()
+  @OneToOne(() => User, (user) => user.tutor)
+  @JoinColumn()
   user: User;
 
   @ManyToMany(() => Course)
+  @JoinTable()
   courses: Course[];
 
   @Column({ nullable: true, default: true })

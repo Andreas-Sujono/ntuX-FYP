@@ -32,10 +32,9 @@ export const SectionContainer = styled.div`
 
 export const SectionTitle = styled.h1`
   margin: 0;
-  padding-bottom: 8px;
-  margin-bottom: 18px;
-  font-weight: bold;
-  font-size: 26px;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  font-size: 2rem;
 
   border-bottom: 2px double #ae1b1b;
   display: inline-block;

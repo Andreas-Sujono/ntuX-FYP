@@ -26,6 +26,7 @@ import { updatePortfolio } from 'Store/Actions/auth';
 
 function ManagePortfolio() {
   const [hideNav, setHideNav] = useState(false);
+  const [firstLoad, setFirstLoad] = useState(false);
   const userId = useSelector(selectUserId);
   const userPortfolio = useSelector(selectPortfolio);
   const dispatch = useThunkDispatch();
@@ -33,12 +34,16 @@ function ManagePortfolio() {
   const isPremium = !!userPortfolio?.user?.premiumSetting;
   const portfolioDetails = userPortfolio?.user?.portfolio || {};
 
-  const portfolioUrl = `${window.location.origin}/#/portfolio/${userId}${
-    hideNav ? '?hideNav=true&hideFooter=true' : ''
-  }`;
+  const isAndreasServer = window.location.origin.includes('andreassujono');
+  const portfolioUrl = `${window.location.origin}/${
+    isAndreasServer ? 'ntux/' : ''
+  }#/portfolio/${userId}${hideNav ? '?hideNav=true&hideFooter=true' : ''}`;
 
   useEffect(() => {
-    setHideNav(!!portfolioDetails.hideNav);
+    if (portfolioDetails.hideNav && !firstLoad) {
+      setHideNav(!!portfolioDetails.hideNav);
+      setFirstLoad(true);
+    }
   }, [portfolioDetails.hideNav]);
 
   const onUpdate = (data) => {
@@ -119,7 +124,13 @@ function ManagePortfolio() {
             </Typography>
 
             <FormControlLabel
-              control={<Checkbox value="allowExtraEmails" color="primary" />}
+              control={
+                <Checkbox
+                  value="allowExtraEmails"
+                  color="primary"
+                  checked={hideNav}
+                />
+              }
               label="Hide Navbar and Footer by default"
               sx={{ display: 'block', mb: 2 }}
               value={hideNav}
@@ -155,6 +166,12 @@ function ManagePortfolio() {
                   value="PERSONAL"
                   control={<Radio />}
                   label="Personal Website"
+                  disabled={!isPremium}
+                />
+                <FormControlLabel
+                  value="FULL_PAGE"
+                  control={<Radio />}
+                  label="Full Page"
                   disabled={!isPremium}
                 />
               </RadioGroup>
