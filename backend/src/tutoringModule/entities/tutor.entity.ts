@@ -9,8 +9,10 @@ import {
   JoinTable,
   OneToOne,
   JoinColumn,
+  OneToMany,
 } from 'typeorm';
 import { Course } from 'src/courseModule/entities/course.entity';
+import { TutorReview } from './tutorReview.entity';
 
 @Entity()
 export class Tutor {
@@ -24,6 +26,9 @@ export class Tutor {
   @ManyToMany(() => Course)
   @JoinTable()
   courses: Course[];
+
+  @OneToMany(() => TutorReview, (tutorReview) => tutorReview.tutor)
+  reviews: TutorReview[];
 
   @Column({ nullable: true, default: true })
   isActive: boolean;

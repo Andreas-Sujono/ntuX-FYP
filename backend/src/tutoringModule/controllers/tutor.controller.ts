@@ -1,6 +1,6 @@
 import { TutorService } from './../services/tutor.service';
 import { Roles } from '../../authModule/roles/roles.decorator';
-import { Body, Controller, Get, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Query } from '@nestjs/common';
 import {
   Crud,
   CrudController,
@@ -52,5 +52,10 @@ export class TutorController implements CrudController<Tutor> {
   @Get('check-self')
   async checkSelfTutor(@UserData('userId') userId: number) {
     return this.service.checkSelfTutor(userId);
+  }
+
+  @Get(':id/review')
+  async getAllReview(@Param('id') tutorId: number) {
+    return this.service.getAllReview(tutorId);
   }
 }

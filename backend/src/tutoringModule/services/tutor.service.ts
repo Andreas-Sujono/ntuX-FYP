@@ -3,13 +3,16 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TypeOrmCrudService } from '@nestjsx/crud-typeorm';
 import { CourseService } from 'src/courseModule/services/course.service';
-import { ILike } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import { Tutor } from '../entities/tutor.entity';
+import { TutorReview } from '../entities/tutorReview.entity';
 
 @Injectable()
 export class TutorService extends TypeOrmCrudService<Tutor> {
   constructor(
     @InjectRepository(Tutor) repo,
+    @InjectRepository(TutorReview)
+    private tutorReviewRepo: Repository<TutorReview>,
     private courseService: CourseService,
   ) {
     super(repo);
@@ -80,5 +83,17 @@ export class TutorService extends TypeOrmCrudService<Tutor> {
       isTutor: true,
       courses: courseUsers.map((item) => item.course),
     };
+  }
+
+  async getAllReview(tutorId: number) {
+    return this.tutorReviewRepo.find({
+      where: {
+        tutor: tutorId,
+      },
+      relations: ['user', 'tutor'],
+      order: {
+        createdAt: 'DESC',
+      },
+    });
   }
 }
