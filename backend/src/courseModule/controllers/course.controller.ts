@@ -1,5 +1,5 @@
 import { Roles } from './../../authModule/roles/roles.decorator';
-import { Controller, Get, Param, Post } from '@nestjs/common';
+import { Controller, Get, Param, Post, Query } from '@nestjs/common';
 import {
   Crud,
   CrudController,
@@ -90,9 +90,10 @@ export class CourseController implements CrudController<Course> {
     return this.service.getRecommendationCourses(userId);
   }
 
-  @Override()
-  async getOne(@Param('id') id: string) {
-    return this.service.adminGetOneCourse(id);
+  @Get('summary')
+  @Roles(UserRole.ADMIN, UserRole.LECTURER)
+  async getCourseSummary(@Query('courseId') courseId: number) {
+    return this.service.getCourseSummary(courseId);
   }
 
   @Override()
@@ -114,5 +115,10 @@ export class CourseController implements CrudController<Course> {
   @Override()
   async deleteOne(@ParsedRequest() req: CrudRequest, @Param('id') id: string) {
     return this.service.deleteCourse(req, id);
+  }
+
+  @Override()
+  async getOne(@Param('id') id: string) {
+    return this.service.adminGetOneCourse(id);
   }
 }

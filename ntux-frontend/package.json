@@ -65,7 +65,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "PUBLIC_URL=/ntux GENERATE_SOURCEMAP=false react-scripts build && react-snapshot",
+    "build": "GENERATE_SOURCEMAP=false react-scripts build && react-snapshot",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint src/*.ts src/*.tsx src/**/*.ts src/**/*.tsx",

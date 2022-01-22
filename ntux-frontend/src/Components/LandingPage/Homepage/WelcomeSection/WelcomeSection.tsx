@@ -9,9 +9,9 @@ import { Button } from '@mui/material';
 const { PUBLIC_URL } = process.env;
 
 const images = [
-  '/assets/LP/slide2.jpg',
-  '/assets/LP/slide1.png',
-  '/assets/LP/slide3.png',
+  PUBLIC_URL + '/assets/LP/slide2.jpg',
+  PUBLIC_URL + '/assets/LP/slide1.png',
+  PUBLIC_URL + '/assets/LP/slide3.png',
   // 'https://image.shutterstock.com/z/stock-vector-cloud-surrounded-by-abstract-computer-network-with-integrated-circles-and-icons-for-digital-283309469.jpg',
   // 'https://www.kindpng.com/picc/m/403-4038581_technology-icon-png-transparent-png.png',
   // 'https://live.staticflickr.com/5476/11870998636_daf8d91bb5_c.jpg',
