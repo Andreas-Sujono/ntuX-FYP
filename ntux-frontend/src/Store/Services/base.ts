@@ -1,7 +1,8 @@
 import axios, { CancelToken } from 'axios';
 import { parseObjectToCamelCase } from '../../common/utils';
 
-const API_URL = 'http://18.141.202.3/';
+const API_URL =
+  process.env.NODE_ENV === 'development' ? 'http://18.141.202.3' : '';
 
 export interface ApiResponse {
   errorCode: number;
