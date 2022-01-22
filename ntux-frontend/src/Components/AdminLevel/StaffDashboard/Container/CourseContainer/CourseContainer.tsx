@@ -62,6 +62,7 @@ import { createCourseContent } from 'Store/Actions/admin/general/courseContent.t
 import { Role } from 'Models/Auth';
 import { selectNotifications } from 'Store/Selector/pointsRewards';
 import { viewNotifications } from 'Store/Actions/pointsRewards';
+import { getCourseSummary } from 'Store/Actions/admin/general/courseLevel.thunk';
 
 const logoImagePath = `${process.env.PUBLIC_URL}/assets/logos/full-colored-logo.svg`;
 
@@ -135,6 +136,7 @@ function CourseContainer({ children }: { children: React.ReactNode }) {
     await Promise.all([
       dispatch(adminGetOneCourse(match.params.courseId)),
       dispatch(getAllStudentRegistrations(match.params.courseId)),
+      dispatch(getCourseSummary(match.params.courseId)),
     ]);
     setLoading(false);
   };

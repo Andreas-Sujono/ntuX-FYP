@@ -44,6 +44,7 @@ export const routes = {
   },
   STAFF_COURSES: {
     BASE: '/admin/courses/:courseId',
+    DASHBOARD: '/admin/courses/:courseId/dashboard',
     OVERVIEW: '/admin/courses/:courseId/overview',
     COURSE_CONTENT: '/admin/courses/:courseId/content',
     ANNOUNCEMENTS: '/admin/courses/:courseId/announcements',

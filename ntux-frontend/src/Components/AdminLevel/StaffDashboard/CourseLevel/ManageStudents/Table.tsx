@@ -20,6 +20,8 @@ import { routes } from 'Components/Routes';
 import { useHistory } from 'react-router-dom';
 import { useThunkDispatch } from 'common/hooks';
 import { changeStudentRegistrationStatus } from 'Store/Actions/admin/general/courseLevel.thunk';
+import { toast } from 'react-toastify';
+import { deleteStudentRegistration } from 'Store/Actions/admin';
 
 export const StatusSelector = ({ id, value, onChange }: any) => {
   const [status, setStatus] = React.useState(value);
@@ -52,7 +54,7 @@ export const StatusSelector = ({ id, value, onChange }: any) => {
   );
 };
 
-export default function TableComponent({ data, courseId, onClickDelete }: any) {
+export default function TableComponent({ data, courseId, max }: any) {
   const history = useHistory();
   const dispatch = useThunkDispatch();
 
@@ -75,6 +77,16 @@ export default function TableComponent({ data, courseId, onClickDelete }: any) {
       }),
     );
   };
+
+  const onClickDelete = async (id: any) => {
+    const confirm = window.confirm('Are you sure you want to delete this?');
+    if (!confirm) return;
+    const res = await dispatch(deleteStudentRegistration({ id, courseId }));
+    if (res.result)
+      toast.success('Student Registration is deleted successfully');
+  };
+
+  if (max) data = data.slice(0, max);
 
   return (
     <>
