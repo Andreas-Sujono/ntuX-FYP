@@ -27,6 +27,11 @@ export default class TutoringService extends BaseService {
     return res.data;
   };
 
+  createRequest = async (data: any) => {
+    const res = await this.postRequest(`/tutor-request/request`, data);
+    return res.data;
+  };
+
   updateRequest = async (data: any) => {
     const res = await this.patchRequest(`/tutor-request/request`, data);
     return res.data;
@@ -34,6 +39,32 @@ export default class TutoringService extends BaseService {
 
   updateOffer = async (data: any) => {
     const res = await this.patchRequest(`/tutor-request/offer`, data);
+    return res.data;
+  };
+
+  getAllReviews = async (tutorId: any) => {
+    const res = await this.getRequest(`/tutor/${tutorId}/review`);
+    return res.data;
+  };
+
+  getAllChats = async (tutorRequestId: any) => {
+    const res = await this.getRequest(`/tutor-request/${tutorRequestId}/chat`);
+    return res.data;
+  };
+
+  createReview = async (data: any) => {
+    const res = await this.postRequest(
+      `/tutor-request/${data.tutorRequest}/review`,
+      data,
+    );
+    return res.data;
+  };
+
+  createChat = async (data: any) => {
+    const res = await this.postRequest(
+      `/tutor-request/${data.tutorRequest}/chat`,
+      data,
+    );
     return res.data;
   };
 }

@@ -80,11 +80,18 @@ export default function TableComponent({
                     scope="row"
                     sx={{
                       fontSize: '1rem',
-                      cursor: row.role === 'STUDENT' ? 'pointer' : 'default',
-                      color: row.role === 'STUDENT' ? '#C63044' : 'inherit',
+                      cursor:
+                        row.role === 'STUDENT' && !!onClickStudent
+                          ? 'pointer'
+                          : 'default',
+                      color:
+                        row.role === 'STUDENT' && !!onClickStudent
+                          ? '#C63044'
+                          : 'inherit',
                     }}
                     onClick={() => {
-                      if (row.role === 'STUDENT') return onClickStudent(row.id);
+                      if (row.role === 'STUDENT' && !!onClickStudent)
+                        return onClickStudent(row.id);
                     }}
                   >
                     {row.fullName}
@@ -184,12 +191,13 @@ export const CreateModal = ({ open, setOpen, data, setData }: any) => {
       return;
     }
 
-    finalData.emailVerifiesAt =
-      isEditMode && data.emailVerifiesAt
-        ? data.emailVerifiesAt
-        : !isEditMode && finalData.emailVerifiesAt
-        ? new Date()
-        : false;
+    if (!isEditMode && finalData.emailVerifiesAt)
+      finalData.emailVerifiesAt = new Date();
+    else if (isEditMode && !data.emailVerifiesAt && finalData.emailVerifiesAt)
+      finalData.emailVerifiesAt = new Date();
+    else if (isEditMode && data.emailVerifiesAt)
+      finalData.emailVerifiesAt = data.emailVerifiesAt;
+    else finalData.emailVerifiesAt = null;
 
     finalData.role = finalData.role || 'STUDENT';
     finalData.id = data?.id || undefined;

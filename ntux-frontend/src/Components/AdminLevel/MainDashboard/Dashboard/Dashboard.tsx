@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import { TopBox, FeatureBox } from './Styles';
@@ -11,10 +11,18 @@ import { selectUser } from 'Store/Selector/auth/general';
 import { selectMyCourses } from 'Store/Selector/courses';
 import { Link } from 'react-router-dom';
 import { routes } from 'Components/Routes';
+import { useThunkDispatch } from 'common/hooks';
+import { getMyAccount } from 'Store/Actions/auth';
 
 function DashboardContent() {
   const user = useSelector(selectUser);
   const myCourses = useSelector(selectMyCourses);
+
+  const dispatch = useThunkDispatch();
+
+  useEffect(() => {
+    dispatch(getMyAccount());
+  }, []);
 
   return (
     <Container maxWidth="xl" sx={{ margin: 0, mt: 2, mb: 8, ml: 1, pr: 1 }}>

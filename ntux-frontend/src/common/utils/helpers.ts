@@ -174,6 +174,8 @@ export const getLevelAndBadges = (exps: number) => {
     }
   }
 
+  level = level || 1;
+
   let badges = 'bronze';
   if (level > 30) badges = 'diamond';
   else if (level > 20) badges = 'platinum';

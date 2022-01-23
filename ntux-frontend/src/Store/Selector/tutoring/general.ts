@@ -10,3 +10,8 @@ export const selectMyRequests = (state: RootState) =>
   selectGeneralState(state).myRequests;
 export const selectMyOffers = (state: RootState) =>
   selectGeneralState(state).myOffers;
+
+export const selectReviews = (state: RootState) =>
+  selectGeneralState(state).reviews;
+export const selectMessages = (state: RootState) =>
+  selectGeneralState(state).messages;

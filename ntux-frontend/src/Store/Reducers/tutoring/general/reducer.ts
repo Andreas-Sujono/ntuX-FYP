@@ -14,6 +14,8 @@ const initialState = initEntityState({
   allTutors: [],
   myRequests: [],
   myOffers: [],
+  reviews: [],
+  messages: [],
 });
 
 function reducer(state = initialState, action: AnyAction) {

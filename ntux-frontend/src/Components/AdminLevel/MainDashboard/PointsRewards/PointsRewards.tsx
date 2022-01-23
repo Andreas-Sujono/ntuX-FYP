@@ -20,6 +20,7 @@ import {
   getRewards,
   getRewardsRedeemed,
 } from 'Store/Actions/pointsRewards';
+import { getMyAccount } from 'Store/Actions/auth';
 
 export default function PointsRewards() {
   const [open, setOpen] = React.useState(false);
@@ -36,6 +37,7 @@ export default function PointsRewards() {
     dispatch(getRewards());
     dispatch(getRewardsRedeemed());
     dispatch(getAvatars());
+    dispatch(getMyAccount());
   }, []);
 
   const data = getLevelAndBadges(user.totalExps);

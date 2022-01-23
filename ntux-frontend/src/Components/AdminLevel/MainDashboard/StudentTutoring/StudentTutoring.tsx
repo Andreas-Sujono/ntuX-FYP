@@ -19,7 +19,11 @@ import {
   updateSelfTutor,
 } from 'Store/Actions/tutoring';
 import { useSelector } from 'react-redux';
-import { selectSelfTutorDetails } from 'Store/Selector/tutoring';
+import {
+  selectMyOffers,
+  selectMyRequests,
+  selectSelfTutorDetails,
+} from 'Store/Selector/tutoring';
 
 export default function StudentTutoring() {
   // const [open, setOpen] = React.useState(false);
@@ -28,6 +32,8 @@ export default function StudentTutoring() {
   const [firstLoad, setFirstLoad] = React.useState(false);
 
   const selfTutor = useSelector(selectSelfTutorDetails);
+  const myRequests = useSelector(selectMyRequests);
+  const myOffers = useSelector(selectMyOffers);
 
   const dispatch = useThunkDispatch();
 
@@ -70,7 +76,7 @@ export default function StudentTutoring() {
                       onClick={() => updateTutor(!isActive)}
                     />
                   }
-                  label="Is visible"
+                  label="Available as a tutor"
                 />
               </Grid>
             </Grid>
@@ -83,10 +89,10 @@ export default function StudentTutoring() {
           <TutorListBox />
         </Grid>
         <Grid item xs={12} lg={6}>
-          <RequestHistory />
+          <RequestHistory data={myRequests} />
         </Grid>
         <Grid item xs={12} lg={6}>
-          <OfferHistory />
+          <OfferHistory data={myOffers} />
         </Grid>
       </Grid>
     </Container>

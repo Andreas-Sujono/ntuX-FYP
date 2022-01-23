@@ -83,7 +83,7 @@ function DashboardContent() {
                 Total Announcements
               </Typography>
               <Typography variant="h3" component="h2">
-                {summary.totalAnnouncement || 0}
+                {summary.totalAnnouncements || 0}
               </Typography>
             </StyledBox>
           </Grid>

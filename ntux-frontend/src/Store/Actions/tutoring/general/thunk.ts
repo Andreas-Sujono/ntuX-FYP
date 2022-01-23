@@ -121,6 +121,28 @@ export const getMyOffers =
     }
   };
 
+export const createRequest =
+  (data: any, bypass = false) =>
+  async (dispatch: AppDispatch, getState: () => RootState) => {
+    try {
+      const res = await service.createRequest(data);
+      if (res.errorCode) {
+        dispatch(loadFailed());
+        sendErrorNotification(res.message, res.errorCode);
+        return {
+          result: false,
+          errorMessage: res.message,
+        };
+      }
+      dispatch(loadSuccess({}));
+      getMyRequests()(dispatch, getState);
+      return { result: true };
+    } catch (err) {
+      dispatch(loadFailed());
+      return { result: false };
+    }
+  };
+
 export const updateRequest =
   (data: any, bypass = false) =>
   async (dispatch: AppDispatch, getState: () => RootState) => {
@@ -170,6 +192,98 @@ export const updateSelfTutor =
   async (dispatch: AppDispatch, getState: () => RootState) => {
     try {
       const res = await service.updateSelfTutor(data);
+      if (res.errorCode) {
+        dispatch(loadFailed());
+        sendErrorNotification(res.message, res.errorCode);
+        return {
+          result: false,
+          errorMessage: res.message,
+        };
+      }
+      dispatch(loadSuccess({}));
+      return { result: true };
+    } catch (err) {
+      dispatch(loadFailed());
+      return { result: false };
+    }
+  };
+
+export const getAllReviews =
+  (tutorId: any, bypass = false) =>
+  async (dispatch: AppDispatch, getState: () => RootState) => {
+    try {
+      const res = await service.getAllReviews(tutorId);
+      if (res.errorCode) {
+        dispatch(loadFailed());
+        sendErrorNotification(res.message, res.errorCode);
+        return {
+          result: false,
+          errorMessage: res.message,
+        };
+      }
+      dispatch(
+        loadSuccess({
+          reviews: res,
+        }),
+      );
+      return { result: true };
+    } catch (err) {
+      dispatch(loadFailed());
+      return { result: false };
+    }
+  };
+
+export const createReview =
+  (data: any, bypass = false) =>
+  async (dispatch: AppDispatch, getState: () => RootState) => {
+    try {
+      const res = await service.createReview(data);
+      if (res.errorCode) {
+        dispatch(loadFailed());
+        sendErrorNotification(res.message, res.errorCode);
+        return {
+          result: false,
+          errorMessage: res.message,
+        };
+      }
+      dispatch(loadSuccess({}));
+      return { result: true };
+    } catch (err) {
+      dispatch(loadFailed());
+      return { result: false };
+    }
+  };
+
+export const getAllChats =
+  (tutorRequestId: any, bypass = false) =>
+  async (dispatch: AppDispatch, getState: () => RootState) => {
+    try {
+      const res = await service.getAllChats(tutorRequestId);
+      if (res.errorCode) {
+        dispatch(loadFailed());
+        sendErrorNotification(res.message, res.errorCode);
+        return {
+          result: false,
+          errorMessage: res.message,
+        };
+      }
+      dispatch(
+        loadSuccess({
+          messages: res,
+        }),
+      );
+      return { result: true };
+    } catch (err) {
+      dispatch(loadFailed());
+      return { result: false };
+    }
+  };
+
+export const createChat =
+  (data: any, bypass = false) =>
+  async (dispatch: AppDispatch, getState: () => RootState) => {
+    try {
+      const res = await service.createChat(data);
       if (res.errorCode) {
         dispatch(loadFailed());
         sendErrorNotification(res.message, res.errorCode);

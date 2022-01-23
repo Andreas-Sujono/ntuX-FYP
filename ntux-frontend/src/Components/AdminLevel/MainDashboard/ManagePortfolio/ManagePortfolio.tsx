@@ -36,7 +36,7 @@ function ManagePortfolio() {
 
   const isAndreasServer = window.location.origin.includes('andreassujono');
   const portfolioUrl = `${window.location.origin}/${
-    isAndreasServer ? 'ntux/' : ''
+    isAndreasServer ? '' : ''
   }#/portfolio/${userId}${hideNav ? '?hideNav=true&hideFooter=true' : ''}`;
 
   useEffect(() => {
