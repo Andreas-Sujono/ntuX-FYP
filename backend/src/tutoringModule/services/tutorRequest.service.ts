@@ -1,3 +1,4 @@
+import { WebsiteActivityService } from 'src/commonModule/services/websiteActivity.service';
 import {
   TutorRequest,
   TutorRequestStatus,
@@ -20,6 +21,7 @@ export class TutorRequestService extends TypeOrmCrudService<TutorRequest> {
     private tutorReviewRepo: Repository<TutorReview>,
     @InjectRepository(TutorMessage)
     private tutorMessageRepo: Repository<TutorMessage>,
+    private websiteActivityService: WebsiteActivityService,
   ) {
     super(repo);
   }
@@ -65,6 +67,15 @@ export class TutorRequestService extends TypeOrmCrudService<TutorRequest> {
         'You have already sent a request to this tutor',
       );
     }
+
+    //create activity
+    this.websiteActivityService.updateWebsiteActivity(
+      {
+        totalTutorRequest: 1,
+      },
+      userId,
+    );
+
     return this.repo.save(
       this.repo.create({
         user: userId as any,
@@ -102,7 +113,16 @@ export class TutorRequestService extends TypeOrmCrudService<TutorRequest> {
     });
   }
 
-  async updateOffer(dto: Partial<TutorRequest>) {
+  async updateOffer(dto: Partial<TutorRequest>, userId: number) {
+    if (dto.status === TutorRequestStatus.ACCEPTED) {
+      //create activity
+      this.websiteActivityService.updateWebsiteActivity(
+        {
+          totalTutorRequestAccepted: 1,
+        },
+        userId,
+      );
+    }
     return this.repo.update({ id: dto.id }, dto);
   }
 

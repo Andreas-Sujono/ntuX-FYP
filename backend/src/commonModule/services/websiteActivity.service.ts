@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import * as moment from 'moment-timezone';
 import { StudentWebsiteActivity } from '../entities/StudentWebsiteActivity.entity';
 import { WebsiteActivity } from '../entities/websiteActivity.entity';
+import { User } from 'src/authModule/entities/user.entity';
 
 @Injectable()
 export class WebsiteActivityService extends TypeOrmCrudService<WebsiteActivity> {
@@ -12,6 +13,8 @@ export class WebsiteActivityService extends TypeOrmCrudService<WebsiteActivity> 
     @InjectRepository(WebsiteActivity) repo,
     @InjectRepository(StudentWebsiteActivity)
     private studentWebsiteActivityRepo: Repository<StudentWebsiteActivity>,
+    @InjectRepository(User)
+    private userRepo: Repository<User>,
   ) {
     super(repo);
   }
@@ -161,8 +164,30 @@ export class WebsiteActivityService extends TypeOrmCrudService<WebsiteActivity> 
         );
     }
 
+    if (userId) {
+      if (dto.totalQuestion) {
+        this.updateExpsAndPoint(userId, 10, 10);
+      }
+      if (dto.totalAnswer) {
+        this.updateExpsAndPoint(userId, 20, 15);
+      }
+      if (dto.totalTutorRequest) {
+        this.updateExpsAndPoint(userId, 30, 20);
+      }
+      if (dto.totalTutorRequestAccepted) {
+        this.updateExpsAndPoint(userId, 30, 30);
+      }
+    }
+
     return {
       success: true,
     };
+  }
+
+  async updateExpsAndPoint(userId: number, exps: number, point: number) {
+    const user = await this.userRepo.findOne(userId);
+    user.totalExps += exps;
+    user.totalPoints += point;
+    await this.userRepo.save(user);
   }
 }

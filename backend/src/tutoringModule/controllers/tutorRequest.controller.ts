@@ -55,7 +55,7 @@ export class TutorRequestController implements CrudController<TutorRequest> {
 
   @Patch('offer')
   async updateOffer(@UserData('userId') userId: number, @Body() body: any) {
-    return this.service.updateOffer(body);
+    return this.service.updateOffer(body, userId);
   }
 
   @Get(':id/chat')

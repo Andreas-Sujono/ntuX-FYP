@@ -195,7 +195,7 @@ export class RewardRedeemedService extends TypeOrmCrudService<RewardRedeemed> {
       this.notificationService.createNotification(
         {
           eventType: EVENT_TYPE.REWARD_CHANGE_STATUS,
-          name: 'Your reward has been ' + dto.status,
+          name: 'Your reward status is changed to ' + dto.status,
           metadata: res,
           itemId: res.id,
           user: rewardDetail.user,

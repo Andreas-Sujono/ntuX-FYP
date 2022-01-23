@@ -167,7 +167,7 @@ export class StudentRegistrationService extends TypeOrmCrudService<StudentRegist
     this.notificationService.createNotification(
       {
         eventType: EVENT_TYPE.COURSE_REGISTRATION_CHANGE_STATUS,
-        name: 'Your registration is ' + newStatus,
+        name: 'Your registration status is changed to' + newStatus,
         metadata: res,
         itemId: res.id,
         user: studentRegistration.user,
