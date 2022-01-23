@@ -32,6 +32,7 @@ export default function TableComponent({
   data,
   onClickEdit,
   onClickDelete,
+  onClickStudent,
   user,
 }: any) {
   const [page, setPage] = React.useState(0);
@@ -77,7 +78,14 @@ export default function TableComponent({
                   <TableCell
                     component="th"
                     scope="row"
-                    sx={{ fontSize: '1rem' }}
+                    sx={{
+                      fontSize: '1rem',
+                      cursor: row.role === 'STUDENT' ? 'pointer' : 'default',
+                      color: row.role === 'STUDENT' ? '#C63044' : 'inherit',
+                    }}
+                    onClick={() => {
+                      if (row.role === 'STUDENT') return onClickStudent(row.id);
+                    }}
                   >
                     {row.fullName}
                   </TableCell>

@@ -226,7 +226,7 @@ function MainContainer({ children }: { children: React.ReactNode }) {
               <ListItemIcon>
                 <item.Icon />
               </ListItemIcon>
-              <ListItemText primary={item.name} />
+              <ListItemText primary={item.getName(user?.role) || item.name} />
             </ListItemButton>
           </DrawerList>
         ))}

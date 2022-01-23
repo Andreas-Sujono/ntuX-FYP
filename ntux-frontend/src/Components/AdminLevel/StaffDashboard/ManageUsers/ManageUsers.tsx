@@ -11,6 +11,7 @@ import { useThunkDispatch } from 'common/hooks';
 import { deleteUser } from 'Store/Actions/admin';
 import { toast } from 'react-toastify';
 import { selectUser } from 'Store/Selector/auth';
+import StudentDetail from '../CourseLevel/StudentDetail';
 import { Role } from 'Models/Auth';
 
 export default function ManageUsers() {
@@ -20,6 +21,7 @@ export default function ManageUsers() {
   const [searchResult, setSearchResult] = useState<any>([]);
   const [openModal, setOpenModal] = useState(false);
   const [chosenData, setChosenData] = useState(false);
+  const [chosenUserId, setChosenUserId] = useState(null);
   const user = useSelector(selectUser);
 
   const ref = useRef<any>(null);
@@ -55,6 +57,14 @@ export default function ManageUsers() {
   };
 
   const final = searchInput ? searchResult : allUsers;
+
+  if (chosenUserId)
+    return (
+      <StudentDetail
+        userId={chosenUserId}
+        onGoBack={() => setChosenUserId(null)}
+      />
+    );
 
   return (
     <Container maxWidth="lg" sx={{ margin: 0, mt: 4, mb: 8, ml: 0, mr: 1 }}>
@@ -103,6 +113,7 @@ export default function ManageUsers() {
           onClickEdit={onClickEdit}
           onClickDelete={onClickDelete}
           user={user}
+          onClickStudent={(id) => setChosenUserId(id)}
         />
       </Paper>
     </Container>

@@ -37,7 +37,7 @@ export const uploadFile =
       data.append('file', file);
       const res = await service.uploadFile(data);
 
-      return { result: true, res, url: res.url };
+      return { result: true, res, url: res.url || res.Location };
     } catch (err) {
       return { result: false };
     }

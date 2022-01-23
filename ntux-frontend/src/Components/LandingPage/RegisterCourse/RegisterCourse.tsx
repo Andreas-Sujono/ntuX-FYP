@@ -186,7 +186,7 @@ export default function RegisterCoursePage() {
 
             <Grid item xs={12} sx={{ mt: 2 }}>
               <Typography component="h3" variant="h6">
-                {!user ? 'New Account Details' : 'Please Login Again!'}
+                {!user ? 'New/Existing Account Details' : 'Please Login Again!'}
               </Typography>
               <Divider sx={{ mb: 2, mt: 0.5 }} />
             </Grid>

@@ -3,6 +3,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as csurf from 'csurf';
 import * as helmet from 'helmet';
 import { AppModule } from './app.module';
+import { urlencoded, json } from 'express';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });
@@ -20,7 +21,9 @@ async function bootstrap() {
   // app.use(csurf());
   app.use(helmet());
   app.setGlobalPrefix(`${process.env.PATH_PREFIX || ''}api/v1`);
+  app.use(json({ limit: '999mb' }));
+  app.use(urlencoded({ extended: true, limit: '999mb' }));
 
-  await app.listen(3000);
+  await app.listen(process.env.PORT || 3000);
 }
 bootstrap();

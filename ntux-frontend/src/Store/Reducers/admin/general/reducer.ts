@@ -17,6 +17,7 @@ const initialState = initEntityState({
     totalAnswers: 0,
     totalTutors: 0,
   },
+  courseSummary: {},
   allCourses: [],
   allUsers: [],
   allRewards: [],

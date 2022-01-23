@@ -7,8 +7,10 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
+  OneToMany,
 } from 'typeorm';
 import { Course } from 'src/courseModule/entities/course.entity';
+import { TutorMessage } from './tutorMessage.entity';
 
 export enum TutorRequestStatus {
   PENDING = 'PENDING',
@@ -30,6 +32,9 @@ export class TutorRequest {
 
   @ManyToOne(() => Tutor)
   course: Course; //who get the request
+
+  @OneToMany(() => TutorMessage, (tutorMessage) => tutorMessage.tutorRequest)
+  messages: TutorMessage[]; //who get the request
 
   @Column({ nullable: true })
   description: string;

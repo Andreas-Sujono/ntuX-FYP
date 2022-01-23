@@ -196,6 +196,8 @@ const EditablePage = ({
             imageUrl={block.imageUrl}
             videoUrl={block.videoUrl}
             isDisabled={isDisabled}
+            name={block.name}
+            type={block.type}
           />
         );
       })}

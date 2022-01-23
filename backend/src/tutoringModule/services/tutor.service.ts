@@ -3,13 +3,16 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TypeOrmCrudService } from '@nestjsx/crud-typeorm';
 import { CourseService } from 'src/courseModule/services/course.service';
-import { ILike } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import { Tutor } from '../entities/tutor.entity';
+import { TutorReview } from '../entities/tutorReview.entity';
 
 @Injectable()
 export class TutorService extends TypeOrmCrudService<Tutor> {
   constructor(
     @InjectRepository(Tutor) repo,
+    @InjectRepository(TutorReview)
+    private tutorReviewRepo: Repository<TutorReview>,
     private courseService: CourseService,
   ) {
     super(repo);
@@ -41,13 +44,13 @@ export class TutorService extends TypeOrmCrudService<Tutor> {
     const courseUsers = await this.courseService.getCompletedCourse(userId);
     const tutorNow = await this.repo.findOne({
       where: {
-        id: userId,
+        user: userId,
       },
       relations: ['courses'],
     });
 
     //not qualified as tutor
-    if (courseUsers.length)
+    if (!courseUsers.length)
       return {
         isTutor: false,
         courses: [],
@@ -58,7 +61,7 @@ export class TutorService extends TypeOrmCrudService<Tutor> {
         user: userId as any,
         isActive: false,
         courses: courseUsers
-          .filter((item) => item.course?.id)
+          .map((item) => item.course?.id)
           .map((item) => ({ id: item })) as any,
       });
       return {
@@ -71,7 +74,7 @@ export class TutorService extends TypeOrmCrudService<Tutor> {
     const res = await this.repo.save({
       ...tutorNow,
       courses: courseUsers
-        .filter((item) => item.course?.id)
+        .map((item) => item.course?.id)
         .map((item) => ({ id: item })) as any,
     });
 
@@ -80,5 +83,17 @@ export class TutorService extends TypeOrmCrudService<Tutor> {
       isTutor: true,
       courses: courseUsers.map((item) => item.course),
     };
+  }
+
+  async getAllReview(tutorId: number) {
+    return this.tutorReviewRepo.find({
+      where: {
+        tutor: tutorId,
+      },
+      relations: ['user', 'tutor'],
+      order: {
+        createdAt: 'DESC',
+      },
+    });
   }
 }

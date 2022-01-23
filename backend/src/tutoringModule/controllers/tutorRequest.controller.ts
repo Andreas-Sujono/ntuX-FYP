@@ -58,14 +58,26 @@ export class TutorRequestController implements CrudController<TutorRequest> {
     return this.service.updateOffer(body);
   }
 
-  @Get(':id/message')
-  async getMessages(@Param('id') id: number) {
-    return this.service.getMessageByRequestId(id);
+  @Get(':id/chat')
+  async getAllChats(@Param('id') tutorRequestId: number) {
+    return this.service.getAllChats(tutorRequestId);
   }
 
-  @Post('message')
-  async sendMessage(@UserData('userId') userId: number, @Body() body: any) {
-    body.sender = userId as any;
-    return this.service.sendMessage(body);
+  @Post(':id/chat')
+  async addChat(
+    @Param('id') tutorRequestId: number,
+    @Body() body: any,
+    @UserData('userId') userId: number,
+  ) {
+    return this.service.createChat(tutorRequestId, body, userId);
+  }
+
+  @Post(':id/review')
+  async addReview(
+    @Param('id') tutorRequestId: number,
+    @Body() body: any,
+    @UserData('userId') userId: number,
+  ) {
+    return this.service.createReview(tutorRequestId, body, userId);
   }
 }

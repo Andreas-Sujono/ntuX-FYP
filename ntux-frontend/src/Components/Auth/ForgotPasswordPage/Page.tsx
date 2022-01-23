@@ -29,6 +29,10 @@ import { useSelector } from 'react-redux';
 import { selectUserId, selectUserRole } from 'Store/Selector/auth';
 import { LoadingBar } from 'common/Components/LoadingBar/FullPageLoadingBar';
 
+const { PUBLIC_URL } = process.env;
+
+const bgImage = PUBLIC_URL + '/assets/LP/ntuBg.jpeg';
+
 export function Copyright(props: any) {
   return (
     <Typography
@@ -172,7 +176,7 @@ export default function ForgotPasswordPage() {
         sm={4}
         md={7}
         sx={{
-          backgroundImage: `url('https://c0.wallpaperflare.com/preview/669/547/646/building-architecture-dome-plant.jpg')`,
+          backgroundImage: `url('${bgImage}')`,
           backgroundRepeat: 'no-repeat',
           backgroundSize: 'cover',
           backgroundPosition: 'center',

@@ -169,4 +169,9 @@ export default class AdminService extends BaseService {
     const res = await this.patchRequest(`/reward-redeemed/${data.id}`, data);
     return res.data;
   };
+
+  getCourseSummary = async (courseId: number) => {
+    const res = await this.getRequest(`/courses/summary?courseId=${courseId}`);
+    return res.data;
+  };
 }

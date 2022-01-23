@@ -11,7 +11,7 @@ const TagSelectorMenu = ({
   handleSelection,
   useTags2,
 }) => {
-  const MENU_HEIGHT = useTags2 ? 100 : 180;
+  const MENU_HEIGHT = useTags2 ? 100 : 200;
   const allowedTags = React.useMemo(
     () =>
       useTags2
@@ -57,6 +57,16 @@ const TagSelectorMenu = ({
               id: 'video',
               tag: 'iframe',
               label: 'Embed youtube',
+            },
+            {
+              id: 'video',
+              tag: 'video',
+              label: 'Upload Video',
+            },
+            {
+              id: 'file',
+              tag: 'file',
+              label: 'Upload Other File',
             },
           ],
     [useTags2],

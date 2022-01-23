@@ -17,6 +17,6 @@ export class CommonController {
   @Public()
   @UseInterceptors(FileInterceptor('file'))
   async uploadFile(@UploadedFile() file: Express.Multer.File) {
-    return this.commonService.uploadFile(file);
+    return this.commonService.uploadFile(file, file.mimetype);
   }
 }

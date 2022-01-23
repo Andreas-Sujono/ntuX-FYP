@@ -21,6 +21,12 @@ export interface SidebarItem {
 
 const data: SidebarItem[] = [
   {
+    id: '0',
+    name: 'Course Dashboard',
+    path: routes.STAFF_COURSES.DASHBOARD,
+    Icon: DashboardIcon,
+  },
+  {
     id: '1',
     name: 'Manage Overview',
     path: routes.STAFF_COURSES.OVERVIEW,

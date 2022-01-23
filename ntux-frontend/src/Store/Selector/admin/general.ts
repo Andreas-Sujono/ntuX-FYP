@@ -52,3 +52,6 @@ export const selectAllRewardsRedeemed = (state: RootState) => {
 export const selectAllStudents = (state: RootState) => {
   return selectGeneralState(state).allStudents;
 };
+export const selectCourseSummary = (state: RootState) => {
+  return selectGeneralState(state).courseSummary;
+};

@@ -2,16 +2,22 @@ import {
   TutorRequest,
   TutorRequestStatus,
 } from './../entities/tutorRequest.entity';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TypeOrmCrudService } from '@nestjsx/crud-typeorm';
-import { TutorMessage } from '../entities/tutorMessage';
 import { Repository } from 'typeorm';
+import { TutorReview } from '../entities/tutorReview.entity';
+import { TutorMessage } from '../entities/tutorMessage.entity';
+import { Tutor } from '../entities/tutor.entity';
 
 @Injectable()
 export class TutorRequestService extends TypeOrmCrudService<TutorRequest> {
   constructor(
     @InjectRepository(TutorRequest) repo,
+    @InjectRepository(Tutor)
+    private tutorRepo: Repository<Tutor>,
+    @InjectRepository(TutorReview)
+    private tutorReviewRepo: Repository<TutorReview>,
     @InjectRepository(TutorMessage)
     private tutorMessageRepo: Repository<TutorMessage>,
   ) {
@@ -72,18 +78,64 @@ export class TutorRequestService extends TypeOrmCrudService<TutorRequest> {
     return this.repo.update({ id: dto.id }, dto);
   }
 
-  async sendMessage(dto: Partial<TutorMessage>) {
-    return this.tutorMessageRepo.save(this.tutorMessageRepo.create(dto));
-  }
-
-  async getMessageByRequestId(requestId: number) {
+  async getAllChats(tutorRequestId: number) {
     return this.tutorMessageRepo.find({
       where: {
-        tutorRequest: requestId,
+        tutorRequest: tutorRequestId,
       },
+      relations: ['tutor'],
       order: {
         createdAt: 'ASC',
       },
     });
+  }
+
+  async createChat(tutorRequestId: number, body: any, userId: number) {
+    return this.tutorMessageRepo.save(
+      this.tutorMessageRepo.create({
+        ...body,
+        tutorRequest: tutorRequestId as any,
+        user: userId as any,
+      }),
+    );
+  }
+
+  async createReview(tutorRequestId: number, body: any, userId: number) {
+    const existing = await this.tutorReviewRepo.findOne({
+      where: {
+        tutorRequest: tutorRequestId,
+        user: userId,
+      },
+    });
+
+    if (existing)
+      throw new BadRequestException('You have already reviewed this tutor');
+
+    const res = await this.tutorReviewRepo.save(
+      this.tutorReviewRepo.create({
+        ...body,
+        tutorRequest: tutorRequestId as any,
+        user: userId as any,
+      }),
+    );
+
+    //update review rating
+    this.updateTutorReview(body.tutor);
+
+    return res;
+  }
+
+  async updateTutorReview(tutorId: number) {
+    const allReviews = await this.tutorReviewRepo.find({
+      where: {
+        tutor: tutorId,
+      },
+    });
+    const sumRating = allReviews.reduce((acc, cur) => {
+      return acc + cur.rating;
+    }, 0);
+    const finalRating = sumRating / allReviews.length;
+
+    return this.tutorRepo.update({ id: tutorId }, { rating: finalRating });
   }
 }

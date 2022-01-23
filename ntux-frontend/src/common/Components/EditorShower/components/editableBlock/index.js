@@ -5,13 +5,14 @@ import React from 'react';
 import ContentEditable from 'react-contenteditable';
 import { Draggable } from 'react-beautiful-dnd';
 import { v4 as uuidv4 } from 'uuid';
-
+import Chip from '@mui/material/Chip';
+import AttachFileIcon from '@mui/icons-material/AttachFile';
 import styles from './styles.module.scss';
 import TagSelectorMenu from '../tagSelectorMenu';
 import ActionMenu from '../actionMenu';
 import DragHandleIcon from '../../images/draggable.svg';
 import { setCaretToEnd, getCaretCoordinates, getSelection } from '../../utils';
-import { createId } from '../../../../utils';
+import { createId, download } from '../../../../utils';
 
 const CMD_KEY = '/';
 
@@ -58,6 +59,8 @@ class EditableBlock extends React.Component {
         x: null,
         y: null,
       },
+      name: '',
+      type: '',
     };
   }
 
@@ -81,6 +84,8 @@ class EditableBlock extends React.Component {
         tag: this.props.tag,
         imageUrl: this.props.imageUrl,
         videoUrl: this.props.videoUrl,
+        name: this.props.name,
+        type: this.props.type,
       });
     }
     [].forEach.call(
@@ -125,6 +130,8 @@ class EditableBlock extends React.Component {
         tag: this.state.tag,
         imageUrl: this.state.imageUrl,
         videoUrl: this.state.videoUrl,
+        name: this.state.name,
+        type: this.state.type,
       });
     }
   }
@@ -407,32 +414,35 @@ class EditableBlock extends React.Component {
   render() {
     return (
       <div className={styles.draggable}>
-        {this.state.tag !== 'img' && this.state.tag !== 'iframe' && (
-          <ContentEditable
-            innerRef={this.contentEditable}
-            data-position={this.props.position}
-            data-tag={this.state.tag}
-            html={this.state.html}
-            onChange={this.handleChange}
-            onFocus={this.handleFocus}
-            onBlur={this.handleBlur}
-            onKeyDown={this.handleKeyDown}
-            onKeyUp={this.handleKeyUp}
-            onMouseUp={this.handleMouseUp}
-            tagName={this.state.tag}
-            className={[
-              styles.block,
-              this.state.isTyping ||
-              this.state.actionMenuOpen ||
-              this.state.tagSelectorMenuOpen
-                ? styles.blockSelected
-                : null,
-              this.state.placeholder ? styles.placeholder : null,
-              this.blockId,
-            ].join(' ')}
-            disabled={this.props.isDisabled}
-          />
-        )}
+        {this.state.tag !== 'img' &&
+          this.state.tag !== 'iframe' &&
+          this.state.tag !== 'video' &&
+          this.state.tag !== 'file' && (
+            <ContentEditable
+              innerRef={this.contentEditable}
+              data-position={this.props.position}
+              data-tag={this.state.tag}
+              html={this.state.html}
+              onChange={this.handleChange}
+              onFocus={this.handleFocus}
+              onBlur={this.handleBlur}
+              onKeyDown={this.handleKeyDown}
+              onKeyUp={this.handleKeyUp}
+              onMouseUp={this.handleMouseUp}
+              tagName={this.state.tag}
+              className={[
+                styles.block,
+                this.state.isTyping ||
+                this.state.actionMenuOpen ||
+                this.state.tagSelectorMenuOpen
+                  ? styles.blockSelected
+                  : null,
+                this.state.placeholder ? styles.placeholder : null,
+                this.blockId,
+              ].join(' ')}
+              disabled={this.props.isDisabled}
+            />
+          )}
         {this.state.tag === 'img' && (
           <div
             data-position={this.props.position}
@@ -509,6 +519,87 @@ class EditableBlock extends React.Component {
                   maxHeight: '800px',
                 }}
               ></iframe>
+            )}
+          </div>
+        )}
+
+        {this.state.tag === 'video' && (
+          <div
+            data-position={this.props.position}
+            data-tag={this.state.tag}
+            ref={this.contentEditable}
+            className={[
+              styles.iframe,
+              this.state.actionMenuOpen || this.state.tagSelectorMenuOpen
+                ? styles.blockSelected
+                : null,
+            ].join(' ')}
+          >
+            {/* <input
+              id={`${this.props.id}_fileInput`}
+              name={this.state.tag}
+              type="file"
+              onChange={this.handleImageUpload}
+              ref={(ref) => (this.videoInput = ref)}
+              hidden
+            /> */}
+            {!this.state.imageUrl && (
+              <label
+                htmlFor={`${this.props.id}_fileInput`}
+                className={styles.fileInputLabel}
+              >
+                No video Selected.
+              </label>
+            )}
+            {this.state.imageUrl && (
+              <video controls>
+                <source src={this.state.imageUrl} type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            )}
+          </div>
+        )}
+
+        {this.state.tag === 'file' && (
+          <div
+            data-position={this.props.position}
+            data-tag={this.state.tag}
+            ref={this.contentEditable}
+            className={[
+              styles.file,
+              this.state.actionMenuOpen || this.state.tagSelectorMenuOpen
+                ? styles.blockSelected
+                : null,
+            ].join(' ')}
+            style={{
+              display: 'inline-block',
+            }}
+          >
+            {/* <input
+              id={`${this.props.id}_fileInput`}
+              name={this.state.tag}
+              type="file"
+              onChange={this.handleImageUpload}
+              ref={(ref) => (this.otherFileInput = ref)}
+              hidden
+            /> */}
+            {!this.state.imageUrl && (
+              <label
+                htmlFor={`${this.props.id}_fileInput`}
+                className={styles.fileInputLabel}
+              >
+                No file Selected.
+              </label>
+            )}
+            {this.state.imageUrl && (
+              <Chip
+                icon={<AttachFileIcon />}
+                label={this.state.name}
+                onClick={() => {
+                  download(this.state.imageUrl, this.state.name);
+                }}
+                sx={{ ml: 1 }}
+              />
             )}
           </div>
         )}

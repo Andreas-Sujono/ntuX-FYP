@@ -24,7 +24,7 @@ import { getStudentSummary } from 'Store/Actions/admin/general/courseLevel.thunk
 import { useSelector } from 'react-redux';
 import { selectStudentSummaryByUserId } from 'Store/Selector/admin';
 
-export default function ManageStudents() {
+export default function ManageStudents({ userId: _userId, onGoBack }: any) {
   const history = useHistory();
   const dispatch = useThunkDispatch();
 
@@ -33,7 +33,7 @@ export default function ManageStudents() {
     match.params = { courseId: null };
 
   const courseId = match?.params?.courseId;
-  const userId = match?.params?.studentId;
+  const userId = _userId || match?.params?.studentId;
 
   const allData = useSelector(selectStudentSummaryByUserId) || {};
   const data = allData[userId] || [];
@@ -53,6 +53,7 @@ export default function ManageStudents() {
         <ListItemButton
           selected={false}
           onClick={() => {
+            if (onGoBack) return onGoBack();
             history.push(
               makePath(routes.STAFF_COURSES.MANAGE_STUDENTS, { courseId }),
             );

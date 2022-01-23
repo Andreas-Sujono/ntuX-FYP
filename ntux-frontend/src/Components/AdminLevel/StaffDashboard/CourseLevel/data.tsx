@@ -4,11 +4,20 @@ import { routes } from '../../../Routes';
 export const routeData = [
   {
     path: routes.STAFF_COURSES.BASE,
-    component: lazy(() => import('./ManageOverview')),
+    component: lazy(() => import('./Dashboard')),
     exact: true,
-    id: '1',
+    id: '0',
     details: {
-      title: 'Manage Overview',
+      title: 'Course Dashboard',
+    },
+  },
+  {
+    path: routes.STAFF_COURSES.BASE,
+    component: lazy(() => import('./Dashboard')),
+    exact: true,
+    id: '0',
+    details: {
+      title: 'Course Dashboard',
     },
   },
   {

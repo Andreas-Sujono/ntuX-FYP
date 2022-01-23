@@ -345,3 +345,28 @@ export const updateRewardRedeemed =
       return { result: false };
     }
   };
+
+export const getCourseSummary =
+  (courseId: any, bypass = false) =>
+  async (dispatch: AppDispatch, getState: () => RootState) => {
+    try {
+      const res = await service.getCourseSummary(courseId);
+      if (res.errorCode) {
+        dispatch(loadFailed());
+        sendErrorNotification(res.message, res.errorCode);
+        return {
+          result: false,
+          errorMessage: res.message,
+        };
+      }
+      dispatch(
+        loadSuccess({
+          courseSummary: res,
+        }),
+      );
+      return { result: true, res };
+    } catch (err) {
+      dispatch(loadFailed());
+      return { result: false };
+    }
+  };

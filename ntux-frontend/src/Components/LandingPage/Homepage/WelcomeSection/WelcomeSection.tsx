@@ -6,10 +6,14 @@ import { Carousel } from 'react-responsive-carousel';
 import { HashLink } from 'react-router-hash-link';
 import { Button } from '@mui/material';
 
+const { PUBLIC_URL } = process.env;
+
 const images = [
-  'https://cdni.iconscout.com/illustration/premium/thumb/young-people-doing-social-networking-in-internet-cafe-2706737-2266901.png',
-  'https://image.shutterstock.com/z/stock-vector-cloud-surrounded-by-abstract-computer-network-with-integrated-circles-and-icons-for-digital-283309469.jpg',
-  'https://www.kindpng.com/picc/m/403-4038581_technology-icon-png-transparent-png.png',
+  PUBLIC_URL + '/assets/LP/slide2.jpg',
+  PUBLIC_URL + '/assets/LP/slide1.png',
+  PUBLIC_URL + '/assets/LP/slide3.png',
+  // 'https://image.shutterstock.com/z/stock-vector-cloud-surrounded-by-abstract-computer-network-with-integrated-circles-and-icons-for-digital-283309469.jpg',
+  // 'https://www.kindpng.com/picc/m/403-4038581_technology-icon-png-transparent-png.png',
   // 'https://live.staticflickr.com/5476/11870998636_daf8d91bb5_c.jpg',
   // 'https://media.gettyimages.com/photos/dusk-elevation-of-learning-hub-with-lit-interiors-ntu-nanyang-picture-id929401118?s=612x612',
   // 'https://thumbs.dreamstime.com/b/inside-view-hive-learning-called-dim-sum-basket-building-nanyang-technological-university-ntu-singapore-62933890.jpg',

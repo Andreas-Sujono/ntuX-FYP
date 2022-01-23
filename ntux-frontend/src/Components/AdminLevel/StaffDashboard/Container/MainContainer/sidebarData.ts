@@ -5,6 +5,7 @@ import LoyaltyIcon from '@mui/icons-material/Loyalty';
 import SettingsIcon from '@mui/icons-material/Settings';
 import PeopleIcon from '@mui/icons-material/People';
 import ForumIcon from '@mui/icons-material/Forum';
+import { Role } from 'Models/Auth';
 
 export interface DropdownItem {
   id: string;
@@ -18,6 +19,7 @@ export interface SidebarItem {
   path: string;
   Icon: any;
   items?: DropdownItem[];
+  getName: any;
 }
 
 const data: SidebarItem[] = [
@@ -26,18 +28,22 @@ const data: SidebarItem[] = [
     name: 'Dashboard',
     path: routes.STAFF.BASE,
     Icon: DashboardIcon,
+    getName: (role) => (role === Role.ADMIN ? 'Dashboard' : 'Dashboard'),
   },
   {
     id: '2',
     name: 'Manage Courses',
     path: routes.STAFF.MANAGE_COURSES,
     Icon: SchoolIcon,
+    getName: (role) =>
+      role === Role.ADMIN ? 'Manage Courses' : 'View Courses',
   },
   {
     id: '3',
     name: 'Manage Users',
     path: routes.STAFF.MANAGE_USERS,
     Icon: PeopleIcon,
+    getName: (role) => (role === Role.ADMIN ? 'Manage Users' : 'View Users'),
   },
   // {
   //   id: '4',
@@ -50,12 +56,15 @@ const data: SidebarItem[] = [
     name: 'Manage Rewards',
     path: routes.STAFF.MANAGE_REWARDS,
     Icon: LoyaltyIcon,
+    getName: (role) =>
+      role === Role.ADMIN ? 'Manage Rewards' : 'View Rewards',
   },
   {
     id: '6',
     name: 'Settings',
     path: routes.STAFF.SETTINGS,
     Icon: SettingsIcon,
+    getName: (role) => (role === Role.ADMIN ? 'Settings' : 'Settings'),
   },
 ];
 

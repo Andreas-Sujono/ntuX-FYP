@@ -5,8 +5,8 @@ import { StorageService } from './storage.service';
 export class CommonService {
   constructor(private storageService: StorageService) {}
 
-  async uploadFile(file: any) {
-    const res = await this.storageService.uploadFile(file.buffer);
+  async uploadFile(file: any, type: string) {
+    const res = await this.storageService.uploadFile(file.buffer, type);
     return res;
   }
 }

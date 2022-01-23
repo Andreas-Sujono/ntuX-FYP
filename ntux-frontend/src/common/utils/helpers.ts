@@ -198,3 +198,15 @@ export const getLevelAndBadges = (exps: number) => {
       100 - ((nextLevelExp - exps) / (nextLevelExp - currentLevelMinExp)) * 100,
   };
 };
+
+export const download = (path, filename) => {
+  const element = document.createElement('a');
+  element.setAttribute('href', path);
+
+  element.style.display = 'none';
+  document.body.appendChild(element);
+
+  element.click();
+
+  document.body.removeChild(element);
+};

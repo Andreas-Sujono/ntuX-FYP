@@ -40,7 +40,11 @@ import { Reward } from 'Models/pointsRewards';
 import { selectUser } from 'Store/Selector/auth';
 import { useThunkDispatch } from 'common/hooks';
 import { toast } from 'react-toastify';
-import { buyAvatar, redeemReward } from 'Store/Actions/pointsRewards';
+import {
+  buyAvatar,
+  redeemReward,
+  useAvatar,
+} from 'Store/Actions/pointsRewards';
 
 // const HowToGetPointsData = [
 //   'Finish online course',
@@ -506,7 +510,16 @@ export const AvatarShop = () => {
                   Cost: {item.pointsRequired} pts
                 </div>
                 {myAvatarSet.has(item.id) ? (
-                  <DoneIcon sx={{ color: 'green' }} />
+                  <>
+                    <DoneIcon sx={{ color: 'green' }} />
+                    {user.currentAvatar?.id !== item.id && (
+                      <Button
+                        onClick={() => dispatch(useAvatar({ id: item.id }))}
+                      >
+                        Use Avatar
+                      </Button>
+                    )}
+                  </>
                 ) : (
                   <Button
                     onClick={() => onBuyAvatar(item)}

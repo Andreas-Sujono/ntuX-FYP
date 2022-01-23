@@ -248,10 +248,44 @@ export class CourseService extends TypeOrmCrudService<Course> {
     const res = await this.courseUserRepo.find({
       where: {
         user: userId as any,
-        'courseBatch.endDate': LessThan(new Date()),
+        // 'courseBatch.endDate': LessThan(new Date()),
       },
       relations: ['course', 'courseBatch'],
     });
+    console.log('res: ', res);
     return res;
+  }
+
+  async getCourseSummary(courseId: number) {
+    const [
+      totalUser,
+      admittedUser,
+      pendingUser,
+      totalAnnouncements,
+      totalBatch,
+    ] = await Promise.all([
+      this.courseContentRepo.query(`
+        select count(*) from student_registration where "courseId" = ${courseId}
+      `),
+      this.courseContentRepo.query(`
+        select count(*) from student_registration where "courseId" = ${courseId} and "status" = 'ADMITTED'
+      `),
+      this.courseContentRepo.query(`
+        select count(*) from student_registration where "courseId" = ${courseId} and "status" = 'PENDING'
+      `),
+      this.courseContentRepo.query(`
+        select count(*) from course_announcement where "courseId" = ${courseId}
+      `),
+      this.courseContentRepo.query(`
+        select count(*) from course_batch where "courseId" = ${courseId}
+      `),
+    ]);
+    return {
+      totalUser: totalUser[0].count,
+      admittedUser: admittedUser[0].count,
+      pendingUser: pendingUser[0].count,
+      totalAnnouncements: totalAnnouncements[0].count,
+      totalBatch: totalBatch[0].count,
+    };
   }
 }
