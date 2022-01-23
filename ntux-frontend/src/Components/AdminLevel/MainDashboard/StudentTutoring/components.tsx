@@ -16,6 +16,7 @@ import {
   IconButton,
   InputAdornment,
   Button,
+  Pagination,
 } from '@mui/material';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
@@ -24,36 +25,53 @@ import CardMedia from '@mui/material/CardMedia';
 import { green, red } from '@mui/material/colors';
 import SearchIcon from '@mui/icons-material/Search';
 import Grid from '@mui/material/Grid';
+import { selectUser } from 'Store/Selector/auth';
+import { useSelector } from 'react-redux';
+import { useThunkDispatch } from 'common/hooks';
+import { getAllTutors } from 'Store/Actions/tutoring';
+import { selectAllTutors } from 'Store/Selector/tutoring';
 
 const rows = [
   { id: 1, eventName: 'Finish lesson1', createdAt: new Date(), points: 10 },
   { id: 2, eventName: 'Finish lesson1', createdAt: new Date(), points: 10 },
 ];
 
-export function ProfileBox() {
+export function ProfileBox({ selfTutor }: any) {
+  const user = useSelector(selectUser);
   return (
     <Box style={{ width: '100%', maxWidth: '100%' }}>
       <Card sx={{ minWidth: 275, boxShadow: 0 }}>
         <CardContent sx={{ padding: 0 }}>
           <Avatar
-            alt="Andreas Sujono"
-            src="/static/images/avatar/1.jpg"
             sx={{
+              bgcolor: green[500],
               width: 80,
               height: 80,
               fontSize: '2.5rem',
-              bgcolor: green[500],
             }}
-          />
+            aria-label="recipe"
+            src={user.currentAvatar?.imageUrl || '#'}
+          >
+            {user.fullName.slice(0, 1).toUpperCase()}
+          </Avatar>
           <Typography variant="h6" component="div" sx={{ mt: 1 }}>
-            Andreas Sujono
+            {user.fullName}
           </Typography>
           <Typography sx={{ mb: 1.5 }} color="text.secondary">
-            You are qualified to be a tutor of:
-            <ul>
-              <li>EE4012: Approved</li>
-              <li>EE4413: Pending</li>
-            </ul>
+            {selfTutor.courses?.length ? (
+              <>
+                You are qualified to be a tutor of:
+                <ul>
+                  {selfTutor.courses.map((course) => (
+                    <li key={course.id}>
+                      {course.code}: {course.name}
+                    </li>
+                  ))}
+                </ul>
+              </>
+            ) : (
+              <span>You need to finish at least 1 course to be a tutor</span>
+            )}
           </Typography>
         </CardContent>
         <CardActions sx={{ padding: 0 }}></CardActions>
@@ -88,6 +106,31 @@ export function TopTutor() {
 }
 
 export const TutorListBox = () => {
+  const [page, setPage] = React.useState(1);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [searchInput, setSearchInput] = React.useState('');
+
+  const dispatch = useThunkDispatch();
+
+  const data = useSelector(selectAllTutors);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const ref = React.useRef<any>(null);
+
+  const onSearch = (value) => {
+    setSearchInput(value);
+
+    if (ref.current) clearTimeout(ref.current);
+
+    ref.current = setTimeout(async () => {
+      dispatch(getAllTutors(value));
+      ref.current = null;
+    }, 200);
+  };
+
   return (
     <Paper style={{ width: '100%', maxWidth: '100%' }} sx={{ p: 2 }}>
       <Typography
@@ -102,6 +145,8 @@ export const TutorListBox = () => {
         label="Search Tutors by Name or Course"
         id="fullWidth"
         sx={{ backgroundColor: 'white' }}
+        value={searchInput}
+        onChange={onSearch}
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
@@ -113,8 +158,8 @@ export const TutorListBox = () => {
         }}
       />
       <Grid container spacing={2} mt={2}>
-        {[1, 2, 3, 4, 5, 6].map((item) => (
-          <Grid item xs={12} md={4} lg={3} key={item}>
+        {data.map((item) => (
+          <Grid item xs={12} md={4} lg={3} key={item.id}>
             <CardHeader
               avatar={
                 <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
@@ -129,6 +174,14 @@ export const TutorListBox = () => {
           </Grid>
         ))}
       </Grid>
+      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+        <Pagination
+          count={Math.floor(data.length / rowsPerPage) + 1}
+          color="primary"
+          onChange={handleChangePage}
+          page={page}
+        />
+      </Box>
     </Paper>
   );
 };

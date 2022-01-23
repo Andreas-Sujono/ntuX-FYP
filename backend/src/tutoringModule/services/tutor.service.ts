@@ -34,7 +34,7 @@ export class TutorService extends TypeOrmCrudService<Tutor> {
   }
 
   async updateTutor(userId: number, dto: Partial<Tutor>) {
-    return this.repo.update({ id: userId }, dto);
+    return this.repo.update({ user: userId as any }, dto);
   }
 
   async checkSelfTutor(userId: number) {

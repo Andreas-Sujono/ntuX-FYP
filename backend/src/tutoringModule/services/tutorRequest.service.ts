@@ -5,10 +5,16 @@ import {
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TypeOrmCrudService } from '@nestjsx/crud-typeorm';
+import { TutorMessage } from '../entities/tutorMessage';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class TutorRequestService extends TypeOrmCrudService<TutorRequest> {
-  constructor(@InjectRepository(TutorRequest) repo) {
+  constructor(
+    @InjectRepository(TutorRequest) repo,
+    @InjectRepository(TutorMessage)
+    private tutorMessageRepo: Repository<TutorMessage>,
+  ) {
     super(repo);
   }
 
@@ -64,5 +70,20 @@ export class TutorRequestService extends TypeOrmCrudService<TutorRequest> {
 
   async updateOffer(dto: Partial<TutorRequest>) {
     return this.repo.update({ id: dto.id }, dto);
+  }
+
+  async sendMessage(dto: Partial<TutorMessage>) {
+    return this.tutorMessageRepo.save(this.tutorMessageRepo.create(dto));
+  }
+
+  async getMessageByRequestId(requestId: number) {
+    return this.tutorMessageRepo.find({
+      where: {
+        tutorRequest: requestId,
+      },
+      order: {
+        createdAt: 'ASC',
+      },
+    });
   }
 }
