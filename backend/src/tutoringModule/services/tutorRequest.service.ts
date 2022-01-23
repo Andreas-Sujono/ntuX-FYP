@@ -29,7 +29,13 @@ export class TutorRequestService extends TypeOrmCrudService<TutorRequest> {
       where: {
         user: userId,
       },
-      relations: ['tutor', 'course'],
+      relations: [
+        'tutor',
+        'course',
+        'tutor.user',
+        'tutor.user.currentAvatar',
+        'messages',
+      ],
       order: {
         createdAt: 'DESC',
       },
@@ -43,8 +49,21 @@ export class TutorRequestService extends TypeOrmCrudService<TutorRequest> {
         status: TutorRequestStatus.PENDING,
       },
     });
+
+    const exsitingPendingWithTutor = await this.repo.findOne({
+      where: {
+        user: userId,
+        status: TutorRequestStatus.PENDING,
+        tutor: dto.tutor,
+      },
+    });
     if (pendingRequest.length >= 5) {
       throw new Error('You can only have 5 pending request at one time');
+    }
+    if (exsitingPendingWithTutor) {
+      throw new BadRequestException(
+        'You have already sent a request to this tutor',
+      );
     }
     return this.repo.save(
       this.repo.create({
@@ -65,9 +84,18 @@ export class TutorRequestService extends TypeOrmCrudService<TutorRequest> {
   async getMyOffer(userId: number) {
     return this.repo.find({
       where: {
-        tutor: userId,
+        tutor: {
+          user: userId,
+        },
       },
-      relations: ['tutor', 'course'],
+      relations: [
+        'tutor',
+        'course',
+        'tutor.user',
+        'tutor.user.currentAvatar',
+        'user',
+        'messages',
+      ],
       order: {
         createdAt: 'DESC',
       },

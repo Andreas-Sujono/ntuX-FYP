@@ -40,8 +40,11 @@ export class TutorController implements CrudController<Tutor> {
   constructor(public service: TutorService) {}
 
   @Override()
-  async getMany(@Query('query') query: string) {
-    return this.service.searchTutor(query);
+  async getMany(
+    @Query('query') query: string,
+    @UserData('userId') userId: number,
+  ) {
+    return this.service.searchTutor(query, userId);
   }
 
   @Override()

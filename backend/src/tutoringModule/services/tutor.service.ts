@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TypeOrmCrudService } from '@nestjsx/crud-typeorm';
 import { CourseService } from 'src/courseModule/services/course.service';
-import { ILike, Repository } from 'typeorm';
+import { ILike, Not, Repository } from 'typeorm';
 import { Tutor } from '../entities/tutor.entity';
 import { TutorReview } from '../entities/tutorReview.entity';
 
@@ -18,10 +18,11 @@ export class TutorService extends TypeOrmCrudService<Tutor> {
     super(repo);
   }
 
-  async searchTutor(query: any) {
+  async searchTutor(query: any, userId: number) {
     const res = await this.repo.find({
       where: {
         user: {
+          id: Not(userId),
           fullName: ILike(`%${query}%`),
           role: UserRole.STUDENT,
         },
@@ -29,7 +30,7 @@ export class TutorService extends TypeOrmCrudService<Tutor> {
         // 'user.role': UserRole.STUDENT,
         isActive: true,
       },
-      relations: ['user', 'courses'],
+      relations: ['user', 'courses', 'user.currentAvatar'],
     });
     res.forEach((item) => {
       delete item.user.confirmationCode;
