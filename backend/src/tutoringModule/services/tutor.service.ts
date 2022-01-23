@@ -21,8 +21,12 @@ export class TutorService extends TypeOrmCrudService<Tutor> {
   async searchTutor(query: any) {
     const res = await this.repo.find({
       where: {
-        'user.fullName': ILike(`%${query}%`),
-        'user.role': UserRole.STUDENT,
+        user: {
+          fullName: ILike(`%${query}%`),
+          role: UserRole.STUDENT,
+        },
+        // 'user.fullName': ILike(`%${query}%`),
+        // 'user.role': UserRole.STUDENT,
         isActive: true,
       },
       relations: ['user', 'courses'],
