@@ -11,6 +11,7 @@ import {
 } from 'typeorm';
 import { Course } from 'src/courseModule/entities/course.entity';
 import { TutorMessage } from './tutorMessage.entity';
+import { TutorReview } from './tutorReview.entity';
 
 export enum TutorRequestStatus {
   PENDING = 'PENDING',
@@ -35,6 +36,9 @@ export class TutorRequest {
 
   @OneToMany(() => TutorMessage, (tutorMessage) => tutorMessage.tutorRequest)
   messages: TutorMessage[]; //who get the request
+
+  @OneToMany(() => TutorReview, (tutorReview) => tutorReview.tutorRequest)
+  reviews: TutorReview[]; //who get the request
 
   @Column({ nullable: true })
   description: string;

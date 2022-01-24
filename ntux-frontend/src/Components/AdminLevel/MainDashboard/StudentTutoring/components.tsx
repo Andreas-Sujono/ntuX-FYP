@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -33,13 +33,20 @@ import Grid from '@mui/material/Grid';
 import { selectUser } from 'Store/Selector/auth';
 import { useSelector } from 'react-redux';
 import { useThunkDispatch } from 'common/hooks';
-import { createRequest, getAllTutors } from 'Store/Actions/tutoring';
+import {
+  createRequest,
+  getAllReviews,
+  getAllTutors,
+  updateOffer,
+  updateRequest,
+} from 'Store/Actions/tutoring';
 import { selectAllTutors } from 'Store/Selector/tutoring';
 import { getLevelAndBadges, makePath } from 'common/utils';
 import { LinearProgressWithLabel } from '../MyCourses/Styles';
 import { toast } from 'react-toastify';
 import { routes } from 'Components/Routes';
 import { useHistory } from 'react-router-dom';
+import { GiveReviewModal } from './Review';
 
 const rows = [
   { id: 1, eventName: 'Finish lesson1', createdAt: new Date(), points: 10 },
@@ -222,7 +229,11 @@ export const TutorListBox = () => {
 
 export const RequestHistory = ({ data }: any) => {
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [open, setOpen] = React.useState(false);
+  const [modalData, setModalData] = React.useState<any>(null);
+
+  const dispatch = useThunkDispatch();
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -233,8 +244,22 @@ export const RequestHistory = ({ data }: any) => {
     setPage(0);
   };
 
+  const onCancel = (id) => {
+    const confirm = window.confirm(
+      'Are you sure you want to cancel this request?',
+    );
+    if (!confirm) return;
+    dispatch(
+      updateRequest({
+        id,
+        status: 'CANCELLED',
+      }),
+    );
+  };
+
   return (
     <TableContainer component={Paper}>
+      <GiveReviewModal data={modalData} open={open} setOpen={setOpen} />
       <Typography variant="h6" component="div" sx={{ mt: 2, ml: 2 }}>
         Tutor Request:
       </Typography>
@@ -260,13 +285,41 @@ export const RequestHistory = ({ data }: any) => {
                   {row.tutor?.user?.fullName}
                 </TableCell>
                 <TableCell align="left">{row.description}</TableCell>
-                <TableCell align="left">{row.status}</TableCell>
+                <TableCell
+                  align="left"
+                  sx={{
+                    color:
+                      row.status === 'PENDING'
+                        ? '#ffc107'
+                        : row.status === 'CANCELLED'
+                        ? 'red'
+                        : '#28a745',
+                  }}
+                >
+                  {row.status}
+                </TableCell>
                 <TableCell align="left">
                   {moment(row.createdAt).format('DD/MMM/YYYY')}
                 </TableCell>
                 <TableCell align="left">
-                  <Button>Messages</Button>
-                  <Button>Cancel</Button>
+                  {/* <Button>Messages</Button> */}
+                  {row.status === 'PENDING' && (
+                    <Button onClick={() => onCancel(row.id)}>Cancel</Button>
+                  )}
+                  {row.status === 'APPROVED' && (
+                    <>
+                      {!row?.reviews?.length && (
+                        <Button
+                          onClick={() => {
+                            setModalData(row);
+                            setOpen(true);
+                          }}
+                        >
+                          Give Review
+                        </Button>
+                      )}
+                    </>
+                  )}
                 </TableCell>
               </TableRow>
             ))}
@@ -287,7 +340,8 @@ export const RequestHistory = ({ data }: any) => {
 
 export const OfferHistory = ({ data }: any) => {
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const dispatch = useThunkDispatch();
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -296,6 +350,32 @@ export const OfferHistory = ({ data }: any) => {
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
+  };
+
+  const onReject = (id) => {
+    const confirm = window.confirm(
+      'Are you sure you want to reject this offer?',
+    );
+    if (!confirm) return;
+    dispatch(
+      updateOffer({
+        id,
+        status: 'REJECTED',
+      }),
+    );
+  };
+
+  const onApprove = (id) => {
+    const confirm = window.confirm(
+      'Are you sure you want to approve this offer?',
+    );
+    if (!confirm) return;
+    dispatch(
+      updateOffer({
+        id,
+        status: 'APPROVED',
+      }),
+    );
   };
   return (
     <TableContainer component={Paper}>
@@ -324,14 +404,37 @@ export const OfferHistory = ({ data }: any) => {
                   {row.user?.fullName}
                 </TableCell>
                 <TableCell align="left">{row.description}</TableCell>
-                <TableCell align="left">{row.status}</TableCell>
+                <TableCell
+                  align="left"
+                  sx={{
+                    color:
+                      row.status === 'PENDING'
+                        ? '#ffc107'
+                        : row.status === 'REJECTED'
+                        ? 'red'
+                        : '#28a745',
+                  }}
+                >
+                  {row.status}
+                </TableCell>
                 <TableCell align="left">
                   {moment(row.createdAt).format('DD/MMM/YYYY')}
                 </TableCell>
                 <TableCell align="left">
-                  <Button>Messages</Button>
-                  <Button>Reject</Button>
-                  <Button>Approve</Button>
+                  {/* <Button>Messages</Button> */}
+                  {row.status === 'PENDING' && (
+                    <>
+                      <Button onClick={() => onReject(row.id)}>Reject</Button>
+                      <Button onClick={() => onApprove(row.id)}>Approve</Button>
+                    </>
+                  )}
+                  {/* {row.status === 'APPROVED' && (
+                    <>
+                      <Button onClick={() => onReject(row.id)}>
+                        Give Review
+                      </Button>
+                    </>
+                  )} */}
                 </TableCell>
               </TableRow>
             ))}
@@ -350,101 +453,17 @@ export const OfferHistory = ({ data }: any) => {
   );
 };
 
-export const RequestBeATutorModal = ({ open, setOpen, data }: any) => {
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-  return (
-    <Modal
-      open={open}
-      onClose={handleClose}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
-    >
-      <Box
-        sx={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          width: 400,
-          bgcolor: 'background.paper',
-          border: '0',
-          boxShadow: 24,
-        }}
-      >
-        <Card sx={{ maxWidth: '400px' }}>
-          <CardMedia
-            component="img"
-            height="140"
-            image="https://previews.123rf.com/images/ganpanjaneedesign/ganpanjaneedesign1604/ganpanjaneedesign160400045/56067507-red-gift-voucher-coupon-design-ticket-banner-cards-polygon-background.jpg"
-            alt="green iguana"
-          />
-          <CardContent>
-            <Typography gutterBottom variant="h6" component="div">
-              Voucher 20$
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Lizards are a widespread group of squamate reptiles, with over
-              6,000 species, ranging across all continents except Antarctica
-            </Typography>
-          </CardContent>
-          <CardActions></CardActions>
-        </Card>
-      </Box>
-    </Modal>
-  );
-};
-
-export const CreateRequestModal = ({ open, setOpen, data }: any) => {
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-  return (
-    <Modal
-      open={open}
-      onClose={handleClose}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
-    >
-      <Box
-        sx={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          width: 400,
-          bgcolor: 'background.paper',
-          border: '0',
-          boxShadow: 24,
-        }}
-      >
-        <Card sx={{ maxWidth: '400px' }}>
-          <CardMedia
-            component="img"
-            height="140"
-            image="https://previews.123rf.com/images/ganpanjaneedesign/ganpanjaneedesign1604/ganpanjaneedesign160400045/56067507-red-gift-voucher-coupon-design-ticket-banner-cards-polygon-background.jpg"
-            alt="green iguana"
-          />
-          <CardContent>
-            <Typography gutterBottom variant="h6" component="div">
-              Voucher 20$
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Lizards are a widespread group of squamate reptiles, with over
-              6,000 species, ranging across all continents except Antarctica
-            </Typography>
-          </CardContent>
-          <CardActions></CardActions>
-        </Card>
-      </Box>
-    </Modal>
-  );
-};
-
-export const TutorDetailsModal = ({ open, setOpen, data }: any) => {
+export const TutorDetailsModal = ({
+  open,
+  setOpen,
+  data,
+  enableCreateRequest = true,
+}: any) => {
   data = data || {};
 
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState<any>({});
+  const [reviews, setReviews] = useState<any>([]);
 
   const dispatch = useThunkDispatch();
   const history = useHistory();
@@ -479,6 +498,15 @@ export const TutorDetailsModal = ({ open, setOpen, data }: any) => {
     console.log('submitted');
   };
 
+  useEffect(() => {
+    if (data?.id) initializeReviews();
+  }, [data?.id]);
+
+  const initializeReviews = async () => {
+    const res = await dispatch(getAllReviews(data?.id));
+    setReviews(res.data || []);
+  };
+
   if (!data) return null;
 
   const levelData = getLevelAndBadges(data?.user?.totalExps);
@@ -495,11 +523,15 @@ export const TutorDetailsModal = ({ open, setOpen, data }: any) => {
           top: '50%',
           left: '50%',
           transform: 'translate(-50%, -50%)',
-          width: 600,
+          width: '90%',
+          maxWidth: 600,
           bgcolor: 'background.paper',
           border: '0',
           boxShadow: 24,
           p: 3,
+          overflowY: 'auto',
+          overflowX: 'hidden',
+          maxHeight: '80vh',
         }}
       >
         <Grid container spacing={2}>
@@ -574,44 +606,105 @@ export const TutorDetailsModal = ({ open, setOpen, data }: any) => {
           </Grid>
         </Grid>
 
-        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 2 }}>
-          <Grid
-            container
-            spacing={{
-              xs: 2,
-              md: 2,
-            }}
-          >
-            <Grid item xs={12} sm={12}>
-              <TextField
-                name="description"
-                required
+        {enableCreateRequest && (
+          <>
+            <Box
+              component="form"
+              noValidate
+              onSubmit={handleSubmit}
+              sx={{ mt: 2 }}
+            >
+              <Grid
+                container
+                spacing={{
+                  xs: 2,
+                  md: 2,
+                }}
+              >
+                <Grid item xs={12} sm={12}>
+                  <TextField
+                    name="description"
+                    required
+                    fullWidth
+                    id="description"
+                    label="Description"
+                    placeholder="Hello, I want to ask you to help me with course EE4013"
+                    value={formData.description || ''}
+                    onChange={onUpdateFormData}
+                    multiline
+                    rows={5}
+                  />
+                </Grid>
+              </Grid>
+              <Button
+                type="submit"
                 fullWidth
-                id="description"
-                label="Description"
-                placeholder="Hello, I want to ask you to help me with course EE4013"
-                value={formData.description || ''}
-                onChange={onUpdateFormData}
-                multiline
-                rows={5}
-              />
-            </Grid>
-          </Grid>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
-            disabled={loading}
-          >
-            Create Request
-          </Button>
-        </Box>
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+                disabled={loading}
+              >
+                Create Request
+              </Button>
+            </Box>
+          </>
+        )}
 
-        <Divider sx={{ mb: 1, mt: 0.5 }} />
-        <Typography variant="h6" component="div" sx={{ mt: 1 }}>
-          Reviews ({data?.reviews?.length || 0})
+        <Divider sx={{ mb: 1, mt: 1 }} />
+        <Typography variant="h6" component="div" sx={{ mt: 2, mb: 2 }}>
+          Reviews ({reviews?.length || 0})
         </Typography>
+
+        <Grid
+          container
+          spacing={{
+            xs: 2,
+            md: 2,
+            mb: 3,
+          }}
+        >
+          {reviews.map((item) => (
+            <Grid item xs={12} sm={12} key={item.id}>
+              <Paper sx={{ p: 1 }}>
+                <Grid container spacing={1.5}>
+                  <Grid item xs={12} md={7}>
+                    <Typography variant="body1" component="div" sx={{ mt: 1 }}>
+                      {item.review}
+                    </Typography>
+                  </Grid>
+
+                  <Grid item xs={12} md={5}>
+                    <CardHeader
+                      avatar={
+                        <Avatar
+                          sx={{
+                            bgcolor: green[500],
+                            width: 30,
+                            height: 30,
+                            fontSize: '0.9rem',
+                          }}
+                          aria-label="recipe"
+                        >
+                          {item.user.fullName?.slice(0, 1)?.toUpperCase()}
+                        </Avatar>
+                      }
+                      title={item.user?.fullName}
+                      sx={{
+                        p: 0,
+                      }}
+                    />
+
+                    <Rating
+                      name="half-rating-read"
+                      defaultValue={item.rating}
+                      precision={0.5}
+                      readOnly
+                    />
+                  </Grid>
+                </Grid>
+              </Paper>
+            </Grid>
+          ))}
+        </Grid>
       </Box>
     </Modal>
   );

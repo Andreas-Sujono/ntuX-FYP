@@ -226,7 +226,7 @@ export const getAllReviews =
           reviews: res,
         }),
       );
-      return { result: true };
+      return { result: true, data: res };
     } catch (err) {
       dispatch(loadFailed());
       return { result: false };

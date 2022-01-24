@@ -95,7 +95,7 @@ export class TutorService extends TypeOrmCrudService<Tutor> {
       where: {
         tutor: tutorId,
       },
-      relations: ['user', 'tutor'],
+      relations: ['user', 'tutor', 'user.currentAvatar'],
       order: {
         createdAt: 'DESC',
       },

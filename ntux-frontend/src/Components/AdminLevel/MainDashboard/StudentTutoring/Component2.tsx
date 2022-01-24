@@ -67,7 +67,7 @@ export function ChatBox({ tutorRequestId }: any) {
   );
 }
 
-const styles = {
+const styles: any = {
   messageRow: {
     display: 'flex',
   },
@@ -187,11 +187,11 @@ export const MessageLeft = ({ data }: any) => {
         <Avatar alt={displayName} sx={styles.orange} src={photoURL}></Avatar>
         <div>
           <div style={styles.displayName}>{displayName}</div>
-          <div style={styles.messageBlue}>
+          <div style={styles.messageBlue as any}>
             <div>
               <p style={styles.messageContent}>{message}</p>
             </div>
-            <div style={styles.messageTimeStampRight}>{timestamp}</div>
+            <div style={styles.messageTimeStampRight as any}>{timestamp}</div>
           </div>
         </div>
       </div>

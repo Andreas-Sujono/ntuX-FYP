@@ -10,6 +10,8 @@ import { Repository } from 'typeorm';
 import { TutorReview } from '../entities/tutorReview.entity';
 import { TutorMessage } from '../entities/tutorMessage.entity';
 import { Tutor } from '../entities/tutor.entity';
+import { NotificationService } from 'src/commonModule/services/notification.service';
+import { EVENT_TYPE } from 'src/commonModule/entities/notification.entity';
 
 @Injectable()
 export class TutorRequestService extends TypeOrmCrudService<TutorRequest> {
@@ -22,6 +24,7 @@ export class TutorRequestService extends TypeOrmCrudService<TutorRequest> {
     @InjectRepository(TutorMessage)
     private tutorMessageRepo: Repository<TutorMessage>,
     private websiteActivityService: WebsiteActivityService,
+    private notificationService: NotificationService,
   ) {
     super(repo);
   }
@@ -37,6 +40,7 @@ export class TutorRequestService extends TypeOrmCrudService<TutorRequest> {
         'tutor.user',
         'tutor.user.currentAvatar',
         'messages',
+        'reviews',
       ],
       order: {
         createdAt: 'DESC',
@@ -68,15 +72,7 @@ export class TutorRequestService extends TypeOrmCrudService<TutorRequest> {
       );
     }
 
-    //create activity
-    this.websiteActivityService.updateWebsiteActivity(
-      {
-        totalTutorRequest: 1,
-      },
-      userId,
-    );
-
-    return this.repo.save(
+    const res = await this.repo.save(
       this.repo.create({
         user: userId as any,
         tutor: dto.tutor,
@@ -86,10 +82,49 @@ export class TutorRequestService extends TypeOrmCrudService<TutorRequest> {
         ...dto,
       }),
     );
+
+    //create notif
+    this.notificationService.createNotification(
+      {
+        eventType: EVENT_TYPE.TUTOR_GOT_NEW_OFFER,
+        name: 'You got a new tutor request',
+        metadata: res,
+        itemId: res.id,
+        user: dto.tutor as any,
+      },
+      dto.tutor as any,
+    );
+
+    //create activity
+    this.websiteActivityService.updateWebsiteActivity(
+      {
+        totalTutorRequest: 1,
+      },
+      userId,
+    );
+
+    return res;
   }
 
   async updateRequest(dto: Partial<TutorRequest>) {
-    return this.repo.update({ id: dto.id }, dto);
+    const existing = await this.repo.findOne({
+      where: { id: dto.id },
+      relations: ['tutor', 'tutor.user'],
+    });
+    const res = await this.repo.update({ id: dto.id }, dto);
+
+    //create notif
+    this.notificationService.createNotification(
+      {
+        eventType: EVENT_TYPE.TUTOR_OFFER_STATUS_CHANGED,
+        name: 'Your tutor request has been ' + dto.status,
+        metadata: res,
+        itemId: res.raw[0].id,
+        user: existing.tutor.user.id as any,
+      },
+      existing.tutor.user.id,
+    );
+    return res;
   }
 
   async getMyOffer(userId: number) {
@@ -123,7 +158,25 @@ export class TutorRequestService extends TypeOrmCrudService<TutorRequest> {
         userId,
       );
     }
-    return this.repo.update({ id: dto.id }, dto);
+
+    const existing = await this.repo.findOne({
+      where: { id: dto.id },
+      relations: ['user'],
+    });
+    const res = await this.repo.update({ id: dto.id }, dto);
+
+    //create notif
+    this.notificationService.createNotification(
+      {
+        eventType: EVENT_TYPE.TUTOR_REQUEST_STATUS_CHANGED,
+        name: 'Your tutor request has been ' + dto.status,
+        metadata: res,
+        itemId: res.raw[0].id,
+        user: existing.user.id as any,
+      },
+      existing.user.id,
+    );
+    return res;
   }
 
   async getAllChats(tutorRequestId: number) {

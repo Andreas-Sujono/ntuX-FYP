@@ -21,10 +21,10 @@ export class TutorReview {
   @ManyToOne(() => User)
   user: User;
 
-  @ManyToOne(() => TutorRequest)
+  @ManyToOne(() => TutorRequest, (tutorRequest) => tutorRequest.reviews)
   tutorRequest: TutorRequest;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, type: 'double' })
   rating: number;
 
   @Column({ nullable: true })
