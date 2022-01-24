@@ -201,7 +201,11 @@ export class TutorRequestService extends TypeOrmCrudService<TutorRequest> {
     );
   }
 
-  async createReview(tutorRequestId: number, body: any, userId: number) {
+  async createReview(
+    tutorRequestId: number,
+    body: Partial<TutorReview>,
+    userId: number,
+  ) {
     const existing = await this.tutorReviewRepo.findOne({
       where: {
         tutorRequest: tutorRequestId,
@@ -221,7 +225,7 @@ export class TutorRequestService extends TypeOrmCrudService<TutorRequest> {
     );
 
     //update review rating
-    this.updateTutorReview(body.tutor);
+    await this.updateTutorReview(body.tutor as any);
 
     return res;
   }

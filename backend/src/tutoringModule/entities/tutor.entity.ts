@@ -33,7 +33,7 @@ export class Tutor {
   @Column({ nullable: true, default: true })
   isActive: boolean;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, type: 'float' })
   rating: number;
 
   @Column({ nullable: true, default: 0 })

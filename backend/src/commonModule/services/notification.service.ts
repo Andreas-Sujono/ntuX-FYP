@@ -85,8 +85,9 @@ export class NotificationService extends TypeOrmCrudService<Notification> {
       pageRedirect = PAGE_REDIRECT.ADMIN_REGISTRATION;
     if (
       dto.eventType === EVENT_TYPE.TUTOR_GOT_MESSAGE ||
-      dto.eventType === EVENT_TYPE.TUTOR_GOT_NEW_REQUEST ||
-      dto.eventType === EVENT_TYPE.TUTOR_GOT_NEW_OFFER
+      dto.eventType === EVENT_TYPE.TUTOR_GOT_NEW_OFFER ||
+      dto.eventType === EVENT_TYPE.TUTOR_REQUEST_STATUS_CHANGED ||
+      dto.eventType === EVENT_TYPE.TUTOR_OFFER_STATUS_CHANGED
     )
       pageRedirect = PAGE_REDIRECT.STUDENT_TUTOR;
     if (dto.eventType === EVENT_TYPE.COURSE_REGISTRATION_CHANGE_STATUS)

@@ -24,7 +24,7 @@ export class TutorReview {
   @ManyToOne(() => TutorRequest, (tutorRequest) => tutorRequest.reviews)
   tutorRequest: TutorRequest;
 
-  @Column({ nullable: true, type: 'double' })
+  @Column({ nullable: true, type: 'float' })
   rating: number;
 
   @Column({ nullable: true })
