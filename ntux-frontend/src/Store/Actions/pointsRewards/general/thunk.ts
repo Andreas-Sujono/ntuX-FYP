@@ -1,11 +1,13 @@
 import { getMyAccount } from 'Store/Actions/auth';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import axios from 'axios';
-import GeneralService from '../../../Services/pointsRewards/general';
+import GeneralService, {
+  TaskType,
+} from '../../../Services/pointsRewards/general';
 import { AppDispatch, RootState } from '../../../Store';
 import { loadSuccess, loadFailed } from './general';
 import { Id, User } from 'Models/Auth';
-import { selectUserId } from 'Store/Selector/auth';
+import { selectUser, selectUserId } from 'Store/Selector/auth';
 import { selectIsActivityAdded } from 'Store/Selector/pointsRewards';
 import { toast } from 'react-toastify';
 
@@ -256,6 +258,27 @@ export const redeemReward =
       dispatch(loadSuccess({}));
       getRewardsRedeemed()(dispatch, getState);
       getMyAccount()(dispatch, getState);
+      return { result: true };
+    } catch (err) {
+      return { result: false };
+    }
+  };
+
+/**
+   * 
+   * @param taskType 
+   * @param bypass 
+   * @returns 
+   * task
+getPoints
+getExps
+   */
+export const checkGetPoint =
+  (taskType: TaskType, bypass = false) =>
+  async (dispatch: AppDispatch, getState: () => RootState) => {
+    try {
+      const user = selectUser(getState());
+      const res = await service.checkGetPoint(taskType);
       return { result: true };
     } catch (err) {
       return { result: false };
