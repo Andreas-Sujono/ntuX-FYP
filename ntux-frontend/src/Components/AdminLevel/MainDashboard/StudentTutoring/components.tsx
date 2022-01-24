@@ -54,9 +54,21 @@ const rows = [
 ];
 
 export function ProfileBox({ selfTutor }: any) {
+  const [open, setOpen] = React.useState(false);
+  const [modalData, setModalData] = React.useState<any>(null);
+
   const user = useSelector(selectUser);
   return (
     <Box style={{ width: '100%', maxWidth: '100%' }}>
+      <TutorDetailsModal
+        open={open}
+        setOpen={setOpen}
+        data={{
+          ...selfTutor,
+          user,
+        }}
+        enableCreateRequest={false}
+      />
       <Card sx={{ minWidth: 275, boxShadow: 0 }}>
         <CardContent sx={{ padding: 0 }}>
           <Avatar
@@ -91,7 +103,9 @@ export function ProfileBox({ selfTutor }: any) {
             )}
           </Typography>
         </CardContent>
-        <CardActions sx={{ padding: 0 }}></CardActions>
+        <CardActions sx={{ padding: 0 }}>
+          <Button onClick={() => setOpen(true)}>See My Profile</Button>
+        </CardActions>
       </Card>
     </Box>
   );
@@ -595,11 +609,17 @@ export const TutorDetailsModal = ({
               <Grid item xs={12}>
                 <Divider sx={{ mb: 2, mt: 2 }} />
 
+                <span style={{ verticalAlign: 'middle' }}>
+                  Overall Rating:{' '}
+                </span>
                 <Rating
                   name="half-rating-read"
                   defaultValue={data?.rating || 0}
                   precision={0.5}
                   readOnly
+                  sx={{
+                    verticalAlign: 'middle',
+                  }}
                 />
               </Grid>
             </Grid>
