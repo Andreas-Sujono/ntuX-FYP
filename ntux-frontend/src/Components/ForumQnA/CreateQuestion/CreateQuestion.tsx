@@ -68,9 +68,10 @@ function getStyles(id, personName, theme) {
   };
 }
 export const SelectTags = ({ data, setData }: any) => {
-  const alltags = useSelector(selectAllTags);
+  let alltags = useSelector(selectAllTags);
   const theme = useTheme();
   const [dataMapped, setDataMapped] = useState<any>([]);
+  alltags = alltags.slice(0, 100);
 
   useEffect(() => {
     const idsSet = new Set(data.map((item) => item.id));

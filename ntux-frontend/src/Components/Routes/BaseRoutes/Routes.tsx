@@ -13,7 +13,7 @@ import Footer from '../../LandingPage/Footer';
 import FullPageLoadingBar from '../../../common/Components/LoadingBar/FullPageLoadingBar';
 import { useDispatch } from 'react-redux';
 import { addWebsiteVisitActivity } from 'Store/Actions/pointsRewards';
-import { getMyAccount } from 'Store/Actions/auth';
+import { getMyAccount, refreshToken } from 'Store/Actions/auth';
 import { getMyCourses } from 'Store/Actions/courses';
 
 const Routes = () => {
@@ -51,6 +51,14 @@ const Routes = () => {
     dispatch(addWebsiteVisitActivity());
     dispatch(getMyAccount());
     dispatch(getMyCourses());
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      dispatch(refreshToken());
+    }, 1000 * 60 * 10);
+
+    return () => clearInterval(interval);
   }, []);
 
   return (

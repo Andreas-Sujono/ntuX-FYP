@@ -25,7 +25,7 @@ const Footer: React.FC = () => {
   const queryObj: Record<string, any> =
     queryString.parse(location.search) || {};
 
-  if (queryObj.hideFooter) return <></>;
+  if (queryObj.hideFooter === 'true') return <></>;
 
   return (
     <div className="w-bprimary w-tprimary" style={{ background: '#181F5E' }}>

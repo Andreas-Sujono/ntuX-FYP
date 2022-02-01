@@ -1,6 +1,6 @@
 import { AuthModule } from './../authModule/auth.module';
 import { CourseContentController } from './controllers/courseContent.controller';
-import { Module } from '@nestjs/common';
+import { CacheModule, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CommonModule } from 'src/commonModule/common.module';
 import { CourseController } from './controllers/course.controller';
@@ -27,6 +27,7 @@ import { ForumAnswerService } from 'src/forumModule/services/forumAnswer.service
 
 @Module({
   imports: [
+    CacheModule.register(),
     TypeOrmModule.forFeature([
       Course,
       CourseUser,

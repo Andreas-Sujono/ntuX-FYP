@@ -7,13 +7,15 @@ import { Tutor } from 'src/tutoringModule/entities/tutor.entity';
 import { IsNull, MoreThan, Repository } from 'typeorm';
 import { WebsiteActivityService } from './websiteActivity.service';
 import { CourseService } from 'src/courseModule/services/course.service';
-import * as data from './data.json';
+// import * as data from './tags.json';
+import { ForumTag } from 'src/forumModule/entities/forumTag.entity';
 
 @Injectable()
 export class AdminService {
   constructor(
     @InjectRepository(User) private userRepo: Repository<User>,
     @InjectRepository(Tutor) private tutorRepo: Repository<Tutor>,
+    @InjectRepository(ForumTag) private forumTagRepo: Repository<ForumTag>,
     @InjectRepository(ForumQuestion)
     private forumQuestionRepo: Repository<ForumQuestion>,
     @InjectRepository(ForumAnswer)
@@ -77,29 +79,12 @@ export class AdminService {
   }
 
   async testInsertData() {
-    // const allUsers = await this.userRepo.find({});
-    // //create tutor
-    // return await Promise.all(
-    //   allUsers.map((item) => {
-    //     if (item.role === null)
-    //       this.tutorRepo.save({
-    //         ...item,
-    //         role: 'STUDENT',
-    //       });
-    //   }),
-    // );
     // return await Promise.all(
     //   data.map((item) =>
-    //     this.userRepo.save(
-    //       this.userRepo.create({
-    //         ...item,
-    //         nationality: 'American',
-    //         citizenship: 'american',
-    //         emailVerifiesAt: new Date(),
-    //         hashedPassword:
-    //           '$2a$10$1GJCwdfl1MqIZRtNiUvMEODhBGkcm3vDORvs8HEKyCkDdcFxmKlCe',
-    //       }),
-    //     ),
+    //     this.forumTagRepo.insert({
+    //       name: item.tagName,
+    //       description: item.Excerpt,
+    //     }),
     //   ),
     // );
   }

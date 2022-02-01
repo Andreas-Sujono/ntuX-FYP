@@ -107,6 +107,34 @@ export const login =
     }
   };
 
+export const refreshToken =
+  (bypass = false) =>
+  async (dispatch: AppDispatch, getState: () => RootState) => {
+    try {
+      const userId = selectUserId(getState());
+      if (!userId) return;
+      const res = await service.refreshToken();
+      if (res.errorCode) {
+        return {
+          result: false,
+          errorMessage: res.message,
+        };
+      }
+      localStorage.setItem('token', res.access_token || res.accessToken);
+      dispatch(
+        loadSuccess({
+          isAuthenticated: true,
+          token: res.access_token || res.accessToken,
+        }),
+      );
+      await setTimeout(() => null, 10); //wait for token is set
+      return { result: true, user: res.user };
+    } catch (err) {
+      dispatch(loadFailed());
+      return { result: false };
+    }
+  };
+
 export const resetAllState = async (dispatch: AppDispatch) => {
   dispatch(resetAuthGeneralState());
 };

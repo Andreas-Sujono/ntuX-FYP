@@ -17,6 +17,11 @@ export default class AuthService extends BaseService {
     return res.data;
   };
 
+  refreshToken = async () => {
+    const res = await this.postRequest('/auth/refresh-token', {});
+    return res.data;
+  };
+
   getAccount = async (userId: Id) => {
     const res = await this.getRequest(`/user/${userId}`);
     return res.data;

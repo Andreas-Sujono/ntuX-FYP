@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { CacheModule, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './authModule/auth.module';
@@ -14,6 +14,7 @@ import { TutoringModule } from './tutoringModule/tutoring.module';
 
 @Module({
   imports: [
+    CacheModule.register(),
     ConfigModule.forRoot({
       isGlobal: true,
     }),

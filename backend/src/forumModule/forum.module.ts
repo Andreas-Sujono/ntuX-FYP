@@ -4,7 +4,7 @@ import { ForumQuestionController } from './controllers/forumQuestion.controller'
 import { ForumAnswerService } from './services/forumAnswer.service';
 import { ForumAnswer } from './entities/forumAnswer.entity';
 import { AuthModule } from '../authModule/auth.module';
-import { Module } from '@nestjs/common';
+import { CacheModule, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CommonModule } from 'src/commonModule/common.module';
 import { ForumQuestion } from './entities/forumQuestion.entity';
@@ -15,6 +15,7 @@ import { User } from 'src/authModule/entities/user.entity';
 
 @Module({
   imports: [
+    CacheModule.register(),
     TypeOrmModule.forFeature([ForumTag, ForumQuestion, ForumAnswer, User]),
     CommonModule,
     AuthModule,

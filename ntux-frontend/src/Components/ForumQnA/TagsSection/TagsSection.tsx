@@ -43,7 +43,7 @@ function TagsSection(): React.ReactElement {
       const result = searchFromListOfObject(allTags, ['name'], value);
       setSearchResult(result);
       ref.current = null;
-    }, 100);
+    }, 300);
   };
 
   const final = searchInput ? searchResult : allTags;

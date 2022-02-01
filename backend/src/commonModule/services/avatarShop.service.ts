@@ -1,3 +1,4 @@
+import { WebsiteActivityService } from 'src/commonModule/services/websiteActivity.service';
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TypeOrmCrudService } from '@nestjsx/crud-typeorm';
@@ -10,6 +11,7 @@ export class AvatarService extends TypeOrmCrudService<Avatar> {
   constructor(
     @InjectRepository(Avatar) repo,
     @InjectRepository(User) private userRepo: Repository<User>,
+    private websiteActivityService: WebsiteActivityService,
   ) {
     super(repo);
   }
@@ -40,6 +42,7 @@ export class AvatarService extends TypeOrmCrudService<Avatar> {
         totalPoints: user.totalPoints - avatar.pointsRequired,
       },
     );
+    await this.websiteActivityService.updateExpsAndPoint(userId, 25, 0);
     return {
       success: true,
       avatar,

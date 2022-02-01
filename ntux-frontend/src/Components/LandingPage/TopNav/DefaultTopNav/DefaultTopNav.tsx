@@ -101,7 +101,7 @@ const DefaultTopNav: React.FC = () => {
     );
   }, [darkTheme]);
 
-  if (queryObj.hideNav) return <></>;
+  if (queryObj.hideNav === 'true') return <></>;
 
   return (
     <BackgroundContainer isScrolled={isScrolled} isDarkTheme={darkTheme}>

@@ -1,3 +1,4 @@
+import { WebsiteActivityService } from './websiteActivity.service';
 import { PremiumSetting } from './../entities/premiumSetting.entity';
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -19,6 +20,7 @@ export class RewardRedeemedService extends TypeOrmCrudService<RewardRedeemed> {
     @InjectRepository(PremiumSetting)
     private premiumSettingRepo: Repository<PremiumSetting>,
     private notificationService: NotificationService,
+    private websiteActivityService: WebsiteActivityService,
   ) {
     super(repo);
   }
@@ -81,6 +83,8 @@ export class RewardRedeemedService extends TypeOrmCrudService<RewardRedeemed> {
             },
           );
         } else {
+          await this.websiteActivityService.updateExpsAndPoint(userId, 30, 0);
+
           return await this.premiumSettingRepo.save({
             premiumPortfolioEnabled: true,
             expiredAt: new Date(Date.now() + monthTime),
@@ -109,6 +113,7 @@ export class RewardRedeemedService extends TypeOrmCrudService<RewardRedeemed> {
             },
           );
         } else {
+          await this.websiteActivityService.updateExpsAndPoint(userId, 30, 0);
           await this.premiumSettingRepo.save({
             premiumPortfolioEnabled: true,
             expiredAt: new Date(Date.now() + 3 * monthTime),
@@ -137,6 +142,7 @@ export class RewardRedeemedService extends TypeOrmCrudService<RewardRedeemed> {
             },
           );
         } else {
+          await this.websiteActivityService.updateExpsAndPoint(userId, 30, 0);
           await this.premiumSettingRepo.save({
             pointMultiplier: 1.5,
             expMultiplier: 1.5,
@@ -179,6 +185,7 @@ export class RewardRedeemedService extends TypeOrmCrudService<RewardRedeemed> {
         userId,
       );
     }
+    await this.websiteActivityService.updateExpsAndPoint(userId, 30, 0);
 
     return res;
   }
