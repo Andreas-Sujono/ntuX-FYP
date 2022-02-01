@@ -64,14 +64,32 @@ export class AuthService {
     delete user.confirmationCode;
     delete user.codeExpiresAt;
 
-    if (!user.emailVerifiesAt)
-      return {
-        user,
-        status: 'NOT_CONFIRMED',
-      };
+    // if (!user.emailVerifiesAt)
+    //   return {
+    //     user,
+    //     status: 'NOT_CONFIRMED',
+    //   };
 
     const payload = { email: user.email, userId: user.id, role: user.role };
 
+    return {
+      access_token: this.jwtService.sign(payload, {
+        secret: process.env.SECRET_KEY,
+      }),
+      user,
+      status: 'CONFIRMED',
+    };
+  }
+
+  async refreshToken(userId: number) {
+    const user = await this.userRepo.findOne({ id: userId });
+
+    if (!user)
+      return {
+        access_token: null,
+      };
+
+    const payload = { email: user.email, userId: user.id, role: user.role };
     return {
       access_token: this.jwtService.sign(payload, {
         secret: process.env.SECRET_KEY,

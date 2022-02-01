@@ -4,9 +4,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User, UserRole } from 'src/authModule/entities/user.entity';
 import { ForumQuestion } from 'src/forumModule/entities/forumQuestion.entity';
 import { Tutor } from 'src/tutoringModule/entities/tutor.entity';
-import { IsNull, Repository } from 'typeorm';
+import { IsNull, MoreThan, Repository } from 'typeorm';
 import { WebsiteActivityService } from './websiteActivity.service';
 import { CourseService } from 'src/courseModule/services/course.service';
+import * as data from './data.json';
 
 @Injectable()
 export class AdminService {
@@ -73,5 +74,33 @@ export class AdminService {
       activitySummary,
       courses: userCourses,
     };
+  }
+
+  async testInsertData() {
+    // const allUsers = await this.userRepo.find({});
+    // //create tutor
+    // return await Promise.all(
+    //   allUsers.map((item) => {
+    //     if (item.role === null)
+    //       this.tutorRepo.save({
+    //         ...item,
+    //         role: 'STUDENT',
+    //       });
+    //   }),
+    // );
+    // return await Promise.all(
+    //   data.map((item) =>
+    //     this.userRepo.save(
+    //       this.userRepo.create({
+    //         ...item,
+    //         nationality: 'American',
+    //         citizenship: 'american',
+    //         emailVerifiesAt: new Date(),
+    //         hashedPassword:
+    //           '$2a$10$1GJCwdfl1MqIZRtNiUvMEODhBGkcm3vDORvs8HEKyCkDdcFxmKlCe',
+    //       }),
+    //     ),
+    //   ),
+    // );
   }
 }
