@@ -1,3 +1,4 @@
+import { getLevelAndBadges } from 'common/utils';
 import { getMyAccount } from 'Store/Actions/auth';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import axios from 'axios';
@@ -10,6 +11,7 @@ import { Id, User } from 'Models/Auth';
 import { selectUser, selectUserId } from 'Store/Selector/auth';
 import { selectIsActivityAdded } from 'Store/Selector/pointsRewards';
 import { toast } from 'react-toastify';
+import swal from 'sweetalert2';
 
 const { CancelToken } = axios;
 const source = CancelToken.source();
@@ -270,15 +272,32 @@ export const redeemReward =
    * @param bypass 
    * @returns 
    * task
-getPoints
-getExps
+    getPoints
+    getExps
    */
 export const checkGetPoint =
   (taskType: TaskType, bypass = false) =>
   async (dispatch: AppDispatch, getState: () => RootState) => {
     try {
       const user = selectUser(getState());
+      if (!user) return { result: false };
       const res = await service.checkGetPoint(taskType);
+
+      if (res && res?.task) {
+        const { level: prevLevel } = getLevelAndBadges(user.totalExps);
+        const { level: currentLevel } = getLevelAndBadges(
+          user.totalExps + res.task?.exps || 0,
+        );
+        if (prevLevel !== currentLevel) {
+          swal.fire({
+            icon: 'success',
+            title: 'Congrats! you have leveled up',
+            text: 'keep it up!',
+          });
+        }
+      }
+      getMyAccount()(dispatch, getState);
+
       return { result: true };
     } catch (err) {
       return { result: false };

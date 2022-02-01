@@ -138,7 +138,7 @@ export function TopTutor() {
 
 export const TutorListBox = () => {
   const [page, setPage] = React.useState(1);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [rowsPerPage, setRowsPerPage] = React.useState(12);
   const [searchInput, setSearchInput] = React.useState('');
   const [chosenData, setChosenData] = React.useState(null);
 
@@ -196,38 +196,49 @@ export const TutorListBox = () => {
         }}
       />
       <Grid container spacing={2} mt={2}>
-        {data.map((item) => {
-          const coursesCode = item.courses
-            .map((course) => course.code)
-            .join(', ');
+        {data
+          .slice(
+            (page - 1) * rowsPerPage,
+            (page - 1) * rowsPerPage + rowsPerPage,
+          )
+          .map((item) => {
+            const coursesCode = item.courses
+              .map((course) => course.code)
+              .join(', ');
 
-          const levelData = getLevelAndBadges(item.user.totalExps);
-          return (
-            <Grid item xs={12} md={4} lg={3} key={item.id}>
-              <CardHeader
-                avatar={
-                  <Avatar
-                    sx={{
-                      bgcolor: green[500],
-                    }}
-                    aria-label="recipe"
-                    src={item.user?.currentAvatar?.imageUrl || '#'}
-                  >
-                    {item.user?.fullName?.slice(0, 1)?.toUpperCase()}
-                  </Avatar>
-                }
-                title={item.user?.fullName}
-                subheader={`Lv ${levelData.level}, ${coursesCode} Tutor`}
-              />
-              {/* <Button size="small">Make Request</Button> */}
-              {user.id !== item.user.id && (
-                <Button size="small" onClick={() => setChosenData(item)}>
-                  See Details
-                </Button>
-              )}
-            </Grid>
-          );
-        })}
+            const levelData = getLevelAndBadges(item.user.totalExps);
+            return (
+              <Grid item xs={12} md={4} lg={3} key={item.id}>
+                <CardHeader
+                  avatar={
+                    <Avatar
+                      sx={{
+                        bgcolor: green[500],
+                        cursor: 'pointer',
+                      }}
+                      aria-label="recipe"
+                      src={item.user?.currentAvatar?.imageUrl || '#'}
+                      onClick={() => setChosenData(item)}
+                    >
+                      {item.user?.fullName?.slice(0, 1)?.toUpperCase()}
+                    </Avatar>
+                  }
+                  title={item.user?.fullName}
+                  subheader={`Lv ${levelData.level}, ${coursesCode} Tutor`}
+                  onClick={() => setChosenData(item)}
+                  sx={{
+                    cursor: 'pointer',
+                  }}
+                />
+                {/* <Button size="small">Make Request</Button> */}
+                {/* {user.id !== item.user.id && (
+                  <Button size="small" onClick={() => setChosenData(item)}>
+                    See Details
+                  </Button>
+                )} */}
+              </Grid>
+            );
+          })}
       </Grid>
       <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
         <Pagination

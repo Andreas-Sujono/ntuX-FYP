@@ -57,10 +57,10 @@ const Card = ({ user }: { user: any }) => {
 function UsersSection(): React.ReactElement {
   const topUsers = useSelector(selectTopUsers).slice(0, 5);
   const activeUsers = useSelector(selectActiveUsers).slice(0, 5);
-  const allUsers = useSelector(selectAllUsers).slice(0, 5);
+  const allUsers = useSelector(selectAllUsers);
 
   const [page, setPage] = React.useState(1);
-  const [rowsPerPage, setRowsPerPage] = React.useState(15);
+  const [rowsPerPage, setRowsPerPage] = React.useState(9);
   const [searchInput, setSearchInput] = React.useState('');
 
   const handleChangePage = (event, newPage) => {

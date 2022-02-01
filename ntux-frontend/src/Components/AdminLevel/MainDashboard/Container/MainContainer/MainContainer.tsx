@@ -38,28 +38,13 @@ import { selectUser } from 'Store/Selector/auth';
 import { selectNotifications } from 'Store/Selector/pointsRewards';
 import { useThunkDispatch } from 'common/hooks';
 import { viewNotifications } from 'Store/Actions/pointsRewards';
+import Notification from '../../../Notification';
 
 const logoImagePath = `${process.env.PUBLIC_URL}/assets/logos/full-colored-logo.svg`;
 
 function MainContainer({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState(window.innerWidth < 550 ? false : true);
-  const [anchorEl, setAnchorEl] = React.useState<any>(null);
   const dispatch = useThunkDispatch();
-
-  const notifications = useSelector(selectNotifications);
-
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-    if (event.currentTarget) {
-      dispatch(viewNotifications());
-    }
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const id = anchorEl ? 'simple-popover' : undefined;
 
   const toggleDrawer = () => {
     setOpen(!open);
@@ -119,59 +104,7 @@ function MainContainer({ children }: { children: React.ReactNode }) {
           >
             {routeDetails.details?.title}
           </Typography>
-          <div>
-            <IconButton
-              sx={{ mr: 2 }}
-              onClick={handleClick}
-              aria-describedby={id}
-            >
-              <Badge
-                color="primary"
-                badgeContent={
-                  notifications.filter((item) => !item.isViewed).length
-                }
-                max={49}
-              >
-                <MailIcon />
-              </Badge>
-            </IconButton>
-          </div>
-          <Popover
-            id={id}
-            open={!!anchorEl}
-            anchorEl={anchorEl}
-            onClose={handleClose}
-            anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'right',
-            }}
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
-          >
-            <List
-              sx={{ maxWidth: '320px', maxHeight: '350px', overflow: 'auto' }}
-            >
-              {notifications.map((item) => (
-                <ListItem disablePadding key={item.id}>
-                  <ListItemButton>
-                    <ListItemIcon>
-                      <InboxIcon />
-                    </ListItemIcon>
-                    <ListItemText primary={item.name} />
-                  </ListItemButton>
-                </ListItem>
-              ))}
-              {notifications.length === 0 && (
-                <ListItem>
-                  <Typography variant="body1" color="text.secondary">
-                    No Notifications
-                  </Typography>
-                </ListItem>
-              )}
-            </List>
-          </Popover>
+          <Notification />
           <ProfileButton onClick={() => history.push(routes.SETTINGS.BASE)}>
             <CardHeader
               avatar={
