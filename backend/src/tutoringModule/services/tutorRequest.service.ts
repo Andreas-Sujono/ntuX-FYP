@@ -83,6 +83,10 @@ export class TutorRequestService extends TypeOrmCrudService<TutorRequest> {
       }),
     );
 
+    const tutor = await this.tutorRepo.findOne({
+      where: { id: dto.tutor },
+      relations: ['user'],
+    });
     //create notif
     this.notificationService.createNotification(
       {
@@ -90,7 +94,7 @@ export class TutorRequestService extends TypeOrmCrudService<TutorRequest> {
         name: 'You got a new tutor request',
         metadata: res,
         itemId: res.id,
-        user: dto.tutor as any,
+        user: tutor.user?.id as any,
       },
       dto.tutor as any,
     );
@@ -120,7 +124,7 @@ export class TutorRequestService extends TypeOrmCrudService<TutorRequest> {
         name: 'Your tutor request has been ' + dto.status,
         metadata: res,
         itemId: res.raw[0].id,
-        user: existing.tutor.user.id as any,
+        user: existing.tutor?.user?.id as any,
       },
       existing.tutor.user.id,
     );
