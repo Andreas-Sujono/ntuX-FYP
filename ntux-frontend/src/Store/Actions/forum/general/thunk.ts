@@ -1,3 +1,4 @@
+import { TaskType } from './../../../Services/pointsRewards/general';
 import { selectQuestionsByTagId } from './../../../Selector/forum/general';
 import { getMyAccount } from 'Store/Actions/auth';
 /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -9,6 +10,7 @@ import { Id, User } from 'Models/Auth';
 import { selectUserId } from 'Store/Selector/auth';
 import { toast } from 'react-toastify';
 import { selectQuestionDetailById } from 'Store/Selector/forum';
+import { checkGetPoint } from 'Store/Actions/pointsRewards';
 
 const { CancelToken } = axios;
 const source = CancelToken.source();
@@ -257,6 +259,8 @@ export const createQuestion =
       }
       dispatch(loadSuccess({}));
       getAllQuestions()(dispatch, getState);
+      checkGetPoint(TaskType.FORUM_ASK_QUESTION)(dispatch, getState);
+      getMyAccount()(dispatch, getState);
       return { result: true };
     } catch (err) {
       dispatch(loadFailed());
@@ -324,6 +328,8 @@ export const createAnswer =
       }
       dispatch(loadSuccess({}));
       getOneQuestion(data.question)(dispatch, getState);
+      checkGetPoint(TaskType.FORUM_ANSWER_QUESTION)(dispatch, getState);
+      getMyAccount()(dispatch, getState);
       return { result: true };
     } catch (err) {
       dispatch(loadFailed());

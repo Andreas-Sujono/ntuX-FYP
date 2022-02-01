@@ -235,6 +235,7 @@ export const buyAvatar =
       const res = await service.buyAvatar(data);
       dispatch(loadSuccess({}));
       getMyAccount()(dispatch, getState);
+      checkGetPoint(TaskType.REWARD_BUY_AVATAR, true)(dispatch, getState);
       return { result: true };
     } catch (err) {
       return { result: false };
@@ -260,6 +261,7 @@ export const redeemReward =
       dispatch(loadSuccess({}));
       getRewardsRedeemed()(dispatch, getState);
       getMyAccount()(dispatch, getState);
+      checkGetPoint(TaskType.REWARD_REDEEM, true)(dispatch, getState);
       return { result: true };
     } catch (err) {
       return { result: false };
@@ -283,21 +285,24 @@ export const checkGetPoint =
       if (!user) return { result: false };
       const res = await service.checkGetPoint(taskType);
 
-      if (res && res?.task) {
-        const { level: prevLevel } = getLevelAndBadges(user.totalExps);
-        const { level: currentLevel } = getLevelAndBadges(
-          user.totalExps + res.task?.exps || 0,
-        );
-        if (prevLevel !== currentLevel) {
-          swal.fire({
-            icon: 'success',
-            title: 'Congrats! you have leveled up',
-            text: 'keep it up!',
-          });
-        }
-      }
-      getMyAccount()(dispatch, getState);
+      // if (res && res?.task && !bypass) {
+      //   const { level: prevLevel } = getLevelAndBadges(user.totalExps);
+      //   const { level: currentLevel } = getLevelAndBadges(
+      //     user.totalExps + res.task?.exps || 0,
+      //   );
+      //   if (prevLevel !== currentLevel) {
+      //     swal.fire({
+      //       icon: 'success',
+      //       title: 'Congrats! you have leveled up',
+      //       text: 'keep it up!',
+      //     });
+      //   }
+      // }
 
+      if (res && res?.task) {
+        toast.success(`Achievement unlocked: ${res.task?.name}`);
+        getMyAchievements()(dispatch, getState);
+      }
       return { result: true };
     } catch (err) {
       return { result: false };

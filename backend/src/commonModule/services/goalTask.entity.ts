@@ -63,6 +63,14 @@ export class GoalTaskService extends TypeOrmCrudService<GoalTask> {
       for (const task of tasks) {
         if (task.quantity > totalQuestionCount) break;
         if (task.quantity === totalQuestionCount) {
+          await this.repo.save({
+            ...task,
+            users: [
+              {
+                id: userId,
+              },
+            ],
+          });
           return {
             task,
             getPoints: true,
@@ -82,6 +90,14 @@ export class GoalTaskService extends TypeOrmCrudService<GoalTask> {
       for (const task of tasks) {
         if (task.quantity > totalCount) break;
         if (task.quantity === totalCount) {
+          await this.repo.save({
+            ...task,
+            users: [
+              {
+                id: userId,
+              },
+            ],
+          });
           return {
             task,
             getPoints: true,
@@ -100,6 +116,14 @@ export class GoalTaskService extends TypeOrmCrudService<GoalTask> {
       for (const task of tasks) {
         if (task.quantity > totalCount) break;
         if (task.quantity === totalCount) {
+          await this.repo.save({
+            ...task,
+            users: [
+              {
+                id: userId,
+              },
+            ],
+          });
           return {
             task,
             getPoints: true,
@@ -121,6 +145,14 @@ export class GoalTaskService extends TypeOrmCrudService<GoalTask> {
       for (const task of tasks) {
         if (task.quantity > totalCount) break;
         if (task.quantity === totalCount) {
+          await this.repo.save({
+            ...task,
+            users: [
+              {
+                id: userId,
+              },
+            ],
+          });
           return {
             task,
             getPoints: true,

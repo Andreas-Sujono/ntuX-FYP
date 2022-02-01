@@ -12,6 +12,8 @@ import {
 import { LoginRequest, User } from 'Models/Auth';
 import { toast } from 'react-toastify';
 import { selectUser, selectUserId } from 'Store/Selector/auth';
+import { getLevelAndBadges } from 'common/utils';
+import swal from 'sweetalert2';
 
 const { CancelToken } = axios;
 const source = CancelToken.source();
@@ -34,6 +36,7 @@ export const getMyAccount =
     try {
       const userId = selectUserId(getState());
       if (!userId) return;
+      const prevUser = selectUser(getState());
 
       const res = await service.getMyAccount();
       if (res.errorCode) {
@@ -50,6 +53,19 @@ export const getMyAccount =
           user: res,
         }),
       );
+
+      let { level: prevLevel } = getLevelAndBadges(prevUser.totalExps);
+      let { level: currentLevel } = getLevelAndBadges(res.totalExps);
+      prevLevel = prevLevel || 1;
+      currentLevel = currentLevel || 1;
+      if (prevLevel !== currentLevel && !bypass) {
+        console.log(prevLevel, currentLevel);
+        swal.fire({
+          icon: 'success',
+          title: 'Congrats! you have leveled up',
+          text: 'keep it up!',
+        });
+      }
       return { result: true };
     } catch (err) {
       dispatch(loadFailed());
