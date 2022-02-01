@@ -121,12 +121,12 @@ export class TutorRequestService extends TypeOrmCrudService<TutorRequest> {
     this.notificationService.createNotification(
       {
         eventType: EVENT_TYPE.TUTOR_OFFER_STATUS_CHANGED,
-        name: 'Your tutor request has been ' + dto.status,
+        name: 'Your tutor request has been ' + dto?.status,
         metadata: res,
-        itemId: res.raw[0].id,
+        itemId: res.raw?.[0]?.id,
         user: existing.tutor?.user?.id as any,
       },
-      existing.tutor.user.id,
+      existing.tutor?.user?.id,
     );
     return res;
   }
@@ -173,12 +173,12 @@ export class TutorRequestService extends TypeOrmCrudService<TutorRequest> {
     this.notificationService.createNotification(
       {
         eventType: EVENT_TYPE.TUTOR_REQUEST_STATUS_CHANGED,
-        name: 'Your tutor request has been ' + dto.status,
+        name: 'Your tutor request has been ' + dto?.status,
         metadata: res,
-        itemId: res.raw[0].id,
-        user: existing.user.id as any,
+        itemId: res.raw?.[0]?.id,
+        user: existing.user?.id as any,
       },
-      existing.user.id,
+      existing.user?.id,
     );
     return res;
   }

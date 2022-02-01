@@ -58,7 +58,7 @@ export class GoalTaskService extends TypeOrmCrudService<GoalTask> {
         user: userId as any,
         parentQuestion: IsNull(),
       });
-      const totalQuestionCount = questionAskedCount + 1;
+      const totalQuestionCount = questionAskedCount;
 
       for (const task of tasks) {
         if (task.quantity > totalQuestionCount) break;
@@ -77,7 +77,7 @@ export class GoalTaskService extends TypeOrmCrudService<GoalTask> {
         user: userId as any,
         parentAnswer: IsNull(),
       });
-      const totalCount = answerCount + 1;
+      const totalCount = answerCount;
 
       for (const task of tasks) {
         if (task.quantity > totalCount) break;
@@ -95,7 +95,7 @@ export class GoalTaskService extends TypeOrmCrudService<GoalTask> {
       const countBefore = await this.rewardRedeemedRepo.count({
         user: userId as any,
       });
-      const totalCount = countBefore + 1;
+      const totalCount = countBefore;
 
       for (const task of tasks) {
         if (task.quantity > totalCount) break;
@@ -116,7 +116,7 @@ export class GoalTaskService extends TypeOrmCrudService<GoalTask> {
         },
         relations: ['avatars'],
       });
-      const totalCount = user?.avatars?.length + 1 || 1;
+      const totalCount = user?.avatars?.length || 1;
 
       for (const task of tasks) {
         if (task.quantity > totalCount) break;
