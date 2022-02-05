@@ -20,17 +20,19 @@ export class TutorService extends TypeOrmCrudService<Tutor> {
 
   async searchTutor(query: any, userId: number) {
     const res = await this.repo.find({
-      where: {
-        user: {
-          id: Not(userId),
-          fullName: ILike(`%${query}%`),
-          role: UserRole.STUDENT,
-        },
-        // 'user.fullName': ILike(`%${query}%`),
-        // 'user.role': UserRole.STUDENT,
-        isActive: true,
-      },
       relations: ['user', 'courses', 'user.currentAvatar'],
+      where: [
+        {
+          user: {
+            id: Not(userId),
+            fullName: ILike(`%${query}%`),
+            role: UserRole.STUDENT,
+          },
+          'user.fullName': ILike(`%${query}%`),
+          'user.role': UserRole.STUDENT,
+          isActive: true,
+        },
+      ],
     });
     res.forEach((item) => {
       delete item.user.confirmationCode;
