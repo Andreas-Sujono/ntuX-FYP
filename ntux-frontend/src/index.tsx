@@ -11,7 +11,7 @@ import './index.css';
 //   </React.StrictMode>,
 //   document.getElementById('root'),
 // );
-
+window.process = {} as any;
 render(
   <React.StrictMode>
     <App />

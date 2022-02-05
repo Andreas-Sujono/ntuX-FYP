@@ -8,7 +8,7 @@ import {
   TextField,
   FormControl,
   InputLabel,
-  Select,
+  // Select,
   OutlinedInput,
   Chip,
   MenuItem,
@@ -21,6 +21,8 @@ import React, { memo, useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import Select from 'react-select';
+import { LoadingBar } from 'common/Components/LoadingBar/FullPageLoadingBar';
 import {
   createQuestion,
   getOneQuestion,
@@ -68,21 +70,27 @@ function getStyles(id, personName, theme) {
   };
 }
 export const SelectTags = ({ data, setData }: any) => {
-  let alltags = useSelector(selectAllTags);
+  let allTags = useSelector(selectAllTags);
   const theme = useTheme();
-  const [dataMapped, setDataMapped] = useState<any>([]);
-  alltags = alltags.slice(0, 100);
+  const [res, setRes] = useState<any>([]); // {id, label, value}
+  // alltags = alltags.slice(0, 100);
+
+  data = data.map((item) => ({ ...item, value: item.id, label: item.name }));
 
   useEffect(() => {
-    const idsSet = new Set(data.map((item) => item.id));
-    const mapped = alltags.filter((item) => idsSet.has(item.id));
-    setDataMapped(mapped);
-  }, [data]);
+    allTags = allTags.map((item) => ({
+      ...item,
+      value: item.id,
+      label: item.name,
+    }));
+    setRes(allTags.slice(0, 100));
+  }, [allTags]);
 
   const handleChange = (event: any) => {
-    const {
-      target: { value },
-    } = event;
+    console.log(event);
+    // const {
+    //   target: { value },
+    // } = event;
     // const idSet = new Set<any>([]);
     // const values: any = [];
 
@@ -92,14 +100,22 @@ export const SelectTags = ({ data, setData }: any) => {
     //     idSet.add(item.id);
     //   }
     // });
-    setData(value);
+    setData(event);
     // console.log(values);
   };
 
   return (
     <FormControl sx={{ width: '100%' }}>
-      <InputLabel id="demo-multiple-chip-label">Tags</InputLabel>
+      {/* <InputLabel id="demo-multiple-chip-label">Tags</InputLabel> */}
       <Select
+        options={res}
+        isMulti
+        placeholder="Tags"
+        value={data}
+        onChange={handleChange}
+      />
+
+      {/* <Select
         labelId="demo-multiple-chip-label"
         id="demo-multiple-chip"
         multiple
@@ -124,22 +140,22 @@ export const SelectTags = ({ data, setData }: any) => {
             {item.name}
           </MenuItem>
         ))}
-      </Select>
+      </Select> */}
     </FormControl>
   );
 };
 
 function CreateQuestion(): React.ReactElement {
+  const { questionId } = useParams<any>();
+  const isEditMode = !!questionId;
+
   const [finalData, setFinalData] = useState<any>({
-    metadata: defaultBlocks,
+    metadata: isEditMode ? [] : defaultBlocks,
   });
   const [tags, setTags] = useState<any>([]);
   const [loading, setLoading] = useState(false);
-  const { questionId } = useParams<any>();
   const history = useHistory();
   const dispatch = useThunkDispatch();
-
-  const isEditMode = !!questionId;
 
   const questionDetail =
     useSelector(selectQuestionDetailById)[questionId] || {};
@@ -204,6 +220,8 @@ function CreateQuestion(): React.ReactElement {
     }
   }, [questionDetail?.name]);
 
+  if (isEditMode && !finalData.name) return <LoadingBar height="50vh" />;
+
   return (
     <Container component="main" maxWidth="md" sx={{ minHeight: '70vh' }}>
       <Box component="form" noValidate onSubmit={handleSubmit}>
@@ -245,14 +263,19 @@ function CreateQuestion(): React.ReactElement {
             <Divider sx={{ mb: 2, mt: 0.5 }} />
           </Grid>
           <Grid item xs={12} sm={12}>
-            <Editor
-              pid={'12345'}
-              blocks={
-                finalData?.metadata?.length ? finalData.metadata : defaultBlocks
-              }
-              handleUpdate={handleUpdate}
-              useTags2
-            />
+            {!isEditMode ||
+              (!!finalData?.metadata?.length && (
+                <Editor
+                  pid={'12345'}
+                  blocks={
+                    finalData?.metadata?.length
+                      ? finalData.metadata
+                      : defaultBlocks
+                  }
+                  handleUpdate={handleUpdate}
+                  useTags2
+                />
+              ))}
           </Grid>
           <Grid item xs={12} sm={12} sx={{ mt: 3 }}>
             <Divider sx={{ mb: 2, mt: 0.5 }} />

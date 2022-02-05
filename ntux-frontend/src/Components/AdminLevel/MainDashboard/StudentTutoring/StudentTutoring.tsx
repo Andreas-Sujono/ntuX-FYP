@@ -60,7 +60,7 @@ export default function StudentTutoring() {
     <Container maxWidth="xl" sx={{ margin: 0, mt: 4, mb: 8, ml: 1, pr: 1 }}>
       {/* <RewardDetailsModal open={open} setOpen={setOpen} data={modalData} /> */}
       <Grid container spacing={3}>
-        <Grid item xs={12} md={7}>
+        <Grid item xs={12} md={6}>
           <TopBox>
             <Grid container>
               <Grid item xs={10} md={8}>
@@ -82,9 +82,9 @@ export default function StudentTutoring() {
             </Grid>
           </TopBox>
         </Grid>
-        {/* <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={6}>
           <TopTutor />
-        </Grid> */}
+        </Grid>
         <Grid item xs={12}>
           <TutorListBox />
         </Grid>

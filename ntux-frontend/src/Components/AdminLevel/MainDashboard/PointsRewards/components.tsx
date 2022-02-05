@@ -99,7 +99,7 @@ export function RewardHistoryTable() {
   const rewardsRedeemed = useSelector(selectRewardsRedeemed);
 
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -198,7 +198,7 @@ export const HowToGetPoints = ({ limit = null }: any) => {
   return (
     <FeatureBox sx={{ padding: '1rem' }}>
       <Typography component="h5" variant="h6">
-        Today Goals
+        Goals
       </Typography>
 
       <List dense={false}>

@@ -112,25 +112,63 @@ export function ProfileBox({ selfTutor }: any) {
 }
 
 export function TopTutor() {
+  const data = useSelector(selectAllTutors);
+  const [chosenData, setChosenData] = React.useState(null);
+
+  const filteredData = React.useMemo(() => {
+    data.sort((a, b) => b.rating - a.rating);
+    return data.slice(0, 6);
+  }, [data]);
+
   return (
     <Paper style={{ width: '100%', maxWidth: '100%' }} sx={{ p: 2 }}>
+      <TutorDetailsModal
+        open={!!chosenData}
+        setOpen={(bool) => setChosenData(null)}
+        data={chosenData}
+      />
       <Typography variant="h6" component="div" sx={{ mt: 1 }}>
         Top Tutors
       </Typography>
       <Grid container spacing={2}>
-        {[1, 2, 3, 4, 5, 6].map((item) => (
-          <Grid item xs={12} md={4} key={item}>
-            <CardHeader
-              avatar={
-                <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                  R
-                </Avatar>
-              }
-              title="Andreas Sujono"
-              subheader="EE4413 Tutor"
-            />
-          </Grid>
-        ))}
+        {filteredData.map((item) => {
+          const coursesCode = item.courses
+            .map((course) => course.code)
+            .join(', ');
+
+          const levelData = getLevelAndBadges(item.user.totalExps);
+          return (
+            <Grid item xs={12} md={6} lg={4} key={item.id}>
+              <CardHeader
+                avatar={
+                  <Avatar
+                    sx={{
+                      bgcolor: green[500],
+                      cursor: 'pointer',
+                    }}
+                    aria-label="recipe"
+                    src={item.user?.currentAvatar?.imageUrl || '#'}
+                    onClick={() => setChosenData(item)}
+                  >
+                    {item.user?.fullName?.slice(0, 1)?.toUpperCase()}
+                  </Avatar>
+                }
+                title={item.user?.fullName}
+                subheader={`Lv ${levelData.level}, ${coursesCode} Tutor`}
+                onClick={() => setChosenData(item)}
+                sx={{
+                  cursor: 'pointer',
+                }}
+              />
+              {/* <Button size="small">Make Request</Button> */}
+              {/* {user.id !== item.user.id && (
+                  <Button size="small" onClick={() => setChosenData(item)}>
+                    See Details
+                  </Button>
+                )} */}
+            </Grid>
+          );
+        })}
       </Grid>
     </Paper>
   );
@@ -138,7 +176,7 @@ export function TopTutor() {
 
 export const TutorListBox = () => {
   const [page, setPage] = React.useState(1);
-  const [rowsPerPage, setRowsPerPage] = React.useState(12);
+  const [rowsPerPage, setRowsPerPage] = React.useState(16);
   const [searchInput, setSearchInput] = React.useState('');
   const [chosenData, setChosenData] = React.useState(null);
 
@@ -257,6 +295,7 @@ export const RequestHistory = ({ data }: any) => {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [open, setOpen] = React.useState(false);
   const [modalData, setModalData] = React.useState<any>(null);
+  const [chosenData, setChosenData] = React.useState(null);
 
   const dispatch = useThunkDispatch();
 
@@ -284,9 +323,15 @@ export const RequestHistory = ({ data }: any) => {
 
   return (
     <TableContainer component={Paper}>
+      <TutorDetailsModal
+        open={!!chosenData}
+        setOpen={(bool) => setChosenData(null)}
+        data={chosenData}
+        enableCreateRequest={false}
+      />
       <GiveReviewModal data={modalData} open={open} setOpen={setOpen} />
       <Typography variant="h6" component="div" sx={{ mt: 2, ml: 2 }}>
-        Tutor Request:
+        Tutor Requested by me:
       </Typography>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
@@ -306,10 +351,19 @@ export const RequestHistory = ({ data }: any) => {
                 key={row.id}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
               >
-                <TableCell component="th" scope="row">
+                <TableCell
+                  component="th"
+                  scope="row"
+                  onClick={() => setChosenData(row.tutor)}
+                  sx={{ color: '#C63044', cursor: 'pointer' }}
+                >
                   {row.tutor?.user?.fullName}
                 </TableCell>
-                <TableCell align="left">{row.description}</TableCell>
+                <TableCell align="left">
+                  <Typography variant="body2" noWrap maxWidth="300px">
+                    <div title={row.description}>{row.description}</div>
+                  </Typography>
+                </TableCell>
                 <TableCell
                   align="left"
                   sx={{
@@ -367,6 +421,7 @@ export const OfferHistory = ({ data }: any) => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const dispatch = useThunkDispatch();
+  const [chosenData, setChosenData] = React.useState(null);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -404,8 +459,13 @@ export const OfferHistory = ({ data }: any) => {
   };
   return (
     <TableContainer component={Paper}>
+      <StudentDetailsModal
+        open={!!chosenData}
+        setOpen={(bool) => setChosenData(null)}
+        data={chosenData}
+      />
       <Typography variant="h6" component="div" sx={{ mt: 2, ml: 2 }}>
-        Tutor Offers:
+        Tutor Offers from students:
       </Typography>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
@@ -425,10 +485,19 @@ export const OfferHistory = ({ data }: any) => {
                 key={row.id}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
               >
-                <TableCell component="th" scope="row">
+                <TableCell
+                  component="th"
+                  scope="row"
+                  onClick={() => setChosenData(row)}
+                  sx={{ color: '#C63044', cursor: 'pointer' }}
+                >
                   {row.user?.fullName}
                 </TableCell>
-                <TableCell align="left">{row.description}</TableCell>
+                <TableCell align="left">
+                  <Typography variant="body2" noWrap maxWidth="300px">
+                    <div title={row.description}>{row.description}</div>
+                  </Typography>
+                </TableCell>
                 <TableCell
                   align="left"
                   sx={{
@@ -697,20 +766,20 @@ export const TutorDetailsModal = ({
             <Grid item xs={12} sm={12} key={item.id}>
               <Paper sx={{ p: 1 }}>
                 <Grid container spacing={1.5}>
-                  <Grid item xs={12} md={7}>
+                  <Grid item xs={12} md={8}>
                     <Typography variant="body1" component="div" sx={{ mt: 1 }}>
                       {item.review}
                     </Typography>
                   </Grid>
 
-                  <Grid item xs={12} md={5}>
+                  <Grid item xs={12} md={4}>
                     <CardHeader
                       avatar={
                         <Avatar
                           sx={{
                             bgcolor: green[500],
-                            width: 30,
-                            height: 30,
+                            width: 20,
+                            height: 20,
                             fontSize: '0.9rem',
                           }}
                           aria-label="recipe"
@@ -729,12 +798,116 @@ export const TutorDetailsModal = ({
                       defaultValue={item.rating}
                       precision={0.5}
                       readOnly
+                      size="small"
                     />
                   </Grid>
                 </Grid>
               </Paper>
             </Grid>
           ))}
+        </Grid>
+      </Box>
+    </Modal>
+  );
+};
+
+export const StudentDetailsModal = ({ open, setOpen, data }: any) => {
+  data = data || {};
+
+  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState<any>({});
+
+  const dispatch = useThunkDispatch();
+  const history = useHistory();
+
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  const isAndreasServer = window.location.origin.includes('andreassujono');
+  const portfolioUrl = `${window.location.origin}/${
+    isAndreasServer ? '' : ''
+  }#/portfolio/${data?.user?.id}`;
+
+  if (!data) return null;
+
+  const levelData = getLevelAndBadges(data?.user?.totalExps);
+  return (
+    <Modal
+      open={open}
+      onClose={handleClose}
+      aria-labelledby="modal-modal-title"
+      aria-describedby="modal-modal-description"
+    >
+      <Box
+        sx={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: '90%',
+          maxWidth: 600,
+          bgcolor: 'background.paper',
+          border: '0',
+          boxShadow: 24,
+          p: 3,
+          overflowY: 'auto',
+          overflowX: 'hidden',
+          maxHeight: '80vh',
+        }}
+      >
+        <Grid container spacing={2}>
+          <Grid item xs={12} md={6}>
+            <Avatar
+              sx={{
+                bgcolor: green[500],
+                width: 80,
+                height: 80,
+                fontSize: '2.5rem',
+              }}
+              aria-label="recipe"
+              src={data?.currentAvatar?.imageUrl || '#'}
+            >
+              {data?.user?.fullName?.slice(0, 1)?.toUpperCase()}
+            </Avatar>
+            <Typography variant="h6" component="div" sx={{ mt: 1 }}>
+              {data?.user?.fullName}
+            </Typography>
+            <Button
+              sx={{ display: 'inline', ml: -1 }}
+              onClick={() => window.open(portfolioUrl)}
+            >
+              See Portfolio
+            </Button>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <Grid container sx={{ alignItems: 'center' }}>
+              <Grid item xs={1} sx={{ maxWidth: '50px' }}>
+                <MilitaryTechIcon
+                  sx={{ fontSize: '3rem', color: levelData.badgeColor }}
+                />
+              </Grid>
+              <Grid item xs={12} md={9} sx={{ ml: 2 }}>
+                <Typography component="h5" variant="h6">
+                  Level {levelData.level} ({levelData.bagdesLabel})
+                </Typography>
+                <LinearProgressWithLabel
+                  variant="determinate"
+                  value={levelData.progress}
+                  label={`${data?.user?.totalExps} / ${levelData.nextLevelExp} Exp`}
+                  sx={{ mt: 0 }}
+                  type="string"
+                  minWidth={100}
+                />
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid item xs={12} md={12}>
+            <Paper sx={{ p: 2 }}>
+              <Typography variant="body1" component="div" sx={{ mt: 1 }}>
+                {data?.description}
+              </Typography>
+            </Paper>
+          </Grid>
         </Grid>
       </Box>
     </Modal>

@@ -226,6 +226,7 @@ export const getAllReviews =
           reviews: res,
         }),
       );
+      getMyRequests()(dispatch, getState);
       return { result: true, data: res };
     } catch (err) {
       dispatch(loadFailed());

@@ -31,6 +31,11 @@ const TagSelectorMenu = ({
               tag: 'iframe',
               label: 'Embed youtube',
             },
+            {
+              id: 'code',
+              tag: 'pre',
+              label: 'Code',
+            },
           ]
         : [
             {

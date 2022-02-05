@@ -21,9 +21,9 @@ interface Props {
 }
 
 const backgroundImages = [
-  'https://cdn.pixabay.com/photo/2017/08/30/01/05/milky-way-2695569_960_720.jpg',
-  'https://www.techrepublic.com/a/hub/i/r/2021/02/05/2c503225-0fb7-447f-8f34-facda0dc4472/resize/1200x/cda20270e6cc67f471f748edf15cba0f/smash-3.jpg',
-  'https://www.techrepublic.com/a/hub/i/2021/02/05/5e274c2d-a892-45d5-8354-361ad5e86a46/smash-4.jpg',
+  'https://cdn.pixabay.com/photo/2018/08/14/13/23/ocean-3605547__480.jpg',
+  'https://www.komando.com/wp-content/uploads/2018/11/dreamstime_m_87808373.jpg',
+  'https://wallpaperaccess.com/full/2040033.jpg',
 ];
 
 const UserSummarySection: React.FC<Props> = ({ data }: Props) => {

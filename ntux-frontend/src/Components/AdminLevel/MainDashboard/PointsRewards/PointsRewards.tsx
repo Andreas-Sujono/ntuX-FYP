@@ -49,7 +49,7 @@ export default function PointsRewards() {
         <Grid item xs={12}>
           <TopBox>
             <Grid container sx={{ alignItems: 'center' }}>
-              <Grid item xs={1} sx={{ maxWidth: '50px' }}>
+              <Grid item sx={{ maxWidth: '50px' }}>
                 <MilitaryTechIcon
                   sx={{ fontSize: '3rem', color: data.badgeColor }}
                 />
@@ -67,7 +67,7 @@ export default function PointsRewards() {
                   minWidth={100}
                 />
               </Grid>
-              <Grid item xs={12} md={6} className="grid-item-2">
+              <Grid item xs={12} md={5} className="grid-item-2">
                 <Typography
                   component="h3"
                   variant="h5"

@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { createAnswer, getOneQuestion } from 'Store/Actions/forum';
 import { selectQuestionDetailById } from 'Store/Selector/forum';
+import { LoadingBar } from 'common/Components/LoadingBar/FullPageLoadingBar';
 import CommentBox from '../../../common/Components/CommentBox';
 import Tag from '../../../common/Components/Tag';
 import {
@@ -44,6 +45,8 @@ function QuestionsSection(): React.ReactElement {
     if (res.result) setAnswerInput('');
     setLoading(false);
   };
+
+  if (!questionDetail.name) return <LoadingBar height="50vh" />;
 
   return (
     <Container>
