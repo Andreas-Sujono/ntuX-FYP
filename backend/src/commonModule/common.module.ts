@@ -1,3 +1,6 @@
+import { CourseWebsiteActivityController } from './controllers/courseWebsiteActivity.controller';
+import { CourseWebsiteActivityService } from './services/courseWebsiteActivity.service';
+import { CourseWebsiteActivity } from './entities/courseWebsiteActivity.entity';
 import { ForumTag } from './../forumModule/entities/forumTag.entity';
 import { ForumAnswer } from './../forumModule/entities/forumAnswer.entity';
 import { AdminController } from './controllers/admin.controller';
@@ -66,6 +69,7 @@ import { NotificationController } from './controllers/notification.controller';
       CourseContent,
       ForumTag,
       Notification,
+      CourseWebsiteActivity,
     ]),
   ],
   providers: [
@@ -83,6 +87,7 @@ import { NotificationController } from './controllers/notification.controller';
     StorageService,
     CourseService,
     NotificationService,
+    CourseWebsiteActivityService,
   ],
   exports: [
     EmailService,
@@ -102,6 +107,7 @@ import { NotificationController } from './controllers/notification.controller';
     AvatarController,
     CommonController,
     NotificationController,
+    CourseWebsiteActivityController,
   ],
 })
 export class CommonModule {}

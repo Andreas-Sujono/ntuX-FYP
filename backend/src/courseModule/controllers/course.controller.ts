@@ -92,8 +92,11 @@ export class CourseController implements CrudController<Course> {
 
   @Get('summary')
   @Roles(UserRole.ADMIN, UserRole.LECTURER)
-  async getCourseSummary(@Query('courseId') courseId: number) {
-    return this.service.getCourseSummary(courseId);
+  async getCourseSummary(
+    @Query('courseId') courseId: number,
+    @Query('batchId') batchId: number,
+  ) {
+    return this.service.getCourseSummary(courseId, batchId);
   }
 
   @Override()

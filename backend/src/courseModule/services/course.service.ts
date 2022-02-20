@@ -256,22 +256,32 @@ export class CourseService extends TypeOrmCrudService<Course> {
     return res;
   }
 
-  async getCourseSummary(courseId: number) {
+  async getCourseSummary(courseId: number, batchId?: number) {
     const [
       totalUser,
+      totalCurrentUser,
       admittedUser,
       pendingUser,
       totalAnnouncements,
       totalBatch,
     ] = await Promise.all([
       this.courseContentRepo.query(`
-        select count(*) from student_registration where "courseId" = ${courseId}
+        select count(*) from student_registration where "courseId" = ${courseId} 
       `),
       this.courseContentRepo.query(`
-        select count(*) from student_registration where "courseId" = ${courseId} and "status" = 'ADMITTED'
+        select count(*) from student_registration where "courseId" = ${courseId} ${
+        batchId ? ` and "courseBatchId" = ${batchId}` : ''
+      }  
       `),
       this.courseContentRepo.query(`
-        select count(*) from student_registration where "courseId" = ${courseId} and "status" = 'PENDING'
+        select count(*) from student_registration where "courseId" = ${courseId} and "status" = 'ADMITTED' ${
+        batchId ? ` and "courseBatchId" = ${batchId}` : ''
+      }  
+      `),
+      this.courseContentRepo.query(`
+        select count(*) from student_registration where "courseId" = ${courseId} and "status" = 'PENDING' ${
+        batchId ? ` and "courseBatchId" = ${batchId}` : ''
+      }  
       `),
       this.courseContentRepo.query(`
         select count(*) from course_announcement where "courseId" = ${courseId}
@@ -282,6 +292,7 @@ export class CourseService extends TypeOrmCrudService<Course> {
     ]);
     return {
       totalUser: totalUser[0].count,
+      totalCurrentUser: totalCurrentUser[0].count,
       admittedUser: admittedUser[0].count,
       pendingUser: pendingUser[0].count,
       totalAnnouncements: totalAnnouncements[0].count,
