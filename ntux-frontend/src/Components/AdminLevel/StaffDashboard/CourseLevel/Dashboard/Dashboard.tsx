@@ -39,7 +39,7 @@ function DashboardContent() {
     >
       <Grid container spacing={3}>
         <Grid item xs={12} md={8}>
-          <UsersChart data={summary} />
+          <UsersChart data={summary} courseId={courseId} />
         </Grid>
 
         <Grid item xs={12} md={4}>
@@ -91,7 +91,7 @@ function DashboardContent() {
         </Grid>
 
         <Grid item xs={12}>
-          <WebsiteTraffic />
+          <WebsiteTraffic courseId={courseId} />
         </Grid>
 
         <Grid item xs={12}>

@@ -170,8 +170,19 @@ export default class AdminService extends BaseService {
     return res.data;
   };
 
-  getCourseSummary = async (courseId: number) => {
-    const res = await this.getRequest(`/courses/summary?courseId=${courseId}`);
+  getCourseSummary = async (courseId: number, batchId?: any) => {
+    const res = await this.getRequest(
+      `/courses/summary?courseId=${courseId}${
+        batchId ? `&batchId=${batchId}` : ''
+      }`,
+    );
+    return res.data;
+  };
+
+  getCourseWebsiteActivity = async (courseId: number) => {
+    const res = await this.getRequest(
+      `/course-website-activity/?courseId=${courseId}`,
+    );
     return res.data;
   };
 }

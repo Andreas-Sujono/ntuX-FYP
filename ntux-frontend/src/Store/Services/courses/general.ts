@@ -62,4 +62,12 @@ export default class CoursesService extends BaseService {
     const res = await this.deleteRequest(`/courses/${id}`, {});
     return res.data;
   };
+  createCourseWebsiteAcitivity = async (courseId: any, batchId: any) => {
+    const res = await this.postRequest(`/course-website-activity`, {
+      course: courseId,
+      courseBatch: batchId,
+      visitWithLogin: 1,
+    });
+    return res.data;
+  };
 }

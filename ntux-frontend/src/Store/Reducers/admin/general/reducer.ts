@@ -32,6 +32,7 @@ const initialState = initEntityState({
   websiteActivities: [],
   allLecturers: [],
   allStudents: [],
+  courseWebsiteActivities: [],
 });
 
 function reducer(state = initialState, action: AnyAction) {

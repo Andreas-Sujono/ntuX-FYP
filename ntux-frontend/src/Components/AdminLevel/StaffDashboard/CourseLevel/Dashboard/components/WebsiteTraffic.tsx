@@ -1,4 +1,4 @@
-import React, { useMemo, memo, useState } from 'react';
+import React, { useMemo, memo, useState, useEffect } from 'react';
 import { merge } from 'lodash';
 import ReactApexChart from 'react-apexcharts';
 import moment from 'moment';
@@ -13,13 +13,23 @@ import {
 } from '@mui/material';
 import { BaseOptionChart } from './baseOptionChart';
 import { useSelector } from 'react-redux';
-import { selectWebsiteActivitiesByInterval } from 'Store/Selector/admin';
+import {
+  selectCourseWebsiteActivities,
+  selectWebsiteActivitiesByInterval,
+} from 'Store/Selector/admin';
+import { useThunkDispatch } from 'common/hooks';
+import { getCourseWebsiteActivity } from 'Store/Actions/admin/general/courseLevel.thunk';
 
 // ----------------------------------------------------------------------
 
-function AppWebsiteVisits() {
+function AppWebsiteVisits({ courseId }: any) {
   const interval = 'd';
-  const data = useSelector(selectWebsiteActivitiesByInterval)(interval);
+  const data = useSelector(selectCourseWebsiteActivities);
+  const dispatch = useThunkDispatch();
+
+  useEffect(() => {
+    dispatch(getCourseWebsiteActivity(courseId));
+  }, []);
 
   const CHART_DATA = useMemo(
     () => [
@@ -55,7 +65,7 @@ function AppWebsiteVisits() {
   return (
     <Card>
       <CardHeader
-        title="Website Visits"
+        title="Course Visits"
         subheader={`For the past ${
           interval === 'd'
             ? '12 Days'

@@ -55,3 +55,6 @@ export const selectAllStudents = (state: RootState) => {
 export const selectCourseSummary = (state: RootState) => {
   return selectGeneralState(state).courseSummary;
 };
+
+export const selectCourseWebsiteActivities = (state: RootState) =>
+  selectGeneralState(state).courseWebsiteActivities;

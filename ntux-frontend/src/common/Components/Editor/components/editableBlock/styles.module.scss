@@ -1,4 +1,4 @@
-@import "../../shared/variables.scss";
+@import '../../shared/variables.scss';
 
 .block {
   padding: 0.25rem;
@@ -73,14 +73,13 @@
   padding: 0.25rem;
 }
 
-.file{
+.file {
   padding: 0.25rem;
 }
 
-pre{
-  background-color: hsl(210, 8%, 95);
+pre {
+  background-color: hsl(210, 8%, 95%);
 }
-
 
 .blockSelected.image {
   opacity: 0.75;

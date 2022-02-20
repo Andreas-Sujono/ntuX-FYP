@@ -249,3 +249,23 @@ export const getRecommendationCourses =
       return { result: false };
     }
   };
+
+export const createCourseWebsiteAcitivity =
+  (courseId: any, batchId: any, bypass = false) =>
+  async (dispatch: AppDispatch, getState: () => RootState) => {
+    try {
+      const res = await service.createCourseWebsiteAcitivity(courseId, batchId);
+      if (res.errorCode) {
+        dispatch(loadFailed());
+        return {
+          result: false,
+          errorMessage: res.message,
+        };
+      }
+      dispatch(loadSuccess({}));
+      return { result: true };
+    } catch (err) {
+      dispatch(loadFailed());
+      return { result: false };
+    }
+  };

@@ -347,10 +347,10 @@ export const updateRewardRedeemed =
   };
 
 export const getCourseSummary =
-  (courseId: any, bypass = false) =>
+  (courseId: any, batchId: any = null, bypass = false) =>
   async (dispatch: AppDispatch, getState: () => RootState) => {
     try {
-      const res = await service.getCourseSummary(courseId);
+      const res = await service.getCourseSummary(courseId, batchId);
       if (res.errorCode) {
         dispatch(loadFailed());
         sendErrorNotification(res.message, res.errorCode);
@@ -362,6 +362,31 @@ export const getCourseSummary =
       dispatch(
         loadSuccess({
           courseSummary: res,
+        }),
+      );
+      return { result: true, res };
+    } catch (err) {
+      dispatch(loadFailed());
+      return { result: false };
+    }
+  };
+
+export const getCourseWebsiteActivity =
+  (courseId: any, bypass = false) =>
+  async (dispatch: AppDispatch, getState: () => RootState) => {
+    try {
+      const res = await service.getCourseWebsiteActivity(courseId);
+      if (res.errorCode) {
+        dispatch(loadFailed());
+        sendErrorNotification(res.message, res.errorCode);
+        return {
+          result: false,
+          errorMessage: res.message,
+        };
+      }
+      dispatch(
+        loadSuccess({
+          courseWebsiteActivities: res,
         }),
       );
       return { result: true, res };

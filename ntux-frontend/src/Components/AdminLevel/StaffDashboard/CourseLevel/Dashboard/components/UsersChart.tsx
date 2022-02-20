@@ -1,5 +1,5 @@
 import { merge } from 'lodash';
-import React, { memo, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import { useTheme, styled } from '@mui/material/styles';
 import {
@@ -11,6 +11,10 @@ import {
   MenuItem,
 } from '@mui/material';
 import { BaseOptionChartStyle, BaseOptionChart } from './baseOptionChart';
+import { useThunkDispatch } from 'common/hooks';
+import { getCourseSummary } from 'Store/Actions/admin/general/courseLevel.thunk';
+import { useSelector } from 'react-redux';
+import { selectAllCourseBatchesByCourseId } from 'Store/Selector/admin';
 
 // ----------------------------------------------------------------------
 
@@ -35,13 +39,34 @@ const ChartWrapperStyle = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-function UsersChart({ data }: any) {
+function UsersChart({ data, courseId }: any) {
   const [batchName, setBatchName] = useState('all');
   const theme = useTheme();
+  const courseBatch =
+    useSelector(selectAllCourseBatchesByCourseId)[courseId] || [];
+
+  const dispatch = useThunkDispatch();
+
+  const handleChange = (event) => {
+    setBatchName(event.target.value);
+    dispatch(
+      getCourseSummary(
+        courseId,
+        event.target.value === 'all' ? null : event.target.value,
+      ),
+    );
+  };
+
+  useEffect(() => {
+    dispatch(getCourseSummary(courseId));
+  }, []);
+
   const CHART_DATA = [
     parseInt(data.pendingUser || '0'),
     parseInt(data.admittedUser || '0'),
-    (data.totalUser || 0) - (data.pendingUser || 0) - (data.admittedUser || 0),
+    (data.totalCurrentUser || 0) -
+      (data.pendingUser || 0) -
+      (data.admittedUser || 0),
   ];
 
   const chartOptions = merge(BaseOptionChart(), {
@@ -80,16 +105,11 @@ function UsersChart({ data }: any) {
       },
     },
   });
-
-  const handleChange = (event) => {
-    setBatchName(event.target.value);
-  };
-
   return (
     <Card sx={{ height: '100%' }}>
       <BaseOptionChartStyle />
       <CardHeader
-        title={`Student Registration: ${data.totalUser || 0}`}
+        title={`Student Registration: ${data.totalCurrentUser || 0}`}
         action={
           <FormControl>
             <InputLabel id="demo-simple-select-label">Age</InputLabel>
@@ -101,8 +121,11 @@ function UsersChart({ data }: any) {
               onChange={handleChange}
             >
               <MenuItem value={'all'}>All Batches</MenuItem>
-              <MenuItem value="Batch1">Batch 1</MenuItem>
-              <MenuItem value="batch2">Batch 2</MenuItem>
+              {courseBatch.map((item) => (
+                <MenuItem value={item.id} key={item.id}>
+                  {item.name}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
         }

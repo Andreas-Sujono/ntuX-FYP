@@ -42,6 +42,7 @@ import { routes } from 'Components/Routes';
 import { makePath } from 'common/utils';
 import { useSelector } from 'react-redux';
 import {
+  createCourseWebsiteAcitivity,
   getCourseAnnouncements,
   getCourseContents,
   getOneCourseRegistered,
@@ -82,6 +83,7 @@ function MainContainer({ children }: { children: React.ReactNode }) {
 
   if (match?.params?.courseId === ':courseId' || !match?.params?.courseId)
     match.params = { courseId: null };
+  const courseId = match.params.courseId;
 
   const user = useSelector(selectUser);
   const allCourseDetailById = useSelector(selectCourseRegisteredById) || {};
@@ -124,6 +126,10 @@ function MainContainer({ children }: { children: React.ReactNode }) {
         getCourseAnnouncements(match.params.courseId, course.courseBatch.id),
       );
   }, [course]);
+
+  useEffect(() => {
+    dispatch(createCourseWebsiteAcitivity(courseId, null));
+  }, [courseId]);
 
   const getAllData = async () => {
     setLoading(true);
