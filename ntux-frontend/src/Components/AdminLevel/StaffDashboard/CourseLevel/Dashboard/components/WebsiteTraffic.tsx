@@ -12,40 +12,30 @@ import {
   MenuItem,
 } from '@mui/material';
 import { BaseOptionChart } from './baseOptionChart';
+import { useSelector } from 'react-redux';
+import { selectWebsiteActivitiesByInterval } from 'Store/Selector/admin';
 
 // ----------------------------------------------------------------------
 
-function AppWebsiteVisits({ data, interval }: any) {
+function AppWebsiteVisits() {
+  const interval = 'd';
+  const data = useSelector(selectWebsiteActivitiesByInterval)(interval);
+
   const CHART_DATA = useMemo(
     () => [
       {
-        name: 'User Visit Without Login',
+        name: 'User Visit',
         type: 'line',
-        data: data.map((item) => item.visitWithoutLogin),
-      },
-      {
-        name: 'User Visit With Login',
-        type: 'line',
-        data: data.map((item) => item.visitWithLogin),
-      },
-      {
-        name: 'Question Asked',
-        type: 'column',
-        data: data.map((item) => item.totalQuestion),
-      },
-      {
-        name: 'Solution Answered',
-        type: 'column',
-        data: data.map((item) => item.totalAnswer),
+        data: data.map((item) => item.visitWithLogin), //change this
       },
     ],
     [data],
   );
 
   const chartOptions = merge(BaseOptionChart(), {
-    stroke: { width: [2, 3, 0, 0] },
+    stroke: { width: [2] },
     plotOptions: { bar: { columnWidth: '11%', borderRadius: 4 } },
-    fill: { type: ['solid', 'solid', 'gradient', 'gradient'] },
+    fill: { type: ['solid'] },
     labels: data.map((item) => moment(item.date).format('MM/DD/YYYY')),
     xaxis: { type: 'datetime' },
     tooltip: {
@@ -74,20 +64,6 @@ function AppWebsiteVisits({ data, interval }: any) {
             : '12 Weeks'
         }`}
       />
-      {/* <FormControl fullWidth>
-        <InputLabel id="demo-simple-select-label">Age</InputLabel>
-        <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          value={age}
-          label="Age"
-          onChange={handleChange}
-        >
-          <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
-        </Select>
-      </FormControl> */}
       <Box sx={{ p: 3, pb: 1, pt: 1 }} dir="ltr">
         <ReactApexChart
           type="line"

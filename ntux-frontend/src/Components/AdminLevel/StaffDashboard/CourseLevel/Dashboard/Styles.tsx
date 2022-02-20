@@ -29,7 +29,9 @@ export const TopBox = styled(Paper).attrs({
 
 export const StyledBox = styled(Paper).attrs({
   sx: {
-    p: 2,
+    p: 2.5,
+    pb: 3,
+    pt: 3,
     position: 'relative',
   },
 })<any>``;

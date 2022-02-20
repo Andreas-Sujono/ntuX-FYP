@@ -13,6 +13,11 @@ export const routeData = [
     exact: true,
   },
   {
+    path: routes.ALL_COURSES,
+    component: lazy(() => import('../../LandingPage/AllCoursesPage')),
+    exact: true,
+  },
+  {
     path: routes.FORGOT_PASSWORD_PAGE,
     component: lazy(() => import('../../Auth/ForgotPasswordPage')),
     exact: true,

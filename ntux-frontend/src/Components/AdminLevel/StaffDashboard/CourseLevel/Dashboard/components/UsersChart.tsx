@@ -1,8 +1,15 @@
 import { merge } from 'lodash';
-import React, { memo } from 'react';
+import React, { memo, useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import { useTheme, styled } from '@mui/material/styles';
-import { Card, CardHeader } from '@mui/material';
+import {
+  Card,
+  CardHeader,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+} from '@mui/material';
 import { BaseOptionChartStyle, BaseOptionChart } from './baseOptionChart';
 
 // ----------------------------------------------------------------------
@@ -29,6 +36,7 @@ const ChartWrapperStyle = styled('div')(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 function UsersChart({ data }: any) {
+  const [batchName, setBatchName] = useState('all');
   const theme = useTheme();
   const CHART_DATA = [
     parseInt(data.pendingUser || '0'),
@@ -73,10 +81,33 @@ function UsersChart({ data }: any) {
     },
   });
 
+  const handleChange = (event) => {
+    setBatchName(event.target.value);
+  };
+
   return (
     <Card sx={{ height: '100%' }}>
       <BaseOptionChartStyle />
-      <CardHeader title={`Student Registration: ${data.totalUser || 0}`} />
+      <CardHeader
+        title={`Student Registration: ${data.totalUser || 0}`}
+        action={
+          <FormControl>
+            <InputLabel id="demo-simple-select-label">Age</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={batchName}
+              label="Age"
+              onChange={handleChange}
+            >
+              <MenuItem value={'all'}>All Batches</MenuItem>
+              <MenuItem value="Batch1">Batch 1</MenuItem>
+              <MenuItem value="batch2">Batch 2</MenuItem>
+            </Select>
+          </FormControl>
+        }
+      />
+
       <ChartWrapperStyle dir="ltr">
         <ReactApexChart
           type="pie"

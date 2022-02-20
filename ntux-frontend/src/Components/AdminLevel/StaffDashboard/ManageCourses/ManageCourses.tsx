@@ -31,10 +31,11 @@ import { useSelector } from 'react-redux';
 import { selectAllCourses, selectAllLecturers } from 'Store/Selector/admin';
 import { toast } from 'react-toastify';
 import { useThunkDispatch } from 'common/hooks';
-import { createCourse, uploadFile } from 'Store/Actions/admin';
+import { createCourse, getAllCourses, uploadFile } from 'Store/Actions/admin';
 import { selectUser } from 'Store/Selector/auth';
 import { Role } from 'Models/Auth';
 import { selectMyCourses } from 'Store/Selector/courses';
+import { getMyCourses } from 'Store/Actions/courses';
 
 export const CourseCard = ({ data }: any) => {
   const history = useHistory();
@@ -77,6 +78,7 @@ export default function ManageCourses() {
   const [searchInput, setSearchInput] = useState('');
   const [searchResult, setSearchResult] = useState<any>([]);
   const [openModal, setOpenModal] = useState(false);
+  const dispatch = useThunkDispatch();
 
   const user = useSelector(selectUser);
 
@@ -98,6 +100,11 @@ export default function ManageCourses() {
       ref.current = null;
     }, 100);
   };
+
+  useEffect(() => {
+    dispatch(getAllCourses());
+    dispatch(getMyCourses());
+  });
 
   const final = searchInput ? searchResult : allCourses;
 

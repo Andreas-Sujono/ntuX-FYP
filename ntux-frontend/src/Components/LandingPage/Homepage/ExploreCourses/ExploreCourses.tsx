@@ -9,15 +9,12 @@ import { getPublicCourses } from 'Store/Actions/courses';
 import { selectPublicCourses } from 'Store/Selector/courses';
 import { Container, CoursesContainer, Title, CourseCard } from './Styles';
 import { Link } from 'react-router-dom';
+import { Button } from '@mui/material';
 
 const ExploreCourses: React.FC = () => {
   const history = useHistory();
   const dispatch = useDispatch();
-  const courses = useSelector(selectPublicCourses);
-
-  useEffect(() => {
-    dispatch(getPublicCourses());
-  }, []);
+  const courses = useSelector(selectPublicCourses).slice(0, 6);
 
   courses.forEach((course) => {
     course?.courseBatches?.sort((a, b) => {
@@ -35,7 +32,14 @@ const ExploreCourses: React.FC = () => {
 
   return (
     <Container id="explore-courses">
-      <Title>Available Courses</Title>
+      <Title>
+        Available Courses
+        <Link to={routes.ALL_COURSES}>
+          <Button sx={{ ml: 4, float: 'right' }} variant="contained">
+            See All Courses
+          </Button>
+        </Link>
+      </Title>
       <CoursesContainer>
         {courses.map((item: Course) => (
           <CourseCard

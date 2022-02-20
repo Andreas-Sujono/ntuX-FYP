@@ -15,6 +15,7 @@ import UsersChart from './components/UsersChart';
 import { useRouteMatch } from 'react-router-dom';
 import { routes } from 'Components/Routes';
 import UserTable from '../ManageStudents/Table';
+import WebsiteTraffic from './components/WebsiteTraffic';
 
 function DashboardContent() {
   const summary = useSelector(selectCourseSummary);
@@ -87,6 +88,10 @@ function DashboardContent() {
               </Typography>
             </StyledBox>
           </Grid>
+        </Grid>
+
+        <Grid item xs={12}>
+          <WebsiteTraffic />
         </Grid>
 
         <Grid item xs={12}>
