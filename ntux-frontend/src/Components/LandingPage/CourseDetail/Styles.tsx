@@ -118,6 +118,7 @@ export const Content = styled.div`
     font-size: 18px;
     line-height: 22px;
     margin-bottom: 2em;
+    white-space: pre-line;
 
     .MuiCardHeader-avatar {
       width: 50px;

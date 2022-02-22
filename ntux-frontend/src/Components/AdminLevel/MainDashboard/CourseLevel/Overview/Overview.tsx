@@ -68,7 +68,7 @@ export default function OverviewContent() {
           >
             <Typography variant="h6">About</Typography>
             <Divider />
-            <Typography variant="body1" sx={{ mt: 2 }}>
+            <Typography variant="body1" sx={{ mt: 2, whiteSpace: 'pre-line' }}>
               {course.description}
             </Typography>
 
@@ -76,7 +76,7 @@ export default function OverviewContent() {
               Objectives
             </Typography>
             <Divider />
-            <Typography variant="body1" sx={{ mt: 2 }}>
+            <Typography variant="body1" sx={{ mt: 2, whiteSpace: 'pre-line' }}>
               {course.objectives}
             </Typography>
 
@@ -84,7 +84,7 @@ export default function OverviewContent() {
               Outlines
             </Typography>
             <Divider />
-            <Typography variant="body1" sx={{ mt: 2 }}>
+            <Typography variant="body1" sx={{ mt: 2, whiteSpace: 'pre-line' }}>
               {course.outline}
             </Typography>
 

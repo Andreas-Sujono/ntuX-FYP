@@ -256,7 +256,14 @@ function MainContainer({ children }: { children: React.ReactNode }) {
                 <ListItemIcon>
                   <item.Icon />
                 </ListItemIcon>
-                <ListItemText primary={item.name} />
+                <ListItemText
+                  primary={item.name}
+                  sx={{
+                    width: '100%',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipis',
+                  }}
+                />
               </ListItemButton>
             </DrawerList>
 
@@ -285,7 +292,14 @@ function MainContainer({ children }: { children: React.ReactNode }) {
                   }}
                   sx={{ flexGrow: 0, pl: 12 }}
                 >
-                  <ListItemText primary={item2.pageName} />
+                  <ListItemText
+                    primary={item2.pageName}
+                    sx={{
+                      width: '100%',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                    }}
+                  />
                 </ListItemButton>
               ))}
           </React.Fragment>

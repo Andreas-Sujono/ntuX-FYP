@@ -320,7 +320,14 @@ function CourseContainer({ children }: { children: React.ReactNode }) {
                       }
                     }}
                   >
-                    <ListItemText primary={item2.pageName} />
+                    <ListItemText
+                      primary={item2.pageName}
+                      sx={{
+                        width: '100%',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                      }}
+                    />
                     {/* <DeleteOutlinedIcon sx={{ color: '#bf414c' }} /> */}
                   </ListItemButton>
                 ))}
