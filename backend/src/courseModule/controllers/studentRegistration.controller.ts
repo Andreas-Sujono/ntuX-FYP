@@ -55,7 +55,7 @@ export class StudentRegistrationController
   async registerCourse(@Body() body: any, @UserData('role') role: string) {
     if (role === UserRole.LECTURER || role === UserRole.ADMIN) {
       return this.service.createStudentRegistration(
-        body.userId,
+        body.userId || body.user,
         body.status,
         body.courseId,
         body.courseBatchId,

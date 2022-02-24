@@ -86,6 +86,8 @@ export class StudentRegistrationService extends TypeOrmCrudService<StudentRegist
     //authenticate user
     await this.authService.login(user.email, user.hashedPassword);
 
+    if (!courseBatchId) throw new BadRequestException('Batch is required');
+
     const res = await this.repo.save(
       this.repo.create({
         course: courseId as any,

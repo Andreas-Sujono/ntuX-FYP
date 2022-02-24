@@ -18,6 +18,7 @@ export const LoadingBar = ({ height }: any) => {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
+        zIndex: 10,
       }}
     >
       <ReactLoading color="rgb(53, 126, 221)" type="spin" />

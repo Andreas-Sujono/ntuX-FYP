@@ -32,6 +32,7 @@ export default function RegisterCoursePage() {
       return new Date(a.startDate).getTime() - new Date(b.endDate).getTime();
     });
   const chosenCourseBatch = courseData?.courseBatches?.[0];
+  console.log('chosenCourseBatch: ', chosenCourseBatch);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -50,7 +51,9 @@ export default function RegisterCoursePage() {
         hashedPassword: data.get('password') as string,
       },
       courseId: courseData?.id,
+      course: courseData?.id,
       coursebatchId: chosenCourseBatch?.id,
+      coursebatch: chosenCourseBatch?.id,
     };
     if (user) {
       formData.user = user;
