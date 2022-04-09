@@ -111,7 +111,10 @@ export default function MyCourses() {
   const ref = useRef<any>(null);
   const history = useHistory();
 
-  const myCourses = useSelector(selectMyCourses);
+  let myCourses = useSelector(selectMyCourses);
+  myCourses = myCourses.filter(
+    (item) => new Date() >= new Date(item?.courseBatch?.startDate),
+  );
   const recommendationCourses = useSelector(selectRecommendationCourses);
 
   useEffect(() => {

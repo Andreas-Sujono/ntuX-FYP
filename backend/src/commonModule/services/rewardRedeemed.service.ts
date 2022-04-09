@@ -70,7 +70,7 @@ export class RewardRedeemedService extends TypeOrmCrudService<RewardRedeemed> {
           const expiredAt = new Date(
             Math.max(
               Date.now(),
-              new Date(premiumSetting.expiredAt).getTime() + monthTime,
+              new Date(premiumSetting.expiredAt).getTime() + 3 * monthTime,
             ),
           );
 
@@ -100,7 +100,7 @@ export class RewardRedeemedService extends TypeOrmCrudService<RewardRedeemed> {
           const expiredAt = new Date(
             Math.max(
               Date.now(),
-              new Date(premiumSetting.expiredAt).getTime() + 3 * monthTime,
+              new Date(premiumSetting.expiredAt).getTime() + 6 * monthTime,
             ),
           );
 

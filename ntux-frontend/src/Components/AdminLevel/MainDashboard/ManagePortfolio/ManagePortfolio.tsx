@@ -31,7 +31,10 @@ function ManagePortfolio() {
   const userPortfolio = useSelector(selectPortfolio);
   const dispatch = useThunkDispatch();
 
-  const isPremium = !!userPortfolio?.user?.premiumSetting;
+  const isPremium =
+    !!userPortfolio?.user?.premiumSetting &&
+    new Date() <=
+      new Date(userPortfolio?.user?.premiumSetting.premiumPortfolioExpiredAt);
   const portfolioDetails = userPortfolio?.user?.portfolio || {};
 
   const isAndreasServer = window.location.origin.includes('andreassujono');

@@ -16,7 +16,10 @@ import { getMyAccount } from 'Store/Actions/auth';
 
 function DashboardContent() {
   const user = useSelector(selectUser);
-  const myCourses = useSelector(selectMyCourses);
+  let myCourses = useSelector(selectMyCourses);
+  myCourses = myCourses.filter(
+    (item) => new Date() >= new Date(item?.courseBatch?.startDate),
+  );
 
   const dispatch = useThunkDispatch();
 

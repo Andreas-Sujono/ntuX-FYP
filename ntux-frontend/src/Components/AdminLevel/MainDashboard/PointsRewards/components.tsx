@@ -389,6 +389,7 @@ export const RewardDetailsModal = ({ open, setOpen, data }: any) => {
     );
     setLoading(false);
     handleClose();
+    toast.success('Reward is redeemed successfully');
   };
 
   return (
@@ -435,7 +436,7 @@ export const RewardDetailsModal = ({ open, setOpen, data }: any) => {
           </CardContent>
           <CardActions>
             <Button size="small" onClick={onRedeem} disabled={loading}>
-              Reedem
+              Redeem
             </Button>
           </CardActions>
         </Card>

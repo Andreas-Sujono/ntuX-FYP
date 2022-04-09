@@ -142,7 +142,9 @@ export default function TableComponent({ data, courseId, max }: any) {
                   </TableCell>
                   <TableCell align="left">
                     {/* <Button>Edit</Button> */}
-                    <Button onClick={onClickDelete}>Delete</Button>
+                    <Button onClick={() => onClickDelete(row.id)}>
+                      Delete
+                    </Button>
                   </TableCell>
                 </TableRow>
               ))}
