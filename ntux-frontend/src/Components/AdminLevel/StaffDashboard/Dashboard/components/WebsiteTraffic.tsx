@@ -43,10 +43,12 @@ function AppWebsiteVisits({ data, interval }: any) {
   );
 
   const chartOptions = merge(BaseOptionChart(), {
-    stroke: { width: [2, 3, 0, 0] },
+    stroke: { width: [2, 3, 0.5, 0.5] },
     plotOptions: { bar: { columnWidth: '11%', borderRadius: 4 } },
     fill: { type: ['solid', 'solid', 'gradient', 'gradient'] },
-    labels: data.map((item) => moment(item.date).format('MM/DD/YYYY')),
+    labels: data.map((item) =>
+      moment(item.date).add(1, 'day').format('MM/DD/YYYY'),
+    ),
     xaxis: { type: 'datetime' },
     tooltip: {
       shared: true,

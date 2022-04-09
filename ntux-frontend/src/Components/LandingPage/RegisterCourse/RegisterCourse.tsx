@@ -52,8 +52,8 @@ export default function RegisterCoursePage() {
       },
       courseId: courseData?.id,
       course: courseData?.id,
-      coursebatchId: chosenCourseBatch?.id,
-      coursebatch: chosenCourseBatch?.id,
+      courseBatchId: chosenCourseBatch?.id,
+      courseBatch: chosenCourseBatch?.id,
     };
     if (user) {
       formData.user = user;

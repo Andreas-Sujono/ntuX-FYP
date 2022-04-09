@@ -61,7 +61,7 @@ export default function Notification() {
     if (type === 'STUDENT_REWARD' || type === 'ADMIN_REWARD')
       return routes.STAFF.MANAGE_REWARDS;
     if (type === 'ADMIN_REGISTRATION' || type === 'ADMIN_REGISTRATION')
-      return makePath(routes.STAFF_COURSES.ANNOUNCEMENTS, {
+      return makePath(routes.STAFF_COURSES.MANAGE_STUDENTS, {
         courseId: notif?.metadata?.course,
       });
 

@@ -57,7 +57,7 @@ const Routes = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       dispatch(refreshToken());
-    }, 1000 * 60 * 3);
+    }, 1000 * 60 * 10);
 
     return () => clearInterval(interval);
   }, []);

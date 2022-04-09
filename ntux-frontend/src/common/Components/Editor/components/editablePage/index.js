@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import EditableBlock from '../editableBlock';
-import Notice from '../notice';
 import { usePrevious } from '../../hooks';
 import { objectId, setCaretToEnd } from '../../utils';
 import { useThunkDispatch } from '../../../../hooks';
@@ -44,10 +43,10 @@ const EditablePage = ({
 }) => {
   if (err) {
     return (
-      <Notice status="ERROR">
+      <div>
         <h3>Something went wrong 💔</h3>
         <p>Have you tried to restart the app at ?</p>
-      </Notice>
+      </div>
     );
   }
 

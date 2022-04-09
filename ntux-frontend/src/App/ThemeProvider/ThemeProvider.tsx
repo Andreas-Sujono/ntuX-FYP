@@ -3,7 +3,7 @@ import { useLocation, matchPath } from 'react-router-dom';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { darkThemeRoutePaths } from '../../common/platformSetting';
+// import { darkThemeRoutePaths } from '../../common/platformSetting';
 import { colors } from '../../common/styling';
 import { PlatformSetting } from '../../Models/PlatformSetting';
 import GlobalStyle, { ThemeProps } from './GlobalStyle';
@@ -46,11 +46,12 @@ const ThemeProvider = ({
   };
 
   const handleChangeTheme = () => {
-    const isUsingDarkTheme = darkThemeRoutePaths.reduce(
-      (acc: any, current: string) =>
-        acc && matchPath(location.pathname, { path: current }),
-      true,
-    );
+    const isUsingDarkTheme = false;
+    // darkThemeRoutePaths.reduce(
+    //   (acc: any, current: string) =>
+    //     acc && matchPath(location.pathname, { path: current }),
+    //   true,
+    // );
 
     if (isUsingDarkTheme && !darkTheme) setDarkTheme(true);
     else {

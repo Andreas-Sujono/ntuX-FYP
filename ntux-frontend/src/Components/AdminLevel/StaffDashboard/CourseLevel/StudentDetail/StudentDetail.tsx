@@ -69,7 +69,7 @@ export default function ManageStudents({ userId: _userId, onGoBack }: any) {
         </ListItemButton>
 
         <Grid container sx={{ alignItems: 'center' }}>
-          <Grid item xs={12} md={6} className="grid-item-2">
+          <Grid item xs={12} md={5} className="grid-item-2">
             <CardHeader
               avatar={
                 <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
@@ -81,7 +81,7 @@ export default function ManageStudents({ userId: _userId, onGoBack }: any) {
               size="large"
             />
           </Grid>
-          <Grid item xs={1} sx={{ maxWidth: '50px' }}>
+          <Grid item sx={{ maxWidth: '50px' }}>
             <MilitaryTechIcon
               sx={{ fontSize: '3rem', color: pointData.badgeColor }}
             />

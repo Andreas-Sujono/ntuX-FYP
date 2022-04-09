@@ -6,6 +6,7 @@ import moment from 'moment';
 import { BaseOptionChart } from '../../Dashboard/components/baseOptionChart';
 
 function AppWebsiteVisits({ data, interval }: any) {
+  data.sort((a, b) => a.date - b.date);
   const CHART_DATA = useMemo(
     () => [
       {
@@ -28,10 +29,12 @@ function AppWebsiteVisits({ data, interval }: any) {
   );
 
   const chartOptions = merge(BaseOptionChart(), {
-    stroke: { width: [3, 0, 0] },
+    stroke: { width: [3, 0.5, 0.5] },
     plotOptions: { bar: { columnWidth: '11%', borderRadius: 4 } },
     fill: { type: ['solid', 'gradient', 'gradient'] },
-    labels: data.map((item) => moment(item.date).format('MM/DD/YYYY')),
+    labels: data.map((item) =>
+      moment(item.date).add(1, 'day').format('MM/DD/YYYY'),
+    ),
     xaxis: { type: 'datetime' },
     tooltip: {
       shared: true,

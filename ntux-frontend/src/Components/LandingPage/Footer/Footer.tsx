@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import queryString from 'query-string';
 import {
   Container,
@@ -9,6 +9,7 @@ import {
   ThirdColumn,
   CopyrightGroup,
 } from './Styles';
+import { routes } from 'Components/Routes';
 // import { useThemeContext } from '../../../App/ThemeProvider';
 
 const {
@@ -39,10 +40,18 @@ const Footer: React.FC = () => {
           <ThirdColumn>
             <h3>Features</h3>
             <ul>
-              <li>Login</li>
-              <li>Explore Courses</li>
-              <li>Forum Discussion</li>
-              <li>Student Tutoring</li>
+              <li>
+                <Link to={routes.LOGIN_PAGE}>Login</Link>
+              </li>
+              <li>
+                <Link to={routes.ALL_COURSES}>Explore Courses</Link>
+              </li>
+              <li>
+                <Link to={routes.FORUM.QUESTIONS}>Forum Discussion</Link>
+              </li>
+              <li>
+                <Link to={routes.ADMIN.STUDENT_TUTORING}>Student Tutoring</Link>
+              </li>
             </ul>
           </ThirdColumn>
 

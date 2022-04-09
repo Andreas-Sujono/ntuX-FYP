@@ -229,6 +229,7 @@ export const getOneQuestion =
           errorMessage: res.message,
         };
       }
+      console.log('get one question: ', id, ': ', res);
       dispatch(
         loadSuccess({
           questionDetailById: {

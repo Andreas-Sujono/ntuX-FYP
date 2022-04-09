@@ -263,19 +263,18 @@ function CreateQuestion(): React.ReactElement {
             <Divider sx={{ mb: 2, mt: 0.5 }} />
           </Grid>
           <Grid item xs={12} sm={12}>
-            {!isEditMode ||
-              (!!finalData?.metadata?.length && (
-                <Editor
-                  pid={'12345'}
-                  blocks={
-                    finalData?.metadata?.length
-                      ? finalData.metadata
-                      : defaultBlocks
-                  }
-                  handleUpdate={handleUpdate}
-                  useTags2
-                />
-              ))}
+            {(!isEditMode || !!finalData?.metadata?.length) && (
+              <Editor
+                pid={'12345'}
+                blocks={
+                  finalData?.metadata?.length
+                    ? finalData.metadata
+                    : defaultBlocks
+                }
+                handleUpdate={handleUpdate}
+                useTags2
+              />
+            )}
           </Grid>
           <Grid item xs={12} sm={12} sx={{ mt: 3 }}>
             <Divider sx={{ mb: 2, mt: 0.5 }} />

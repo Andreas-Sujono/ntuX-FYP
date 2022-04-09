@@ -82,6 +82,11 @@ export const ThirdColumn = styled(Column)`
     list-style-type: none;
   }
 
+  a:hover {
+    color: white;
+    text-decoration: underline;
+  }
+
   ${media.lessThan('sm')`
   text-align: left;
   `}

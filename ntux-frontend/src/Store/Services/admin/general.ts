@@ -181,7 +181,7 @@ export default class AdminService extends BaseService {
 
   getCourseWebsiteActivity = async (courseId: number) => {
     const res = await this.getRequest(
-      `/course-website-activity/?courseId=${courseId}`,
+      `/course-website-activity/summary/?courseId=${courseId}`,
     );
     return res.data;
   };

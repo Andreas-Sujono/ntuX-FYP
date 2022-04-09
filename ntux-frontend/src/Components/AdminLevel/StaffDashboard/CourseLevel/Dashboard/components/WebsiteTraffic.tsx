@@ -46,7 +46,9 @@ function AppWebsiteVisits({ courseId }: any) {
     stroke: { width: [2] },
     plotOptions: { bar: { columnWidth: '11%', borderRadius: 4 } },
     fill: { type: ['solid'] },
-    labels: data.map((item) => moment(item.date).format('MM/DD/YYYY')),
+    labels: data.map((item) =>
+      moment(item.date).add(1, 'day').format('MM/DD/YYYY'),
+    ),
     xaxis: { type: 'datetime' },
     tooltip: {
       shared: true,

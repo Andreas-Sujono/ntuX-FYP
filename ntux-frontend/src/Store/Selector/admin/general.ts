@@ -56,5 +56,8 @@ export const selectCourseSummary = (state: RootState) => {
   return selectGeneralState(state).courseSummary;
 };
 
-export const selectCourseWebsiteActivities = (state: RootState) =>
-  selectGeneralState(state).courseWebsiteActivities;
+export const selectCourseWebsiteActivities = (state: RootState) => {
+  const all = selectGeneralState(state).courseWebsiteActivities;
+  all.sort((a, b) => a.date - b.date);
+  return all;
+};
