@@ -13,6 +13,7 @@ import {
 import { UserRole } from 'src/authModule/entities/user.entity';
 import { UserData } from 'src/authModule/user.decorator';
 import { WebsiteActivityService } from 'src/commonModule/services/websiteActivity.service';
+import { ApiTags } from '@nestjs/swagger';
 
 @Crud({
   model: {
@@ -37,6 +38,7 @@ import { WebsiteActivityService } from 'src/commonModule/services/websiteActivit
     },
   },
 })
+@ApiTags('Forum Answer')
 @Controller('forum-answer')
 export class ForumAnswerController implements CrudController<ForumAnswer> {
   constructor(

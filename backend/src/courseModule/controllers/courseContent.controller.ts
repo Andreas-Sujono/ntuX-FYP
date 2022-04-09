@@ -54,8 +54,12 @@ export class CourseContentController implements CrudController<CourseContent> {
   //   return this.service.createOrUpdateCourseContent(body.content);
   // }
 
-  @Override()
-  async createOne(@ParsedRequest() req: CrudRequest, @ParsedBody() dto: any) {
+  @Override('createOneBase')
+  @Roles(UserRole.LECTURER)
+  async createCourseContent(
+    @ParsedRequest() req: CrudRequest,
+    @ParsedBody() dto: any,
+  ) {
     delete dto.id;
     return this.service.createOne(req, dto);
   }

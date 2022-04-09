@@ -1,3 +1,4 @@
+import { ApiTags } from '@nestjs/swagger';
 import { ForumTag } from './../entities/forumTag.entity';
 import { Roles } from '../../authModule/roles/roles.decorator';
 import { Controller } from '@nestjs/common';
@@ -35,6 +36,7 @@ import { Public } from 'src/authModule/public.decorator';
     },
   },
 })
+@ApiTags('Forum Tag')
 @Controller('forum-tag')
 export class ForumTagController implements CrudController<ForumTag> {
   constructor(public service: ForumTagService) {}

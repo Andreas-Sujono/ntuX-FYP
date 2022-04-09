@@ -38,7 +38,7 @@ export class CourseWebsiteActivityService extends TypeOrmCrudService<CourseWebsi
       return res;
     }
     const res = await this.repo.query(`   
-    SELECT sum(course_website_activity."visitWithLogin") as "visitWithLogin",
+    SELECT CAST(sum(course_website_activity."visitWithLogin") AS INT) as "visitWithLogin",
         date
         from course_website_activity where course_website_activity."courseId" = ${courseId}
         group by date order by date desc limit 210
