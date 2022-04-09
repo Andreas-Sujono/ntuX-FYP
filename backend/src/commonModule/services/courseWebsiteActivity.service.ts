@@ -21,7 +21,7 @@ export class CourseWebsiteActivityService extends TypeOrmCrudService<CourseWebsi
   async getSummary(interval: 'd' | 'w' | 'm', courseId: number) {
     if (interval === 'd') {
       const res = await this.repo.query(`   
-        sum(course_website_activity."visitWithLogin") as "visitWithLogin",
+      SELECT sum(course_website_activity."visitWithLogin") as "visitWithLogin",
         date
         from course_website_activity where course_website_activity."courseId" = ${courseId}
         group by date order by date desc limit 7
@@ -30,7 +30,7 @@ export class CourseWebsiteActivityService extends TypeOrmCrudService<CourseWebsi
     }
     if (interval === 'w') {
       const res = await this.repo.query(`   
-        sum(course_website_activity."visitWithLogin") as "visitWithLogin",
+      SELECT sum(course_website_activity."visitWithLogin") as "visitWithLogin",
         date
         from course_website_activity where course_website_activity."courseId" = ${courseId}
         group by date order by date desc limit 49
@@ -38,7 +38,7 @@ export class CourseWebsiteActivityService extends TypeOrmCrudService<CourseWebsi
       return res;
     }
     const res = await this.repo.query(`   
-        sum(course_website_activity."visitWithLogin") as "visitWithLogin",
+    SELECT sum(course_website_activity."visitWithLogin") as "visitWithLogin",
         date
         from course_website_activity where course_website_activity."courseId" = ${courseId}
         group by date order by date desc limit 210
