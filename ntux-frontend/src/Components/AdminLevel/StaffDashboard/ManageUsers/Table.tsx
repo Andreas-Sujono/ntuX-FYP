@@ -325,20 +325,19 @@ export const CreateModal = ({ open, setOpen, data, setData }: any) => {
                 onChange={handleChange}
               />
             </Grid>
-            {!isEditMode && (
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  name="hashedPassword"
-                  required
-                  fullWidth
-                  id="password"
-                  label="Password"
-                  type="password"
-                  value={finalData.hashedPassword}
-                  onChange={handleChange}
-                />
-              </Grid>
-            )}
+            {/* {!isEditMode && ( */}
+            <Grid item xs={12} sm={6}>
+              <TextField
+                name="hashedPassword"
+                required
+                fullWidth
+                id="password"
+                label="Password"
+                type="password"
+                value={finalData.hashedPassword}
+                onChange={handleChange}
+              />
+            </Grid>
             <Grid item xs={12} sm={6}>
               <FormControlLabel
                 control={<Checkbox checked={!!finalData.emailVerifiesAt} />}

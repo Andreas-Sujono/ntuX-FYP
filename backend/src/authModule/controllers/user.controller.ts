@@ -1,3 +1,4 @@
+import { EncryptionService } from './../../commonModule/services/encryption.service';
 import { Roles } from '../roles/roles.decorator';
 import {
   Controller,
@@ -67,7 +68,7 @@ import { ILike } from 'typeorm';
 })
 @Controller('user')
 export class UserController implements CrudController<User> {
-  constructor(public service: UserService) {}
+  constructor(public service: UserService, public encryptionService: EncryptionService) {}
 
   @Get('all/lecturers')
   @Public()
@@ -177,6 +178,9 @@ export class UserController implements CrudController<User> {
   ) {
     if (role === UserRole.STUDENT && String(id) !== String(userId)) {
       throw new BadRequestException('You can only update your own account');
+    }
+    if(dto.hashedPassword){
+      dto.hashedPassword = await  this.encryptionService.hash(dto.hashedPassword);
     }
     return this.service.updateOne(req, dto);
   }
