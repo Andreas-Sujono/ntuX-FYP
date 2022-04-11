@@ -353,6 +353,9 @@ export const CreateModal = ({ open, setOpen, data, setData }: any) => {
 export function ManageRewardsRedeemed() {
   const dispatch = useDispatch();
   const allRewardsRedeemed = useSelector(selectAllRewardsRedeemed);
+  allRewardsRedeemed.sort(
+    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+  );
 
   const [searchInput, setSearchInput] = useState('');
   const [searchResult, setSearchResult] = useState<any>([]);

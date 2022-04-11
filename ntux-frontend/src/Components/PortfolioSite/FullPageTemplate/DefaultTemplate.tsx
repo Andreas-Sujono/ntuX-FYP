@@ -34,7 +34,7 @@ const DefaultTemplate: React.FC<any> = ({ portfolio }: any) => {
             />
           )}
 
-          <WebsiteTraffic data={portfolio.studentSummary || []} interval="w" />
+          <WebsiteTraffic data={portfolio.studentSummary || []} interval="d" />
         </PaddedContainer>
       </PageContentContainer>
     </div>

@@ -43,7 +43,7 @@ export class UserService extends TypeOrmCrudService<User> {
       left join avatar on "user"."currentAvatarId" = avatar.id
       where "user".role = '${UserRole.STUDENT}'
       group by "user".id, avatar."imageUrl"
-      order by sum(student_website_activity."visitWithLogin") desc limit 10
+      order by CAST((COALESCE(sum(student_website_activity."visitWithLogin"),'0')) AS INTEGER) desc limit 10
     `);
     res.forEach((item) => {
       delete item.confirmationCode;

@@ -554,6 +554,7 @@ export const TutorDetailsModal = ({
   enableCreateRequest = true,
 }: any) => {
   data = data || {};
+  console.log('tutor details: ', data);
 
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState<any>({});

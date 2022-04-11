@@ -248,6 +248,8 @@ export const createReview =
         };
       }
       dispatch(loadSuccess({}));
+      getMyRequests()(dispatch, getState);
+      getMyOffers()(dispatch, getState);
       return { result: true };
     } catch (err) {
       dispatch(loadFailed());

@@ -113,7 +113,9 @@ export default function AppWebsiteVisits({ data, interval }: any) {
     stroke: { width: [2, 0, 0] },
     plotOptions: { bar: { columnWidth: '11%', borderRadius: 4 } },
     fill: { type: ['solid', 'gradient', 'gradient'] },
-    labels: parsedData.map((item) => moment(item.date).format('MM/DD/YYYY')),
+    labels: parsedData.map((item) =>
+      moment(item.date).add(1, 'day').format('MM/DD/YYYY'),
+    ),
     xaxis: { type: 'datetime' },
     tooltip: {
       shared: true,
