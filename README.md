@@ -66,6 +66,7 @@
  - diagram builder tool: draw.io
  - UI/UX design tool: Figma
  - SQL DB GUI: Dbeaver
+ - API tester GUI: Postman
     
     
     
