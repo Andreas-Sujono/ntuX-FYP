@@ -24,6 +24,7 @@
     - run `npm start` to start the development server in `localhost:3000`
     - to call API server, modify the API url in `./src/Store/Services/base.url
 
+
 #### 2) Backend
 ---
 - ##### **Technologies**: 
@@ -49,7 +50,7 @@
         DB_USERNAME=PUT_USERNAME_HERE
         DB_PASSWORD=PUT_PASSWORD_HERE
         DB_NAME=PUT_VALUE_HERE
-        SECRET_KEY=PUT_VALUE_HERE
+        SECRET_KEY=PUT_ANY_STRING_HERE
         AWS_ACCESS_KEY=PUT_VALUE_HERE
         AWS_SECRET_KEY=PUT_VALUE_HERE
         PORT=3000
@@ -61,7 +62,10 @@
         - run `npm run migration:run`
     
     
-    
+ 3) Other tools
+ - diagram builder tool: draw.io
+ - UI/UX design tool: Figma
+ - SQL DB GUI: Dbeaver
     
     
     
